@@ -23,7 +23,7 @@ class LeadPluginEpoint {
 
   }
 
-  static Future <Map<String, dynamic>> open (BuildContext context, Locale locale,String token, int create, {String domain, String brandCode}) async {
+  static open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, Function action}) async {
     if(domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -42,23 +42,31 @@ class LeadPluginEpoint {
     Navigator.of(LeadConnection.buildContext).pop();
     if(result) {
       // await Navigator.of(LeadConnection.buildContext,rootNavigator: true).push(
-          // MaterialPageRoute(builder: (context) =>  AppDocument(),settings: const RouteSettings(name: 'folder_management_screen')));
-    // await LeadNavigator.push(context, CreatePotentialCustomer());
+      // MaterialPageRoute(builder: (context) =>  AppDocument(),settings: const RouteSettings(name: 'folder_management_screen')));
+      // await LeadNavigator.push(context, CreatePotentialCustomer());
 
-    if (create == 0 ) {
-     Map<String, dynamic> result =  await Navigator.of(context).push(
-         MaterialPageRoute(
-             builder: (context) => CreatePotentialCustomer()));
-     return result;
-    } else {
-       await Navigator.of(context).push(
-           MaterialPageRoute(
-               builder: (context) => LeadScreen()));
-    }
+      if (create == 0 ) {
+        Map<String, dynamic> event =  await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => CreatePotentialCustomer()));
+        if(action!=null) {
+          Map<String,dynamic> addCustomer;
+          if (event != null) {
+            addCustomer = {
+              'customerLeadId': event['customer_lead_id'],
+              'type': 'cpo'
+            };
+            action(addCustomer);
+          }
+        }
+      } else {
+        await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => LeadScreen()));
+      }
     }else {
       loginError(LeadConnection.buildContext, 'Fail');
     }
-    return null;
   }
 
   static void loginError(BuildContext context, String title) async {
@@ -73,10 +81,10 @@ class LeadPluginEpoint {
               children: <Widget>[
                 Center(
                     child: Text(
-                  'Cảnh báo\n',
-                  style:
+                      'Cảnh báo\n',
+                      style:
                       TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-                )),
+                    )),
                 Center(child: Text(title)),
               ],
             ),

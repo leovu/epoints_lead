@@ -536,7 +536,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                   allocatorData: allocatorData,
                 ),
                 onTap: () {
-                  LeadNavigator.pop(context);
+                  Navigator.of(context).pop();
                 },
                 behavior: HitTestBehavior.opaque,
               );
@@ -580,7 +580,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                   pipeLineData: pipeLineData,
                 ),
                 onTap: () {
-                  LeadNavigator.pop(context);
+                  Navigator.of(context).pop();
                 },
                 behavior: HitTestBehavior.opaque,
               );
@@ -634,7 +634,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                   journeys: journeysData,
                 ),
                 onTap: () {
-                  LeadNavigator.pop(context);
+                  Navigator.of(context).pop();
                 },
                 behavior: HitTestBehavior.opaque,
               );
@@ -816,7 +816,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               }
               
 
-              LeadNavigator.pop(context, object: widget.filterScreenModel);
+              Navigator.of(context).pop(widget.filterScreenModel);
             },
             child: Center(
               child: Text(

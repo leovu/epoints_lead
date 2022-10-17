@@ -31,14 +31,6 @@ static push(BuildContext context, Widget screen,
 
 
   }
-
-
-  static pop(BuildContext context, {dynamic object, bool root = true}) {
-    if (object == null)
-      Navigator.of(context, rootNavigator: root).pop();
-    else
-      Navigator.of(context, rootNavigator: root).pop(object);
-  }
 }
 
 class CustomRouteDialog extends PageRouteBuilder {

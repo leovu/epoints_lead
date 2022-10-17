@@ -99,7 +99,7 @@ class _PipelineModalState extends State<PipelineModal> {
     }
     models[index].selected = true;
     setState(() {
-      LeadNavigator.pop(context , object: models[index]);
+      Navigator.of(context).pop(models[index]);
     });
   }
 }

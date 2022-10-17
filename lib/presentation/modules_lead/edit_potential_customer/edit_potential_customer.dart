@@ -289,7 +289,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
                       customerTypeData: customerTypeData,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -335,7 +335,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
                       sources: customerSourcesData,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -367,7 +367,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
                       pipeLineData: pipeLineData,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -411,7 +411,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
                       journeys: journeysData,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -512,7 +512,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
                   print(result.errorDescription);
 
                   await _showMyDialog(result.errorDescription);
-                  LeadNavigator.pop(context, object: true);
+                  Navigator.of(context).pop(true);
  
                 } else {
                   _showMyDialog(result.errorDescription);

@@ -165,7 +165,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
                 widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(_fromDate)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
                 print(widget.filterScreenModel.filterModel.createdAt);
-                LeadNavigator.pop(context);
+                Navigator.of(context).pop();
               },
               haveBnConfirm: true,
             ),
@@ -206,7 +206,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
                 widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
                 print(widget.filterScreenModel.filterModel.createdAt);
-                LeadNavigator.pop(context);
+                Navigator.of(context).pop();
               },
               haveBnConfirm: true,
             ),

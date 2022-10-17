@@ -56,7 +56,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                         if (allowBack)
                           Opacity(
                             child: InkWell(
-                              onTap: funcPop?? () => LeadNavigator.pop(context),
+                              onTap: funcPop?? () => Navigator.of(context).pop(),
                               child: Container(
                                 width: 48.0,
                                 height: 48.0,

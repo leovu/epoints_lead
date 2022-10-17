@@ -245,7 +245,7 @@ class _BuildMoreAddressEditPotentialState
                       provinces: widget.provinces,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -289,7 +289,7 @@ class _BuildMoreAddressEditPotentialState
                         districts: districts,
                       ),
                       onTap: () {
-                        LeadNavigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       behavior: HitTestBehavior.opaque,
                     );
@@ -336,7 +336,7 @@ class _BuildMoreAddressEditPotentialState
           //               ward: wards,
           //             ),
           //             onTap: () {
-          //               LeadNavigator.pop(context);
+          //               Navigator.of(context).pop();
           //             },
           //             behavior: HitTestBehavior.opaque,
           //           );
@@ -413,7 +413,7 @@ class _BuildMoreAddressEditPotentialState
                     allocatorData: widget.allocatorData,
                   ),
                   onTap: () {
-                    LeadNavigator.pop(context);
+                    Navigator.of(context).pop();
                   },
                   behavior: HitTestBehavior.opaque,
                 );

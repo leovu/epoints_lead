@@ -186,7 +186,7 @@ class _BuildMoreAddressCreatPotentialState
                         districts: districts,
                       ),
                       onTap: () {
-                        LeadNavigator.pop(context);
+                        Navigator.of(context).pop();
                       },
                       behavior: HitTestBehavior.opaque,
                     );
@@ -273,7 +273,7 @@ class _BuildMoreAddressCreatPotentialState
                     allocatorData: widget.allocatorData,
                   ),
                   onTap: () {
-                    LeadNavigator.pop(context);
+                    Navigator.of(context).pop();
                   },
                   behavior: HitTestBehavior.opaque,
                 );

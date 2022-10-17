@@ -250,7 +250,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
                       customerTypeData: customerTypeData,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -296,7 +296,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
                       sources: customerSourcesData,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -328,7 +328,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
                       pipeLineData: pipeLineData,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -373,7 +373,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
                       journeys: journeysData,
                     ),
                     onTap: () {
-                      LeadNavigator.pop(context);
+                      Navigator.of(context).pop();
                     },
                     behavior: HitTestBehavior.opaque,
                   );
@@ -480,8 +480,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
                       status: true
                       );
                     }
-
-                  LeadNavigator.pop(context, object: modelResponse.toJson());
+                  Navigator.of(context).pop(modelResponse.toJson());
  
                 } else {
                   LeadConnection.showMyDialog(context, result.errorDescription);

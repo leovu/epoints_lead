@@ -114,7 +114,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
                             await LeadConnection.showMyDialog(
                                 context, result.errorDescription);
-                            LeadNavigator.pop(context, object: true);
+                            Navigator.of(context).pop(true);
                           } else {
                             LeadConnection.showMyDialog(
                                 context, result.errorDescription);

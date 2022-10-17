@@ -111,7 +111,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
     }
     models[index].selected = true;
     setState(() {
-      LeadNavigator.pop(context, object: models[index].staffId);
+      Navigator.of(context).pop(models[index].staffId);
     });
   }
 

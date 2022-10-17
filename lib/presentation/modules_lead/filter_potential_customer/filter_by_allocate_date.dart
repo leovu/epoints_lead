@@ -173,7 +173,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                 widget.filterScreenModel.filterModel.allocationDate =
                     "${DateFormat("dd/MM/yyyy").format(_fromDate)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
                 print(widget.filterScreenModel.filterModel.allocationDate);
-                LeadNavigator.pop(context);
+                Navigator.of(context).pop();
               },
               haveBnConfirm: true,
             ),
@@ -215,7 +215,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                 widget.filterScreenModel.filterModel.allocationDate =
                     "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
                 print(widget.filterScreenModel.filterModel.allocationDate);
-                LeadNavigator.pop(context);
+                Navigator.of(context).pop();
               },
               haveBnConfirm: true,
             ),

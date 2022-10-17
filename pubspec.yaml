@@ -1,0 +1,44 @@
+name: lead_plugin_epoint
+description: A new Flutter project.
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: '>=2.10.0 <3.0.0'
+  flutter: ">=2.5.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+  auto_size_text: ^3.0.0
+  http: ^0.13.5
+  url_launcher: ^6.1.5
+  intl: ^0.17.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.example.lead_plugin_epoint
+        pluginClass: LeadPluginEpointPlugin
+      ios:
+        pluginClass: LeadPluginEpointPlugin
+      web:
+        pluginClass: LeadPluginEpointWeb
+        fileName: lead_plugin_epoint_web.dart
+
+  # To add assets to your plugin package, add an assets section, like this:
+  assets:
+    - assets/languages/
+    - assets/icons/
+    - assets/images/
+

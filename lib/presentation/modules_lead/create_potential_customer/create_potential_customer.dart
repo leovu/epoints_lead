@@ -21,7 +21,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_cu
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
@@ -472,8 +472,9 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
                 if (result.errorCode == 0) {
                   print(result.errorDescription);
 
+                  LeadConnection.showLoading(context);
                   await LeadConnection.showMyDialog(context, result.errorDescription);
-
+                  Navigator.of(context).pop();
                   if (result.data != null) {
                      modelResponse = ObjectPopDetailModel(
                       customer_lead_id: result.data.customerLeadId,

@@ -27,7 +27,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_customer_type.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_status.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_tags.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 
 class FilterPotentialCustomer extends StatefulWidget {
   FilterScreenModel filterScreenModel = FilterScreenModel();

@@ -21,7 +21,7 @@ import 'package:lead_plugin_epoint/presentation/modal/customer_type_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/build_more_address_edit_potential.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';

@@ -4,7 +4,7 @@ import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/list_screen/list_potential_customer.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 import 'common/localization/app_localizations.dart';
 import 'lead_plugin_epoint_platform_interface.dart';
 
@@ -17,7 +17,9 @@ class LeadPluginEpoint {
     // await AppSizes.init(context);
     await AppLocalizations(locale).load();
 
-    return LeadNavigator.push(context, LeadScreen());
+    return Navigator.of(context).push(
+        MaterialPageRoute(
+            builder: (context) => LeadScreen()));
 
   }
 
@@ -44,10 +46,14 @@ class LeadPluginEpoint {
     // await LeadNavigator.push(context, CreatePotentialCustomer());
 
     if (create == 0 ) {
-     Map<String, dynamic> result =  await LeadNavigator.push(context, CreatePotentialCustomer());
+     Map<String, dynamic> result =  await Navigator.of(context).push(
+         MaterialPageRoute(
+             builder: (context) => CreatePotentialCustomer()));
      return result;
     } else {
-       await LeadNavigator.push(context, LeadScreen());
+       await Navigator.of(context).push(
+           MaterialPageRoute(
+               builder: (context) => LeadScreen()));
     }
     }else {
       loginError(LeadConnection.buildContext, 'Fail');

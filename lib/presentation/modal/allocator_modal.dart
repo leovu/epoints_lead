@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class AllocatorModal extends StatefulWidget {

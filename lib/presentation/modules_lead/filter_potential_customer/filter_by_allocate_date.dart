@@ -5,7 +5,7 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/allocate_date.dart';
 import 'package:lead_plugin_epoint/model/filter_screen_model.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_meni_bottom_sheet.dart';
 

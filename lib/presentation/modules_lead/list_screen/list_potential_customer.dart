@@ -13,7 +13,7 @@ import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_respo
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
@@ -131,7 +131,9 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
         actions: [
           InkWell(
             onTap: () async {
-            FilterScreenModel result = await LeadNavigator.push(context, FilterPotentialCustomer(filterScreenModel: filterScreenModel,));
+            FilterScreenModel result = await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => FilterPotentialCustomer(filterScreenModel: filterScreenModel,)));
           print("bbbb");
   
             if (result != null) {
@@ -150,7 +152,9 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
       body:  _buildBody(),
       floatingActionButton:  FloatingActionButton(
         onPressed: () async {
-         ObjectPopDetailModel result = await LeadNavigator.push(context, CreatePotentialCustomer());
+         ObjectPopDetailModel result = await Navigator.of(context).push(
+             MaterialPageRoute(
+                 builder: (context) => CreatePotentialCustomer()));
          if (result != null) {
            if (result.status) {
            getData(false);
@@ -248,8 +252,9 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
       children: [
         InkWell(
           onTap: () async {
-           bool result = await LeadNavigator.push(
-                context, DetailPotentialCustomer(customer_lead_code: item.customerLeadCode,));
+           bool result = await Navigator.of(context).push(
+               MaterialPageRoute(
+                   builder: (context) => DetailPotentialCustomer(customer_lead_code: item.customerLeadCode,)));
 
                 if (result != null && result) {
                   getData(false);

@@ -5,7 +5,7 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/list_customer_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';

@@ -17,7 +17,7 @@ import 'package:lead_plugin_epoint/presentation/modal/business_focal_point_modal
 import 'package:lead_plugin_epoint/presentation/modal/district_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/province_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/ward_modal.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 
 class BuildMoreAddressCreatPotential extends StatefulWidget {
@@ -304,11 +304,12 @@ class _BuildMoreAddressCreatPotentialState
           //       return BusinessFocalPointModal(
           //       );
           //     });
-          ListCustomLeadItems businessFocalPoint = await LeadNavigator.push(
-              context,
-              BusinessFocalPointModal(
+          ListCustomLeadItems businessFocalPoint = await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) =>
+                      BusinessFocalPointModal(
                 businessFocalPointData: businessFocalPointData,
-              ));
+              )));
 
           if (businessFocalPoint != null) {
             businessFocalPointSeleted = businessFocalPoint;

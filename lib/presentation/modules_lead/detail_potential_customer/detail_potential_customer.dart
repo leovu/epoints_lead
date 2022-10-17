@@ -10,7 +10,7 @@ import 'package:lead_plugin_epoint/model/response/description_model_response.dar
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
-import 'package:lead_plugin_epoint/utils/navigator.dart';
+
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -87,11 +87,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                           AppLocalizations.text(LangKey.edit),
                           Assets.iconEdit,
                           Color.fromARGB(255, 89, 177, 150), () async {
-                        bool result = await LeadNavigator.push(
-                            context,
-                            EditPotentialCustomer(
+                        bool result = await Navigator.of(context).push(
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    EditPotentialCustomer(
                               detailPotential: detail,
-                            ));
+                            )));
 
                         if (result != null) {
                           if (result) {
@@ -126,8 +127,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               AppLocalizations.text(LangKey.assignment),
                               Assets.iconAssignment,
                               Color(0xFF2F9AF4), () async {
-                              int staffID = await LeadNavigator.push(
-                                  context, AllocatorScreen());
+                              int staffID = await Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => AllocatorScreen()));
 
                               if (staffID != null) {
                                 DescriptionModelResponse result =

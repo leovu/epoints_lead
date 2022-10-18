@@ -42,13 +42,10 @@ class _BuildMoreAddressCreatPotentialState
   final TextEditingController _addressText = TextEditingController();
   final TextEditingController _zaloText = TextEditingController();
   final TextEditingController _fanpageFBText = TextEditingController();
-  final TextEditingController _focalPointText = TextEditingController();
   final TextEditingController _emailText = TextEditingController();
 
   FocusNode _addressFocusNode = FocusNode();
   FocusNode _zaloFocusNode = FocusNode();
-  FocusNode _fanpageFBFocusNode = FocusNode();
-  FocusNode _focalPointFocusNode = FocusNode();
   FocusNode _emailFocusNode = FocusNode();
 
   ProvinceData provinceSeleted = ProvinceData();
@@ -63,22 +60,21 @@ class _BuildMoreAddressCreatPotentialState
   ListCustomLeadItems businessFocalPointSeleted = ListCustomLeadItems();
 
   List<GenderModel> genderData = [
-    GenderModel(genderName: AppLocalizations.text(LangKey.male),
+    GenderModel(
+        genderName: AppLocalizations.text(LangKey.male),
         genderEnName: "male",
-            genderID: 0,
-            selected: false
-  ),
-  GenderModel(genderName: AppLocalizations.text(LangKey.female),
-  genderEnName: "female",
-            genderID: 1,
-            selected: false
-  ),
-  GenderModel(genderName: AppLocalizations.text(LangKey.male),
-  genderEnName: "other",
-            genderID: 2,
-            selected: false
-  )
-  
+        genderID: 0,
+        selected: false),
+    GenderModel(
+        genderName: AppLocalizations.text(LangKey.female),
+        genderEnName: "female",
+        genderID: 1,
+        selected: false),
+    GenderModel(
+        genderName: AppLocalizations.text(LangKey.male),
+        genderEnName: "other",
+        genderID: 2,
+        selected: false)
   ];
   GenderModel genderSelected = GenderModel();
 
@@ -138,29 +134,65 @@ class _BuildMoreAddressCreatPotentialState
               true,
               false, ontap: () async {
             FocusScope.of(context).unfocus();
-            ProvinceData province = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return ProvinceModal(
-                    provinces: widget.provinces,
-                  );
-                });
-            if (province != null) {
-              if (provinceSeleted?.provinceid != province.provinceid) {
-                distictSelected = null;
-                wardSelected = null;
+
+            if (widget.provinces == null || widget.provinces.length == 0) {
+              LeadConnection.showLoading(context);
+              var dataProvinces = await LeadConnection.getProvince(context);
+              Navigator.of(context).pop();
+              if (dataProvinces != null) {
+                widget.provinces = dataProvinces.data;
+
+                ProvinceData province = await showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return ProvinceModal(
+                        provinces: widget.provinces,
+                      );
+                    });
+                if (province != null) {
+                  if (provinceSeleted?.provinceid != province.provinceid) {
+                    distictSelected = null;
+                    wardSelected = null;
+                  }
+                  provinceSeleted = province;
+                  widget.detailPotential.provinceId =
+                      provinceSeleted.provinceid;
+                  var dataDistrict = await LeadConnection.getDistrict(
+                      context, provinceSeleted.provinceid);
+                  if (dataDistrict != null) {
+                    districts = dataDistrict.data;
+                  }
+                  setState(() {});
+                }
               }
-              provinceSeleted = province;
-              widget.detailPotential.provinceId = provinceSeleted.provinceid;
-              var dataDistrict = await LeadConnection.getDistrict(
-                  context, provinceSeleted.provinceid);
-              if (dataDistrict != null) {
-                districts = dataDistrict.data;
+            } else {
+              ProvinceData province = await showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) {
+                    return ProvinceModal(
+                      provinces: widget.provinces,
+                    );
+                  });
+              if (province != null) {
+                if (provinceSeleted?.provinceid != province.provinceid) {
+                  distictSelected = null;
+                  wardSelected = null;
+                }
+                provinceSeleted = province;
+                widget.detailPotential.provinceId = provinceSeleted.provinceid;
+                var dataDistrict = await LeadConnection.getDistrict(
+                    context, provinceSeleted.provinceid);
+                if (dataDistrict != null) {
+                  districts = dataDistrict.data;
+                }
+                setState(() {});
               }
-              setState(() {});
             }
           }),
           Container(
@@ -262,27 +294,60 @@ class _BuildMoreAddressCreatPotentialState
             false, ontap: () async {
           FocusScope.of(context).unfocus();
           print("Chọn người được phân bổ");
-          AllocatorData allocator = await showModalBottomSheet(
-              context: context,
-              useRootNavigator: true,
-              isScrollControlled: true,
-              backgroundColor: Colors.transparent,
-              builder: (context) {
-                return GestureDetector(
-                  child: AllocatorModal(
-                    allocatorData: widget.allocatorData,
-                  ),
-                  onTap: () {
-                    Navigator.of(context).pop();
-                  },
-                  behavior: HitTestBehavior.opaque,
-                );
-              });
-          if (allocator != null) {
-            allocatorSelected = allocator;
-            widget.detailPotential?.saleId = allocatorSelected.staffId;
 
-            setState(() {});
+          if (widget.allocatorData == null ||
+              widget.allocatorData.length == 0) {
+            LeadConnection.showLoading(context);
+            var allocators = await LeadConnection.getAllocator(context);
+            Navigator.of(context).pop();
+
+            if (allocators != null) {
+              widget.allocatorData = allocators.data;
+
+              AllocatorData allocator = await showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) {
+                    return GestureDetector(
+                      child: AllocatorModal(
+                        allocatorData: widget.allocatorData,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      behavior: HitTestBehavior.opaque,
+                    );
+                  });
+              if (allocator != null) {
+                allocatorSelected = allocator;
+                widget.detailPotential?.saleId = allocatorSelected.staffId;
+                setState(() {});
+              }
+            }
+          } else {
+            AllocatorData allocator = await showModalBottomSheet(
+                context: context,
+                useRootNavigator: true,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) {
+                  return GestureDetector(
+                    child: AllocatorModal(
+                      allocatorData: widget.allocatorData,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    behavior: HitTestBehavior.opaque,
+                  );
+                });
+            if (allocator != null) {
+              allocatorSelected = allocator;
+              widget.detailPotential?.saleId = allocatorSelected.staffId;
+              setState(() {});
+            }
           }
         }),
         // Đầu mối doanh nghiệp
@@ -294,22 +359,11 @@ class _BuildMoreAddressCreatPotentialState
             true,
             false, ontap: () async {
           FocusScope.of(context).unfocus();
-
-          // ListCustomLeadItems businessFocalPoint = await showModalBottomSheet(
-          //     context: context,
-          //     useRootNavigator: true,
-          //     isScrollControlled: true,
-          //     backgroundColor: Colors.transparent,
-          //     builder: (context) {
-          //       return BusinessFocalPointModal(
-          //       );
-          //     });
-          ListCustomLeadItems businessFocalPoint = await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) =>
-                      BusinessFocalPointModal(
-                businessFocalPointData: businessFocalPointData,
-              )));
+          ListCustomLeadItems businessFocalPoint =
+              await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => BusinessFocalPointModal(
+                        businessFocalPointData: businessFocalPointData,businessFocalPointSeleted: businessFocalPointSeleted,
+                      )));
 
           if (businessFocalPoint != null) {
             businessFocalPointSeleted = businessFocalPoint;
@@ -337,7 +391,7 @@ class _BuildMoreAddressCreatPotentialState
           border: Border.all(
               width: 1.0, color: Color(0xFFC3C8D3), style: BorderStyle.solid),
           borderRadius: BorderRadius.circular(10.0)),
-      padding: const EdgeInsets.only( left: 5.0),
+      padding: const EdgeInsets.only(left: 5.0),
       margin: EdgeInsets.only(bottom: 15.0 / 2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -372,7 +426,7 @@ class _BuildMoreAddressCreatPotentialState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 InkWell(
-                  onTap: ()  {
+                  onTap: () {
                     selectedGender(0);
                   },
                   child: Container(
@@ -381,7 +435,7 @@ class _BuildMoreAddressCreatPotentialState
                         borderRadius: BorderRadius.circular(10)),
                     margin: EdgeInsets.only(right: 5.0),
                     padding: EdgeInsets.only(
-                      top: 5.0, bottom: 5.0, left: 8.0, right: 8.0),
+                        top: 5.0, bottom: 5.0, left: 8.0, right: 8.0),
                     child: Row(
                       children: [
                         Container(
@@ -396,7 +450,9 @@ class _BuildMoreAddressCreatPotentialState
                           AppLocalizations.text(LangKey.male),
                           style: TextStyle(
                               fontSize: AppTextSizes.size15,
-                              color: (genderSelected?.genderID  == 0) ? Colors.black : Color(0xFF9E9E9E),
+                              color: (genderSelected?.genderID == 0)
+                                  ? Colors.black
+                                  : Color(0xFF9E9E9E),
                               fontWeight: FontWeight.normal),
                           maxLines: 1,
                         )
@@ -406,7 +462,7 @@ class _BuildMoreAddressCreatPotentialState
                 ),
                 InkWell(
                   onTap: () {
-                      selectedGender(1);
+                    selectedGender(1);
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -429,7 +485,9 @@ class _BuildMoreAddressCreatPotentialState
                           AppLocalizations.text(LangKey.female),
                           style: TextStyle(
                               fontSize: AppTextSizes.size15,
-                              color: (genderSelected?.genderID == 1) ? Colors.black : Color(0xFF9E9E9E),
+                              color: (genderSelected?.genderID == 1)
+                                  ? Colors.black
+                                  : Color(0xFF9E9E9E),
                               fontWeight: FontWeight.normal),
                           maxLines: 1,
                         )
@@ -454,7 +512,9 @@ class _BuildMoreAddressCreatPotentialState
                         AppLocalizations.text(LangKey.other),
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: (genderSelected?.genderID == 2) ? Colors.black : Color(0xFF9E9E9E),
+                            color: (genderSelected?.genderID == 2)
+                                ? Colors.black
+                                : Color(0xFF9E9E9E),
                             fontWeight: FontWeight.normal),
                         maxLines: 1,
                       ),
@@ -476,9 +536,8 @@ class _BuildMoreAddressCreatPotentialState
     genderData[index].selected = true;
     genderSelected = genderData[index];
     widget.detailPotential.gender = genderSelected.genderEnName;
-    
-    setState(() {
-    });
+
+    setState(() {});
   }
 
   Widget _buildTextField(String title, String content, String icon,
@@ -551,7 +610,7 @@ class _BuildMoreAddressCreatPotentialState
               widget.detailPotential?.address = event;
             } else if (fillText == _zaloText) {
               widget.detailPotential?.zalo = event;
-            } else if (fillText == _fanpageFBText){
+            } else if (fillText == _fanpageFBText) {
               widget.detailPotential?.fanpage = event;
             } else {
               widget.detailPotential?.email = _emailText.text;

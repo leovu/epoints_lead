@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
+import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/list_screen/list_potential_customer.dart';
 
 import 'common/localization/app_localizations.dart';
@@ -23,7 +25,7 @@ class LeadPluginEpoint {
 
   }
 
-  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode}) async {
+  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, String fullname, String phone, String customerLeadCode}) async {
     if(domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -41,8 +43,13 @@ class LeadPluginEpoint {
       if (create == 0 ) {
         Map<String, dynamic> event =  await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => CreatePotentialCustomer()));
+                builder: (context) => CreatePotentialCustomer(fullname: fullname, phoneNumber: phone)));
         return event;
+      } else if (create == 1) {
+        await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => DetailPotentialCustomer(customer_lead_code: customerLeadCode)));
+        return null;
       } else {
         await Navigator.of(context).push(
             MaterialPageRoute(

@@ -27,7 +27,9 @@ import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class CreatePotentialCustomer extends StatefulWidget {
-  const CreatePotentialCustomer({Key key}) : super(key: key);
+  String fullname;
+  String phoneNumber;
+ CreatePotentialCustomer({Key key, this.fullname, this. phoneNumber}) : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -35,8 +37,8 @@ class CreatePotentialCustomer extends StatefulWidget {
       _CreatePotentialCustomerState();
 }
 
-class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with WidgetsBindingObserver {
-
+class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
+    with WidgetsBindingObserver {
   var _isKeyboardVisible = false;
 
   ScrollController _controller = ScrollController();
@@ -69,68 +71,45 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
 
   List<CustomerTypeModel> customerTypeData = [
     CustomerTypeModel(
-          customerTypeName: AppLocalizations.text(LangKey.personal),
-          customerTypeID: 1,
-          selected: true), 
+        customerTypeName: AppLocalizations.text(LangKey.personal),
+        customerTypeID: 1,
+        selected: true),
     CustomerTypeModel(
-          customerTypeName: AppLocalizations.text(LangKey.business),
-          customerTypeID: 2,
-          selected: false),
+        customerTypeName: AppLocalizations.text(LangKey.business),
+        customerTypeID: 2,
+        selected: false),
   ];
 
   CustomerTypeModel customerTypeSelected = CustomerTypeModel(
-          customerTypeName: AppLocalizations.text(LangKey.personal),
-          customerTypeID: 1,
-          selected: true);
+      customerTypeName: AppLocalizations.text(LangKey.personal),
+      customerTypeID: 1,
+      selected: true);
 
-  
-  DetailPotentialData detailPotential = DetailPotentialData(provinceId: 0,districtId: 0,address: "",saleId: 0,businessClue: "",zalo: "");
+  DetailPotentialData detailPotential = DetailPotentialData(
+      provinceId: 0,
+      districtId: 0,
+      address: "",
+      saleId: 0,
+      businessClue: "",
+      zalo: "");
 
-  ObjectPopDetailModel modelResponse = ObjectPopDetailModel(); 
+  ObjectPopDetailModel modelResponse = ObjectPopDetailModel();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      LeadConnection.showLoading(context);
-      await callApi();
-      Navigator.of(context).pop();
+
+      if (widget.fullname != null) {
+        _fullNameText.text = widget.fullname ;
+      }
+
+      if (widget.phoneNumber != null) {
+        _phoneNumberText.text = widget.phoneNumber ;
+      }
     });
   }
 
-  void callApi() async {
-    var dataType_Source = await LeadConnection.getCustomerOption(context);
-    if (dataType_Source != null) {
-      customerOptonData = dataType_Source.data;
-      // customerType = customerOptonData.customerType;
-      customerSourcesData = customerOptonData.source;
-
-      // customerTypeData.add(CustomerTypeModel(
-      //     customerTypeName: customerOptonData.customerType.personal,
-      //     customerTypeID: 1,
-      //     selected: false));
-      // customerTypeData.add(CustomerTypeModel(
-      //     customerTypeName: customerOptonData.customerType.business,
-      //     customerTypeID: 2,
-      //     selected: false));
-    }
-
-    var dataProvinces = await LeadConnection.getProvince(context);
-    if (dataProvinces != null) {
-      provinces = dataProvinces.data;
-      print(provinces);
-    }
-
-    var pipelines = await LeadConnection.getPipeline(context);
-    if (pipelines != null) {
-      pipeLineData = pipelines.data;
-    }
-
-    var allocator = await LeadConnection.getAllocator(context);
-    if (allocator != null) {
-      allocatorData = allocator.data;
-    }
-  }
 
   @override
   void dispose() {
@@ -139,7 +118,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
     super.dispose();
   }
 
-   @override
+  @override
   void didChangeMetrics() {
     final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
     final newValue = bottomInset > 0.0;
@@ -187,9 +166,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
           // separator: const Divider(),
           children: _listWidget(),
         )),
-        Visibility(
-          visible: !_isKeyboardVisible,
-          child: _buildButton()),
+        Visibility(visible: !_isKeyboardVisible, child: _buildButton()),
         Container(
           height: 20.0,
         )
@@ -285,25 +262,58 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
 
             FocusScope.of(context).unfocus();
 
-            CustomerOptionSource source = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return GestureDetector(
-                    child: CustomerSourceModal(
-                      sources: customerSourcesData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
-                  );
-                });
-            if (source != null) {
-              sourceSelected = source;
-              setState(() {});
+            if (customerSourcesData == null ||
+                customerSourcesData.length == 0) {
+              LeadConnection.showLoading(context);
+              var dataType_Source =
+                  await LeadConnection.getCustomerOption(context);
+              Navigator.of(context).pop();
+              if (dataType_Source != null) {
+                customerOptonData = dataType_Source.data;
+                customerSourcesData = customerOptonData.source;
+
+                CustomerOptionSource source = await showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return GestureDetector(
+                        child: CustomerSourceModal(
+                          sources: customerSourcesData,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        behavior: HitTestBehavior.opaque,
+                      );
+                    });
+                if (source != null) {
+                  sourceSelected = source;
+                  setState(() {});
+                }
+              }
+            } else {
+              CustomerOptionSource source = await showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) {
+                    return GestureDetector(
+                      child: CustomerSourceModal(
+                        sources: customerSourcesData,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      behavior: HitTestBehavior.opaque,
+                    );
+                  });
+              if (source != null) {
+                sourceSelected = source;
+                setState(() {});
+              }
             }
           }),
 
@@ -316,8 +326,15 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
               true,
               false, ontap: () async {
             FocusScope.of(context).unfocus();
-            print("Pipeline");
-            PipelineData pipeline = await showModalBottomSheet(
+
+            if (pipeLineData == null || pipeLineData.length == 0) {
+              LeadConnection.showLoading(context);
+              var pipelines = await LeadConnection.getPipeline(context);
+              Navigator.of(context).pop();
+              if (pipelines != null) {
+                pipeLineData = pipelines.data;
+
+                PipelineData pipeline = await showModalBottomSheet(
                 context: context,
                 useRootNavigator: true,
                 isScrollControlled: true,
@@ -342,11 +359,47 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
               LeadConnection.showLoading(context);
               var journeys = await LeadConnection.getJourney(
                   context, pipelineSelected.pipelineCode);
-                  Navigator.of(context).pop();
+              Navigator.of(context).pop();
               if (journeys != null) {
                 journeysData = journeys.data;
               }
               setState(() {});
+            }
+
+              }
+            } else {
+
+              PipelineData pipeline = await showModalBottomSheet(
+                context: context,
+                useRootNavigator: true,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) {
+                  return GestureDetector(
+                    child: PipelineModal(
+                      pipeLineData: pipeLineData,
+                    ),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    behavior: HitTestBehavior.opaque,
+                  );
+                });
+            if (pipeline != null) {
+              if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
+                journeySelected = null;
+              }
+
+              pipelineSelected = pipeline;
+              LeadConnection.showLoading(context);
+              var journeys = await LeadConnection.getJourney(
+                  context, pipelineSelected.pipelineCode);
+              Navigator.of(context).pop();
+              if (journeys != null) {
+                journeysData = journeys.data;
+              }
+              setState(() {});
+            }
             }
           }),
 
@@ -446,46 +499,45 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
               sourceSelected == null ||
               pipelineSelected == null ||
               journeySelected == null) {
-            LeadConnection.showMyDialog(context, 'Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)');
+            LeadConnection.showMyDialog(
+                context, 'Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)');
           } else {
             LeadConnection.showLoading(context);
             AddLeadModelResponse result = await LeadConnection.addLead(
                 context,
                 AddLeadModelRequest(
-                  avatar: "",
-                  customerType: customerTypeSelected.customerTypeName,
-                  fullName: _fullNameText.text,
-                  phone: _phoneNumberText.text,
-                  customerSource: sourceSelected.customerSourceId,
-                  pipelineCode: pipelineSelected.pipelineCode,
-                  journeyCode: journeySelected.journeyCode,
-                  provinceId: detailPotential.provinceId,
-                  districtId: detailPotential.districtId,
-                  address: detailPotential.address,
-                  saleId: detailPotential.saleId,
-                  businessClue: detailPotential.businessClue,
-                  zalo: detailPotential.zalo ?? "",
-                  gender: detailPotential.gender,
-                  email: detailPotential.email
-                ));
+                    avatar: "",
+                    customerType: customerTypeSelected.customerTypeName,
+                    fullName: _fullNameText.text,
+                    phone: _phoneNumberText.text,
+                    customerSource: sourceSelected.customerSourceId,
+                    pipelineCode: pipelineSelected.pipelineCode,
+                    journeyCode: journeySelected.journeyCode,
+                    provinceId: detailPotential.provinceId,
+                    districtId: detailPotential.districtId,
+                    address: detailPotential.address,
+                    saleId: detailPotential.saleId,
+                    businessClue: detailPotential.businessClue,
+                    zalo: detailPotential.zalo ?? "",
+                    gender: detailPotential.gender,
+                    email: detailPotential.email));
             Navigator.of(context).pop();
-              if (result != null ) {
-                if (result.errorCode == 0) {
-                  print(result.errorDescription);
-                  await LeadConnection.showMyDialog(context, result.errorDescription);
-                  if (result.data != null) {
-                     modelResponse = ObjectPopDetailModel(
+            if (result != null) {
+              if (result.errorCode == 0) {
+                print(result.errorDescription);
+                await LeadConnection.showMyDialog(
+                    context, result.errorDescription);
+                if (result.data != null) {
+                  modelResponse = ObjectPopDetailModel(
                       customer_lead_id: result.data.customerLeadId,
-                      status: true
-                      );
-                    }
-                  Navigator.of(context).pop(modelResponse.toJson());
- 
-                } else {
-                  LeadConnection.showMyDialog(context, result.errorDescription);
+                      status: true);
                 }
+                Navigator.of(context).pop(modelResponse.toJson());
+              } else {
+                LeadConnection.showMyDialog(context, result.errorDescription);
               }
-                
+            }
+
             print("Okie call api add");
           }
         },
@@ -503,9 +555,6 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
       ),
     );
   }
-
-
-
 
   Widget _buildAvatarImg(String name) {
     return Container(

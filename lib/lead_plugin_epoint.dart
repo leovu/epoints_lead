@@ -23,7 +23,7 @@ class LeadPluginEpoint {
 
   }
 
-  static open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, Function action}) async {
+  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode}) async {
     if(domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -33,39 +33,25 @@ class LeadPluginEpoint {
     if(token != null) {
       HTTPConnection.asscessToken = token;
     }
-
     LeadConnection.locale = locale;
     LeadConnection.buildContext = context;
     await AppLocalizations(LeadConnection.locale).load();
     bool result = await LeadConnection.init(token,domain: domain);
-
-    Navigator.of(LeadConnection.buildContext).pop();
     if(result) {
-      // await Navigator.of(LeadConnection.buildContext,rootNavigator: true).push(
-      // MaterialPageRoute(builder: (context) =>  AppDocument(),settings: const RouteSettings(name: 'folder_management_screen')));
-      // await LeadNavigator.push(context, CreatePotentialCustomer());
-
       if (create == 0 ) {
         Map<String, dynamic> event =  await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => CreatePotentialCustomer()));
-        if(action!=null) {
-          Map<String,dynamic> addCustomer;
-          if (event != null) {
-            addCustomer = {
-              'customerLeadId': event['customer_lead_id'],
-              'type': 'cpo'
-            };
-            action(addCustomer);
-          }
-        }
+        return event;
       } else {
         await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => LeadScreen()));
+        return null;
       }
     }else {
       loginError(LeadConnection.buildContext, 'Fail');
+      return null;
     }
   }
 

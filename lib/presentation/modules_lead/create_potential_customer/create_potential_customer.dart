@@ -448,6 +448,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
               journeySelected == null) {
             LeadConnection.showMyDialog(context, 'Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)');
           } else {
+            LeadConnection.showLoading(context);
             AddLeadModelResponse result = await LeadConnection.addLead(
                 context,
                 AddLeadModelRequest(
@@ -467,14 +468,11 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer> with 
                   gender: detailPotential.gender,
                   email: detailPotential.email
                 ));
-
+            Navigator.of(context).pop();
               if (result != null ) {
                 if (result.errorCode == 0) {
                   print(result.errorDescription);
-
-                  LeadConnection.showLoading(context);
                   await LeadConnection.showMyDialog(context, result.errorDescription);
-                  Navigator.of(context).pop();
                   if (result.data != null) {
                      modelResponse = ObjectPopDetailModel(
                       customer_lead_id: result.data.customerLeadId,

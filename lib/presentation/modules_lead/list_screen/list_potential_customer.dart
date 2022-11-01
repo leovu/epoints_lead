@@ -8,7 +8,6 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/filter_screen_model.dart';
 import 'package:lead_plugin_epoint/model/object_pop_detail_model.dart';
 import 'package:lead_plugin_epoint/model/request/list_customer_lead_model_request.dart';
-import 'package:lead_plugin_epoint/model/response/add_lead_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_potential_customer.dart';
@@ -137,6 +136,7 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
           print("bbbb");
   
             if (result != null) {
+              filterScreenModel = result;
               filterModel = result.filterModel;
               print("aaaaa");
               filterModel.page = 1;
@@ -273,6 +273,7 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
                   padding: const EdgeInsets.all(5.0),
                   margin: EdgeInsets.only(bottom: 8.0),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         width: (item.isConvert == 0) ? MediaQuery.of(context).size.width / 2 - 20 : MediaQuery.of(context).size.width / 2 + 20,

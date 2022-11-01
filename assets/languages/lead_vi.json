@@ -108,7 +108,8 @@
     "search_not_found":"Không tìm thấy thông tin",
     "other":"Khác",
 
-    "input_search":"Nhập thông tin tìm kiếm"
+    "input_search":"Nhập thông tin tìm kiếm",
+    "warning_choose_full_fromdate_todate":"Vui lòng chọn đầy đủ từ ngày - đến ngày"
 
   }
   

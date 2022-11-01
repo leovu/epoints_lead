@@ -5,6 +5,7 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
+import 'package:lead_plugin_epoint/model/object_pop_detail_model.dart';
 import 'package:lead_plugin_epoint/model/request/assign_revoke_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
@@ -27,6 +28,7 @@ class DetailPotentialCustomer extends StatefulWidget {
 class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   final ScrollController _controller = ScrollController();
   DetailPotentialData detail;
+  bool allowPop = false;
 
   @override
   void initState() {
@@ -54,21 +56,30 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white,
+    return WillPopScope(
+      onWillPop: () {
+        if(allowPop){
+              Navigator.of(context).pop( allowPop);
+        }
+        return;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: const IconThemeData(
+            color: Colors.white,
+          ),
+          // actionsIconTheme: Navigator.of(context).pop(true),
+          backgroundColor: AppColors.primaryColor,
+          title: Text(
+            AppLocalizations.text(LangKey.detailPotential),
+            style: const TextStyle(color: Colors.white, fontSize: 18.0),
+          ),
+          leadingWidth: 20.0,
         ),
-        backgroundColor: AppColors.primaryColor,
-        title: Text(
-          AppLocalizations.text(LangKey.detailPotential),
-          style: const TextStyle(color: Colors.white, fontSize: 18.0),
-        ),
-        leadingWidth: 20.0,
+        body: Container(
+            decoration: const BoxDecoration(color: AppColors.white),
+            child: buildBody()),
       ),
-      body: Container(
-          decoration: const BoxDecoration(color: AppColors.white),
-          child: buildBody()),
     );
   }
 
@@ -96,6 +107,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
                         if (result != null) {
                           if (result) {
+                            allowPop = true;
                             getData();
                             ;
                           }

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -16,6 +19,7 @@ import 'package:lead_plugin_epoint/model/response/get_journey_model_response.dar
 import 'package:lead_plugin_epoint/model/response/get_pipeline_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_province_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/upload_image_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_type_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/build_more_address_create_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
@@ -29,7 +33,8 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 class CreatePotentialCustomer extends StatefulWidget {
   String fullname;
   String phoneNumber;
- CreatePotentialCustomer({Key key, this.fullname, this. phoneNumber}) : super(key: key);
+  CreatePotentialCustomer({Key key, this.fullname, this.phoneNumber})
+      : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -50,6 +55,12 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
 
   bool showMoreAddress = false;
   bool showMoreAll = false;
+
+  String _imgAvatar = "";
+
+  File _image;
+  PickedFile _pickedFile;
+  final _picker = ImagePicker();
 
   AddLeadModelRequest requestModel = AddLeadModelRequest();
   List<ProvinceData> provinces = <ProvinceData>[];
@@ -99,17 +110,15 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-
       if (widget.fullname != null) {
-        _fullNameText.text = widget.fullname ;
+        _fullNameText.text = widget.fullname;
       }
 
       if (widget.phoneNumber != null) {
-        _phoneNumberText.text = widget.phoneNumber ;
+        _phoneNumberText.text = widget.phoneNumber;
       }
     });
   }
-
 
   @override
   void dispose() {
@@ -128,6 +137,24 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
       });
     }
     super.didChangeMetrics();
+  }
+
+  Future<void> _pickImage() async {
+    _pickedFile = await _picker.getImage(source: ImageSource.gallery);
+
+    if (_pickedFile != null) {
+      _image = File(_pickedFile.path);
+
+      UploadImageModelResponse result =
+          await LeadConnection.upload(context, _image);
+
+      if (result != null) {
+        _imgAvatar = result.data.link;
+        setState(() {
+          print(_image);
+        });
+      }
+    }
   }
 
   @override
@@ -199,8 +226,43 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           ),
 
           Center(
-            child: _buildAvatarImg("Duc Tran Tan"),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  InkWell(
+            onTap: () {
+                  print("chon anh");
+                  _pickImage();
+            },
+            child: (_imgAvatar != "")
+                    ? _buildAvatarWithImage(_imgAvatar)
+                    : _buildAvatarImg(_fullNameText.text),
           ),
+
+          Positioned(
+                    left: 60,
+                    bottom: 55,
+                    child: InkWell(
+                      onTap: () {
+                        _imgAvatar = "";
+                        setState(() {
+                          
+                        });
+                      },
+                      child:  (_imgAvatar != "") ? Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.red
+                            ),
+                        child: Center(child: Icon(Icons.clear, color: Colors.white,
+                        size: 15,)),
+                      ) : Container(),
+                    ))
+
+                ],
+              )),
 
           Container(
             height: 10,
@@ -335,71 +397,69 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 pipeLineData = pipelines.data;
 
                 PipelineData pipeline = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return GestureDetector(
-                    child: PipelineModal(
-                      pipeLineData: pipeLineData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
-                  );
-                });
-            if (pipeline != null) {
-              if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
-                journeySelected = null;
-              }
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return GestureDetector(
+                        child: PipelineModal(
+                          pipeLineData: pipeLineData,
+                        ),
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        behavior: HitTestBehavior.opaque,
+                      );
+                    });
+                if (pipeline != null) {
+                  if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
+                    journeySelected = null;
+                  }
 
-              pipelineSelected = pipeline;
-              LeadConnection.showLoading(context);
-              var journeys = await LeadConnection.getJourney(
-                  context, pipelineSelected.pipelineCode);
-              Navigator.of(context).pop();
-              if (journeys != null) {
-                journeysData = journeys.data;
-              }
-              setState(() {});
-            }
-
+                  pipelineSelected = pipeline;
+                  LeadConnection.showLoading(context);
+                  var journeys = await LeadConnection.getJourney(
+                      context, pipelineSelected.pipelineCode);
+                  Navigator.of(context).pop();
+                  if (journeys != null) {
+                    journeysData = journeys.data;
+                  }
+                  setState(() {});
+                }
               }
             } else {
-
               PipelineData pipeline = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return GestureDetector(
-                    child: PipelineModal(
-                      pipeLineData: pipeLineData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
-                  );
-                });
-            if (pipeline != null) {
-              if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
-                journeySelected = null;
-              }
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) {
+                    return GestureDetector(
+                      child: PipelineModal(
+                        pipeLineData: pipeLineData,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      behavior: HitTestBehavior.opaque,
+                    );
+                  });
+              if (pipeline != null) {
+                if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
+                  journeySelected = null;
+                }
 
-              pipelineSelected = pipeline;
-              LeadConnection.showLoading(context);
-              var journeys = await LeadConnection.getJourney(
-                  context, pipelineSelected.pipelineCode);
-              Navigator.of(context).pop();
-              if (journeys != null) {
-                journeysData = journeys.data;
+                pipelineSelected = pipeline;
+                LeadConnection.showLoading(context);
+                var journeys = await LeadConnection.getJourney(
+                    context, pipelineSelected.pipelineCode);
+                Navigator.of(context).pop();
+                if (journeys != null) {
+                  journeysData = journeys.data;
+                }
+                setState(() {});
               }
-              setState(() {});
-            }
             }
           }),
 
@@ -558,8 +618,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
 
   Widget _buildAvatarImg(String name) {
     return Container(
-      width: 65.0,
-      height: 65.0,
+      width: 80.0,
+      height: 80.0,
       padding: const EdgeInsets.all(2.0),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
@@ -571,6 +631,30 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           name: name,
           textSize: AppTextSizes.size22,
         ),
+      ),
+    );
+  }
+
+  Widget _buildAvatarWithImage(String image) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10000.0),
+      child: FittedBox(
+        child: Container(
+          width: 80.0,
+    height: 80.0,
+    padding: const EdgeInsets.all(2.0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blueGrey,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(1), BlendMode.dstATop),
+              image: NetworkImage(image)
+            )
+          ),
+        ),
+        fit: BoxFit.fill,
       ),
     );
   }
@@ -646,6 +730,14 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             print(event.toLowerCase());
             if (fillText != null) {
               print(fillText.text);
+              if (fillText == _fullNameText) {
+                // _buildAvatarImg(fillText.text);
+              }
+            }
+          },
+          onSubmitted: (event) {
+            if (fillText == _fullNameText) {
+              _buildAvatarImg(_fullNameText.text);
             }
           },
         ),

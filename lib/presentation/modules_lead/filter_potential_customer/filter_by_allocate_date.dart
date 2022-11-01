@@ -5,18 +5,17 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/allocate_date.dart';
 import 'package:lead_plugin_epoint/model/filter_screen_model.dart';
+import 'package:lead_plugin_epoint/utils/global.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_meni_bottom_sheet.dart';
 
 class FilterByAllocateDate extends StatefulWidget {
   FilterScreenModel filterScreenModel = FilterScreenModel();
-
-  // ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest();
   List<AllocateDateModel> allocateDateOptions = <AllocateDateModel>[];
-
+   String id_allocate_date;
   FilterByAllocateDate(
-      {Key key, this.filterScreenModel, this.allocateDateOptions})
+      {Key key, this.filterScreenModel, this.allocateDateOptions,this.id_allocate_date})
       : super(key: key);
 
   @override
@@ -24,7 +23,6 @@ class FilterByAllocateDate extends StatefulWidget {
 }
 
 class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
-  AllocateDateModel allocateDateSeleted = AllocateDateModel();
 
   DateTime _fromDate;
   DateTime _toDate;
@@ -35,7 +33,6 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
   @override
   void initState() {
     super.initState();
-    _toDate = _now;
 
     if (widget.filterScreenModel.fromDate_allocation_date != null) {
       _fromDateText.text = DateFormat("dd/MM/yyyy")
@@ -54,7 +51,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
         if (widget.allocateDateOptions[i].allocateDateID ==
             int.parse(widget.filterScreenModel.id_allocation_date)) {
           widget.allocateDateOptions[i].selected = true;
-          allocateDateSeleted = widget.allocateDateOptions[i];
+          widget.id_allocate_date =  "${widget.allocateDateOptions[i].allocateDateID}";
         } else {
           widget.allocateDateOptions[i].selected = false;
         }
@@ -83,7 +80,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                   runSpacing: 20,
                 ),
               ),
-              (allocateDateSeleted?.allocateDateID == 6)
+              (widget.id_allocate_date == "6")
                   ? Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -108,7 +105,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                                         8,
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.fromDate),
-                                    _fromDateText, () {
+                                     widget.id_allocate_date != "" ? _fromDateText : "", () {
                                   _showFromDatePickerCreateDate();
                                 })),
                             Container(
@@ -126,7 +123,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                                         4,
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.toDate),
-                                    _toDateText, () {
+                                    widget.id_allocate_date != "" ?  _toDateText : "", () {
                                   _showToDatePickerCreateDate();
                                 }))
                           ],
@@ -165,13 +162,20 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                 },
               ),
               onTapConfirm: () {
+
+                if (_toDate == null) {
+                  Global.validateAllocateDate = false;
+                } else {
+                  Global.validateAllocateDate = true;
+                }
+                
                 _fromDate = selectedDate;
                 widget.filterScreenModel.fromDate_allocation_date = selectedDate;
 
                 _fromDateText.text =
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
                 widget.filterScreenModel.filterModel.allocationDate =
-                    "${DateFormat("dd/MM/yyyy").format(_fromDate)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
+                    "${DateFormat("dd/MM/yyyy").format(_fromDate)} - ${DateFormat("dd/MM/yyyy").format(_toDate ?? _now)}";
                 print(widget.filterScreenModel.filterModel.allocationDate);
                 Navigator.of(context).pop();
               },
@@ -181,12 +185,12 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
         });
   }
 
-  _showToDatePickerCreateDate() {
+_showToDatePickerCreateDate() {
     DateTime selectedDate = _toDate ?? _now;
     DateTime maximumTime = _now;
-    if (_toDate.year == _now.year &&
-        _toDate.month == _now.month &&
-        _toDate.day > _now.day) maximumTime = _toDate;
+    if (_toDate?.year == _now.year &&
+        _toDate?.month == _now.month &&
+        _toDate?.day > _now.day) maximumTime = _toDate;
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -208,12 +212,16 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                 },
               ),
               onTapConfirm: () {
+                if (_fromDate == null) {
+                  Global.validateAllocateDate = false;
+                } else {
+                  Global.validateAllocateDate = true;
+                }
                 _toDate = selectedDate;
                 widget.filterScreenModel.toDate_allocation_date = selectedDate;
                 _toDateText.text =
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
-                widget.filterScreenModel.filterModel.allocationDate =
-                    "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
+                widget.filterScreenModel.filterModel.allocationDate = "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
                 print(widget.filterScreenModel.filterModel.allocationDate);
                 Navigator.of(context).pop();
               },
@@ -296,58 +304,61 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
 
   selectedSource(int index) async {
     if (index != 6) {
-      widget.filterScreenModel.fromDate_created_at = null;
-      widget.filterScreenModel.toDate_created_at = null;
+      Global.validateAllocateDate = true;
+      _fromDateText.text = "";
+      _toDateText.text = "";
+
+      widget.filterScreenModel.fromDate_allocation_date = null;
+      widget.filterScreenModel.toDate_allocation_date = null;
+      _fromDate = null;
+      _toDate = null;
+    } else {
+      Global.validateAllocateDate = false;
     }
+
     List<AllocateDateModel> models = widget.allocateDateOptions;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
     models[index].selected = true;
-    allocateDateSeleted = models[index];
+    widget.id_allocate_date = "${models[index].allocateDateID}";
+    widget.filterScreenModel.id_allocation_date = "${index}";
+
     switch (index) {
       case 0:
         widget.filterScreenModel.filterModel.allocationDate =
             "${DateFormat("dd/MM/yyyy").format(_now)} - ${DateFormat("dd/MM/yyyy").format(_now)}";
-
-        widget.filterScreenModel.id_allocation_date = "${index}";
         print(widget.filterScreenModel.filterModel.allocationDate);
         break;
       case 1:
         widget.filterScreenModel.filterModel.allocationDate =
             "${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
         print(widget.filterScreenModel.filterModel.allocationDate);
-        widget.filterScreenModel.id_allocation_date = "${index}";
         break;
       case 2:
         widget.filterScreenModel.filterModel.allocationDate =
             "${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 7)))} - ${DateFormat("dd/MM/yyyy").format(_now)}";
         print(widget.filterScreenModel.filterModel.allocationDate);
-        widget.filterScreenModel.id_allocation_date = "${index}";
         break;
       case 3:
         widget.filterScreenModel.filterModel.allocationDate =
             "${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 31)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
         print(widget.filterScreenModel.filterModel.allocationDate);
-        widget.filterScreenModel.id_allocation_date = "${index}";
         break;
       case 4:
         widget.filterScreenModel.filterModel.allocationDate =
             "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month + 1, 0).toString()))}";
         print(widget.filterScreenModel.filterModel.allocationDate);
-        widget.filterScreenModel.id_allocation_date = "${index}";
         break;
       case 5:
         var lastmonth = _now.month - 1;
         widget.filterScreenModel.filterModel.allocationDate =
             "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month - 1, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, lastmonth + 1, 0).toString()))}";
         print(widget.filterScreenModel.filterModel.allocationDate);
-        widget.filterScreenModel.id_allocation_date = "${index}";
         break;
       case 6:
         widget.filterScreenModel.filterModel.allocationDate = "";
         print(widget.filterScreenModel.filterModel.allocationDate);
-        widget.filterScreenModel.id_allocation_date = "${index}";
         break;
       default:
     }

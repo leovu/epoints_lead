@@ -109,5 +109,6 @@ class LangKey {
   static const String other = "other";
 
   static const String inputSearch = "input_search";
+    static const String warningChooseFullFromdateTodate = "warning_choose_full_fromdate_todate";
 }
 

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
@@ -27,6 +26,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_customer_type.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_status.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_tags.dart';
+import 'package:lead_plugin_epoint/utils/global.dart';
 
 
 class FilterPotentialCustomer extends StatefulWidget {
@@ -42,8 +42,6 @@ class FilterPotentialCustomer extends StatefulWidget {
 
 class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
   final ScrollController _controller = ScrollController();
-  final TextEditingController _fromDateText = TextEditingController();
-  final TextEditingController _toDateText = TextEditingController();
 
   List<AllocatorData> allocatorData = <AllocatorData>[];
   AllocatorData allocatorSelected = AllocatorData();
@@ -173,46 +171,54 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         selected: false)
   ];
 
-  DateTime _fromDate;
-  DateTime _toDate;
-  DateTime _now = DateTime.now();
+ 
+
+  FilterScreenModel filterScreenModel = FilterScreenModel(
+      filterModel: ListCustomLeadModelRequest(
+          search: "",
+          page: 1,
+          statusAssign: "",
+          customerType: "",
+          tagId: "",
+          customerSourceName: "",
+          isConvert: "",
+          staffFullName:"",
+          pipelineName: "",
+          journeyName: "",
+          createdAt:"",
+          allocationDate: ""),
+      fromDate_created_at: null,
+      toDate_created_at: null,
+      fromDate_allocation_date: null,
+      toDate_allocation_date: null,
+      id_created_at: "",
+      id_allocation_date: "");
 
   // bool isSelected = false;
   @override
   void initState() {
     super.initState();
+    filterScreenModel = FilterScreenModel(
+      filterModel: ListCustomLeadModelRequest.fromJson(widget.filterScreenModel.filterModel.toJson()),
+      fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
+      toDate_created_at: widget.filterScreenModel.toDate_created_at,
+      fromDate_allocation_date: widget.filterScreenModel.fromDate_allocation_date,
+      toDate_allocation_date: widget.filterScreenModel.toDate_allocation_date,
+      id_created_at: widget.filterScreenModel.id_created_at,
+      id_allocation_date: widget.filterScreenModel.id_allocation_date
+    );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       LeadConnection.showLoading(context);
       await getData();
       Navigator.of(context).pop();
-      _toDate = _now;
     });
   }
 
-  void initModel() async {
-    // _modeltTagDatas = GetTagModelReponse(
-    //     data: (tagDatas ?? <TagData>[])
-    //         .map((e) => TagData.fromJson(e.toJson())).toList());
-
-    // _modeltTagDatas = GetTagModelReponse(
-    //     data: (tagDatas ?? <TagData>[])
-    //         .map((e) => TagData.fromJson(e.toJson())).toList());
-
-    // if (widget.filterScreenModel.fromDate_allocation_date != null) {
-    //   _fromDateText.text = DateFormat("dd/MM/yyyy")
-    //       .format(widget.filterScreenModel.fromDate_allocation_date);
-    //   _fromDate = widget.filterScreenModel.fromDate_allocation_date;
-    // }
-
-    // if (widget.filterScreenModel.toDate_allocation_date != null) {
-    //   _toDateText.text = DateFormat("dd/MM/yyyy")
-    //       .format(widget.filterScreenModel.toDate_allocation_date);
-    //   _toDate = widget.filterScreenModel.toDate_allocation_date;
-    // }
+  void bindingModel() async {
 
     for (int i = 0; i < tagDatas.length; i++) {
-      if (widget.filterScreenModel.filterModel.tagId != "") {
+      if (filterScreenModel.filterModel.tagId != "") {
         if (widget.filterScreenModel.filterModel.tagId ==
             "${tagDatas[i].tagId}") {
           tagDatas[i].selected = true;
@@ -223,7 +229,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
 
     for (int i = 0; i < customerTypeData.length; i++) {
-      if (widget.filterScreenModel.filterModel.customerType != "") {
+      if (filterScreenModel.filterModel.customerType != "") {
         if (widget.filterScreenModel.filterModel.customerType ==
             customerTypeData[i].customerTypeName) {
           customerTypeData[i].selected = true;
@@ -234,7 +240,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
 
     for (int i = 0; i < statusOptions.length; i++) {
-      if (widget.filterScreenModel.filterModel.statusAssign != "") {
+      if (filterScreenModel.filterModel.statusAssign != "") {
         if (widget.filterScreenModel.filterModel.statusAssign ==
             "${statusOptions[i].statusID}") {
           statusOptions[i].selected = true;
@@ -245,7 +251,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
 
     for (int i = 0; i < customerSources.length; i++) {
-      if (widget.filterScreenModel.filterModel.customerSourceName != "") {
+      if (filterScreenModel.filterModel.customerSourceName != "") {
         if (widget.filterScreenModel.filterModel.customerSourceName ==
             customerSources[i].sourceName) {
           customerSources[i].selected = true;
@@ -256,7 +262,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
 
     for (int i = 0; i < convertStatusOptions.length; i++) {
-      if (widget.filterScreenModel.filterModel.isConvert != "") {
+      if (filterScreenModel.filterModel.isConvert != "") {
         if (widget.filterScreenModel.filterModel.isConvert ==
             "${convertStatusOptions[i].statusID}") {
           convertStatusOptions[i].selected = true;
@@ -266,29 +272,32 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       }
     }
 
-    if (widget.filterScreenModel.filterModel.staffFullName != "") {
+    if (filterScreenModel.filterModel.staffFullName != "") {
       AllocatorData data = allocatorData.firstWhere((element) =>
           element.fullName ==
           widget.filterScreenModel.filterModel.staffFullName);
       allocatorSelected = data;
+      allocatorSelected.selected = true;
     }
 
-    if (widget.filterScreenModel.filterModel.pipelineName != "") {
+    if (filterScreenModel.filterModel.pipelineName != "") {
       PipelineData data = pipeLineData.firstWhere((element) =>
           element.pipelineName ==
           widget.filterScreenModel.filterModel.pipelineName);
       pipelineSelected = data;
+      pipelineSelected.selected = true;
 
       var journeys = await LeadConnection.getJourney(
           context, pipelineSelected.pipelineCode);
       if (journeys != null) {
         journeysData = journeys.data;
 
-        if (widget.filterScreenModel.filterModel.journeyName != "") {
+        if (filterScreenModel.filterModel.journeyName != "") {
           JourneyData data = journeysData.firstWhere((element) =>
               element.journeyName ==
               widget.filterScreenModel.filterModel.journeyName);
           journeySelected = data;
+          journeySelected.selected = true;
         }
       }
     }
@@ -301,7 +310,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       tagDatas.addAll(tags.data);
       
     }
-
     var sources = await LeadConnection.getCustomerOption(context);
     if (sources != null) {
       customerOptionData = sources.data;
@@ -315,22 +323,16 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           customerTypeName: customerOptionData.customerType.business,
           customerTypeID: 2,
           selected: false));
-
-
     }
-
     var pipelines = await LeadConnection.getPipeline(context);
     if (pipelines != null) {
       pipeLineData = pipelines.data;
-
-
     }
-
     var allocator = await LeadConnection.getAllocator(context);
     if (allocator != null) {
       allocatorData = allocator.data;
     }
-    initModel();
+    bindingModel();
   }
 
 
@@ -437,8 +439,9 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             fontWeight: FontWeight.bold),
       ),
       FilterByCreateDate(
-        filterScreenModel: widget.filterScreenModel,
+        filterScreenModel: filterScreenModel,
         createDateOptions: createDateOptions,
+        id_create_date: filterScreenModel.id_created_at,
       ),
 
       Text(
@@ -450,8 +453,9 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       ),
 
       FilterByAllocateDate(
-        filterScreenModel: widget.filterScreenModel,
+        filterScreenModel: filterScreenModel,
         allocateDateOptions: allocateDateOptions,
+        id_allocate_date: filterScreenModel.id_allocation_date,
       ),
 
       // khung thời gian tự chọn
@@ -543,7 +547,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             });
         if (allocator != null) {
           allocatorSelected = allocator;
-          widget.filterScreenModel.filterModel.staffFullName =
+          filterScreenModel.filterModel.staffFullName =
               allocatorSelected.fullName;
           setState(() {});
         }
@@ -591,7 +595,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           }
 
           pipelineSelected = pipeline;
-          widget.filterScreenModel.filterModel.pipelineName =
+          filterScreenModel.filterModel.pipelineName =
               pipelineSelected.pipelineName;
 
           var journeys = await LeadConnection.getJourney(
@@ -641,7 +645,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             });
         if (journey != null) {
           journeySelected = journey;
-          widget.filterScreenModel.filterModel.journeyName =
+          filterScreenModel.filterModel.journeyName =
               journeySelected.journeyName;
 
           setState(() {
@@ -650,34 +654,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         }
       }),
     ];
-  }
-
-  Widget _buildDatePicker(
-      String hintText, TextEditingController fillText, Function ontap) {
-    return InkWell(
-      onTap: ontap,
-      child: TextField(
-        enabled: false,
-        controller: fillText,
-        decoration: InputDecoration(
-          isCollapsed: true,
-          contentPadding: EdgeInsets.all(12.0),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          // focusedBorder: OutlineInputBorder(
-          //   borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-          // ),
-          hintText: hintText,
-          hintStyle: TextStyle(
-              fontSize: 14.0,
-              color: Color(0xFF8E8E8E),
-              fontWeight: FontWeight.normal),
-          isDense: true,
-        ),
-        // },
-      ),
-    );
   }
 
   Widget _buildTextField(String title, String content, String icon,
@@ -768,20 +744,29 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           child: InkWell(
             onTap: () {
               print("ap dung");
+
+               if (Global.validateCreateDate == false ||
+                  Global.validateAllocateDate == false) {
+                LeadConnection.showMyDialog(
+                    context,
+                    AppLocalizations.text(
+                        LangKey.warningChooseFullFromdateTodate));
+                return;
+              }
               var tagData = tagDatas.firstWhere((element) => element.selected);
               if (tagData.name == AppLocalizations.text(LangKey.all)){
-                widget.filterScreenModel.filterModel.tagId = "";
+                filterScreenModel.filterModel.tagId = "";
               } else {
-                widget.filterScreenModel.filterModel.tagId = "${tagData.tagId}";
+               filterScreenModel.filterModel.tagId = "${tagData.tagId}";
               }
 
               var cusType =
                   customerTypeData.firstWhere((element) => element.selected);
 
               if (cusType.customerTypeName == AppLocalizations.text(LangKey.all)) {
-                widget.filterScreenModel.filterModel.customerType = "";
+                filterScreenModel.filterModel.customerType = "";
               } else {
-                widget.filterScreenModel.filterModel.customerType =
+                filterScreenModel.filterModel.customerType =
                     cusType.customerTypeName;
               }
 
@@ -790,17 +775,17 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               if (statusOption.statusName == AppLocalizations.text(LangKey.all)) {
                 widget.filterScreenModel.filterModel.statusAssign = "";
               } else {
-                widget.filterScreenModel.filterModel.statusAssign =
+                filterScreenModel.filterModel.statusAssign =
                     "${statusOption.statusID}";
               }
 
               var cusSource =
                   customerSources.firstWhere((element) => element.selected);
                     if (cusSource.sourceName == AppLocalizations.text(LangKey.all)) {
-                widget.filterScreenModel.filterModel.customerSourceName =
+                filterScreenModel.filterModel.customerSourceName =
                   "";
               } else {
-                widget.filterScreenModel.filterModel.customerSourceName =
+                filterScreenModel.filterModel.customerSourceName =
                   cusSource.sourceName;
               }
 
@@ -808,13 +793,15 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                   .firstWhere((element) => element.selected);
 
                   if (convertStatusOption.statusName == AppLocalizations.text(LangKey.all)) {
-                widget.filterScreenModel.filterModel.isConvert =
+                filterScreenModel.filterModel.isConvert =
                   "";
               } else {
-                widget.filterScreenModel.filterModel.isConvert =
+                filterScreenModel.filterModel.isConvert =
                   "${convertStatusOption.statusID}";
               }
-              
+
+
+              widget.filterScreenModel = filterScreenModel;
 
               Navigator.of(context).pop(widget.filterScreenModel);
             },
@@ -875,112 +862,74 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         createdAt: "",
         allocationDate: ""), fromDate_allocation_date: null, toDate_allocation_date: null, fromDate_created_at: null, toDate_created_at:  null,id_created_at: "");
 
-allocatorSelected = null;
-   pipelineSelected = null;
+  filterScreenModel = FilterScreenModel(
+      filterModel: ListCustomLeadModelRequest.fromJson(widget.filterScreenModel.filterModel.toJson()),
+      fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
+      toDate_created_at: widget.filterScreenModel.toDate_created_at,
+      fromDate_allocation_date: widget.filterScreenModel.fromDate_allocation_date,
+      toDate_allocation_date: widget.filterScreenModel.toDate_allocation_date,
+      id_created_at: widget.filterScreenModel.id_created_at,
+      id_allocation_date: widget.filterScreenModel.id_allocation_date
+    );
 
+
+  allocatorSelected = null;
+   pipelineSelected = null;
    journeySelected = null;
 
-   _fromDate = null;
-   _fromDateText.text = "";
-   _toDate = _now;
-   _toDateText.text = "";
 
+   for (int i = 0; i < tagDatas.length; i++) {
+      if (i == 0) {
+        tagDatas[i].selected = true;
+      } else {
+        tagDatas[i].selected = false;
+      }
+    }
 
-      tagDatas = [
-    TagData(
-        tagId: 0,
-        keyword: AppLocalizations.text(LangKey.all),
-        name: AppLocalizations.text(LangKey.all),
-        selected: true)
-  ];
+    for (int i = 0; i < customerTypeData.length; i++) {
+      if (i == 0) {
+        customerTypeData[i].selected = true;
+      } else {
+        customerTypeData[i].selected = false;
+      }
+    }
+   for (int i = 0; i < customerSources.length; i++) {
+      if (i == 0) {
+        customerSources[i].selected = true;
+      } else {
+        customerSources[i].selected = false;
+      }
+    }
+    for (int i = 0; i < createDateOptions.length; i++) {
+      createDateOptions[i].selected = false;
+    }
 
-  // _modeltTagDatas.data = tagDatas;
+    for (int i = 0; i < allocateDateOptions.length; i++) {
+      allocateDateOptions[i].selected = false;
+    }
 
-  customerSources = [
-    CustomerOptionSource(
-      customerSourceId: 0,
-      customerSourceType: AppLocalizations.text(LangKey.all),
-      sourceName: AppLocalizations.text(LangKey.all),
-      selected: true,
-    )
-  ];
+    for (int i = 0; i < statusOptions.length; i++) {
+      if (i == 0) {
+        statusOptions[i].selected = true;
+      } else {
+        statusOptions[i].selected = false;
+      }
+    }
+ 
 
-  customerOptionData = CustomerOptionData();
+    for (int i = 0; i < convertStatusOptions.length; i++) {
+      if (i == 0) {
+        convertStatusOptions[i].selected = true;
+      } else {
+        convertStatusOptions[i].selected = false;
+      }
+    }
 
-  createDateOptions = [
-    CreateDateModel(
-        createDateName: AppLocalizations.text(LangKey.today),
-        createDateID: 0,
-        selected: false),
-    CreateDateModel(
-        createDateName: AppLocalizations.text(LangKey.tomorrow),
-        createDateID: 1,
-        selected: false),
-    CreateDateModel(
-        createDateName: AppLocalizations.text(LangKey.seven_day_ago),
-        createDateID: 2,
-        selected: false),
-    CreateDateModel(
-        createDateName: AppLocalizations.text(LangKey.thirty_day_ago),
-        createDateID: 3,
-        selected: false),
-    CreateDateModel(
-        createDateName: AppLocalizations.text(LangKey.in_month),
-        createDateID: 4,
-        selected: false),
-    CreateDateModel(
-        createDateName: AppLocalizations.text(LangKey.last_month),
-        createDateID: 5,
-        selected: false),
-    CreateDateModel(
-        createDateName: AppLocalizations.text(LangKey.date_option),
-        createDateID: 6,
-        selected: false)
-  ];
+    Global.validateAllocateDate = true;
+    Global.validateCreateDate = true;
 
-  customerTypeData = [
-    CustomerTypeModel(
-        customerTypeName: AppLocalizations.text(LangKey.all),
-        customerTypeID: 0,
-        selected: true)
-  ];
-
- statusOptions = [
-    StatusAssignModel(
-        statusName: AppLocalizations.text(LangKey.all),
-        statusID: 0,
-        selected: true),
-    StatusAssignModel(
-        statusName: AppLocalizations.text(LangKey.assigned),
-        statusID: 1,
-        selected: false),
-    StatusAssignModel(
-        statusName: AppLocalizations.text(LangKey.unassigned),
-        statusID: 2,
-        selected: false)
-  ];
-
-  convertStatusOptions = [
-    ConvertStatusModel(
-        statusName: AppLocalizations.text(LangKey.all),
-        statusID: 2,
-        selected: true),
-    ConvertStatusModel(
-        statusName: AppLocalizations.text(LangKey.convertCustomersSuccess),
-        statusID: 1,
-        selected: false),
-    ConvertStatusModel(
-        statusName: AppLocalizations.text(LangKey.convertCustomersNotSuccess),
-        statusID: 0,
-        selected: false)
-  ];
-
-  // initModel() ;
-
-  LeadConnection.showLoading(context);
-      await getData();
-      Navigator.of(context).pop();
-
-
+    setState(() {
+      
+    });
   }
 }

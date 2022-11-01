@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -16,6 +19,7 @@ import 'package:lead_plugin_epoint/model/response/get_journey_model_response.dar
 import 'package:lead_plugin_epoint/model/response/get_pipeline_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_province_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/upload_image_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_type_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
@@ -47,6 +51,11 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
 
   bool showMoreAddress = false;
   bool showMoreAll = false;
+
+  String _imgAvatar = "";
+  File _image;
+  PickedFile _pickedFile;
+  final _picker = ImagePicker();
 
   AddLeadModelRequest requestModel = AddLeadModelRequest();
   List<ProvinceData> provinces = <ProvinceData>[];
@@ -119,6 +128,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
   }
 
   void initModel() async {
+    // _imgAvatar =  widget.detailPotential?.avatar ?? "";
     _fullNameText.text = widget.detailPotential?.fullName ?? "";
     _phoneNumberText.text = widget.detailPotential?.phone ?? "";
     for (int i = 0; i < customerTypeData.length; i++) {
@@ -169,6 +179,24 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
      Navigator.of(context).pop();
 
     setState(() {});
+  }
+
+    Future<void> _pickImage() async {
+    _pickedFile = await _picker.getImage(source: ImageSource.gallery);
+
+    if (_pickedFile != null) {
+      _image = File(_pickedFile.path);
+
+      UploadImageModelResponse result =
+          await LeadConnection.upload(context, _image);
+
+      if (result != null) {
+        _imgAvatar = result.data.link;
+        setState(() {
+          print(_image);
+        });
+      }
+    }
   }
 
   @override
@@ -261,8 +289,43 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
           ),
 
           Center(
-            child: _buildAvatarImg(widget.detailPotential?.fullName ?? ""),
+              child: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  InkWell(
+            onTap: () {
+                  print("chon anh");
+                  _pickImage();
+            },
+            child: (_imgAvatar != "")
+                    ? _buildAvatarWithImage(_imgAvatar)
+                    : _buildAvatarImg(_fullNameText.text ?? ""),
           ),
+
+          Positioned(
+                    left: 60,
+                    bottom: 55,
+                    child: InkWell(
+                      onTap: () {
+                        _imgAvatar = "";
+                        setState(() {
+                          
+                        });
+                      },
+                      child:  (_imgAvatar != "") ? Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Colors.red
+                            ),
+                        child: Center(child: Icon(Icons.clear, color: Colors.white,
+                        size: 15,)),
+                      ) : Container(),
+                    ))
+
+                ],
+              )),
 
           Container(
             height: 10,
@@ -489,6 +552,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
             DescriptionModelResponse result = await LeadConnection.updateLead(
                 context,
                 EditPotentialRequestModel(
+                  
                   customerLeadCode: widget.detailPotential.customerLeadCode,
                   customerType: customerTypeSelected.customerTypeName,
                   fullName: _fullNameText.text,
@@ -496,7 +560,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
                   customerSource: customerSourceSelected.customerSourceId,
                   pipelineCode: pipelineSelected.pipelineCode,
                   journeyCode: journeySelected.journeyCode,
-                  avatar: "",
+                  avatar: _imgAvatar,
                   provinceId: "${widget.detailPotential.provinceId}",
                   districtId: "${widget.detailPotential.districtId}",
                   address: widget.detailPotential.address,
@@ -571,8 +635,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
 
   Widget _buildAvatarImg(String name) {
     return Container(
-      width: 65.0,
-      height: 65.0,
+      width: 80.0,
+      height: 80.0,
       padding: const EdgeInsets.all(2.0),
       decoration: const BoxDecoration(
         shape: BoxShape.circle,
@@ -584,6 +648,30 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
           name: name,
           textSize: AppTextSizes.size22,
         ),
+      ),
+    );
+  }
+
+   Widget _buildAvatarWithImage(String image) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10000.0),
+      child: FittedBox(
+        child: Container(
+          width: 80.0,
+    height: 80.0,
+    padding: const EdgeInsets.all(2.0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.blueGrey,
+            image: DecorationImage(
+              fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(1), BlendMode.dstATop),
+              image: NetworkImage(image)
+            )
+          ),
+        ),
+        fit: BoxFit.fill,
       ),
     );
   }

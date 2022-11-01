@@ -21,13 +21,15 @@ import 'package:lead_plugin_epoint/model/response/get_pipeline_model_response.da
 import 'package:lead_plugin_epoint/model/response/get_province_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
+import 'package:http/http.dart' as http;
+import 'package:lead_plugin_epoint/model/response/upload_image_response_model.dart';
 
 import '../model/response/list_customer_lead_model_response.dart';
 
 class LeadConnection {
   static BuildContext buildContext;
   static HTTPConnection connection = HTTPConnection();
-  static Account account;
+  // static Account account;
   // static Locale locale = Locale('vi', 'VN');
   static Locale locale;
 
@@ -56,6 +58,21 @@ class LeadConnection {
       return null;
     }
     return null;
+  }
+
+  static  Future<String> uploadImage(filepath, url) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files.add(
+        http.MultipartFile.fromBytes(
+            'picture',
+            File(filepath).readAsBytesSync(),
+            filename: filepath.split("/").last
+        )
+    );
+    var res = await request.send();
+    if (res != null) {
+
+    }
   }
 
   static Future<DetailPotentialModelResponse> getdetailPotential(
@@ -247,6 +264,17 @@ class LeadConnection {
     return null;
   }
 
+  static Future<UploadImageModelResponse> upload(BuildContext context, File file) async {
+    showLoading(context);
+    ResponseData responseData = await LeadConnection.connection.upload('/user/upload-file', file);
+    Navigator.of(context).pop();
+    if (responseData.isSuccess) {
+      UploadImageModelResponse data = UploadImageModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
   static Future showLoading(BuildContext context) async {
     return await showDialog(
         context: context,
@@ -265,6 +293,8 @@ class LeadConnection {
           );
         });
   }
+
+
 
   static Future showMyDialog(BuildContext context, String title) async {
     return showDialog<void>(

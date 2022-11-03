@@ -128,7 +128,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
   }
 
   void initModel() async {
-    // _imgAvatar =  widget.detailPotential?.avatar ?? "";
+    _imgAvatar =  widget.detailPotential?.avatar ?? "";
     _fullNameText.text = widget.detailPotential?.fullName ?? "";
     _phoneNumberText.text = widget.detailPotential?.phone ?? "";
     for (int i = 0; i < customerTypeData.length; i++) {
@@ -280,7 +280,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
           Padding(
             padding: const EdgeInsets.all(8),
             child: Text(
-              "Hình ảnh",
+              AppLocalizations.text(LangKey.picture),
               style: TextStyle(
                   fontSize: AppTextSizes.size15,
                   color: const Color(0xFF858080),
@@ -547,7 +547,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
               customerSourceSelected == null ||
               pipelineSelected == null ||
               journeySelected == null) {
-            _showMyDialog('Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)');
+            LeadConnection.showMyDialog( context,AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             DescriptionModelResponse result = await LeadConnection.updateLead(
                 context,
@@ -575,19 +575,18 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
                 if (result.errorCode == 0) {
                   print(result.errorDescription);
 
-                  await _showMyDialog(result.errorDescription);
+                  await LeadConnection.showMyDialog(context,result.errorDescription);
+                  
                   Navigator.of(context).pop(true);
  
                 } else {
-                  _showMyDialog(result.errorDescription);
+                 LeadConnection.showMyDialog(context,result.errorDescription);
                 }
               }
-            print("Okie call api edit");
           }
         },
         child: Center(
           child: Text(
-            // AppLocalizations.text(LangKey.convertCustomers),
             AppLocalizations.text(LangKey.editPotential),
             style: TextStyle(
                 fontSize: 12.0,
@@ -597,39 +596,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
           ),
         ),
       ),
-    );
-  }
-
-  Future<void> _showMyDialog(String title) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          // title:  Text(''),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Center(
-                    child: Text(
-                  'Thông báo\n',
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-                )),
-                Center(child: Text(title)),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Center(child: Text('Đồng ý')),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 

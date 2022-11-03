@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
+import 'package:lead_plugin_epoint/common/lang_key.dart';
+import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/model/acount.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
@@ -308,7 +310,7 @@ class LeadConnection {
               children: <Widget>[
                 Center(
                     child: Text(
-                  'Thông báo\n',
+                  AppLocalizations.text(LangKey.notify) + "\n",
                   style:
                       TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
                 )),
@@ -318,7 +320,7 @@ class LeadConnection {
           ),
           actions: <Widget>[
             TextButton(
-              child: Center(child: Text('Đồng ý')),
+              child: Center(child: Text(AppLocalizations.text(LangKey.argree))),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -328,4 +330,52 @@ class LeadConnection {
       },
     );
   }
+
+  static Future showMyDialogWithFunction(BuildContext context, String title ,{Function ontap}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title:  Text(''),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Center(
+                    child: Text(
+                  AppLocalizations.text(LangKey.notify) + "\n",
+                  style:
+                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                )),
+                Center(child: Text(title)),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [TextButton(
+                child: Center(child: Text(AppLocalizations.text(LangKey.no),
+                style: TextStyle(
+                  color: Colors.red
+                ),)),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+
+              TextButton(
+                child: Center(child: Text(AppLocalizations.text(LangKey.yes))),
+                onPressed: ontap,
+              ),],
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
+
+
 }

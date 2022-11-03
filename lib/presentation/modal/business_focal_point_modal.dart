@@ -184,7 +184,7 @@ ListCustomLeadData _model ;
   }
 
   selectedStaff(int index) async {
-    List<ListCustomLeadItems> models = widget.businessFocalPointData;
+    List<ListCustomLeadItems> models = _model.items;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

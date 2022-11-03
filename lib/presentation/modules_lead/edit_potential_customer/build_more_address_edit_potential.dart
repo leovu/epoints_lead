@@ -364,7 +364,7 @@ class _BuildMoreAddressEditPotentialState
                       children: [
                         Divider(),
                         Text(
-                          "Xem thêm",
+                         AppLocalizations.text(LangKey.showMore),
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),

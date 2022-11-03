@@ -109,7 +109,16 @@
     "other":"Khác",
 
     "input_search":"Nhập thông tin tìm kiếm",
-    "warning_choose_full_fromdate_todate":"Vui lòng chọn đầy đủ từ ngày - đến ngày"
+    "warning_choose_full_fromdate_todate":"Vui lòng chọn đầy đủ từ ngày - đến ngày",
+    "please_enter_and_select_all_required_infomation":"Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)",
+    "are_you_sure_delete_lead?":"Bạn có chắc chắn muốn xóa lead?",
+
+    "yes":"Có",
+    "no":"Không",
+    "notify":"Thông báo",
+    "argree":"Đồng ý",
+    "show_more":"Xem thêm"
+    
 
   }
   

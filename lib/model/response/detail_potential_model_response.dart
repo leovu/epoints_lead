@@ -25,6 +25,7 @@ class DetailPotentialModelResponse {
 }
 
 class DetailPotentialData {
+  String avatar;
   String fullName;
   String phone;
   String customerLeadCode;
@@ -57,7 +58,8 @@ class DetailPotentialData {
   List<JourneyTrackingPotential> journeyTracking;
 
   DetailPotentialData(
-      {this.fullName,
+      {this.avatar,
+      this.fullName,
       this.phone,
       this.customerLeadCode,
       this.customerSource,
@@ -89,8 +91,9 @@ class DetailPotentialData {
       this.journeyTracking});
 
   DetailPotentialData.fromJson(Map<String, dynamic> json) {
-    fullName = json['full_name'];
-    phone = json['phone'];
+    avatar = json['avatar'] ?? "";
+    fullName = json['full_name'] ?? "";
+    phone = json['phone'] ?? "";
     customerLeadCode = json['customer_lead_code'];
     customerSource = json['customer_source'];
     customerSourceName = json['customer_source_name'];
@@ -99,22 +102,22 @@ class DetailPotentialData {
     pipelineCode = json['pipeline_code'];
     journeyName = json['journey_name'];
     journeyCode = json['journey_code'];
-    email = json['email'];
+    email = json['email'] ?? "";
     gender = json['gender'];
-    provinceId = json['province_id'];
-    districtId = json['district_id'];
-    provinceType = json['province_type'];
-    provinceName = json['province_name'];
+    provinceId = json['province_id'] ?? 0;
+    districtId = json['district_id'] ?? 0;
+    provinceType = json['province_type'] ?? "";
+    provinceName = json['province_name'] ?? "";
     districtType = json['district_type'];
     districtName = json['district_name'];
-    address = json['address'];
-    zalo = json['zalo'];
-    fanpage = json['fanpage'];
-    saleId = json['sale_id'];
+    address = json['address'] ?? "";
+    zalo = json['zalo'] ?? "";
+    fanpage = json['fanpage'] ?? "";
+    saleId = json['sale_id'] ?? 0;
     saleName = json['sale_name'];
     isConvert = json['is_convert'];
-    businessClue = json['business_clue'];
-    businessClueName = json['business_clue_name'];
+    businessClue = json['business_clue'] ?? "";
+    businessClueName = json['business_clue_name'] ?? "";
     timeRevokeLead = json['time_revoke_lead'];
     dateRevoke = json['date_revoke'];
     allocationDate = json['allocation_date'];
@@ -128,6 +131,7 @@ class DetailPotentialData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['avatar'] = this.avatar;
     data['full_name'] = this.fullName;
     data['phone'] = this.phone;
     data['customer_lead_code'] = this.customerLeadCode;

@@ -58,8 +58,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        if(allowPop){
-              Navigator.of(context).pop( allowPop);
+        if (allowPop) {
+          Navigator.of(context).pop(allowPop);
+        } else {
+          Navigator.of(context).pop();
         }
         return;
       },
@@ -98,12 +100,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                           AppLocalizations.text(LangKey.edit),
                           Assets.iconEdit,
                           Color.fromARGB(255, 89, 177, 150), () async {
-                        bool result = await Navigator.of(context).push(
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    EditPotentialCustomer(
-                              detailPotential: detail,
-                            )));
+                        bool result =
+                            await Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => EditPotentialCustomer(
+                                      detailPotential: detail,
+                                    )));
 
                         if (result != null) {
                           if (result) {
@@ -113,26 +114,32 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                           }
                         }
                       }),
-                      _buildFunction(
-                          AppLocalizations.text(LangKey.delete),
-                          Assets.iconDelete,
-                          Color.fromARGB(255, 231, 86, 86), () async {
-                        DescriptionModelResponse result =
-                            await LeadConnection.deleteLead(
-                                context, detail.customerLeadCode);
+                      _buildFunction(AppLocalizations.text(LangKey.delete),
+                          Assets.iconDelete, Color(0xFFE75656), () async {
+                        LeadConnection.showMyDialogWithFunction(context,
+                            AppLocalizations.text(LangKey.warningDeleteLead),
+                            ontap: () async {
+                          DescriptionModelResponse result =
+                              await LeadConnection.deleteLead(
+                                  context, detail.customerLeadCode);
 
-                        if (result != null) {
-                          if (result.errorCode == 0) {
-                            print(result.errorDescription);
+                          Navigator.of(context).pop();
 
-                            await LeadConnection.showMyDialog(
-                                context, result.errorDescription);
-                            Navigator.of(context).pop(true);
-                          } else {
-                            LeadConnection.showMyDialog(
-                                context, result.errorDescription);
+                          if (result != null) {
+                            if (result.errorCode == 0) {
+                              allowPop = true;
+                              print(result.errorDescription);
+
+                              await LeadConnection.showMyDialog(
+                                  context, result.errorDescription);
+
+                              Navigator.of(context).pop(true);
+                            } else {
+                              LeadConnection.showMyDialog(
+                                  context, result.errorDescription);
+                            }
                           }
-                        }
+                        });
                       }),
                       (detail.saleId == null)
                           ? _buildFunction(
@@ -210,14 +217,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 controller: _controller,
                 children: buildInfomation(),
               )),
-              buildButtonConvert(
-                  AppLocalizations.text(LangKey.convertCustomers), () {
-                print("chuyen doi khach hang");
-              }),
-              buildButtonConvert(
-                  AppLocalizations.text(LangKey.convertCustomersWithDeal), () {
-                print("chuyen doi khach hang co tao deal");
-              }),
+              // buildButtonConvert(
+              //     AppLocalizations.text(LangKey.convertCustomers), () {
+              //   print("chuyen doi khach hang");
+              // }),
+              // buildButtonConvert(
+              //     AppLocalizations.text(LangKey.convertCustomersWithDeal), () {
+              //   print("chuyen doi khach hang co tao deal");
+              // }),
               Container(
                 height: 20.0,
               )
@@ -281,9 +288,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 _infoItem(AppLocalizations.text(LangKey.customerStyle),
                     detail?.customerType ?? ""),
                 const Divider(),
-                (detail?.saleId != null) ? _infoItem(AppLocalizations.text(LangKey.allottedPerson),
-                    detail?.saleName ?? "") : Container(),
-                 (detail?.saleId != null) ? Divider() : Container(),
+                (detail?.saleId != null)
+                    ? _infoItem(AppLocalizations.text(LangKey.allottedPerson),
+                        detail?.saleName ?? "")
+                    : Container(),
+                (detail?.saleId != null) ? Divider() : Container(),
                 _infoItem(AppLocalizations.text(LangKey.pipeline),
                     detail?.pipelineName ?? ""),
               ],
@@ -768,7 +777,9 @@ class _SubDetailPotentialCustomerState
           ),
 
           Center(
-            child: _buildAvatarImg(widget.detail.fullName),
+            child: (widget.detail.avatar == "")
+                ? _buildAvatarImg(widget.detail.fullName)
+                : _buildAvatarWithImage(widget.detail.avatar),
           ),
 
           const Divider(),
@@ -799,13 +810,31 @@ class _SubDetailPotentialCustomerState
               widget.detail?.businessClue ?? "",
               icon: Assets.iconPoint),
           const Divider(),
-          _infoItem(
+          _channelItem(
               AppLocalizations.text(LangKey.zalo), widget.detail?.zalo ?? "",
-              icon: Assets.iconSource, icon2: Assets.iconZalo),
+              icon: Assets.iconSource,
+              icon2: Assets.iconZalo,
+              style: TextStyle(
+                  fontSize: AppTextSizes.size16,
+                  color: AppColors.bluePrimary,
+                  fontWeight: FontWeight.w500),
+                  ontap: () {
+
+                    _openChathub(widget.detail?.zalo ?? "");
+                  }
+                  ),
           const Divider(),
-          _infoItem(AppLocalizations.text(LangKey.fanpage),
-              widget.detail?.fanpage ?? "",
-              icon: Assets.iconFanpage, icon2: Assets.iconMessenger)
+          _channelItem(AppLocalizations.text(LangKey.fanpage),
+               "https://www.facebook.com/groups/riviu.official",
+              icon: Assets.iconFanpage,
+              icon2: Assets.iconMessenger,
+              style: TextStyle(
+                  fontSize: AppTextSizes.size16,
+                  color: AppColors.bluePrimary,
+                  fontWeight: FontWeight.w500),
+                  ontap: () {
+                    _openChathub("https://www.facebook.com/groups/riviu.official");
+                  })
         ],
       ),
     );
@@ -857,6 +886,60 @@ class _SubDetailPotentialCustomerState
     );
   }
 
+  Widget _channelItem(String title, String content,
+      {TextStyle style, String icon, String icon2, Function ontap}) {
+    return Container(
+      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+      margin: EdgeInsets.only(left: 15.0 / 2),
+      child: Row(
+        children: [
+          Container(
+            width: (MediaQuery.of(context).size.width) / 1.9,
+            child: Row(
+              children: [
+                if (icon != null)
+                  Container(
+                    margin: const EdgeInsets.only(right: 8.0),
+                    height: 15.0,
+                    width: 15.0,
+                    child: Image.asset(icon),
+                  ),
+                Container(
+                  margin: const EdgeInsets.only(right: 8.0),
+                  child: Text(
+                    title,
+                    style: AppTextStyles.style15BlackNormal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+              child: InkWell(
+            onTap: ontap,
+            child: Text(
+              content,
+              style: style ?? AppTextStyles.style15BlackNormal,
+              // maxLines: 1,
+            ),
+          )),
+          if (icon2 != null)
+            Container(
+              margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+              height: 30.0,
+              width: 30.0,
+              child: Image.asset(icon2),
+            ),
+        ],
+      ),
+    );
+  }
+
+
+   Future _openChathub(String link) async {
+    return await launch(link);
+  }
+
   Widget dealInfomation() {
     return Container(
       margin: EdgeInsets.only(top: 50.0, bottom: 100.0),
@@ -905,34 +988,40 @@ class _SubDetailPotentialCustomerState
               ],
             ),
           ),
-          sex != ""  ? Container(
-            height: 40,
-            padding: const EdgeInsets.all(8.0),
-            decoration: BoxDecoration(
-                color: AppColors.darkGrey,
-                borderRadius: BorderRadius.circular(10)),
-            child: Row(
-              children: [
-                sex != "other" ? Container(
-                  margin: const EdgeInsets.only(
-                    right: 4.0,
+          sex != ""
+              ? Container(
+                  height: 40,
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      color: AppColors.darkGrey,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      sex != "other"
+                          ? Container(
+                              margin: const EdgeInsets.only(
+                                right: 4.0,
+                              ),
+                              height: 20.0,
+                              width: 20.0,
+                              child: sex == "male"
+                                  ? Image.asset(Assets.iconMale)
+                                  : Image.asset(Assets.iconFemale),
+                            )
+                          : Container(),
+                      Text(
+                        sex == "other"
+                            ? AppLocalizations.text(LangKey.other)
+                            : sex == "male"
+                                ? AppLocalizations.text(LangKey.male)
+                                : AppLocalizations.text(LangKey.female),
+                        style: AppTextStyles.style15BlackNormal,
+                        maxLines: 1,
+                      )
+                    ],
                   ),
-                  height: 20.0,
-                  width: 20.0,
-                  child: sex == "male"
-                      ? Image.asset(Assets.iconMale)
-                      : Image.asset(Assets.iconFemale),
-                ) : Container(),
-                Text(
-                  sex == "other" ? AppLocalizations.text(LangKey.other) : sex == "male"
-                      ? AppLocalizations.text(LangKey.male)
-                      : AppLocalizations.text(LangKey.female),
-                  style: AppTextStyles.style15BlackNormal,
-                  maxLines: 1,
                 )
-              ],
-            ),
-          ) : Container()
+              : Container()
         ],
       ),
     );
@@ -953,6 +1042,28 @@ class _SubDetailPotentialCustomerState
           name: name,
           textSize: AppTextSizes.size22,
         ),
+      ),
+    );
+  }
+
+  Widget _buildAvatarWithImage(String image) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10000.0),
+      child: FittedBox(
+        child: Container(
+          width: 80.0,
+          height: 80.0,
+          padding: const EdgeInsets.all(2.0),
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.blueGrey,
+              image: DecorationImage(
+                  fit: BoxFit.cover,
+                  colorFilter: ColorFilter.mode(
+                      Colors.black.withOpacity(1), BlendMode.dstATop),
+                  image: NetworkImage(image))),
+        ),
+        fit: BoxFit.fill,
       ),
     );
   }

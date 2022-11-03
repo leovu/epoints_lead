@@ -247,7 +247,7 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
     );
   }
 
-  Widget potentialItem(ListCustomLeadItems item) {
+  Widget potentialItem(ListCustomLeadItems item) { 
     return Stack(
       children: [
         InkWell(

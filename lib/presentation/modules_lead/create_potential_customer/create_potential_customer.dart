@@ -560,13 +560,13 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               pipelineSelected == null ||
               journeySelected == null) {
             LeadConnection.showMyDialog(
-                context, 'Vui lòng nhập và chọn đầy đủ thông tin bắt buộc (*)');
+                context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             LeadConnection.showLoading(context);
             AddLeadModelResponse result = await LeadConnection.addLead(
                 context,
                 AddLeadModelRequest(
-                    avatar: "",
+                    avatar: _imgAvatar,
                     customerType: customerTypeSelected.customerTypeName,
                     fullName: _fullNameText.text,
                     phone: _phoneNumberText.text,
@@ -597,8 +597,6 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 LeadConnection.showMyDialog(context, result.errorDescription);
               }
             }
-
-            print("Okie call api add");
           }
         },
         child: Center(

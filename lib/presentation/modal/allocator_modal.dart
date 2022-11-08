@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class AllocatorModal extends StatefulWidget {
   List<AllocatorData> allocatorData = <AllocatorData>[];
-   AllocatorModal({ Key key ,this.allocatorData}) : super(key: key);
+  AllocatorData allocatorSelected = AllocatorData();
+   AllocatorModal({ Key key ,this.allocatorData,this.allocatorSelected}) : super(key: key);
 
   @override
   _AllocatorModalState createState() => _AllocatorModalState();
@@ -14,6 +16,34 @@ class AllocatorModal extends StatefulWidget {
 
 class _AllocatorModalState extends State<AllocatorModal> {
  final ScrollController _controller = ScrollController();
+  final TextEditingController _searchext = TextEditingController();
+  final FocusNode _fonusNode = FocusNode();
+  GetAllocatorModelReponse _model;
+
+     @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+         for (int i = 0; i < widget.allocatorData.length ; i++) {
+        if ((widget.allocatorSelected?.staffId ?? "") == widget.allocatorData[i].staffId ) {
+          widget.allocatorData[i].selected = true;
+        } else {
+          widget.allocatorData[i].selected = false;
+        }
+      }
+
+
+      _model = GetAllocatorModelReponse(
+        data: (widget.allocatorData ?? <AllocatorData>[])
+            .map((e) => AllocatorData.fromJson(e.toJson()))
+            .toList());
+
+            setState(() {
+      
+    });
+    });
+    
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +75,12 @@ class _AllocatorModalState extends State<AllocatorModal> {
             
             ],
           ),
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _buildSearch(),
+          ),
+
+          ( _model != null ) ? Expanded(
             child: CustomListView(
                   shrinkWrap: true,
                   padding:
@@ -55,7 +90,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
                   separator: Divider(),
                   children: _listWidget(),
                 ),
-          ),
+          ) : Container(),
         ],
       ),
     );
@@ -63,9 +98,9 @@ class _AllocatorModalState extends State<AllocatorModal> {
 
   List<Widget> _listWidget() {
     return List.generate(
-        widget.allocatorData.length,
+        _model.data.length,
         (index) => _buildItem(
-                widget.allocatorData[index].fullName, widget.allocatorData[index].selected,
+                _model.data[index].fullName,  _model.data[index].selected,
                 () {
               selectedItem(index);
             }));
@@ -91,8 +126,71 @@ class _AllocatorModalState extends State<AllocatorModal> {
     );
   }
 
+    Widget _buildSearch() {
+    return TextField(
+      enabled: true,
+      controller: _searchext,
+      focusNode: _fonusNode,
+      // focusNode: _focusNode,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+        isCollapsed: true,
+        contentPadding: EdgeInsets.all(12.0),
+        border: OutlineInputBorder(
+          // borderSide:
+          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+        ),
+        // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
+        hintText: AppLocalizations.text(LangKey.inputSearch),
+        isDense: true,
+      ),
+      onChanged: (event) {
+        print(event.toLowerCase());
+        if (_searchext != null) {
+          print(_searchext.text);
+
+          searchModel(widget.allocatorData,event);
+        }
+      },
+    );
+  }
+
+   searchModel(List<AllocatorData> model, String value) {
+    if (model == null || value.isEmpty) {
+      _model.data = widget.allocatorData;
+      setState(() {
+      });
+    } else {
+      try {
+        List<AllocatorData> models = model.where((model) {
+          List<String> search = value.removeAccents().split(" ");
+          bool result = true;
+          for (String element in search) {
+            if (!((model.fullName ?? "").removeAccents().contains(element))) {
+              result = false;
+              break;
+            }
+          }
+          return result;
+        }).toList();
+        _model.data = models;
+        setState(() {
+      });
+      } catch (_) {
+        setState(() {
+        
+      });
+      }
+    }
+  }
+
+
   selectedItem(int index) async {
-    List<AllocatorData> models = widget.allocatorData;
+    List<AllocatorData> models = _model.data;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

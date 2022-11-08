@@ -26,65 +26,73 @@ class LeadScreen extends StatefulWidget {
 }
 
 class _LeadScreen extends State<LeadScreen> {
- ScrollController _controller = ScrollController();
+  ScrollController _controller = ScrollController();
   final TextEditingController _searchtext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<ListCustomLeadItems> items = <ListCustomLeadItems>[];
+  List<ListCustomLeadItems> items ;
 
   int currentPage = 1;
   int nextPage = 2;
 
   ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest(
-        search: "",
-        page: 1,
-        statusAssign: "",
-        customerType: "",
-        tagId: "",
-        customerSourceName: "",
-        isConvert: "",
-        staffFullName: "",
-        pipelineName: "",
-        journeyName: "",
-        createdAt: "",
-        allocationDate: "");
+      search: "",
+      page: 1,
+      statusAssign: "",
+      customerType: "",
+      tagId: "",
+      customerSourceName: "",
+      isConvert: "",
+      staffFullName: "",
+      pipelineName: "",
+      journeyName: "",
+      createdAt: "",
+      allocationDate: "");
 
-FilterScreenModel filterScreenModel = FilterScreenModel();
-
+  FilterScreenModel filterScreenModel = FilterScreenModel();
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(_scrollListener);
-    
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      filterScreenModel = FilterScreenModel(filterModel: filterModel, fromDate_allocation_date: null, toDate_allocation_date: null, fromDate_created_at: null, toDate_created_at:  null,id_created_at: "", id_allocation_date: "");
+      filterScreenModel = FilterScreenModel(
+          filterModel: filterModel,
+          fromDate_allocation_date: null,
+          toDate_allocation_date: null,
+          fromDate_created_at: null,
+          toDate_created_at: null,
+          id_created_at: "",
+          id_allocation_date: "");
       getData(false);
     });
   }
-    getData(bool loadMore , {int page}) async {
-    ListCustomLeadModelReponse model = await LeadConnection.getList(context,ListCustomLeadModelRequest(
-        search: _searchtext.text,
-        page: filterModel.page,
-        statusAssign: filterModel.statusAssign,
-        customerType: filterModel.customerType,
-        tagId: filterModel.tagId,
-        customerSourceName: filterModel.customerSourceName,
-        isConvert: filterModel.isConvert,
-        staffFullName: filterModel.staffFullName,
-        pipelineName: filterModel.pipelineName,
-        journeyName: filterModel.journeyName,
-        createdAt: filterModel.createdAt,
-        allocationDate: filterModel.allocationDate));
-    if(model != null){
 
+  getData(bool loadMore, {int page}) async {
+    ListCustomLeadModelReponse model = await LeadConnection.getList(
+        context,
+        ListCustomLeadModelRequest(
+            search: _searchtext.text,
+            page: filterModel.page,
+            statusAssign: filterModel.statusAssign,
+            customerType: filterModel.customerType,
+            tagId: filterModel.tagId,
+            customerSourceName: filterModel.customerSourceName,
+            isConvert: filterModel.isConvert,
+            staffFullName: filterModel.staffFullName,
+            pipelineName: filterModel.pipelineName,
+            journeyName: filterModel.journeyName,
+            createdAt: filterModel.createdAt,
+            allocationDate: filterModel.allocationDate));
+    if (model != null) {
       if (!loadMore) {
         items = [];
-          items = model.data?.items;
-          _controller.animateTo(
-    _controller.position.minScrollExtent,
-    duration: Duration(seconds: 2),
-    curve: Curves.fastOutSlowIn,
-  );
+        items = model.data?.items;
+        _controller.animateTo(
+          _controller.position.minScrollExtent,
+          duration: Duration(seconds: 2),
+          curve: Curves.fastOutSlowIn,
+        );
       } else {
         items.addAll(model.data?.items);
       }
@@ -97,9 +105,8 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
     }
   }
 
-    _scrollListener() async {
-    if (_controller.offset >=
-            _controller.position.maxScrollExtent &&
+  _scrollListener() async {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
       if (this.currentPage < this.nextPage) {
         filterModel.page = currentPage + 1;
@@ -130,36 +137,40 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
         actions: [
           InkWell(
             onTap: () async {
-            FilterScreenModel result = await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => FilterPotentialCustomer(filterScreenModel: filterScreenModel,)));
-          print("bbbb");
-  
-            if (result != null) {
-              filterScreenModel = result;
-              filterModel = result.filterModel;
-              print("aaaaa");
-              filterModel.page = 1;
-              getData(false);
-            }
+              FilterScreenModel result =
+                  await Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => FilterPotentialCustomer(
+                            filterScreenModel: filterScreenModel,
+                          )));
+
+              if (result != null) {
+                filterScreenModel = result;
+                filterModel = result.filterModel;
+                filterModel.page = 1;
+                getData(false);
+              }
             },
-            child: Padding(padding: EdgeInsets.only(right: 8.0),
-            child: Image.asset(Assets.iconFilter, width: 24.0,),
+            child: Padding(
+              padding: EdgeInsets.only(right: 8.0),
+              child: Image.asset(
+                Assets.iconFilter,
+                width: 24.0,
+              ),
             ),
           )
         ],
       ),
-      body:  _buildBody(),
-      floatingActionButton:  FloatingActionButton(
+      body: _buildBody(),
+      floatingActionButton: FloatingActionButton(
         onPressed: () async {
-         ObjectPopDetailModel result = await Navigator.of(context).push(
-             MaterialPageRoute(
-                 builder: (context) => CreatePotentialCustomer()));
-         if (result != null) {
-           if (result.status) {
-           getData(false);
-         }
-         }
+          ObjectPopDetailModel result = await Navigator.of(context).push(
+              MaterialPageRoute(
+                  builder: (context) => CreatePotentialCustomer()));
+          if (result != null) {
+            if (result.status) {
+              getData(false);
+            }
+          }
         },
         child: const Icon(Icons.add),
       ),
@@ -167,98 +178,101 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
   }
 
   Widget _buildBody() {
-      return Container(
-        padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
-        child: Column(
-          children: [ 
-            _buildSearch(),
-            Expanded(
-              child: CustomListView(
-                padding: EdgeInsets.all(20.0 / 2),
-                physics: const AlwaysScrollableScrollPhysics(),
-                controller: _controller,
-                // separator: const Divider(),
-                children: [
-          (items == null ||items?.length == 0) ?
-      CustomDataNotFound():
-     Column(
-                    children: items.map((e) => potentialItem(e)).toList()
-                  ),
-                  Container(height: 100)
-                ],
-              ),
+    return Container(
+      padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+      child: Column(
+        children: [
+          _buildSearch(),
+          Expanded(
+            child: CustomListView(
+              padding: EdgeInsets.all(20.0 / 2),
+              physics: const AlwaysScrollableScrollPhysics(),
+              controller: _controller,
+              // separator: const Divider(),
+              children: [
+                (items == null)
+                    ? Container()
+                    : (items.length > 0)
+                        ? Column(
+                            children:
+                                items.map((e) => potentialItem(e)).toList())
+                        : CustomDataNotFound(),
+                Container(height: 100)
+              ],
             ),
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildSearch() {
     return Container(
       padding: EdgeInsets.only(left: 10.0, right: 10.0),
       child: TextField(
-        enabled: true,
-        controller: _searchtext,
-        focusNode: _fonusNode,
-        // focusNode: _focusNode,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-          isCollapsed: true,
-          contentPadding: EdgeInsets.all(12.0),
-          border: OutlineInputBorder(
-            // borderSide:
-            //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-          ),
-          hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
-          suffixIcon: InkWell(
-            splashColor: Colors.white,
-            onTap: () async {
-              filterModel.page = 1;
-            getData(false);
-            },
-            child: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Image.asset(
-                Assets.iconSearch,
+          enabled: true,
+          controller: _searchtext,
+          focusNode: _fonusNode,
+          // focusNode: _focusNode,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            isCollapsed: true,
+            contentPadding: EdgeInsets.all(12.0),
+            border: OutlineInputBorder(
+              // borderSide:
+              //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+            ),
+            hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
+            suffixIcon: InkWell(
+              splashColor: Colors.white,
+              onTap: () async {
+                filterModel.page = 1;
+                getData(false);
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Image.asset(
+                  Assets.iconSearch,
+                ),
               ),
             ),
+            suffixIconConstraints:
+                BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
+            isDense: true,
           ),
-          suffixIconConstraints: BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
-          isDense: true,
-        ),
-        onChanged: (event) {
-          // print(event.toLowerCase());
-          if (_searchtext != null) {
-            // print(_searchext.text);
+          onChanged: (event) {
+            // print(event.toLowerCase());
+            if (_searchtext != null) {
+              // print(_searchext.text);
 
+            }
+          },
+          onSubmitted: (event) async {
+            filterModel.page = 1;
+            getData(false);
           }
-        },
-
-        onSubmitted: (event) async {
-          filterModel.page = 1;
-           getData(false);
-        }  
-        // },
-      ),
+          // },
+          ),
     );
   }
 
-  Widget potentialItem(ListCustomLeadItems item) { 
+  Widget potentialItem(ListCustomLeadItems item) {
     return Stack(
       children: [
         InkWell(
           onTap: () async {
-           bool result = await Navigator.of(context).push(
-               MaterialPageRoute(
-                   builder: (context) => DetailPotentialCustomer(customer_lead_code: item.customerLeadCode,)));
+            bool result = await Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => DetailPotentialCustomer(
+                      customer_lead_code: item.customerLeadCode,
+                    )));
 
-                if (result != null && result) {
-                  getData(false);
-                }
+            if (result != null && result) {
+              getData(false);
+            }
           },
           child: Container(
             margin: EdgeInsets.only(bottom: 10.0),
@@ -276,81 +290,88 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
-                        width: (item.isConvert == 0) ? MediaQuery.of(context).size.width / 2 - 20 : MediaQuery.of(context).size.width / 2 + 20,
+                        width: (item.isConvert == 0)
+                            ? MediaQuery.of(context).size.width / 2 - 20
+                            : MediaQuery.of(context).size.width / 2 + 20,
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildAvatar(item?.leadFullName ?? ""),
-                      Expanded(
-                        child: Container(
-                          padding: const EdgeInsets.only(left: 8.0, top: 6.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              AutoSizeText(
-                                item?.leadFullName ?? "",
-                                style: TextStyle(
-                                    fontSize: AppTextSizes.size14,
-                                    color: AppColors.primaryColor,
-                                    fontWeight: FontWeight.w600),
-                                // maxLines: ,
-                              ),
-                              Text(
-                                item?.tagName ?? "",
-                                style: TextStyle(
-                                  fontSize: 13.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.normal,
+                            Expanded(
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.only(left: 8.0, top: 6.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    AutoSizeText(
+                                      item?.leadFullName ?? "",
+                                      style: TextStyle(
+                                          fontSize: AppTextSizes.size14,
+                                          color: AppColors.primaryColor,
+                                          fontWeight: FontWeight.w600),
+                                      // maxLines: ,
+                                    ),
+                                    Text(
+                                      item?.tagName ?? "",
+                                      style: TextStyle(
+                                        fontSize: 13.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                      // maxLines: 1,
+                                    )
+                                  ],
                                 ),
-                                // maxLines: 1,
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                      (item.isConvert == 0) ? Container(
-                        padding: EdgeInsets.all(15.0 / 1.5),
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Color(0xFF11B482),
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Center(
-                          child: Text(
-                            AppLocalizations.text(
-                                LangKey.convertCustomersSuccess),
-                            style: AppTextStyles.style14WhiteWeight400,
-                          ),
-                        ),
-                      ) :
-                       Expanded(
-                         child: Container(
-                          padding: EdgeInsets.all(15.0 / 1.5),
-                          height: 40,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF8E8E8E),
-                              borderRadius: BorderRadius.circular(50)),
-                          child: Center(
-                            child: Text(
-                              AppLocalizations.text(
-                                  LangKey.convertCustomersNotSuccess),
-                              style: AppTextStyles.style14WhiteWeight400,
-                            ),
-                          ),
-                      ),
-                       )
+                      (item.isConvert == 0)
+                          ? Container(
+                              padding: EdgeInsets.all(15.0 / 1.5),
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  color: Color(0xFF11B482),
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: Center(
+                                child: Text(
+                                  AppLocalizations.text(
+                                      LangKey.convertCustomersSuccess),
+                                  style: AppTextStyles.style14WhiteWeight400,
+                                ),
+                              ),
+                            )
+                          : Expanded(
+                              child: Container(
+                                padding: EdgeInsets.all(15.0 / 1.5),
+                                height: 40,
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF8E8E8E),
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: Center(
+                                  child: Text(
+                                    AppLocalizations.text(
+                                        LangKey.convertCustomersNotSuccess),
+                                    style: AppTextStyles.style14WhiteWeight400,
+                                  ),
+                                ),
+                              ),
+                            )
                     ],
                   ),
                 ),
-                infoItem(Assets.iconCall, item?.phone ?? "" , false),
+                infoItem(Assets.iconCall, item?.phone ?? "", false),
                 infoItem(
-                    Assets.iconChance, "${item?.pipelineName ?? ""} - ${item?.journeyName ?? ""}", false),
-                infoItem(Assets.iconPerson, item?.customerSourceName ?? "", false),
+                    Assets.iconChance,
+                    "${item?.pipelineName ?? ""} - ${item?.journeyName ?? ""}",
+                    false),
                 infoItem(
-                    Assets.iconName, item?.staffFullName ?? "", true),
+                    Assets.iconPerson, item?.customerSourceName ?? "", false),
+                infoItem(Assets.iconName, item?.staffFullName ?? "", true),
               ],
             ),
           ),
@@ -414,9 +435,9 @@ FilterScreenModel filterScreenModel = FilterScreenModel();
 
   Future<bool> callPhone(String phone) async {
     final regSpace = RegExp(r"\s+");
-  // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
-  return await launch("tel:" + phone.replaceAll(regSpace, ""));
-}
+    // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
+    return await launch("tel:" + phone.replaceAll(regSpace, ""));
+  }
 
   Widget _buildAvatar(String name) {
     return Container(

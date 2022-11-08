@@ -243,6 +243,7 @@ class _BuildMoreAddressEditPotentialState
                   return GestureDetector(
                     child: ProvinceModal(
                       provinces: widget.provinces,
+                      provinceSeleted:provinceSeleted
                     ),
                     onTap: () {
                       Navigator.of(context).pop();
@@ -411,6 +412,7 @@ class _BuildMoreAddressEditPotentialState
                 return GestureDetector(
                   child: AllocatorModal(
                     allocatorData: widget.allocatorData,
+                    allocatorSelected:allocatorSelected
                   ),
                   onTap: () {
                     Navigator.of(context).pop();

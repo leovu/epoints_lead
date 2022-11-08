@@ -11,6 +11,7 @@ import 'package:lead_plugin_epoint/model/response/description_model_response.dar
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
+import 'package:lead_plugin_epoint/utils/global.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -141,7 +142,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                           }
                         });
                       }),
-                      (detail.saleId == null)
+                      (detail.saleId == 0)
                           ? _buildFunction(
                               AppLocalizations.text(LangKey.assignment),
                               Assets.iconAssignment,
@@ -205,8 +206,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       _buildFunction(
                           AppLocalizations.text(LangKey.createJobs),
                           Assets.iconTask,
-                          Color.fromARGB(255, 243, 180, 125), () {
-                        print("task");
+                          Color.fromARGB(255, 243, 180, 125), () async {
+                        if (Global.createJob != null) {
+                          await Global.createJob(detail.customerLeadCode);
+                        }
+
+
                       })
                     ],
                   )),
@@ -288,7 +293,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 _infoItem(AppLocalizations.text(LangKey.customerStyle),
                     detail?.customerType ?? ""),
                 const Divider(),
-                (detail?.saleId != null)
+                (detail?.saleId != 0)
                     ? _infoItem(AppLocalizations.text(LangKey.allottedPerson),
                         detail?.saleName ?? "")
                     : Container(),
@@ -825,7 +830,7 @@ class _SubDetailPotentialCustomerState
                   ),
           const Divider(),
           _channelItem(AppLocalizations.text(LangKey.fanpage),
-               "https://www.facebook.com/groups/riviu.official",
+               widget.detail?.fanpage ?? "",
               icon: Assets.iconFanpage,
               icon2: Assets.iconMessenger,
               style: TextStyle(
@@ -833,7 +838,7 @@ class _SubDetailPotentialCustomerState
                   color: AppColors.bluePrimary,
                   fontWeight: FontWeight.w500),
                   ontap: () {
-                    _openChathub("https://www.facebook.com/groups/riviu.official");
+                    _openChathub(widget.detail?.fanpage ?? "");
                   })
         ],
       ),

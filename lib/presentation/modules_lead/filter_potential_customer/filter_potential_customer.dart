@@ -42,6 +42,7 @@ class FilterPotentialCustomer extends StatefulWidget {
 
 class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
   final ScrollController _controller = ScrollController();
+  bool allowPop = false;
 
   List<AllocatorData> allocatorData = <AllocatorData>[];
   AllocatorData allocatorSelected = AllocatorData();
@@ -308,7 +309,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     var tags = await LeadConnection.getTag(context);
     if (tags != null) {
       tagDatas.addAll(tags.data);
-      
     }
     var sources = await LeadConnection.getCustomerOption(context);
     if (sources != null) {
@@ -344,20 +344,44 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
+    return WillPopScope(
+       onWillPop: () {
+        if(allowPop){
+        widget.filterScreenModel = FilterScreenModel(filterModel: ListCustomLeadModelRequest(
+        search: "",
+        page: 1,
+        statusAssign: "",
+        customerType: "",
+        tagId: "",
+        customerSourceName: "",
+        isConvert: "",
+        staffFullName: "",
+        pipelineName: "",
+        journeyName: "",
+        createdAt: "",
+        allocationDate: ""), fromDate_allocation_date: null, toDate_allocation_date: null, fromDate_created_at: null, toDate_created_at:  null,id_created_at: "", id_allocation_date: "");
+
+              Navigator.of(context).pop(widget.filterScreenModel);
+        } else {
+          Navigator.of(context).pop();
+        }
+        return;
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            iconTheme: const IconThemeData(
+              color: Colors.white,
+            ),
+            backgroundColor: AppColors.primaryColor,
+            title: Text(
+              AppLocalizations.text(LangKey.filter),
+              style: const TextStyle(color: Colors.white, fontSize: 20.0),
+            ),
           ),
-          backgroundColor: AppColors.primaryColor,
-          title: Text(
-            AppLocalizations.text(LangKey.filter),
-            style: const TextStyle(color: Colors.white, fontSize: 20.0),
-          ),
-        ),
-        body: Container(
-            decoration: const BoxDecoration(color: AppColors.white),
-            child: _buildBody()));
+          body: Container(
+              decoration: const BoxDecoration(color: AppColors.white),
+              child: _buildBody())),
+    );
   }
 
   Widget _buildBody() {
@@ -538,6 +562,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               return GestureDetector(
                 child: AllocatorModal(
                   allocatorData: allocatorData,
+                  allocatorSelected:allocatorSelected
                 ),
                 onTap: () {
                   Navigator.of(context).pop();
@@ -828,6 +853,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                   width: 1.0, color: Colors.blue, style: BorderStyle.solid)),
           child: InkWell(
             onTap: ()  async {
+              allowPop = true;
               print("xoa");
               await clearData();
             },
@@ -860,7 +886,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         pipelineName: "",
         journeyName: "",
         createdAt: "",
-        allocationDate: ""), fromDate_allocation_date: null, toDate_allocation_date: null, fromDate_created_at: null, toDate_created_at:  null,id_created_at: "");
+        allocationDate: ""), fromDate_allocation_date: null, toDate_allocation_date: null, fromDate_created_at: null, toDate_created_at:  null,id_created_at: "", id_allocation_date: "");
 
   filterScreenModel = FilterScreenModel(
       filterModel: ListCustomLeadModelRequest.fromJson(widget.filterScreenModel.filterModel.toJson()),

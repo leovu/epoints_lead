@@ -150,6 +150,7 @@ class _BuildMoreAddressCreatPotentialState
                     builder: (context) {
                       return ProvinceModal(
                         provinces: widget.provinces,
+                        provinceSeleted:provinceSeleted
                       );
                     });
                 if (province != null) {
@@ -177,6 +178,7 @@ class _BuildMoreAddressCreatPotentialState
                   builder: (context) {
                     return ProvinceModal(
                       provinces: widget.provinces,
+                      provinceSeleted:provinceSeleted
                     );
                   });
               if (province != null) {
@@ -313,6 +315,7 @@ class _BuildMoreAddressCreatPotentialState
                     return GestureDetector(
                       child: AllocatorModal(
                         allocatorData: widget.allocatorData,
+                        allocatorSelected:allocatorSelected
                       ),
                       onTap: () {
                         Navigator.of(context).pop();
@@ -336,6 +339,7 @@ class _BuildMoreAddressCreatPotentialState
                   return GestureDetector(
                     child: AllocatorModal(
                       allocatorData: widget.allocatorData,
+                      allocatorSelected:allocatorSelected
                     ),
                     onTap: () {
                       Navigator.of(context).pop();

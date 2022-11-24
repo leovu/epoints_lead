@@ -77,7 +77,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
             AppLocalizations.text(LangKey.detailPotential),
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
-          leadingWidth: 20.0,
+          // leadingWidth: 20.0,
         ),
         body: Container(
             decoration: const BoxDecoration(color: AppColors.white),

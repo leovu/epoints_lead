@@ -234,7 +234,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
               AppLocalizations.text(LangKey.editPotential),
               style: const TextStyle(color: Colors.white, fontSize: 16.0),
             ),
-            leadingWidth: 20.0,
+            // leadingWidth: 20.0,
           ),
           body: Container(
               decoration: const BoxDecoration(color: AppColors.white),

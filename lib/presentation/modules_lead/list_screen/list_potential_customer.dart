@@ -133,7 +133,7 @@ class _LeadScreen extends State<LeadScreen> {
           AppLocalizations.text(LangKey.listPotential),
           style: const TextStyle(color: Colors.white, fontSize: 16.0),
         ),
-        leadingWidth: 20.0,
+        // leadingWidth: 20.0,
         actions: [
           InkWell(
             onTap: () async {

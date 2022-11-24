@@ -173,7 +173,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               AppLocalizations.text(LangKey.addPotentialCustomer),
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
-            leadingWidth: 20.0,
+            // leadingWidth: 20.0,
           ),
           body: Container(
               decoration: const BoxDecoration(color: AppColors.white),

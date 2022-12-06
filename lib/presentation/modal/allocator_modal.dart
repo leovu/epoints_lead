@@ -3,52 +3,51 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
+import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class AllocatorModal extends StatefulWidget {
   List<AllocatorData> allocatorData = <AllocatorData>[];
   AllocatorData allocatorSelected = AllocatorData();
-   AllocatorModal({ Key key ,this.allocatorData,this.allocatorSelected}) : super(key: key);
+  AllocatorModal({Key key, this.allocatorData, this.allocatorSelected})
+      : super(key: key);
 
   @override
   _AllocatorModalState createState() => _AllocatorModalState();
 }
 
 class _AllocatorModalState extends State<AllocatorModal> {
- final ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
   GetAllocatorModelReponse _model;
 
-     @override
+  @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-         for (int i = 0; i < widget.allocatorData.length ; i++) {
-        if ((widget.allocatorSelected?.staffId ?? "") == widget.allocatorData[i].staffId ) {
+      for (int i = 0; i < widget.allocatorData.length; i++) {
+        if ((widget.allocatorSelected?.staffId ?? "") ==
+            widget.allocatorData[i].staffId) {
           widget.allocatorData[i].selected = true;
         } else {
           widget.allocatorData[i].selected = false;
         }
       }
 
-
       _model = GetAllocatorModelReponse(
-        data: (widget.allocatorData ?? <AllocatorData>[])
-            .map((e) => AllocatorData.fromJson(e.toJson()))
-            .toList());
+          data: (widget.allocatorData ?? <AllocatorData>[])
+              .map((e) => AllocatorData.fromJson(e.toJson()))
+              .toList());
 
-            setState(() {
-      
+      setState(() {});
     });
-    });
-    
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10.0,bottom: 50),
+      padding: EdgeInsets.only(top: 10.0, bottom: 50),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -59,51 +58,57 @@ class _AllocatorModalState extends State<AllocatorModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
-              Text(AppLocalizations.text(LangKey.chooseAllottedPerson),style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400),),
+              Container(width: 30,),
+              Text(
+                AppLocalizations.text(LangKey.chooseAllottedPerson),
+                style: TextStyle(
+                    fontSize: 18.0,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500),
+              ),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
                 },
-                child: Padding(padding: EdgeInsets.only(right: 20),
-                child: Icon(Icons.clear),
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Icon(Icons.clear),
                 ),
               ),
-            
             ],
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: _buildSearch(),
           ),
-
-          ( _model != null ) ? Expanded(
-            child: CustomListView(
-                  shrinkWrap: true,
-                  padding:
-                      EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                  physics: ClampingScrollPhysics(),
-                  controller: _controller,
-                  separator: Divider(),
-                  children: _listWidget(),
-                ),
-          ) : Container(),
+          (_model != null)
+              ? Expanded(
+                  child: CustomListView(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(
+                        top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+                    physics: ClampingScrollPhysics(),
+                    controller: _controller,
+                    separator: Divider(),
+                    children: _listWidget(),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
   }
 
   List<Widget> _listWidget() {
-    return List.generate(
-        _model.data.length,
-        (index) => _buildItem(
-                _model.data[index].fullName,  _model.data[index].selected,
-                () {
-              selectedItem(index);
-            }));
+    return (_model.data != null)
+        ? List.generate(
+            _model.data.length,
+            (index) => _buildItem(
+                    _model.data[index].fullName, _model.data[index].selected,
+                    () {
+                  selectedItem(index);
+                }))
+        : [CustomDataNotFound()];
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {
@@ -116,7 +121,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 17.0,
                   color: selected ? Colors.orange : Colors.black,
                   fontWeight: FontWeight.normal),
             )
@@ -126,7 +131,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
     );
   }
 
-    Widget _buildSearch() {
+  Widget _buildSearch() {
     return TextField(
       enabled: true,
       controller: _searchext,
@@ -153,17 +158,16 @@ class _AllocatorModalState extends State<AllocatorModal> {
         if (_searchext != null) {
           print(_searchext.text);
 
-          searchModel(widget.allocatorData,event);
+          searchModel(widget.allocatorData, event);
         }
       },
     );
   }
 
-   searchModel(List<AllocatorData> model, String value) {
+  searchModel(List<AllocatorData> model, String value) {
     if (model == null || value.isEmpty) {
       _model.data = widget.allocatorData;
-      setState(() {
-      });
+      setState(() {});
     } else {
       try {
         List<AllocatorData> models = model.where((model) {
@@ -178,16 +182,12 @@ class _AllocatorModalState extends State<AllocatorModal> {
           return result;
         }).toList();
         _model.data = models;
-        setState(() {
-      });
+        setState(() {});
       } catch (_) {
-        setState(() {
-        
-      });
+        setState(() {});
       }
     }
   }
-
 
   selectedItem(int index) async {
     List<AllocatorData> models = _model.data;

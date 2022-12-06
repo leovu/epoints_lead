@@ -131,7 +131,8 @@ class _LeadScreen extends State<LeadScreen> {
         backgroundColor: AppColors.primaryColor,
         title: Text(
           AppLocalizations.text(LangKey.listPotential),
-          style: const TextStyle(color: Colors.white, fontSize: 16.0),
+          style: TextStyle(color: Colors.white, fontSize: 16.0),
+          textAlign: TextAlign.start,
         ),
         // leadingWidth: 20.0,
         actions: [
@@ -154,7 +155,7 @@ class _LeadScreen extends State<LeadScreen> {
               padding: EdgeInsets.only(right: 8.0),
               child: Image.asset(
                 Assets.iconFilter,
-                width: 24.0,
+                width: 20.0,
               ),
             ),
           )

@@ -37,8 +37,7 @@ class _MyAppState extends State<MyApp> {
             onTap: () async {
               var result = await LeadPluginEpoint.open(
                   context,
-                  const Locale(LangKey.langVi, 'VN'),
-                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTY2OTI4NDc2NCwiZXhwIjoxNjY5MzA2MzY0LCJuYmYiOjE2NjkyODQ3NjQsImp0aSI6IlZkc0JCSXlFWU5NRHJtV0EiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.mntzS787Xcg0tw8hkznsRJmWj8qm7v7NasdyGQq42mU',
+                  const Locale(LangKey.langVi, 'VN'),'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTY3MDIxMjYzNCwiZXhwIjoxNjcwMjM0MjM0LCJuYmYiOjE2NzAyMTI2MzQsImp0aSI6ImpKd0N5dXB2dmVOTENVZFQiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.l5aCUDq4fYpuOhdiNdco_qJp-SG-LCBMVcDX1z7wclA',
                   2,
                   domain: 'https://staff-api.stag.epoints.vn',
                   brandCode: 'qc');
@@ -51,3 +50,72 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+
+// import 'dart:io' as io;
+// import 'package:flutter/material.dart';
+// import 'dart:async';
+
+// import 'package:salesiq_mobilisten/salesiq_mobilisten.dart';
+
+// void main() {
+//   runApp(MyApp());
+// }
+
+// class MyApp extends StatefulWidget {
+//   @override
+//   _MyAppState createState() => _MyAppState();
+// }
+
+// class _MyAppState extends State<MyApp> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     initPlatformState();
+//     initMobilisten();
+//   }
+
+//   Future<void> initMobilisten() async {
+//     if (io.Platform.isIOS || io.Platform.isAndroid) {
+//       String appKey;
+//       String accessKey;
+//       if (io.Platform.isIOS) {
+//         appKey = "EtzmN6YYkoybb%2FWmfEtMUIT2jS0cVRMaE8IA0L0udBo%3D";
+//         accessKey = "dU6CFehEs80y0jcz0o7B3nvp8CidTijd5CiEgy5fyo5kltXAnEnrCVUuCXPmQSe7q1WkU0uxOTQkNLmR0xFHzbB3NBeHf2mgdrzElerQsMyEuSoGXAJjSxdjp5vHW7FhPFhjL367TwelYT218Ogo8cr6mhMDscv1ud3cxli2xGYwm04Gs7ytKg%3D%3D";
+//       } else {
+//         appKey = "INSERT_ANDROID_APP_KEY";
+//         accessKey = "INSERT_ANDROID_ACCESS_KEY";
+//       }
+//       ZohoSalesIQ.init(appKey, accessKey).then((_) {
+//         // initialization successful
+
+//         ZohoSalesIQ.showLauncher(true);
+        
+//       }).catchError((error) {
+//         // initialization failed
+//         print(error);
+//       });
+//       ZohoSalesIQ.setThemeColorForiOS("#6d85fc");
+//     }
+//   }
+
+//   Future<void> initPlatformState() async {
+//     // If the widget was removed from the tree while the asynchronous platform
+//     // message was in flight, we want to discard the reply rather than calling
+//     // setState to update our non-existent appearance.
+//     if (!mounted) return;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       home: Scaffold(
+//           appBar: AppBar(
+//             title: const Text('Example Application'),
+//           ),
+//           body: Center(child: Column(children: <Widget>[]))),
+//     );
+//   }
+// }
+
+

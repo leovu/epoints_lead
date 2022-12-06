@@ -88,7 +88,6 @@ class _BuildMoreAddressEditPotentialState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      // LeadConnection.showLoading(context);
 
       _addressText.text =
           widget.detailPotential?.address ?? "";
@@ -168,11 +167,6 @@ class _BuildMoreAddressEditPotentialState
       //     wards[i].selected = false;
       //   }
       // }
-
-      // Navigator.of(context).pop;
-
-
-      
 
       setState(() {
         // Navigator.of(context).pop;
@@ -259,8 +253,10 @@ class _BuildMoreAddressEditPotentialState
               provinceSeleted = province;
               widget.detailPotential.provinceId = provinceSeleted.provinceid;
               widget.detailPotential.districtId = 0;
+               LeadConnection.showLoading(context);
               var dataDistrict = await LeadConnection.getDistrict(
                   context, provinceSeleted.provinceid);
+                   Navigator.of(context).pop();
               if (dataDistrict != null) {
                 districts = dataDistrict.data;
               }

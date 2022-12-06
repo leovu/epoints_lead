@@ -63,11 +63,11 @@ class _ProvinceModalState extends State<ProvinceModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              Container(width: 30,),
               Text(AppLocalizations.text(LangKey.provinceCity),style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
-                  fontWeight: FontWeight.w400),),
+                  fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -181,7 +181,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 17.0,
                   color: selected ? Colors.orange : Colors.black,
                   fontWeight: FontWeight.normal),
             )

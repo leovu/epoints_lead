@@ -156,7 +156,7 @@ ListCustomLeadData _model ;
         children: [
           _buildSearch(),
           (widget.businessFocalPointData != null)
-              ? Expanded(
+              ? (widget.businessFocalPointData.length > 0) ? Expanded(
                   child: CustomListView(
                   shrinkWrap: true,
                   padding: EdgeInsets.only(
@@ -165,7 +165,7 @@ ListCustomLeadData _model ;
                   controller: _controller,
                   separator: Divider(),
                   children: _listWidget(),
-                ))
+                )) : Container()
               : CustomDataNotFound(),
           Container(
             height: 20.0,

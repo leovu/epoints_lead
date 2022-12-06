@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
+import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
-import 'package:lead_plugin_epoint/model/acount.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/assign_revoke_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/edit_potential_model_request.dart';
@@ -39,7 +39,7 @@ class LeadConnection {
     if (domain != null && token != null) {
       HTTPConnection.domain = domain;
       HTTPConnection.asscessToken = token;
-       return true;
+      return true;
     } else {
       return false;
     }
@@ -62,19 +62,13 @@ class LeadConnection {
     return null;
   }
 
-  static  Future<String> uploadImage(filepath, url) async {
+  static Future<String> uploadImage(filepath, url) async {
     var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(
-        http.MultipartFile.fromBytes(
-            'picture',
-            File(filepath).readAsBytesSync(),
-            filename: filepath.split("/").last
-        )
-    );
+    request.files.add(http.MultipartFile.fromBytes(
+        'picture', File(filepath).readAsBytesSync(),
+        filename: filepath.split("/").last));
     var res = await request.send();
-    if (res != null) {
-
-    }
+    if (res != null) {}
   }
 
   static Future<DetailPotentialModelResponse> getdetailPotential(
@@ -266,12 +260,15 @@ class LeadConnection {
     return null;
   }
 
-  static Future<UploadImageModelResponse> upload(BuildContext context, File file) async {
+  static Future<UploadImageModelResponse> upload(
+      BuildContext context, File file) async {
     showLoading(context);
-    ResponseData responseData = await LeadConnection.connection.upload('/user/upload-file', file);
+    ResponseData responseData =
+        await LeadConnection.connection.upload('/user/upload-file', file);
     Navigator.of(context).pop();
     if (responseData.isSuccess) {
-      UploadImageModelResponse data = UploadImageModelResponse.fromJson(responseData.data);
+      UploadImageModelResponse data =
+          UploadImageModelResponse.fromJson(responseData.data);
       return data;
     }
     return null;
@@ -296,79 +293,61 @@ class LeadConnection {
         });
   }
 
-
-
-  static Future showMyDialog(BuildContext context, String title) async {
+  static Future showMyDialog(BuildContext context, String title, {bool isCancle = true}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          // title:  Text(''),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Center(
-                    child: Text(
-                  AppLocalizations.text(LangKey.notify) + "\n",
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-                )),
-                Center(child: Text(title)),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Center(child: Text(AppLocalizations.text(LangKey.argree))),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+                Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(),
+                    Center(
+                        child: Text(
+                      AppLocalizations.text(LangKey.notify) + "\n",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    )),
 
-  static Future showMyDialogWithFunction(BuildContext context, String title ,{Function ontap}) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          // title:  Text(''),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
+                    isCancle ? InkWell(
+                      child: Icon(Icons.clear,size: 20,),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ) : Container()
+                  ],
+                ),
                 Center(
                     child: Text(
-                  AppLocalizations.text(LangKey.notify) + "\n",
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                  title,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: Colors.grey[700]),
                 )),
-                Center(child: Text(title)),
               ],
             ),
           ),
           actions: <Widget>[
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [TextButton(
-                child: Center(child: Text(AppLocalizations.text(LangKey.no),
-                style: TextStyle(
-                  color: Colors.red
-                ),)),
+            Container(
+              margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 15.0),
+              height: 40,
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(10)),
+              child: TextButton(
+                child: Center(
+                    child: Text(
+                  AppLocalizations.text(LangKey.argree),
+                  style: TextStyle(color: AppColors.white),
+                )),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-              ),
-
-              TextButton(
-                child: Center(child: Text(AppLocalizations.text(LangKey.yes))),
-                onPressed: ontap,
-              ),],
               ),
             )
           ],
@@ -377,5 +356,71 @@ class LeadConnection {
     );
   }
 
-
+  static Future showMyDialogWithFunction(BuildContext context, String title,
+      {Function ontap , bool isCancle = true}) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          // title:  Text(''),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                   crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(),
+                    Center(
+                        child: Text(
+                      AppLocalizations.text(LangKey.notify) + "\n",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    )),
+                    InkWell(
+                      child: Icon(Icons.clear,size: 20,),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ) 
+                  ],
+                ),
+                Center(
+                    child: Text(
+                  title,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.grey[700]),
+                )),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    child: Center(
+                        child: Text(
+                      AppLocalizations.text(LangKey.no),
+                      style: TextStyle(color: Color(0xFF0067AC)),
+                    )),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child:
+                        Center(child: Text(AppLocalizations.text(LangKey.yes))),
+                    onPressed: ontap,
+                  ),
+                ],
+              ),
+            )
+          ],
+        );
+      },
+    );
+  }
 }

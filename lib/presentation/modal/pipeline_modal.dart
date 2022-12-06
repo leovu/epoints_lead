@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/response/get_pipeline_model_response.dart';
+import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
@@ -30,11 +31,11 @@ class _PipelineModalState extends State<PipelineModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              Container(width: 30,),
               Text(AppLocalizations.text(LangKey.choosePipeline),style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
-                  fontWeight: FontWeight.w400),),
+                  fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -43,7 +44,6 @@ class _PipelineModalState extends State<PipelineModal> {
                 child: Icon(Icons.clear),
                 ),
               ),
-            
             ],
           ),
           Expanded(
@@ -63,13 +63,13 @@ class _PipelineModalState extends State<PipelineModal> {
   }
 
   List<Widget> _listWidget() {
-    return List.generate(
+    return (widget.pipeLineData != null) ? List.generate(
         widget.pipeLineData.length,
         (index) => _buildItem(
                 widget.pipeLineData[index].pipelineName, widget.pipeLineData[index].selected,
                 () {
               selectedItem(index);
-            }));
+            })) : [CustomDataNotFound()];
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {
@@ -82,7 +82,7 @@ class _PipelineModalState extends State<PipelineModal> {
             Text(
               title,
               style: TextStyle(
-                  fontSize: 18.0,
+                  fontSize: 17.0,
                   color: selected ? Colors.orange : Colors.black,
                   fontWeight: FontWeight.normal),
             )

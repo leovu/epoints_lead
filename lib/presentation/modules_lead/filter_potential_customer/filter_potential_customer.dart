@@ -306,10 +306,13 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
   }
 
   void getData() async {
+
+
     var tags = await LeadConnection.getTag(context);
     if (tags != null) {
       tagDatas.addAll(tags.data);
     }
+    
     var sources = await LeadConnection.getCustomerOption(context);
     if (sources != null) {
       customerOptionData = sources.data;

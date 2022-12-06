@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/response/get_journey_model_response.dart';
+import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
@@ -30,11 +31,11 @@ class _JourneyModalState extends State<JourneyModal> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(),
+              Container(width: 30,),
               Text(AppLocalizations.text(LangKey.chooseItinerary),style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.black,
-                  fontWeight: FontWeight.w400),),
+                  fontWeight: FontWeight.w500),),
               InkWell(
                 onTap: () {
                   Navigator.of(context).pop();
@@ -63,13 +64,13 @@ class _JourneyModalState extends State<JourneyModal> {
   }
 
   List<Widget> _listWidget() {
-    return List.generate(
+    return (widget.journeys != null && widget.journeys?.length > 0) ? List.generate(
         widget.journeys.length,
         (index) => _buildItem(
                 widget.journeys[index].journeyName, widget.journeys[index].selected,
                 () {
               selectedItem(index);
-            }));
+            })) : [CustomDataNotFound()];
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {

@@ -5,7 +5,6 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
-import 'package:lead_plugin_epoint/model/object_pop_detail_model.dart';
 import 'package:lead_plugin_epoint/model/request/assign_revoke_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
@@ -44,8 +43,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     var dataDetail = await LeadConnection.getdetailPotential(
         context, widget.customer_lead_code);
     if (dataDetail != null) {
-      detail = dataDetail.data;
+      if (dataDetail.errorCode == 0) {
+        detail = dataDetail.data;
       setState(() {});
+      } else {
+        await LeadConnection.showMyDialog(
+                                  context, dataDetail.errorDescription, isCancle: false );
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -297,7 +302,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     ? _infoItem(AppLocalizations.text(LangKey.allottedPerson),
                         detail?.saleName ?? "")
                     : Container(),
-                (detail?.saleId != null) ? Divider() : Container(),
+                (detail?.saleId != 0) ? Divider() : Container(),
                 _infoItem(AppLocalizations.text(LangKey.pipeline),
                     detail?.pipelineName ?? ""),
               ],

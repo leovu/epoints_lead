@@ -195,6 +195,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
         setState(() {
           print(_image);
         });
+      } else {
+        LeadConnection.showMyDialog(context, AppLocalizations.text(LangKey.uploadImageFail));
       }
     }
   }
@@ -541,13 +543,22 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer> with Widg
         onTap: () async {
           print("edit khtn");
 
+          if (_phoneNumberText.text.isNotEmpty) {
+            if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) || (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+            print("so dien thoai sai oi");
+            LeadConnection.showMyDialog(
+                context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat), warning: true);
+            return;
+          }
+          }
+
           if (_fullNameText.text == "" ||
-              _phoneNumberText.text == "" ||
+              // _phoneNumberText.text == "" ||
               customerTypeSelected == null ||
               customerSourceSelected == null ||
               pipelineSelected == null ||
               journeySelected == null) {
-            LeadConnection.showMyDialog( context,AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
+            LeadConnection.showMyDialog( context,AppLocalizations.text(LangKey.warningChooseAllRequiredInfo), warning: true);
           } else {
             DescriptionModelResponse result = await LeadConnection.updateLead(
                 context,

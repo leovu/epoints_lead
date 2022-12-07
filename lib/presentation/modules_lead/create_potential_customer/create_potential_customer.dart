@@ -153,6 +153,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
         setState(() {
           print(_image);
         });
+      } else {
+        LeadConnection.showMyDialog(context, AppLocalizations.text(LangKey.uploadImageFail));
       }
     }
   }
@@ -307,7 +309,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               fillText: _fullNameText, focusNode: _fullnameFocusNode),
           // _buildPhoneNumber("0945160061"),
           _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
-              Assets.iconCall, true, false, true,
+              Assets.iconCall, false, false, true,
               fillText: _phoneNumberText,
               focusNode: _phoneNumberFocusNode,
               inputType: TextInputType.phone),
@@ -553,15 +555,25 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
         onTap: () async {
           print("theemmm khtn");
 
+          if (_phoneNumberText.text.isNotEmpty) {
+            if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) && (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+            print("so dien thoai sai oy");
+            LeadConnection.showMyDialog(
+                context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat), warning: true);
+            return;
+             }
+          }
+
           if (_fullNameText.text == "" ||
-              _phoneNumberText.text == "" ||
+              // _phoneNumberText.text == "" ||
               customerTypeSelected == null ||
               sourceSelected == null ||
               pipelineSelected == null ||
               journeySelected == null) {
             LeadConnection.showMyDialog(
-                context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
+                context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo), warning: true);
           } else {
+            
             LeadConnection.showLoading(context);
             AddLeadModelResponse result = await LeadConnection.addLead(
                 context,
@@ -589,6 +601,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                     context, result.errorDescription);
                 if (result.data != null) {
                   modelResponse = ObjectPopDetailModel(
+                      customer_lead_code: "",
                       customer_lead_id: result.data.customerLeadId,
                       status: true);
                 }

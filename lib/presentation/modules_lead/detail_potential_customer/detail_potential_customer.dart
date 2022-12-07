@@ -48,7 +48,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       setState(() {});
       } else {
         await LeadConnection.showMyDialog(
-                                  context, dataDetail.errorDescription, isCancle: false );
+                                  context, dataDetail.errorDescription);
         Navigator.of(context).pop();
       }
     }
@@ -213,10 +213,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                           Assets.iconTask,
                           Color.fromARGB(255, 243, 180, 125), () async {
                         if (Global.createJob != null) {
-                          await Global.createJob(detail.customerLeadCode);
+                          await Global.createJob();
                         }
-
-
                       })
                     ],
                   )),

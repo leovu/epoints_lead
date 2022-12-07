@@ -62,14 +62,14 @@ class LeadConnection {
     return null;
   }
 
-  static Future<String> uploadImage(filepath, url) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(http.MultipartFile.fromBytes(
-        'picture', File(filepath).readAsBytesSync(),
-        filename: filepath.split("/").last));
-    var res = await request.send();
-    if (res != null) {}
-  }
+  // static Future<String> uploadImage(filepath, url) async {
+  //   var request = http.MultipartRequest('POST', Uri.parse(url));
+  //   request.files.add(http.MultipartFile.fromBytes(
+  //       'picture', File(filepath).readAsBytesSync(),
+  //       filename: filepath.split("/").last));
+  //   var res = await request.send();
+  //   if (res != null) {}
+  // }
 
   static Future<DetailPotentialModelResponse> getdetailPotential(
       BuildContext context, String customer_lead_code) async {
@@ -293,7 +293,7 @@ class LeadConnection {
         });
   }
 
-  static Future showMyDialog(BuildContext context, String title, {bool isCancle = true}) async {
+  static Future showMyDialog(BuildContext context, String title, {bool isCancle = false, bool warning = false}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -309,7 +309,7 @@ class LeadConnection {
                     Container(),
                     Center(
                         child: Text(
-                      AppLocalizations.text(LangKey.notify) + "\n",
+                     warning ? AppLocalizations.text(LangKey.warning) : AppLocalizations.text(LangKey.notify) + "\n",
                       style: TextStyle(
                           fontWeight: FontWeight.bold, color: Colors.black),
                     )),
@@ -342,7 +342,8 @@ class LeadConnection {
               child: TextButton(
                 child: Center(
                     child: Text(
-                  AppLocalizations.text(LangKey.argree),
+                  // AppLocalizations.text(LangKey.argree),
+                  "OK",
                   style: TextStyle(color: AppColors.white),
                 )),
                 onPressed: () {

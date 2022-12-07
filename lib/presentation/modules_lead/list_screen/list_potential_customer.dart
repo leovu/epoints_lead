@@ -164,11 +164,12 @@ class _LeadScreen extends State<LeadScreen> {
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          ObjectPopDetailModel result = await Navigator.of(context).push(
+          var result = await Navigator.of(context).push(
               MaterialPageRoute(
                   builder: (context) => CreatePotentialCustomer()));
           if (result != null) {
-            if (result.status) {
+            var status = result["status"];
+            if (status) {
               getData(false);
             }
           }

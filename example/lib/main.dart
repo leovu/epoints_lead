@@ -32,18 +32,28 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: InkWell(
-            child: Text("Open lead"),
-            onTap: () async {
-              var result = await LeadPluginEpoint.open(
-                  context,
-                  const Locale(LangKey.langVi, 'VN'),'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTY3MDIxMjYzNCwiZXhwIjoxNjcwMjM0MjM0LCJuYmYiOjE2NzAyMTI2MzQsImp0aSI6ImpKd0N5dXB2dmVOTENVZFQiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.l5aCUDq4fYpuOhdiNdco_qJp-SG-LCBMVcDX1z7wclA',
-                  2,
-                  domain: 'https://staff-api.stag.epoints.vn',
-                  brandCode: 'qc');
+          child: Container(
+            decoration: BoxDecoration( 
+                color: Color.fromARGB(249, 249, 64, 2),
+                borderRadius: BorderRadius.circular(10)),
+            height: 40,
+            width: MediaQuery.of(context).size.width / 2,
+            child: Center(
+              child: InkWell(
+                child: Text("Open lead"),
+                onTap: () async {
+                  var result = await LeadPluginEpoint.open(
+                      context,
+                      const Locale(LangKey.langVi, 'VN'),
+                      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vc3RhZmYtYXBpLnN0YWcuZXBvaW50cy52bi91c2VyL2xvZ2luIiwiaWF0IjoxNjcwNDE5MzMxLCJleHAiOjE2NzA0NDA5MzEsIm5iZiI6MTY3MDQxOTMzMSwianRpIjoiNzRRSGIxRlZMOHZqQjlpSCIsInN1YiI6MSwicHJ2IjoiYTBmM2U3NGJlZGY1MTJjNDc3ODI5N2RlNWY5MjA4NmRhZDM5Y2E5ZiIsInNpZCI6ImFkbWluQHBpb2FwcHMudm4iLCJicmFuZF9jb2RlIjoicWMifQ.9BXNNLRJgJ5RTqty3kEn7I6wtecdPmuAWxWq83cbsSM',
+                      2,
+                      domain: 'https://staff-api.stag.epoints.vn',
+                      brandCode: 'qc');
 
-              if (result != null) {}
-            },
+                  if (result != null) {}
+                },
+              ),
+            ),
           ),
         ),
       ),

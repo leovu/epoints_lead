@@ -5,6 +5,7 @@ class LangKey {
   static const String error = "error";
   static const String success = "success";
   static const String fail = "fail";
+  static const String warning = "warning";
   static const String filterNameCodePhone = "filter_Name_Code_Phone";
   static const String inputFullname = "input_fullname";
   static const String inputAddress = "input_address";
@@ -120,6 +121,8 @@ class LangKey {
   static const String no = "no";
   static const String notify = "notify";
   static const String argree = "argree";
-  static const String showMore = "show_more";
+  static const String showMore = "show_more"; 
+  static const String phoneNumberNotCorrectFormat = "phone_number_not_correct_format";
+  static const String uploadImageFail = "upload_image_fail"; 
   
 }

@@ -6,6 +6,7 @@ import 'package:lead_plugin_epoint/model/response/detail_potential_model_respons
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/list_screen/list_potential_customer.dart';
+import 'package:lead_plugin_epoint/utils/global.dart';
 
 import 'common/localization/app_localizations.dart';
 import 'lead_plugin_epoint_platform_interface.dart';
@@ -25,7 +26,7 @@ class LeadPluginEpoint {
 
   }
 
-  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, String fullname, String phone, String customerLeadCode}) async {
+  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, String fullname, String phone, String customerLeadCode, Function createJob}) async {
     if(domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -35,6 +36,11 @@ class LeadPluginEpoint {
     if(token != null) {
       HTTPConnection.asscessToken = token;
     }
+     if (createJob != null) {
+      Global.createJob = createJob;
+
+    }
+    
     LeadConnection.locale = locale;
     LeadConnection.buildContext = context;
     await AppLocalizations(LeadConnection.locale).load();

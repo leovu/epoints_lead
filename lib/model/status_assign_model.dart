@@ -1,6 +1,6 @@
 class StatusAssignModel {
   String statusName;
-  int statusID;
+  String statusID;
   bool selected;
 
   StatusAssignModel({this.statusName, this.statusID, this.selected});

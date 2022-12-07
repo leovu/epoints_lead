@@ -11,3 +11,23 @@ void keyboardDismissOnTap(BuildContext context) {
     }
   }
 }
+
+class Validators {
+  var validatePhone = RegExp(r"^[+#*()\[\]]*([0-9][ ext+-pw#*()\[\]]*){10,45}$");
+  var validateNumber = RegExp(r"^[\d]*$");
+
+ bool isValidPhone(String phone){
+    if (phone!=null&&phone.isNotEmpty&&validatePhone.hasMatch(phone)){
+      return true;
+    }
+    return false;
+  }
+
+  bool isNumber(String number){
+    if (number!=null&&number.isNotEmpty&&validateNumber.hasMatch(number)){
+      return true;
+    }
+    return false;
+  }
+
+}

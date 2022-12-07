@@ -58,16 +58,15 @@ class HTTPConnection {
     }
   }
 
-   Future<String> uploadImage(filepath, url) async {
-    var request = http.MultipartRequest('POST', Uri.parse(url));
-    request.files.add(http.MultipartFile('image',
-        File(filepath).readAsBytes().asStream(), File(filepath).lengthSync(),
-        filename: filepath.split("/").last));
-    var res = await request.send();
+  //  Future<String> uploadImage(filepath, url) async {
+  //   var request = http.MultipartRequest('POST', Uri.parse(url));
+  //   request.files.add(http.MultipartFile('image',
+  //       File(filepath).readAsBytes().asStream(), File(filepath).lengthSync(),
+  //       filename: filepath.split("/").last));
+  //   var res = await request.send();
 
     
-  }
-
+  // }
 
   
   Future<ResponseData>post(String path, Map<String, dynamic> body) async {

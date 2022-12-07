@@ -1,6 +1,6 @@
 {
     "error": "Đã có lỗi xảy ra!",
-    "warning": "Cảnh báo!!!",
+    "warning": "Cảnh báo",
     "error_message": "Đã có lỗi xảy ra!",
     "success": "Thành công",
     "fail": "Thất bại",
@@ -117,8 +117,9 @@
     "no":"Không",
     "notify":"Thông báo",
     "argree":"Đồng ý",
-    "show_more":"Xem thêm"
+    "show_more":"Xem thêm",
+    "phone_number_not_correct_format":"Số điện thoại không đúng định dạng",
+    "upload_image_fail":"Upload ảnh thất bại"
     
-
   }
   

@@ -145,15 +145,15 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
   List<StatusAssignModel> statusOptions = [
     StatusAssignModel(
         statusName: AppLocalizations.text(LangKey.all),
-        statusID: 0,
+        statusID: "",
         selected: true),
     StatusAssignModel(
         statusName: AppLocalizations.text(LangKey.assigned),
-        statusID: 1,
+        statusID: "assigned",
         selected: false),
     StatusAssignModel(
         statusName: AppLocalizations.text(LangKey.unassigned),
-        statusID: 2,
+        statusID: "unassigned",
         selected: false)
   ];
 
@@ -241,14 +241,12 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
 
     for (int i = 0; i < statusOptions.length; i++) {
-      if (filterScreenModel.filterModel.statusAssign != "") {
         if (widget.filterScreenModel.filterModel.statusAssign ==
-            "${statusOptions[i].statusID}") {
+            statusOptions[i].statusID) {
           statusOptions[i].selected = true;
         } else {
           statusOptions[i].selected = false;
         }
-      }
     }
 
     for (int i = 0; i < customerSources.length; i++) {
@@ -485,45 +483,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         id_allocate_date: filterScreenModel.id_allocation_date,
       ),
 
-      // khung thời gian tự chọn
-      // Text(
-      //   AppLocalizations.text(LangKey.customerTimeFrame),
-      //   style: TextStyle(
-      //       fontSize: 15.0,
-      //       color: const Color(0xFF8E8E8E),
-      //       fontWeight: FontWeight.normal),
-      // ),
-
-      // Container(
-      //   height: 10.0,
-      // ),
-
-      // Row(
-      //   mainAxisAlignment: MainAxisAlignment.start,
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     Container(
-      //         margin: const EdgeInsets.only(bottom: 10.0),
-      //         width: (MediaQuery.of(context).size.width - 60) / 2 - 8,
-      //         child: _buildDatePicker(
-      //             AppLocalizations.text(LangKey.fromDate), _fromDateText, () {
-      //           _showFromDatePickerAllocateDate();
-      //         })),
-      //     Container(
-      //         margin: EdgeInsets.only(left: 15, right: 5),
-      //         child: Text(
-      //           "-",
-      //           style: TextStyle(color: Color(0xFF8E8E8E)),
-      //         )),
-      //     Container(
-      //         margin: const EdgeInsets.only(bottom: 10.0, left: 10.0),
-      //         width: (MediaQuery.of(context).size.width - 60) / 2 - 4,
-      //         child: _buildDatePicker(
-      //             AppLocalizations.text(LangKey.toDate), _toDateText, () {
-      //           _showToDatePickerAllocateDate();
-      //         }))
-      //   ],
-      // ),
       Container(height: 10.0),
 
       Text(
@@ -778,7 +737,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                 LeadConnection.showMyDialog(
                     context,
                     AppLocalizations.text(
-                        LangKey.warningChooseFullFromdateTodate));
+                        LangKey.warningChooseFullFromdateTodate),warning: true);
                 return;
               }
               var tagData = tagDatas.firstWhere((element) => element.selected);
@@ -801,10 +760,10 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               var statusOption =
                   statusOptions.firstWhere((element) => element.selected);
               if (statusOption.statusName == AppLocalizations.text(LangKey.all)) {
-                widget.filterScreenModel.filterModel.statusAssign = "";
+                filterScreenModel.filterModel.statusAssign = "";
               } else {
                 filterScreenModel.filterModel.statusAssign =
-                    "${statusOption.statusID}";
+                    statusOption.statusID;
               }
 
               var cusSource =

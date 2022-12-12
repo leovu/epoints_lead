@@ -1,3 +1,4 @@
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/lead_plugin_epoint.dart';
@@ -7,6 +8,7 @@ void main() {
     locale: const Locale('vi', 'VN'),
     title: 'Navigation Basics',
     debugShowCheckedModeBanner: false,
+    
     home: MyApp(),
   ));
 }
@@ -45,7 +47,7 @@ class _MyAppState extends State<MyApp> {
                   var result = await LeadPluginEpoint.open(
                       context,
                       const Locale(LangKey.langVi, 'VN'),
-                      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vc3RhZmYtYXBpLnN0YWcuZXBvaW50cy52bi91c2VyL2xvZ2luIiwiaWF0IjoxNjcwNDE5MzMxLCJleHAiOjE2NzA0NDA5MzEsIm5iZiI6MTY3MDQxOTMzMSwianRpIjoiNzRRSGIxRlZMOHZqQjlpSCIsInN1YiI6MSwicHJ2IjoiYTBmM2U3NGJlZGY1MTJjNDc3ODI5N2RlNWY5MjA4NmRhZDM5Y2E5ZiIsInNpZCI6ImFkbWluQHBpb2FwcHMudm4iLCJicmFuZF9jb2RlIjoicWMifQ.9BXNNLRJgJ5RTqty3kEn7I6wtecdPmuAWxWq83cbsSM',
+                      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vc3RhZmYtYXBpLnN0YWcuZXBvaW50cy52bi91c2VyL2xvZ2luIiwiaWF0IjoxNjcwODExNDcxLCJleHAiOjE2NzA4MzMwNzEsIm5iZiI6MTY3MDgxMTQ3MSwianRpIjoiUGh1UnpQQm91QkR0cWFyYiIsInN1YiI6MSwicHJ2IjoiYTBmM2U3NGJlZGY1MTJjNDc3ODI5N2RlNWY5MjA4NmRhZDM5Y2E5ZiIsInNpZCI6ImFkbWluQHBpb2FwcHMudm4iLCJicmFuZF9jb2RlIjoicWMifQ.dACMOOMWI5Dw6fx5u1EnqLJEpk9dhw-ZX-KU4YXilXc',
                       2,
                       domain: 'https://staff-api.stag.epoints.vn',
                       brandCode: 'qc');
@@ -56,6 +58,15 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
         ),
+        floatingActionButton: DraggableFab(
+          securityBottom: -5,
+        child: FloatingActionButton(
+          onPressed: () {
+            print("keo");
+          },
+          child: Icon(Icons.add),
+        ),
+      ),
       ),
     );
   }

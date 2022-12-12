@@ -293,7 +293,7 @@ class LeadConnection {
         });
   }
 
-  static Future showMyDialog(BuildContext context, String title, {bool isCancle = false, bool warning = false}) async {
+  static Future showMyDialog(BuildContext context, String title, {bool warning = false}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -302,26 +302,14 @@ class LeadConnection {
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(),
-                    Center(
-                        child: Text(
-                     warning ? AppLocalizations.text(LangKey.warning) : AppLocalizations.text(LangKey.notify) + "\n",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
-                    )),
-
-                    isCancle ? InkWell(
-                      child: Icon(Icons.clear,size: 20,),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    ) : Container()
-                  ],
-                ),
+                
+                Center(
+                    child: Text(
+                 warning ? AppLocalizations.text(LangKey.warning) : AppLocalizations.text(LangKey.notify) + "\n",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
+                )),
+                Container(height: 10,),
                 Center(
                     child: Text(
                   title,

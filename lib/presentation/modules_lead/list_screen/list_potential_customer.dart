@@ -622,9 +622,13 @@ class _LeadScreen extends State<LeadScreen> {
                         }),
                         _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
                             ontap: () async {
-                              Navigator.of(context).push(
+                              bool result = await Navigator.of(context).push(
                                   MaterialPageRoute(
-                                      builder: (context) => CustomerCarePotential(customer_lead_code: item.customerLeadCode, customer_lead_id: item.customerLeadId,)));
+                                      builder: (context) => CustomerCarePotential(item:item)));
+
+                                      if (result!= null && result) {
+                                        getData(false);
+                                      }
                           print("CustomerCare");
                         }),
                       //   _actionItem(Assets.iconTask, Color(0xFFCD6000),

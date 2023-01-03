@@ -130,3 +130,17 @@ class ResponseData {
    List<dynamic> datas;
 }
 
+class MultipartFileModel {
+  File file;
+  String name;
+
+  MultipartFileModel({this.file, this.name});
+
+   Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+     data['file'] = this.file;
+    data['name'] = this.name;
+    return data;
+  }
+}
+

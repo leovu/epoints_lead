@@ -3,7 +3,7 @@ class AddWorkRequestModel {
   String manageWorkCustomerType;
   int manageTypeWorkId;
   // String date_start;
-  String date_finish;
+  // String date_finish;
   String from_date;
   String to_date;
 
@@ -32,7 +32,7 @@ class AddWorkRequestModel {
       this.manageWorkCustomerType,
       this.manageTypeWorkId,
       // this.date_start,
-      this.date_finish,
+      // this.date_finish,
       this.from_date,
       this.to_date,
       this.time,
@@ -61,7 +61,7 @@ class AddWorkRequestModel {
     manageTypeWorkId = json['manage_type_work_id'];
     // date_start = json['date_start'];
 
-    date_finish = json['date_finish'];
+    // date_finish = json['date_finish'];
     from_date = json['from_date'];
     to_date = json['to_date'];
 
@@ -107,7 +107,7 @@ class AddWorkRequestModel {
     data['manage_type_work_id'] = this.manageTypeWorkId;
     // data['date_start'] = this.date_start;
 
-    data['date_finish'] = this.date_finish;
+    // data['date_finish'] = this.date_finish;
     data['from_date'] = this.from_date;
     data['to_date'] = this.to_date;
 

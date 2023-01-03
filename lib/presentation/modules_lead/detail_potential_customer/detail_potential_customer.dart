@@ -39,15 +39,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
   DetailPotentialData detail;
   bool allowPop = false;
-  List<String> listFunction = [
-    "CRM",
-    "Dùng excel",
-    "Chấm công",
-    "Chathub",
-    "Quản lý công việc",
-    "Chấm công",
-    "QLCV"
-  ];
 
   @override
   void initState() {
@@ -474,20 +465,20 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     margin: EdgeInsets.only(top: 25.0),
                     child: Column(
                       children: [
-                        Container(
-                          height: 24,
-                          width: 55,
-                          decoration: BoxDecoration(
-                              color: Color(0xFF3AEDB6),
-                              borderRadius: BorderRadius.circular(4.0)),
-                          child: Center(
-                            child: Text("Mới",
-                                style: TextStyle(
-                                    color: Color(0xFF11B482),
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.normal)),
-                          ),
-                        ),
+                        // Container(
+                        //   height: 24,
+                        //   width: 55,
+                        //   decoration: BoxDecoration(
+                        //       color: Color(0xFF3AEDB6),
+                        //       borderRadius: BorderRadius.circular(4.0)),
+                        //   child: Center(
+                        //     child: Text("Mới",
+                        //         style: TextStyle(
+                        //             color: Color(0xFF11B482),
+                        //             fontSize: 14,
+                        //             fontWeight: FontWeight.normal)),
+                        //   ),
+                        // ),
                         SizedBox(
                           height: 4.0,
                         ),
@@ -547,23 +538,23 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
 
                               infoItem(Assets.iconName, detail.saleName ?? ""),
-                              infoItem(Assets.iconInteraction, "12/12/2022"),
+                              infoItem(Assets.iconInteraction, detail.dateLastCare ?? ""),
 
-                              Container(
-                                height: 24,
-                                width: 55,
-                                margin: EdgeInsets.only(left: 8.0),
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF3AEDB6),
-                                    borderRadius: BorderRadius.circular(4.0)),
-                                child: Center(
-                                  child: Text("Mới",
-                                      style: TextStyle(
-                                          color: Color(0xFF11B482),
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.normal)),
-                                ),
-                              )
+                              // Container(
+                              //   height: 24,
+                              //   width: 55,
+                              //   margin: EdgeInsets.only(left: 8.0),
+                              //   decoration: BoxDecoration(
+                              //       color: Color(0xFF3AEDB6),
+                              //       borderRadius: BorderRadius.circular(4.0)),
+                              //   child: Center(
+                              //     child: Text("Mới",
+                              //         style: TextStyle(
+                              //             color: Color(0xFF11B482),
+                              //             fontSize: 14,
+                              //             fontWeight: FontWeight.normal)),
+                              //   ),
+                              // )
                             ],
                           ),
                         ),
@@ -962,11 +953,11 @@ class _SubDetailPotentialCustomerState
           index = 2;
           selectedTab(2);
         }),
-        option(tabPotentials[3].typeName, tabPotentials[3].selected, 120, () {
+        option(tabPotentials[3].typeName, tabPotentials[3].selected, 60, () {
           index = 3;
           selectedTab(3);
         }),
-        option(tabPotentials[4].typeName, tabPotentials[4].selected, 120, () {
+        option(tabPotentials[4].typeName, tabPotentials[4].selected, 100, () {
           index = 4;
           selectedTab(4);
         })

@@ -9,6 +9,7 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
+import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/add_work_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
@@ -16,6 +17,7 @@ import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model
 import 'package:lead_plugin_epoint/model/response/get_status_work_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_type_work_response_model.dart';
+import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_project_model_response.dart';
 import 'package:lead_plugin_epoint/model/type_card_model.dart';
 import 'package:lead_plugin_epoint/presentation/modal/list_projects_modal.dart';
@@ -34,9 +36,10 @@ import 'package:lead_plugin_epoint/widget/custom_size_transaction.dart';
 import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
 
 class CustomerCarePotential extends StatefulWidget {
-  int customer_lead_id;
-  String customer_lead_code;
-  CustomerCarePotential({Key key, this.customer_lead_id,this.customer_lead_code}) : super(key: key);
+
+  ListCustomLeadItems item;
+
+  CustomerCarePotential({Key key,this.item}) : super(key: key);
 
   @override
   _CustomerCarePotentialState createState() => _CustomerCarePotentialState();
@@ -90,7 +93,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
       manageWorkCustomerType: "",
       manageTypeWorkId: 0,
       // date_start: "",
-      date_finish: "",
+      // date_finish: "",
       time: 0,
       timeType: "d",
       processorId: 0,
@@ -166,6 +169,57 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
     }
     super.didChangeMetrics();
   }
+
+  _showDocumentPicker() async {
+    List<File> files = await openMultiDocument(
+        context,
+        params: [
+          "pdf",
+          "doc",
+          "docx",
+          "xls",
+          "xlsx",
+          "xlsm",
+        ]
+    );
+
+    if((files?.length ?? 0) != 0){
+      // LeadConnection.showLoading(context);
+      for(var e in files){
+        await LeadConnection.workUploadFile(context,MultipartFileModel(
+            name: "link",
+            file: e
+        ));
+      }
+      
+      Navigator.of(context).pop();
+    }
+  }
+
+    static Future<List<File>> openMultiDocument(
+      BuildContext context, {
+        List<String> params,
+      }) async {
+    try {
+      bool permission = true;
+      // permission = await CustomPermissionRequest.request(
+      //     context, PermissionRequestType.STORAGE);
+
+      if (!permission) return null;
+    } catch (_) {
+      return null;
+    }
+
+    FilePickerResult files = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: params,
+        allowMultiple: true
+    );
+
+    return files == null ? null : files.files.map((e) => File(e.path)).toList();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -385,7 +439,9 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
             margin: EdgeInsets.only(bottom: 10),
             child: InkWell(
               onTap: () {
-                selectFile();
+                // selectFile();
+              // _showDocumentPicker();
+                
               },
               child: DottedBorder(
                 color: AppColors.borderColor,
@@ -519,41 +575,43 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                       )
                     ],
                   ),
-                  Container(
+                  (widget.item.customerType == "business") ? Container(
                     margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Flexible(
-                          fit: FlexFit.loose,
-                          child: Container(
-                            height: 36.0,
-                            // width: 70.0,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    offset: Offset(0, 1),
-                                    blurRadius: 2,
-                                    color: Colors.black.withOpacity(0.3),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(5.0)),
-                            child: Image.asset(Assets.imgFeatureDeveloping),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 11.0,
-                        ),
+                        // Flexible(
+                        //   fit: FlexFit.loose,
+                        //   child: Container(
+                        //     height: 36.0,
+                        //     // width: 70.0,
+                        //     decoration: BoxDecoration(
+                        //         color: Colors.white,
+                        //         boxShadow: [
+                        //           BoxShadow(
+                        //             offset: Offset(0, 1),
+                        //             blurRadius: 2,
+                        //             color: Colors.black.withOpacity(0.3),
+                        //           )
+                        //         ],
+                        //         borderRadius: BorderRadius.circular(5.0)),
+                        //     child: Image.asset(Assets.imgFeatureDeveloping),
+                        //   ),
+                        // ),
+                        // SizedBox(
+                        //   width: 11.0,
+                        // ),
                         Text(
-                          "CÔNG TY TNHH NESTLÉ VIỆT NAM",
+                          widget.item.leadFullName,
                           style: TextStyle(
-                              fontSize: 14.0,
+                              fontSize: 15.0,
                               color: const Color(0xFF121212),
                               fontWeight: FontWeight.w600),
                         )
                       ],
                     ),
+                  ) : Container(
+                    height: 15.0,
                   ),
 
                   _buildTextField(
@@ -991,7 +1049,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                   from_date:  _fromDateText.text ?? "",
                   to_date:_toDateText.text ?? "" ,
                   // date_start: _fromDateText.text ?? "",
-                  date_finish: _toDateText.text ?? "",
+                  // date_finish: _toDateText.text ?? "",
                   time: null,
                   timeType: null,
                   processorId: addWorkModel.processorId,
@@ -1008,7 +1066,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                   parentId: null,
                   description: _enterWorkDescText.text ?? "",
                   manageProjectId: addWorkModel.manageProjectId,
-                  customerId: widget.customer_lead_id,
+                  customerId: widget.item.customerLeadId,
                   listTag: addWorkModel.listTag,
                   typeCardWork: null,
                   priority: 0,
@@ -1029,8 +1087,9 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
                 Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => DetailPotentialCustomer(
-                              customer_lead_code: widget.customer_lead_code,
+                              customer_lead_code: widget.item.customerLeadCode,
                                   customerCare: true,
+                                  indexTab: 2,
                                 )));
 
               } else {

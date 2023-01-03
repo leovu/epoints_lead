@@ -16,6 +16,7 @@ import 'package:lead_plugin_epoint/model/request/get_journey_model_request.dart'
 import 'package:lead_plugin_epoint/model/request/get_list_staff_request_model.dart';
 import 'package:lead_plugin_epoint/model/request/list_customer_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/list_project_model_request.dart';
+import 'package:lead_plugin_epoint/model/request/work_upload_file_document_request_model.dart';
 import 'package:lead_plugin_epoint/model/response/add_lead_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/contact_list_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
@@ -40,6 +41,8 @@ import 'package:lead_plugin_epoint/model/response/list_project_model_response.da
 import 'package:lead_plugin_epoint/model/response/upload_image_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_branch_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_department_response_model.dart';
+import 'package:lead_plugin_epoint/model/response/work_list_file_response_model.dart';
+import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
 
 import '../model/response/list_customer_lead_model_response.dart';
 
@@ -454,6 +457,37 @@ class LeadConnection {
     }
     return null;
   }
+
+   static Future<List<WorkListFileModel>> workUploadFile(BuildContext context, MultipartFileModel model) async {
+    ResponseData response = await connection.upload(
+        '/manage-work/upload-file',model.file);
+    if(response.isSuccess){
+      var responseModel = WorkUploadFileResponseModel.fromJson(response.data);
+
+    return  workUploadFileDocument(WorkUploadFileDocumentRequestModel(
+        manageWorkId: null,
+        path: responseModel.path
+      ));
+    }
+    return null;
+  }
+
+   static Future<List<WorkListFileModel>>  workUploadFileDocument(WorkUploadFileDocumentRequestModel model) async {
+      List<WorkListFileModel> _fileModels;
+   ResponseData response = await connection.post(
+        '/manage-work/upload-file-document',model.toJson());
+    if(response.isSuccess){
+      var responseModel = WorkListFileModel.fromJson(response.data);
+
+      _fileModels.insert(0, responseModel);
+      // setFileModels(_fileModels);
+      return _fileModels;
+    }
+    return null;
+  }
+
+  
+ 
 
 
 

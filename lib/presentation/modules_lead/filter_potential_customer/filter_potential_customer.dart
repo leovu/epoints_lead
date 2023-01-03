@@ -330,8 +330,8 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
     for (int i = 0; i < customerTypeData.length; i++) {
       if (filterScreenModel.filterModel.customerType != "") {
-        if (widget.filterScreenModel.filterModel.customerType ==
-            customerTypeData[i].customerTypeName) {
+        if (widget.filterScreenModel.filterModel.customerType.toLowerCase() ==
+            customerTypeData[i].customerTypeName.toLowerCase()) {
           customerTypeData[i].selected = true;
         } else {
           customerTypeData[i].selected = false;
@@ -1205,7 +1205,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                 filterScreenModel.filterModel.customerType = "";
               } else {
                 filterScreenModel.filterModel.customerType =
-                    cusType.customerTypeName;
+                    cusType.customerTypeName.toLowerCase();
               }
 
               var statusOption =

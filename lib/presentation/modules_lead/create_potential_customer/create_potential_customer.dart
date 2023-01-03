@@ -13,7 +13,6 @@ import 'package:lead_plugin_epoint/model/object_pop_detail_model.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/get_journey_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/add_lead_model_response.dart';
-import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_option_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_district_model_response.dart';
@@ -25,7 +24,6 @@ import 'package:lead_plugin_epoint/model/response/get_status_work_response_model
 import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/status_work_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/build_more_address_create_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
@@ -665,7 +663,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             }
           }),
 
-          _buildTextField(AppLocalizations.text(LangKey.chooseCards),
+          _buildTextField(AppLocalizations.text(LangKey.chooseCards) ?? "Chọn nhãn",
               tagsString, Assets.iconTag, false, true, false, ontap: () async {
             print("Tag");
             FocusScope.of(context).unfocus();

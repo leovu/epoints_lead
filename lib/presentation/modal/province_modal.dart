@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
-import 'package:lead_plugin_epoint/connection/lead_connection.dart';
+import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/model/response/get_province_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
+import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class ProvinceModal extends StatefulWidget {
   List<ProvinceData> provinces = <ProvinceData>[];
   ProvinceData provinceSeleted = ProvinceData();
-  ProvinceModal({Key key, this.provinces, this.provinceSeleted}) : super(key: key);
+  ProvinceModal({Key key, this.provinces, this.provinceSeleted})
+      : super(key: key);
 
   @override
   _ProvinceModalState createState() => _ProvinceModalState();
@@ -21,33 +23,32 @@ class _ProvinceModalState extends State<ProvinceModal> {
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
   GetProvinceModelReponse _model;
+  List<ProvinceData> provinces = <ProvinceData>[];
+  ProvinceData provinceSeleted = ProvinceData();
 
-
-   @override
+  @override
   void initState() {
     super.initState();
+    provinces = widget.provinces;
+    provinceSeleted = widget.provinceSeleted;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-         for (int i = 0; i < widget.provinces.length ; i++) {
-        if ((widget.provinceSeleted?.provinceid ?? "") == widget.provinces[i].provinceid ) {
-          widget.provinces[i].selected = true;
+      for (int i = 0; i < provinces.length; i++) {
+        if ((provinceSeleted?.provinceid ?? "") ==
+            provinces[i].provinceid) {
+          provinces[i].selected = true;
         } else {
-          widget.provinces[i].selected = false;
+          provinces[i].selected = false;
         }
       }
 
-
       _model = GetProvinceModelReponse(
-        data: (widget.provinces ?? <ProvinceData>[])
-            .map((e) => ProvinceData.fromJson(e.toJson()))
-            .toList());
+          data: (provinces ?? <ProvinceData>[])
+              .map((e) => ProvinceData.fromJson(e.toJson()))
+              .toList());
 
-            setState(() {
-      
+      setState(() {});
     });
-    });
-    
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,46 +61,59 @@ class _ProvinceModalState extends State<ProvinceModal> {
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(width: 30,),
-              Text(AppLocalizations.text(LangKey.provinceCity),style: TextStyle(
-                  fontSize: 18.0,
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500),),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Padding(padding: EdgeInsets.only(right: 20),
-                child: Icon(Icons.clear),
+          Container(
+            padding: EdgeInsets.all(15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 20),
+                    child: Icon(
+                      Icons.clear,
+                      size: 20.0,
+                    ),
+                  ),
                 ),
-              ),
-            
-            ],
+                Text(
+                  AppLocalizations.text(LangKey.provinceCity),
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
+                ),
+                Container(
+                  width: 30,
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: _buildSearch(),
           ),
-          ( _model != null ) ? Expanded(
-            child: CustomListView(
-                  shrinkWrap: true,
-                  padding:
-                      EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                  physics: ClampingScrollPhysics(),
-                  controller: _controller,
-                  separator: Divider(),
-                  children: _listWidget(),
-                ),
-          ) : Container(),
+          (_model != null)
+              ? Expanded(
+                  child: CustomListView(
+                    shrinkWrap: true,
+                    padding: EdgeInsets.only(
+                        top: 16.0, bottom: 16.0, left: 16.0, right: 8.0),
+                    physics: ClampingScrollPhysics(),
+                    controller: _controller,
+                    separator: Divider(),
+                    children: _listWidget(),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
   }
 
-    Widget _buildSearch() {
+  Widget _buildSearch() {
     return TextField(
       enabled: true,
       controller: _searchext,
@@ -110,8 +124,6 @@ class _ProvinceModalState extends State<ProvinceModal> {
         isCollapsed: true,
         contentPadding: EdgeInsets.all(12.0),
         border: OutlineInputBorder(
-          // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
           borderRadius: BorderRadius.circular(10.0),
         ),
         focusedBorder: OutlineInputBorder(
@@ -122,21 +134,19 @@ class _ProvinceModalState extends State<ProvinceModal> {
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel(widget.provinces,event);
+        searchModel(provinces, event);
         print(event.toLowerCase());
         if (_searchext != null) {
           print(_searchext.text);
-          
         }
       },
     );
   }
 
- searchModel(List<ProvinceData> model, String value) {
+  searchModel(List<ProvinceData> model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = widget.provinces;
-      setState(() {
-      });
+      _model.data = provinces;
+      setState(() {});
     } else {
       try {
         List<ProvinceData> models = model.where((model) {
@@ -151,24 +161,22 @@ class _ProvinceModalState extends State<ProvinceModal> {
           return result;
         }).toList();
         _model.data = models;
-        setState(() {
-      });
+        setState(() {});
       } catch (_) {
-        setState(() {
-        
-      });
+        setState(() {});
       }
     }
   }
 
   List<Widget> _listWidget() {
-    return List.generate(
-        _model.data.length,
-        (index) => _buildItem(
-                _model.data[index].name, _model.data[index].selected,
-                () {
-              selectedItem(index);
-            }));
+    return (_model.data != null)
+        ? (_model.data.length > 0) ? List.generate(
+            _model.data.length,
+            (index) => _buildItem(
+                    _model.data[index].name, _model.data[index].selected, () {
+                  selectedItem(index);
+                }))
+        : [CustomDataNotFound()]: Container();
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {
@@ -177,14 +185,18 @@ class _ProvinceModalState extends State<ProvinceModal> {
       child: Container(
         height: 40,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               title,
               style: TextStyle(
-                  fontSize: 17.0,
-                  color: selected ? Colors.orange : Colors.black,
-                  fontWeight: FontWeight.normal),
-            )
+                  fontSize: 15.0,
+                  color: selected ?AppColors.primaryColor : Color(0xFF040C21),
+                  fontWeight:
+                      selected ? FontWeight.w700 : FontWeight.w400),
+            ),
+
+            selected ? Icon(Icons.check, color: AppColors.primaryColor,size: 20,) : Container(),
           ],
         ),
       ),

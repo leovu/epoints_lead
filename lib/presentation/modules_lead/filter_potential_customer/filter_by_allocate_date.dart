@@ -8,7 +8,7 @@ import 'package:lead_plugin_epoint/model/filter_screen_model.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
-import 'package:lead_plugin_epoint/widget/custom_meni_bottom_sheet.dart';
+import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
 class FilterByAllocateDate extends StatefulWidget {
   FilterScreenModel filterScreenModel = FilterScreenModel();
@@ -65,6 +65,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
   Widget build(BuildContext context) {
     return (widget.allocateDateOptions != null)
         ? Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
@@ -77,7 +78,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                             selectedSource(index);
                           })),
                   spacing: 20,
-                  runSpacing: 20,
+                  runSpacing: 10,
                 ),
               ),
               (widget.id_allocate_date == "6")

@@ -43,7 +43,7 @@ class CustomDropDown extends StatelessWidget {
                 // ignore: sort_child_properties_last
                 child: Container(
                   padding: EdgeInsets.symmetric(
-                    horizontal: 15.0,
+                    horizontal: 10.0,
                   ),
                   child: CustomImageIcon(
                     icon: prefixIcon,
@@ -58,10 +58,10 @@ class CustomDropDown extends StatelessWidget {
                   padding:  (prefixIcon == null)
                       ? EdgeInsets.only(
                       left: 20.0,
-                      top:  15.0,
-                      bottom: 15.0)
+                      top:  10.0,
+                      bottom: 10.0)
                       : EdgeInsets.symmetric(
-                    vertical:  15.0,
+                    vertical:  10.0,
                   ),
                   child: Text(
                     hintText??"",
@@ -76,7 +76,7 @@ class CustomDropDown extends StatelessWidget {
                 // ignore: sort_child_properties_last
                 child: Container(
                   margin: EdgeInsets.symmetric(
-                    horizontal: suffixChildMargin??15.0,
+                    horizontal: suffixChildMargin??10.0,
                   ),
                   child: CustomImageIcon(
                     icon: suffixIcon,

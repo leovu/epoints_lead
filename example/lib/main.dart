@@ -1,4 +1,3 @@
-import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/lead_plugin_epoint.dart';
@@ -34,39 +33,30 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: Container(
-            decoration: BoxDecoration( 
-                color: Color.fromARGB(249, 249, 64, 2),
-                borderRadius: BorderRadius.circular(10)),
-            height: 40,
-            width: MediaQuery.of(context).size.width / 2,
-            child: Center(
-              child: InkWell(
-                child: Text("Open lead"),
-                onTap: () async {
-                  var result = await LeadPluginEpoint.open(
-                      context,
-                      const Locale(LangKey.langVi, 'VN'),
-                      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vc3RhZmYtYXBpLnN0YWcuZXBvaW50cy52bi91c2VyL2xvZ2luIiwiaWF0IjoxNjcwODExNDcxLCJleHAiOjE2NzA4MzMwNzEsIm5iZiI6MTY3MDgxMTQ3MSwianRpIjoiUGh1UnpQQm91QkR0cWFyYiIsInN1YiI6MSwicHJ2IjoiYTBmM2U3NGJlZGY1MTJjNDc3ODI5N2RlNWY5MjA4NmRhZDM5Y2E5ZiIsInNpZCI6ImFkbWluQHBpb2FwcHMudm4iLCJicmFuZF9jb2RlIjoicWMifQ.dACMOOMWI5Dw6fx5u1EnqLJEpk9dhw-ZX-KU4YXilXc',
-                      2,
-                      domain: 'https://staff-api.stag.epoints.vn',
-                      brandCode: 'qc');
+          child: InkWell(
+            onTap:  () async {
+                    var result = await LeadPluginEpoint.open(
+                        context,
+                        const Locale(LangKey.langVi, 'VN'),
+                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTY3MjcxMTA5NywiZXhwIjoxNjcyNzMyNjk3LCJuYmYiOjE2NzI3MTEwOTcsImp0aSI6InlvM1RBTjlGQXlWT2IwcDYiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.Jhp4oe8LTlcsnTuuAqZa_tU9dqrlRx4gIwzD1T6gTns',
+                        2,
+                        domain: 'https://staff-api.stag.epoints.vn',
+                        brandCode: 'qc'
+                        );
 
-                  if (result != null) {}
-                },
-              ),
+                    if (result != null) {}
+                  },
+            child: Container(
+              decoration: BoxDecoration( 
+                  color: Color.fromARGB(249, 249, 64, 2),
+                  borderRadius: BorderRadius.circular(10)), 
+              height: 40,
+              width: MediaQuery.of(context).size.width / 2,
+              child: Center(child: Text("Open lead")),
             ),
           ),
         ),
-        floatingActionButton: DraggableFab(
-          securityBottom: -5,
-        child: FloatingActionButton(
-          onPressed: () {
-            print("keo");
-          },
-          child: Icon(Icons.add),
-        ),
-      ),
+
       ),
     );
   }

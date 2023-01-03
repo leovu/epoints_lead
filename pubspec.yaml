@@ -20,6 +20,12 @@ dependencies:
   url_launcher: ^6.1.5
   intl: ^0.17.0
   image_picker: ^0.8.6
+  draggable_expandable_fab: ^1.0.0
+  rxdart: ^0.27.4
+  shimmer: ^2.0.0
+  cached_network_image: ^3.2.1
+  dotted_border: ^2.0.0+3
+  file_picker: ^5.2.4
 
 dev_dependencies:
   flutter_test:

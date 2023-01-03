@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
+import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
@@ -20,23 +21,27 @@ class _AllocatorModalState extends State<AllocatorModal> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
+  List<AllocatorData> allocatorData = <AllocatorData>[];
+  AllocatorData allocatorSelected = AllocatorData();
   GetAllocatorModelReponse _model;
 
   @override
   void initState() {
     super.initState();
+    allocatorData= widget.allocatorData;
+    allocatorSelected = widget.allocatorSelected;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      for (int i = 0; i < widget.allocatorData.length; i++) {
+      for (int i = 0; i < allocatorData.length; i++) {
         if ((widget.allocatorSelected?.staffId ?? "") ==
-            widget.allocatorData[i].staffId) {
-          widget.allocatorData[i].selected = true;
+            allocatorData[i].staffId) {
+          allocatorData[i].selected = true;
         } else {
-          widget.allocatorData[i].selected = false;
+          allocatorData[i].selected = false;
         }
       }
 
       _model = GetAllocatorModelReponse(
-          data: (widget.allocatorData ?? <AllocatorData>[])
+          data: (allocatorData ?? <AllocatorData>[])
               .map((e) => AllocatorData.fromJson(e.toJson()))
               .toList());
 
@@ -47,7 +52,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 10.0, bottom: 50),
+      padding: EdgeInsets.only(bottom: 50, top: 10),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
@@ -55,27 +60,35 @@ class _AllocatorModalState extends State<AllocatorModal> {
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(width: 30,),
-              Text(
-                AppLocalizations.text(LangKey.chooseAllottedPerson),
-                style: TextStyle(
-                    fontSize: 18.0,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-              ),
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: 20),
-                  child: Icon(Icons.clear),
+          Container(
+            padding: EdgeInsets.all(15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 20),
+                    child: Icon(
+                      Icons.clear,
+                      size: 15.0,
+                    ),
+                  ),
                 ),
-              ),
-            ],
+                Text(
+                  AppLocalizations.text(LangKey.chooseAllottedPerson),
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
+                ),
+                Container(
+                  width: 30,
+                ),
+              ],
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -86,7 +99,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
                   child: CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.only(
-                        top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+                        top: 16.0, bottom: 16.0, left: 16.0, right: 8.0),
                     physics: ClampingScrollPhysics(),
                     controller: _controller,
                     separator: Divider(),
@@ -111,20 +124,24 @@ class _AllocatorModalState extends State<AllocatorModal> {
         : [CustomDataNotFound()];
   }
 
-  Widget _buildItem(String title, bool selected, Function ontap) {
+ Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
       onTap: ontap,
       child: Container(
         height: 40,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               title,
               style: TextStyle(
-                  fontSize: 17.0,
-                  color: selected ? Colors.orange : Colors.black,
-                  fontWeight: FontWeight.normal),
-            )
+                  fontSize: 15.0,
+                  color: selected ?AppColors.primaryColor : Color(0xFF040C21),
+                  fontWeight:
+                      selected ? FontWeight.w700 : FontWeight.w400),
+            ),
+
+            selected ? Icon(Icons.check, color: AppColors.primaryColor,size: 20,) : Container(),
           ],
         ),
       ),
@@ -158,7 +175,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
         if (_searchext != null) {
           print(_searchext.text);
 
-          searchModel(widget.allocatorData, event);
+          searchModel(allocatorData, event);
         }
       },
     );
@@ -166,7 +183,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
 
   searchModel(List<AllocatorData> model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = widget.allocatorData;
+      _model.data = allocatorData;
       setState(() {});
     } else {
       try {

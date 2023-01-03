@@ -6,6 +6,10 @@ class Global {
 
   static bool validateAllocateDate = true;
 
+  static bool validateHistoryCareDate = true;
+
+  static bool validateWorkScheduleDate = true;
+
   static Function createJob;
 
   // static List<TagData> tagDatas = [];

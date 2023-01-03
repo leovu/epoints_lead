@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/widget/custom_scroll_behavior.dart';
+import 'package:lead_plugin_epoint/widget/container_scrollable.dart';
 
-class CustomListView extends StatelessWidget {
-
+class CustomListView extends StatefulWidget {
   final ScrollController controller;
   final List<Widget> children;
   final EdgeInsetsGeometry padding;
@@ -11,7 +9,10 @@ class CustomListView extends StatelessWidget {
   final ScrollPhysics physics;
   final bool shrinkWrap;
   final Widget separator;
-  final bool isVertical;
+  final Axis scrollDirection;
+  final bool showLoadmore;
+  final Function onLoadmore;
+  final Future<void> Function() onRefresh;
 
   CustomListView({
     this.controller,
@@ -19,26 +20,62 @@ class CustomListView extends StatelessWidget {
     this.padding,
     this.separatorPadding,
     this.physics,
-    this.shrinkWrap, this.separator, this.isVertical=true
+    this.shrinkWrap,
+    this.separator,
+    this.scrollDirection,
+    this.showLoadmore,
+    this.onRefresh,
+    this.onLoadmore,
   });
 
   @override
-  Widget build(BuildContext context) {
-    if((children??[]).isEmpty){
-      return Container();
+  State<CustomListView> createState() => _CustomListViewState();
+}
+
+class _CustomListViewState extends State<CustomListView> {
+  bool _isLoadmore = false;
+
+  _loadmore() async {
+    if (!_isLoadmore) {
+      _isLoadmore = true;
+      await widget.onLoadmore();
+      _isLoadmore = false;
     }
-    return ScrollConfiguration(
-        behavior: MyCustomScrollBehavior(),
-        child: ListView.separated(
-            controller: controller??ScrollController(),
-            padding: padding??EdgeInsets.all(20),
-            physics: physics?? const ClampingScrollPhysics(),
-            shrinkWrap: shrinkWrap??false,
-            scrollDirection: isVertical?Axis.vertical:Axis.horizontal,
-            itemBuilder: (_, index) => children[index],
-            separatorBuilder: (_, index) => (separator??Container(height: separatorPadding??15,)),
-            itemCount: children.length
+  }
+
+  Widget _buildBody() {
+    List<Widget> children = []..addAll(this.widget.children ?? []);
+    if ((widget.showLoadmore ?? false)) {
+      children.add(Container(
+        height: 40.0,
+        child: Center(
+          child: CircularProgressIndicator.adaptive(),
         ),
-      );
+      ));
+    }
+
+    return ListView.separated(
+        scrollDirection: widget.scrollDirection ?? Axis.vertical,
+        controller: widget.controller,
+        padding: widget.padding ?? EdgeInsets.all(20.0),
+        physics: widget.physics ?? AlwaysScrollableScrollPhysics(),
+        shrinkWrap: widget.shrinkWrap ?? false,
+        itemBuilder: (_, index) {
+          if (widget.onLoadmore != null && index > (children.length / 2)) {
+            _loadmore();
+          }
+          return children[index];
+        },
+        separatorBuilder: (_, index) => (widget.separator ??
+            Container(
+              height: widget.separatorPadding ?? 10.0,
+            )),
+        itemCount: children.length);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ContainerScrollable(
+        child: _buildBody(), onRefresh: widget.onRefresh);
   }
 }

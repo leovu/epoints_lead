@@ -30,9 +30,9 @@ class ListCustomLeadData {
   ListCustomLeadData({this.pageInfo, this.items});
 
   ListCustomLeadData.fromJson(Map<String, dynamic> json) {
-    pageInfo = json['PageInfo'] != null
-        ? new ListCustomLeadPageInfo.fromJson(json['PageInfo'])
-        : null;
+    pageInfo = (json['PageInfo'] != null) ?
+         new ListCustomLeadPageInfo.fromJson(json['PageInfo'])
+        : null ;
     if (json['Items'] != null) {
       items = <ListCustomLeadItems>[];
       json['Items'].forEach((v) {
@@ -79,15 +79,15 @@ class ListCustomLeadPageInfo {
 
   ListCustomLeadPageInfo.fromJson(Map<String, dynamic> json) {
     total = json['total'] ?? 0 ;
-    itemPerPage = json['itemPerPage'] ?? 10;
+    itemPerPage = json['itemPerPage'] ??  10;
     from = json['from'] ?? 0;
     to = json['to'] ?? 0;
     currentPage = json['currentPage'] ?? 1;
     firstPage = json['firstPage'] ?? 1;
-    lastPage = json['lastPage'] ?? 0;
+    lastPage = json['lastPage']??  0;
     previousPage = json['previousPage'] ?? 0;
     nextPage = json['nextPage'] ?? 1;
-    pageRange = json['pageRange']?.cast<int>() ?? [];
+    (json['pageRange'] != null) ? pageRange = json['pageRange'].cast<int>() : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -108,69 +108,133 @@ class ListCustomLeadPageInfo {
 
 class ListCustomLeadItems {
   String avatar;
-  String leadFullName;
-  String customerType;
-  String phone;
-  String journeyName;
-  String zalo;
-  String staffFullName;
-  int saleId;
-  String tagName;
+  int customerSource;
   String customerSourceName;
-  int isConvert;
-  String pipelineName;
+  int customerLeadId;
   String customerLeadCode;
+  String leadFullName;
+  String birthday;
+  String phone;
+  String customerType;
+  int saleId;
+  String staffFullName;
+  String zalo;
+  int isConvert;
+  String pipelineCode;
+  String pipelineName;
+  String journeyCode;
+  String journeyName;
+  String dateLastCare;
+  List<Tag> tag;
+  int diffDay;
+  int relatedWork;
+  int appointment;
   bool selected;
 
   ListCustomLeadItems(
       {this.avatar,
-      this.leadFullName,
-      this.customerType,
-      this.phone,
-      this.journeyName,
-      this.zalo,
-      this.staffFullName,
-      this.saleId,
-      this.tagName,
+      this.customerSource,
       this.customerSourceName,
-      this.isConvert,
-      this.pipelineName,
+      this.customerLeadId,
       this.customerLeadCode,
-      this.selected});
+      this.leadFullName,
+      this.birthday,
+      this.phone,
+      this.customerType,
+      this.saleId,
+      this.staffFullName,
+      this.zalo,
+      this.isConvert,
+      this.pipelineCode,
+      this.pipelineName,
+      this.journeyCode,
+      this.journeyName,
+      this.dateLastCare,
+      this.tag,
+      this.diffDay,
+      this.relatedWork,
+      this.appointment, this.selected});
 
   ListCustomLeadItems.fromJson(Map<String, dynamic> json) {
-    avatar = json['avatar'] ?? "" ;
-    leadFullName = json['lead_full_name'] ?? "";
-    customerType = json['customer_type'] ?? "";
-    phone = json['phone'] ?? "";
-    journeyName = json['journey_name'];
-    zalo = json['zalo'];
-    staffFullName = json['staff_full_name'];
-    saleId = json['sale_id'];
-    tagName = json['tag_name'];
+    avatar = json['avatar'];
+    customerSource = json['customer_source'];
     customerSourceName = json['customer_source_name'];
-    isConvert = json['is_convert'];
-    pipelineName = json['pipeline_name'];
+    customerLeadId = json['customer_lead_id'];
     customerLeadCode = json['customer_lead_code'];
+    leadFullName = json['lead_full_name'];
+    birthday = json['birthday'];
+    phone = json['phone'];
+    customerType = json['customer_type'];
+    saleId = json['sale_id'];
+    staffFullName = json['staff_full_name'];
+    zalo = json['zalo'];
+    isConvert = json['is_convert'];
+    pipelineCode = json['pipeline_code'];
+    pipelineName = json['pipeline_name'];
+    journeyCode = json['journey_code'];
+    journeyName = json['journey_name'];
+    dateLastCare = json['date_last_care'];
+    if (json['tag'] != null) {
+      tag = <Tag>[];
+      json['tag'].forEach((v) {
+        tag.add(new Tag.fromJson(v));
+      });
+    }
+    diffDay = json['diff_day'];
+    relatedWork = json['related_work'];
+    appointment = json['appointment'];
     selected = json['selected'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['avatar'] = this.avatar;
-    data['lead_full_name'] = this.leadFullName;
-    data['customer_type'] = this.customerType;
-    data['phone'] = this.phone;
-    data['journey_name'] = this.journeyName;
-    data['zalo'] = this.zalo;
-    data['staff_full_name'] = this.staffFullName;
-    data['sale_id'] = this.saleId;
-    data['tag_name'] = this.tagName;
+    data['customer_source'] = this.customerSource;
     data['customer_source_name'] = this.customerSourceName;
-    data['is_convert'] = this.isConvert;
-    data['pipeline_name'] = this.pipelineName;
+    data['customer_lead_id'] = this.customerLeadId;
     data['customer_lead_code'] = this.customerLeadCode;
+    data['lead_full_name'] = this.leadFullName;
+    data['birthday'] = this.birthday;
+    data['phone'] = this.phone;
+    data['customer_type'] = this.customerType;
+    data['sale_id'] = this.saleId;
+    data['staff_full_name'] = this.staffFullName;
+    data['zalo'] = this.zalo;
+    data['is_convert'] = this.isConvert;
+    data['pipeline_code'] = this.pipelineCode;
+    data['pipeline_name'] = this.pipelineName;
+    data['journey_code'] = this.journeyCode;
+    data['journey_name'] = this.journeyName;
+    data['date_last_care'] = this.dateLastCare;
+    if (this.tag != null) {
+      data['tag'] = this.tag.map((v) => v.toJson()).toList();
+    }
+    data['diff_day'] = this.diffDay;
+    data['related_work'] = this.relatedWork;
+    data['appointment'] = this.appointment;
     data['selected'] = this.selected;
+    return data;
+  }
+}
+
+class Tag {
+  int tagId;
+  String keyword;
+  String tagName;
+
+  Tag({this.tagId, this.keyword, this.tagName});
+
+  Tag.fromJson(Map<String, dynamic> json) {
+    tagId = json['tag_id'];
+    keyword = json['keyword'];
+    tagName = json['tag_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['tag_id'] = this.tagId;
+    data['keyword'] = this.keyword;
+    data['tag_name'] = this.tagName;
     return data;
   }
 }

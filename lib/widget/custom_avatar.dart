@@ -36,7 +36,7 @@ class CustomAvatar extends StatelessWidget {
         child: Text(
           newName,
           style: TextStyle(
-            color: Colors.white,
+            color: AppColors.white,
             fontWeight: FontWeight.w500,
             fontSize: textSize??20.0
           ),

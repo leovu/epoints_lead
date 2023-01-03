@@ -8,18 +8,19 @@ class CustomDataNotFound extends StatelessWidget {
   final String content;
   final Color color;
   final bool isTitle;
+  final double height;
 
   const CustomDataNotFound(
       {Key key,
       this.title,
       this.content,
       this.color,
-      this.isTitle = true})
+      this.isTitle = true, this.height})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.6,
+      height: height ?? MediaQuery.of(context).size.height * 0.6,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -27,7 +28,7 @@ class CustomDataNotFound extends StatelessWidget {
           Container(
             height: MediaQuery.of(context).size.width / 8,
             width: MediaQuery.of(context).size.width / 4,
-            child: Icon(Icons.not_interested, color: Colors.grey[850],),
+            child: Icon(Icons.not_interested, color: Colors.grey[850],size: 50,),
           ),
           if (isTitle ?? true)
             Padding(
@@ -40,7 +41,7 @@ class CustomDataNotFound extends StatelessWidget {
                   title ?? AppLocalizations.text(LangKey.searchNotFound),
                   textAlign: TextAlign.center,
                   style: AppTextStyles.style14Black50Weight400
-                      .copyWith(color: Colors.grey[850])),
+                      .copyWith(color: Color.fromARGB(255, 112, 91, 91))),
             )
           else
             Container(height: 20.0),

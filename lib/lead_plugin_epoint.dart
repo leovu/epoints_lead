@@ -5,6 +5,7 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/list_screen/list_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
 
@@ -56,7 +57,11 @@ class LeadPluginEpoint {
             MaterialPageRoute(
                 builder: (context) => DetailPotentialCustomer(customer_lead_code: customerLeadCode)));
         return null;
-      } else {
+      } else if (create == 3) {
+        await Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => EditPotentialCustomer(customer_lead_code: "LEAD_29122022233")));
+      }  else {
         await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => LeadScreen()));

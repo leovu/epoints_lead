@@ -2,210 +2,115 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
-import 'package:lead_plugin_epoint/widget/custom_inkwell.dart';
 
 class CustomTextField extends StatelessWidget {
+
   final FocusNode focusNode;
-  final TextSelectionControls selectionControls;
   final TextEditingController controller;
   final String hintText;
-  final TextStyle hintStyle;
-  final String labelText;
+  final IconData suffixIconData;
   final String suffixIcon;
-  final Color suffixIconColor;
-  final double suffixSize;
+  final Color borderColor;
   final Color backgroundColor;
-  final Function onSuffixIconTap;
-  final String prefixIcon;
-  final Color prefixIconColor;
-  final Function onPrefixIconTap;
-  final bool obscureText;
-  final TextInputType keyboardType;
-  final TextInputAction textInputAction;
-  final Function(String) onSubmitted;
-  final List<TextInputFormatter> inputFormatters;
-  final Function(String) onChanged;
-  final bool autofocus;
-  final bool readOnly;
-  final Function onTap;
-  final bool enableBorder;
   final int maxLines;
+  final TextInputType keyboardType;
+  final List<TextInputFormatter> inputFormatters;
+  final bool readOnly;
+  final bool autofocus;
+  final TextAlign textAlign;
+  final TextInputAction textInputAction;
   final int maxLength;
-  final bool isPhone;
-  final TextStyle style;
-  final int limitInput;
-  final double verticalPadding;
-  final double horizontalPadding;
-  final double verticalMargin;
-  final double horizontalMargin;
-  final String error;
-  final double radius;
-  final Widget suffixChild;
-  final TextCapitalization textCapitalization;
+  final Function(String) onSubmitted;
+  final Function(String) onChanged;
+  final Function onSuffixTap;
+  final Function onTap;
+  final bool obscureText;
 
-  CustomTextField(
-      {this.focusNode,
-      this.controller,
-      this.hintText,
-      this.labelText,
-      this.suffixIcon,
-      this.suffixIconColor,
-      this.onSuffixIconTap,
-      this.obscureText = false,
-      this.keyboardType,
-      this.textInputAction,
-      this.onSubmitted,
-      this.inputFormatters,
-      this.onChanged,
-      this.autofocus,
-      this.readOnly = false,
-      this.onTap,
-      this.enableBorder = false,
-      this.maxLines,
-      this.maxLength,
-      this.isPhone = false,
-      this.style,
-      this.limitInput = 10,
-      this.verticalPadding,
-      this.horizontalPadding,
-      this.horizontalMargin = 0.0,
-      this.verticalMargin = 0.0,
-      this.error = "",
-      this.prefixIcon,
-      this.prefixIconColor,
-      this.onPrefixIconTap,
-      this.radius = 5.0,
-      this.backgroundColor,
-      this.hintStyle,
-      this.suffixSize,
-      this.suffixChild,
-      this.textCapitalization, this.selectionControls});
+  CustomTextField({
+    this.focusNode,
+    this.controller,
+    this.hintText,
+    this.suffixIconData,
+    this.suffixIcon,
+    this.borderColor,
+    this.backgroundColor,
+    this.maxLines,
+    this.keyboardType,
+    this.inputFormatters,
+    this.readOnly,
+    this.autofocus,
+    this.textAlign,
+    this.textInputAction,
+    this.maxLength,
+    this.onSubmitted,
+    this.onChanged,
+    this.onSuffixTap,
+    this.onTap,
+    this.obscureText
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: EdgeInsets.only(
-              top: horizontalMargin,
-              left: verticalMargin,
-              right: verticalMargin),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(radius)),
-              color: backgroundColor ??
-                  ((error != "")
-                      ? AppColors.white
-                      : (enableBorder ? AppColors.white : AppColors.lightGrey)),
-              border: Border.all(
-                  width: 1.0,
-                  color: (error != "")
-                      ? AppColors.redColor
-                      : (enableBorder
-                          ? AppColors.primaryColor
-                          : AppColors.lightGrey),
-                  style: BorderStyle.solid)),
-          child: Row(
-            children: [
-              if (prefixIcon != null)
-                CustomInkWell(
-                  // ignore: sort_child_properties_last
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: horizontalPadding ?? 15.0,
-                    ),
-                    child: CustomImageIcon(
-                      icon: prefixIcon,
-                      size: 20.0,
-                      color: prefixIconColor ?? AppColors.primaryColor,
-                    ),
-                  ),
-                  onTap: onPrefixIconTap ?? onTap,
-                ),
-              Expanded(
-                child: TextField(
-                  focusNode: focusNode ?? FocusNode(),
-                  controller: controller ?? TextEditingController(),
-                  selectionControls: selectionControls,
-                  keyboardType: isPhone
-                      ? TextInputType.phone
-                      : (obscureText
-                          ? TextInputType.visiblePassword
-                          : (keyboardType ?? TextInputType.emailAddress)),
-                  textInputAction: textInputAction ?? TextInputAction.done,
-                  decoration: InputDecoration(
-                    contentPadding: (prefixIcon == null)
-                        ? EdgeInsets.only(
-                            left: horizontalPadding ?? 20,
-                            top: verticalPadding ?? 15,
-                            bottom: verticalPadding ?? 15)
-                        : EdgeInsets.symmetric(
-                            vertical: verticalPadding ?? 15,
-                          ),
-                    hintText: hintText,
-                    hintStyle: hintStyle ?? AppTextStyles.style15Grey600Normal,
-                    labelText: labelText,
-                    labelStyle: hintStyle ?? AppTextStyles.style15Grey600Normal,
+    return InkWell(
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(5.0),
+            color: backgroundColor??Color(0xFFF6F6F6),
+            border: borderColor == null?null:Border.all(color: borderColor)
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextField(
+                focusNode: focusNode,
+                controller: controller,
+                style: TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.black,
+      fontWeight: FontWeight.normal),
+                decoration: InputDecoration(
                     isDense: true,
-                    border: InputBorder.none,
-                  ),
-                  style: style ?? AppTextStyles.style15BlackNormal,
-                  obscureText: obscureText,
-                  onSubmitted: onSubmitted,
-                  inputFormatters: isPhone
-                      ? [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(limitInput),
-                        ]
-                      : inputFormatters,
-                  onChanged: onChanged,
-                  autofocus: autofocus ?? false,
-                  maxLines: maxLines ?? 1,
-                  maxLength: maxLength,
-                  readOnly: readOnly,
-                  onTap: onTap,
-                  textCapitalization:
-                      textCapitalization ?? TextCapitalization.none,
+                    contentPadding: EdgeInsets.all(10.0),
+                    hintText: hintText,
+                    hintStyle: TextStyle(
+      fontSize: 14.0,
+      color: AppColors.hintColor,
+      fontWeight: FontWeight.normal),
+                    border: InputBorder.none
+                ),
+                maxLines: maxLines ?? 1,
+                keyboardType: keyboardType,
+                inputFormatters: inputFormatters,
+                enabled: !(readOnly ?? false),
+                autofocus: autofocus ?? false,
+                textInputAction: textInputAction,
+                onSubmitted: onSubmitted,
+                onChanged: onChanged,
+                textAlign: textAlign ?? TextAlign.start,
+                maxLength: maxLength,
+                obscureText: obscureText ?? false,
+              ),
+            ),
+            (suffixIcon == null && suffixIconData == null)?Container():InkWell(
+              splashColor: Colors.transparent,
+              child: Container(
+                padding: EdgeInsets.only(right: 10.0),
+                child: suffixIcon != null?CustomImageIcon(
+                  icon: suffixIcon,
+                  size: 20.0,
+                  color: Color(0xFF9E9E9E),
+                ):Icon(
+                  suffixIconData,
+                  size: 20.0,
+                  color: Color(0xFF9E9E9E),
                 ),
               ),
-              if (suffixIcon != null || suffixChild != null)
-                suffixChild ??
-                    CustomInkWell(
-                      // ignore: sort_child_properties_last
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: horizontalPadding ?? 15,
-                        ),
-                        child: CustomImageIcon(
-                          icon: suffixIcon,
-                          size: suffixSize ?? 20,
-                          color: suffixIconColor ?? AppColors.primaryColor,
-                        ),
-                      ),
-                      onTap: onSuffixIconTap ?? onTap,
-                    )
-            ],
-          ),
+              onTap: onSuffixTap,
+            )
+          ],
         ),
-        if (error != "")
-          error != "."
-              ? Container(
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(
-                      bottom: horizontalMargin,
-                      top: 4,
-                      left: 15,
-                      right: 15.0),
-                  child: Text(
-                    error,
-                    style: AppTextStyles.style12RedNormal,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                )
-              : Container()
-      ],
+      ),
+      onTap: onTap,
     );
   }
 }

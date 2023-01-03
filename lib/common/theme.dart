@@ -74,6 +74,8 @@ class AppColors {
   static const ash = Color(0xFF7D8290);
   static const colorDot = Color(0xFFADB1B9);
   static const disableColor = Color(0xFFDADADA);
+  static const hintColor = Color(0xFF8E8E8E);
+  static const borderColor = Color(0xFFE5E5E5);
 }
 
 class AppFonts {
@@ -194,7 +196,10 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
-
+  static TextStyle style15WhiteBold = TextStyle(
+      fontSize: AppTextSizes.size15,
+      color: AppColors.white,
+      fontWeight: FontWeight.bold);
   static TextStyle style12WhiteWeight700Italic = TextStyle(
     fontSize: AppTextSizes.size12,
     color: AppColors.white,

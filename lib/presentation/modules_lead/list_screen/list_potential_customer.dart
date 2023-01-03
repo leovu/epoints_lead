@@ -6,12 +6,17 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/filter_screen_model.dart';
-import 'package:lead_plugin_epoint/model/object_pop_detail_model.dart';
+import 'package:lead_plugin_epoint/model/request/assign_revoke_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/list_customer_lead_model_request.dart';
+import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/customer_care_potential/customer_care_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/multi_staff_screen_potentail/ui/multi_staff_screen.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
@@ -29,24 +34,39 @@ class _LeadScreen extends State<LeadScreen> {
   ScrollController _controller = ScrollController();
   final TextEditingController _searchtext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<ListCustomLeadItems> items ;
+
+   List<WorkListStaffModel> models = [];
+
+  List<ListCustomLeadItems> items;
+  List<String> listFunction = [
+    "CRM",
+    "Dùng excel",
+    "Chấm công",
+    "Chathub",
+    "Quản lý công việc",
+    "Chấm công",
+    "QLCV"
+  ];
 
   int currentPage = 1;
   int nextPage = 2;
 
   ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest(
       search: "",
-      page: 1,
-      statusAssign: "",
-      customerType: "",
-      tagId: "",
-      customerSourceName: "",
-      isConvert: "",
-      staffFullName: "",
-      pipelineName: "",
-      journeyName: "",
-      createdAt: "",
-      allocationDate: "");
+          page: 1,
+          statusAssign: "",
+          customerType: "",
+          tagId: [],
+          customerSourceId: [],
+          staffId: [],
+          pipelineId: [],
+          journeyId: [],
+          careHistory: "",
+          isConvert: "",
+          createdAt: "",
+          allocationDate: "",
+
+      );
 
   FilterScreenModel filterScreenModel = FilterScreenModel();
 
@@ -62,8 +82,15 @@ class _LeadScreen extends State<LeadScreen> {
           toDate_allocation_date: null,
           fromDate_created_at: null,
           toDate_created_at: null,
+          fromDate_history_care_date: null,
+          toDate_history_care_date: null,
+          fromDate_work_schedule_date: null,
+          toDate_work_schedule_date: null,
+          id_history_care_date: "",
+          id_work_schedule_date: "",
           id_created_at: "",
-          id_allocation_date: "");
+          id_allocation_date: ""
+          );
       getData(false);
     });
   }
@@ -77,14 +104,15 @@ class _LeadScreen extends State<LeadScreen> {
             statusAssign: filterModel.statusAssign,
             customerType: filterModel.customerType,
             tagId: filterModel.tagId,
-            customerSourceName: filterModel.customerSourceName,
+            // customerSourceName: filterModel.customerSourceName,
             isConvert: filterModel.isConvert,
-            staffFullName: filterModel.staffFullName,
-            pipelineName: filterModel.pipelineName,
-            journeyName: filterModel.journeyName,
+            // staffFullName: filterModel.staffFullName,
+            // pipelineName: filterModel.pipelineName,
+            // journeyName: filterModel.journeyName,
             createdAt: filterModel.createdAt,
             allocationDate: filterModel.allocationDate));
     if (model != null) {
+      models = [];
       if (!loadMore) {
         items = [];
         items = model.data?.items;
@@ -161,20 +189,21 @@ class _LeadScreen extends State<LeadScreen> {
           )
         ],
       ),
+      backgroundColor: Colors.white,
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryColor,
         onPressed: () async {
-          var result = await Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (context) => CreatePotentialCustomer()));
+          var result = await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => CreatePotentialCustomer()));
           if (result != null) {
             var status = result["status"];
             if (status) {
               getData(false);
             }
-          }
+          } 
         },
-        child: const Icon(Icons.add),
+       child: const Icon(Icons.add,color: Colors.white, size: 50,),
       ),
     );
   }
@@ -187,17 +216,18 @@ class _LeadScreen extends State<LeadScreen> {
           _buildSearch(),
           Expanded(
             child: CustomListView(
-              padding: EdgeInsets.all(20.0 / 2),
+              padding: EdgeInsets.only(
+                  top: 30.0, bottom: 10.0, left: 10.0, right: 10.0),
               physics: const AlwaysScrollableScrollPhysics(),
               controller: _controller,
               // separator: const Divider(),
-              children: [
+              children: [ 
                 (items == null)
                     ? Container()
                     : (items.length > 0)
                         ? Column(
                             children:
-                                items.map((e) => potentialItem(e)).toList())
+                                items.map((e) => potentialItemV2(e)).toList())
                         : CustomDataNotFound(),
                 Container(height: 100)
               ],
@@ -262,159 +292,539 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  Widget potentialItem(ListCustomLeadItems item) {
-    return Stack(
-      children: [
-        InkWell(
-          onTap: () async {
-            bool result = await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => DetailPotentialCustomer(
-                      customer_lead_code: item.customerLeadCode,
-                    )));
+  // Widget potentialItem(ListCustomLeadItems item) {
+  //   return Stack(
+  //     children: [
+  //       InkWell(
+  //         onTap: () async {
+  //           bool result = await Navigator.of(context).push(MaterialPageRoute(
+  //               builder: (context) => DetailPotentialCustomer(
+  //                     customer_lead_code: item.customerLeadCode,
+  //                   )));
 
-            if (result != null && result) {
-              getData(false);
-            }
-          },
-          child: Container(
-            margin: EdgeInsets.only(bottom: 10.0),
-            decoration: BoxDecoration(
-                color: Color(0xFFF6F6F7),
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(5.0),
-                  margin: EdgeInsets.only(bottom: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        width: (item.isConvert == 0)
-                            ? MediaQuery.of(context).size.width / 2 - 20
-                            : MediaQuery.of(context).size.width / 2 + 20,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _buildAvatar(item?.leadFullName ?? ""),
-                            Expanded(
-                              child: Container(
-                                padding:
-                                    const EdgeInsets.only(left: 8.0, top: 6.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    AutoSizeText(
-                                      item?.leadFullName ?? "",
+  //           if (result != null && result) {
+  //             getData(false);
+  //           }
+  //         },
+  //         child: Container(
+  //           margin: EdgeInsets.only(bottom: 10.0),
+  //           decoration: BoxDecoration(
+  //               color: Color(0xFFF6F6F7),
+  //               borderRadius: BorderRadius.circular(5),
+  //               border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Container(
+  //                 padding: const EdgeInsets.all(5.0),
+  //                 margin: EdgeInsets.only(bottom: 8.0),
+  //                 child: Row(
+  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                   children: [
+  //                     Container(
+  //                       width: (item.isConvert == 0)
+  //                           ? MediaQuery.of(context).size.width / 2 - 20
+  //                           : MediaQuery.of(context).size.width / 2 + 20,
+  //                       child: Row(
+  //                         crossAxisAlignment: CrossAxisAlignment.start,
+  //                         children: [
+  //                           _buildAvatar(item?.leadFullName ?? ""),
+  //                           Expanded(
+  //                             child: Container(
+  //                               padding:
+  //                                   const EdgeInsets.only(left: 8.0, top: 6.0),
+  //                               child: Column(
+  //                                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                                 mainAxisAlignment:
+  //                                     MainAxisAlignment.spaceBetween,
+  //                                 children: [
+  //                                   AutoSizeText(
+  //                                     item?.leadFullName ?? "",
+  //                                     style: TextStyle(
+  //                                         fontSize: AppTextSizes.size14,
+  //                                         color: AppColors.primaryColor,
+  //                                         fontWeight: FontWeight.w600),
+  //                                     // maxLines: ,
+  //                                   ),
+  //                                   Text(
+  //                                     item?.tagName ?? "",
+  //                                     style: TextStyle(
+  //                                       fontSize: 13.0,
+  //                                       color: Colors.black,
+  //                                       fontWeight: FontWeight.normal,
+  //                                     ),
+  //                                     // maxLines: 1,
+  //                                   )
+  //                                 ],
+  //                               ),
+  //                             ),
+  //                           ),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                     (item.isConvert == 0)
+  //                         ? Container(
+  //                             padding: EdgeInsets.all(15.0 / 1.5),
+  //                             height: 40,
+  //                             decoration: BoxDecoration(
+  //                                 color: Color(0xFF11B482),
+  //                                 borderRadius: BorderRadius.circular(50)),
+  //                             child: Center(
+  //                               child: Text(
+  //                                 AppLocalizations.text(
+  //                                     LangKey.convertCustomersSuccess),
+  //                                 style: AppTextStyles.style14WhiteWeight400,
+  //                               ),
+  //                             ),
+  //                           )
+  //                         : Expanded(
+  //                             child: Container(
+  //                               padding: EdgeInsets.all(15.0 / 1.5),
+  //                               height: 40,
+  //                               decoration: BoxDecoration(
+  //                                   color: Color(0xFF8E8E8E),
+  //                                   borderRadius: BorderRadius.circular(50)),
+  //                               child: Center(
+  //                                 child: Text(
+  //                                   AppLocalizations.text(
+  //                                       LangKey.convertCustomersNotSuccess),
+  //                                   style: AppTextStyles.style14WhiteWeight400,
+  //                                 ),
+  //                               ),
+  //                             ),
+  //                           )
+  //                   ],
+  //                 ),
+  //               ),
+  //               infoItem(Assets.iconCall, item?.phone ?? ""),
+  //               infoItem(
+  //                 Assets.iconChance,
+  //                 "${item?.pipelineName ?? ""} - ${item?.journeyName ?? ""}",
+  //               ),
+  //               infoItem(Assets.iconPerson, item?.customerSourceName ?? ""),
+  //               infoItem(Assets.iconName, item?.staffFullName ?? ""),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //       Positioned(
+  //         right: 10,
+  //         bottom: 20,
+  //         child: InkWell(
+  //           onTap: () async {
+  //             print(item.phone);
+  //             await callPhone(item?.phone ?? "");
+  //           },
+  //           child: Container(
+  //             padding: EdgeInsets.all(20.0 / 2),
+  //             height: 50,
+  //             width: 50,
+  //             decoration: BoxDecoration(
+  //               color: Color(0xFF06A605),
+  //               borderRadius: BorderRadius.circular(50),
+  //               // border:  Border.all(color: AppColors.white,)
+  //             ),
+  //             child: Center(
+  //                 child: Image.asset(
+  //               Assets.iconCall,
+  //               color: AppColors.white,
+  //             )),
+  //           ),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
+
+  Widget potentialItemV2(ListCustomLeadItems item) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          margin: EdgeInsets.only(bottom: 32.0),
+          // padding: EdgeInsets.only(bot),
+          child: InkWell(
+            onTap: () async {
+              bool result = await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => DetailPotentialCustomer(
+                        customer_lead_code: item.customerLeadCode,indexTab: 0,
+                      )));
+
+              if (result != null && result) {
+                getData(false);
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 8.0, top: 8.0),
+                    margin: EdgeInsets.only(left: 107, bottom: 6.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              RichText(
+                                  text: TextSpan(
+                                      text: item.customerSourceName ?? "",
                                       style: TextStyle(
-                                          fontSize: AppTextSizes.size14,
-                                          color: AppColors.primaryColor,
-                                          fontWeight: FontWeight.w600),
-                                      // maxLines: ,
-                                    ),
-                                    Text(
-                                      item?.tagName ?? "",
-                                      style: TextStyle(
-                                        fontSize: 13.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.normal,
-                                      ),
-                                      // maxLines: 1,
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      (item.isConvert == 0)
-                          ? Container(
-                              padding: EdgeInsets.all(15.0 / 1.5),
-                              height: 40,
-                              decoration: BoxDecoration(
-                                  color: Color(0xFF11B482),
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Center(
-                                child: Text(
-                                  AppLocalizations.text(
-                                      LangKey.convertCustomersSuccess),
-                                  style: AppTextStyles.style14WhiteWeight400,
-                                ),
-                              ),
-                            )
-                          : Expanded(
-                              child: Container(
-                                padding: EdgeInsets.all(15.0 / 1.5),
-                                height: 40,
-                                decoration: BoxDecoration(
+                                          fontSize: 16.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal),
+                                      children: [
+                                    TextSpan(
+                                        text: (item.customerSourceName != "" && item.customerSourceName != null) ?  ( " - " + item?.leadFullName ?? ""): ( "" + item?.leadFullName ?? "" ) ,
+                                        style: TextStyle(
+                                            color: AppColors.primaryColor,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold))
+                                  ])),
+                              SizedBox(height: 5),
+                              Text(item?.phone ?? "",
+                                  style: TextStyle(
+                                      fontSize: 16.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal)),
+                              SizedBox(height: 5),
+                              Text(
+                                // "DN- CTY TNHH MỘT THÀNH VIÊN CÔNG NGHỆ XANH CỎ",
+                                "",
+                                maxLines: 4,
+                                style: TextStyle(
+                                    overflow: TextOverflow.ellipsis,
+                                    fontSize: 16.0,
                                     color: Color(0xFF8E8E8E),
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: Center(
-                                  child: Text(
-                                    AppLocalizations.text(
-                                        LangKey.convertCustomersNotSuccess),
-                                    style: AppTextStyles.style14WhiteWeight400,
-                                  ),
-                                ),
-                              ),
-                            )
-                    ],
+                                    fontWeight: FontWeight.normal),
+                              )
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            print(item.phone);
+                            await callPhone(item?.phone ?? "");
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(20.0 / 2),
+                            height: 45,
+                            width: 45,
+                            decoration: BoxDecoration(
+                              color: Color(0xFF06A605),
+                              borderRadius: BorderRadius.circular(50),
+                              // border:  Border.all(color: AppColors.white,)
+                            ),
+                            child: Center(
+                                child: Image.asset(
+                              Assets.iconCall,
+                              color: AppColors.white,
+                            )),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                infoItem(Assets.iconCall, item?.phone ?? "", false),
-                infoItem(
-                    Assets.iconChance,
-                    "${item?.pipelineName ?? ""} - ${item?.journeyName ?? ""}",
-                    false),
-                infoItem(
-                    Assets.iconPerson, item?.customerSourceName ?? "", false),
-                infoItem(Assets.iconName, item?.staffFullName ?? "", true),
-              ],
+                  // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
+                  // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
+
+                  infoItem(Assets.iconName, item?.staffFullName ?? ""),
+                  // infoItem(Assets.iconInteraction, "12/12/2022"),
+
+                  Container(
+                    padding: const EdgeInsets.only(left: 8, bottom: 8.0),
+                    margin: EdgeInsets.only(bottom: 8.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.only(right: 10.0),
+                          height: 15.0,
+                          width: 15.0,
+                          child: Image.asset(Assets.iconInteraction),
+                        ),
+                        (item.dateLastCare != null) ? Expanded(
+                          child: RichText(
+                              text: TextSpan(
+                                  text: item.dateLastCare + " ",
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.normal),
+                                  children: [
+                                TextSpan(
+                                    text: "(${item.diffDay} ngày)",
+                                    style: TextStyle(
+                                        color: AppColors.primaryColor,
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.normal))
+                              ])),
+                        ) : Container(),
+                      ],
+                    ),
+                  ),
+
+                  // Container(
+                  //   margin: EdgeInsets.only(left: 8.0, bottom: 8.0),
+                  //   child: Row(children: [
+                  //     statusPotential("Mới", Color(0xFF3AEDB6), Color(0xFF11B482)),
+                  //     statusPotential("Vừa", Color.fromRGBO(199, 135, 0, 0.59), Color(0xFFC78700))
+                  //   ]),
+                  // ),
+
+                  item.tag.length > 0  ? Container(
+                    padding: EdgeInsets.all(8.0),
+                    child: Wrap(
+                      children: List.generate(item.tag.length,
+                          (index) => _optionItem(item.tag[index])),
+                      spacing: 10,
+                      runSpacing: 10,
+                    ),
+                  ) : Container(),
+
+                  Container(
+                    margin:
+                        EdgeInsets.only(bottom: 13.0, right: 10.0, top: 21.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _actionItem(Assets.iconCalendar, Color(0xFF26A7AD), 
+                            show: true, number: item?.relatedWork ?? 0, ontap: () async{
+
+                            bool result = await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => DetailPotentialCustomer(
+                        customer_lead_code: item.customerLeadCode,indexTab: 2,
+                      )));
+
+              if (result != null && result) {
+                getData(false);
+              }
+                          print("1");
+                        }),
+                        _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
+                            show: true, number: item?.appointment ?? 0, ontap: ()  async {
+
+                            bool result = await Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => DetailPotentialCustomer(
+                        customer_lead_code: item.customerLeadCode,indexTab: 2,
+                      )));
+
+              if (result != null && result) {
+                getData(false);
+              }
+                          print("2");
+                        }),
+                        _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
+                            ontap: () async {
+                              Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                      builder: (context) => CustomerCarePotential(customer_lead_code: item.customerLeadCode, customer_lead_id: item.customerLeadId,)));
+                          print("CustomerCare");
+                        }),
+                      //   _actionItem(Assets.iconTask, Color(0xFFCD6000),
+                      //       ontap: () {
+                      //     print("4");
+                      //   }),
+                      //   (item.staffFullName == null) ? _actionItem(Assets.iconAssignment, Color(0xFF0067AC),
+                      //     ontap: () async {
+
+                      //       models = await Navigator.of(context).push(
+                      //           MaterialPageRoute(
+                      //               builder: (context) =>
+                      //                   PickOneStaffScreen(
+                      //                     models: models,
+                      //                   )));
+
+                      //       if (models != null && models.length > 0) {
+                      //         int staffID = models[0].staffId;
+
+                      //         if (staffID != null) {
+                      //           DescriptionModelResponse result =
+                      //               await LeadConnection.assignRevokeLead(
+                      //                   context,
+                      //                   AssignRevokeLeadRequestModel(
+                      //                       type: "assign",
+                      //                       customerLeadCode: item.customerLeadCode,
+                      //                       saleId: staffID,
+                      //                       timeRevokeLead: 30));
+
+                      //           if (result != null) {
+                      //             if (result.errorCode == 0) {
+                      //               print(result.errorDescription);
+
+                      //               await LeadConnection.showMyDialog(
+                      //                   context, result.errorDescription);
+                      //               getData(false);
+                      //             } else {
+                      //               LeadConnection.showMyDialog(
+                      //                   context, result.errorDescription);
+                      //             }
+                      //           }
+                      //         }
+
+                      //         print(models);
+                      //       }
+
+                      //       print("iconAssignment");
+
+                      //   print("5");
+                      // }):
+
+                      // _actionItem(Assets.iconRecall, Color(0xFFFFAD02),
+                      //     ontap: () async {
+                      //       LeadConnection.showMyDialogWithFunction(
+                      //           context,
+                      //           AppLocalizations.text(
+                      //               LangKey.warningRecallStaff),
+                      //           ontap: () async {
+                      //         DescriptionModelResponse result =
+                      //             await LeadConnection.assignRevokeLead(
+                      //                 context,
+                      //                 AssignRevokeLeadRequestModel(
+                      //                     type: "revoke",
+                      //                     customerLeadCode: item.customerLeadCode,
+                      //                     saleId: item.saleId,
+                      //                     timeRevokeLead: 30));
+
+                      //         Navigator.of(context).pop();
+
+                      //         if (result != null) {
+                      //           if (result.errorCode == 0) {
+                      //             print(result.errorDescription);
+
+                      //             await LeadConnection.showMyDialog(
+                      //                 context, result.errorDescription);
+                      //             getData(false);
+                      //           } else {
+                      //             LeadConnection.showMyDialog(
+                      //                 context, result.errorDescription);
+                      //           }
+                      //         }
+                      //       });
+
+                      //       print("iconAssignment");
+
+                      //   print("5");
+                      // })
+                      ],
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
         Positioned(
-          right: 10,
-          bottom: 20,
-          child: InkWell(
-            onTap: () async {
-              print(item.phone);
-              await callPhone(item?.phone ?? "");
-            },
-            child: Container(
-              padding: EdgeInsets.all(20.0 / 2),
-              height: 50,
-              width: 50,
-              decoration: BoxDecoration(
-                color: Color(0xFF06A605),
-                borderRadius: BorderRadius.circular(50),
-                // border:  Border.all(color: AppColors.white,)
-              ),
-              child: Center(
-                  child: Image.asset(
-                Assets.iconCall,
-                color: AppColors.white,
-              )),
-            ),
-          ),
+          left: 10,
+          top: -22,
+          child: _buildAvatar(item?.leadFullName ?? ""),
         ),
       ],
     );
   }
 
-  Widget infoItem(String icon, String title, bool minWidth) {
+  Widget _actionItem(String icon, Color color,
+      {num number, bool show = false, Function ontap}) {
+    return InkWell(
+      onTap: ontap,
+      child: Container(
+          margin: EdgeInsets.only(left: 17),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                height: 45,
+                width: 45,
+                decoration: BoxDecoration(
+                    color: color, borderRadius: BorderRadius.circular(1000.0)),
+                child: Center(
+                  child: Image.asset(
+                    icon,
+                    scale: 2.5,
+                  ),
+                ),
+              ),
+              show
+                  ? Positioned(
+                      left: 30,
+                      bottom: 30,
+                      child: Container(
+                        width: (number > 99)
+                            ? 30
+                            : (number > 9)
+                                ? 25
+                                : 22,
+                        height: 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                            color: Color(0xFFF45E38)),
+                        child: Center(
+                            child: Text("${number ?? 0}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w600))),
+                      ))
+                  : Container()
+            ],
+          )),
+    );
+  }
+
+  Widget statusPotential(String title, Color color, Color colorText) {
     return Container(
-      width: minWidth
-          ? MediaQuery.of(context).size.width - 80
-          : MediaQuery.of(context).size.width - 40,
-      // height: 40,
+      height: 24,
+      width: 55,
+      margin: EdgeInsets.only(right: 8.0),
+      decoration: BoxDecoration(
+          color: color, borderRadius: BorderRadius.circular(4.0)),
+      child: Center(
+        child: Text(title,
+            style: TextStyle(
+                color: colorText,
+                fontSize: 14,
+                fontWeight: FontWeight.normal)),
+      ),
+    );
+  }
+
+  Widget _optionItem(Tag item) {
+    return Container(
+      padding: EdgeInsets.only(left: 4.0, right: 4.0),
+      height: 24,
+      decoration: BoxDecoration(
+          color: Color(0x420067AC), borderRadius: BorderRadius.circular(5.0)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+              height: 8.0,
+              width: 8.0,
+              margin: EdgeInsets.only(right: 5.0),
+              decoration: BoxDecoration(
+                  color: Color(0x790067AC),
+                  borderRadius: BorderRadius.circular(1000.0))),
+          Text(item.tagName,
+              style: TextStyle(
+                  color: Color(0xFF0067AC),
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.w600))
+        ],
+      ),
+    );
+  }
+
+  Widget infoItem(String icon, String title) {
+    return Container(
       padding: const EdgeInsets.only(left: 8, bottom: 8.0),
-      margin: EdgeInsets.only(left: 15.0 / 2, bottom: 8.0),
+      margin: EdgeInsets.only(bottom: 8.0),
       child: Row(
         children: [
           Container(
@@ -426,7 +836,10 @@ class _LeadScreen extends State<LeadScreen> {
           Expanded(
             child: Text(
               title,
-              style: AppTextStyles.style14BlackWeight500,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.normal),
               // maxLines: 1,
             ),
           ),
@@ -443,18 +856,21 @@ class _LeadScreen extends State<LeadScreen> {
 
   Widget _buildAvatar(String name) {
     return Container(
-      width: 50.0,
-      height: 50.0,
-      padding: EdgeInsets.all(2.0),
+      width: 87.0,
+      height: 87.0,
       decoration: BoxDecoration(
+        border: Border.all(
+          width: 2.0,
+          color: AppColors.primaryColor,
+        ),
         shape: BoxShape.circle,
-        color: AppColors.lightGrey,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10000.0),
         child: CustomAvatar(
+          color: Color(0xFFEEB132),
           name: name,
-          textSize: AppTextSizes.size22,
+          textSize: 36.0,
         ),
       ),
     );

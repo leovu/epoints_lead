@@ -124,5 +124,83 @@ class LangKey {
   static const String showMore = "show_more"; 
   static const String phoneNumberNotCorrectFormat = "phone_number_not_correct_format";
   static const String uploadImageFail = "upload_image_fail"; 
+  static const String customerCareUpcase = "customer_care_upcase"; 
+
+  static const String title = "title";
+  static const String typeOfWork = "type_of_work";
+  static const String enterTitle = "enter_title";
+  static const String content = "content";
+  static const String enterCareContent = "enter_care_content";
+  static const String appointmentForJob = "appointment_for_job";
+  static const String executionStaff = "execution_staff";
+  static const String chooseExecutionStaff = "choose_execution_staff";
+  static const String startTime = "start_time";
+  static const String chooseStartTime = "choose_start_time";
+  static const String endTime = "end_time";
+  static const String chooseEndTime = "choose_end_time";
+  static const String status = "status";
+  static const String chooseStatus = "choose_status";
+  static const String saveInfo = "save_info";
+  static const String chooseBusiness = "choose_business";
+  static const String listBusiness = "list_business";
+  static const String enterBusiness_Name = "enter_business_name";
+  static const String createNewBusiness = "create_new_business";
+  static const String addNewBusiness = "add_new_business";
+   static const String byHistoryCustomerCare = "by_history_customer_care";
+  static const String byWorkSchedule = "by_work_schedule";
+  static const String byWorkStatus = "by_work_status";
+  static const String chooseWorkStatus = "choose_work_status";
+  static const String select_all = "select_all";
+  static const String department = "department";
+  static const String warningRecallStaff = "warning_recall_staff";
+
+
+  static const String chooseFields = "choose_fields";
+  static const String chooseDateOfEstablishment = "choose_date_of_establishment";
+  static const String chooseCards = "choose_cards";
+  static const String representative = "representative";
+  static const String tax = "tax";
+  static const String enterField = "enter_field";
+  static const String businessAreas = "business_areas";
+  static const String enterBusiness = "enter_business";
+  static const String choose_birth_day = "choose_birth_day";
+  static const String contactInformation = "contact_information";
+
+  static const String enterWorkTitle = "enter_work_title";
+  static const String chooseTypeOfWork = "choose_type_of_work";
+  static const String chooseStartDay = "choose_start_day";
+  static const String chooseCompleteDay = "choose_complete_day";
+  static const String chooseExecutor = "choose_executor";
+  static const String enterJobDescription = "enter_job_description";
+  static const String clickToUploadDocument = "click_to_upload_document";
+  static const String setReminderSchedule = "set_reminder_schedule";
+  static const String chooseSupporter = "choose_supporter";
+  static const String tagType = "tag_type";
+  static const String chooseProject = "choose_project";
+  static const String workNeedCensorship = "work_need_censorship";
+  static const String saveWork = "save_work";
+  static const String potentialCustomer = "potential_customer";
+  static const String chooseSupporterUpcase = "choose_supporter_upcase";
+  static const String chooseExecutorUpcase = "choose_executor_upcase";
+  static const String bonus = "bonus";
+  static const String kpi = "kpi";
+  static const String enterWorkDesc = "enter_work_desc";
+  static const String pressUploadPhotosAndVideos = "press_upload_photos_and_videos";
+
+  static const String chooseBusinessAreas = "choose_business_areas";
+  static const String createNewBusinessAreas = "create_new_business_areas";
+  static const String addNewBusinessAreas = "add_new_business_areas";
+  static const String enterNameBusinessArea = "enter_name_business_area";
+
+  static const String addTag = "add_tag";
+  static const String enterNewTag = "enter_new_tag";
+  static const String addNewTag = "add_new_tag";
+  static const String numberEmployees = "number_employees";
+  static const String discuss = "discuss";
+  static const String contactPerson = "contact_person";
+  static const String deal = "deal";
+  static const String call = "call";
   
+
+
 }

@@ -1,4 +1,5 @@
-import 'dart:io';
+// import 'dart:html';
+// import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,25 +11,31 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/customer_type.dart';
 import 'package:lead_plugin_epoint/model/object_pop_detail_model.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
+import 'package:lead_plugin_epoint/model/request/get_journey_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/add_lead_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_option_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_district_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_journey_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/get_pipeline_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_province_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_status_work_response_model.dart';
+import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
-import 'package:lead_plugin_epoint/model/response/upload_image_response_model.dart';
-import 'package:lead_plugin_epoint/presentation/modal/customer_type_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modal/status_work_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/build_more_address_create_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
+import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class CreatePotentialCustomer extends StatefulWidget {
   String fullname;
@@ -53,12 +60,25 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   TextEditingController _phoneNumberText = TextEditingController();
   FocusNode _phoneNumberFocusNode = FocusNode();
 
+  TextEditingController _businessText = TextEditingController();
+  FocusNode _businessFocusNode = FocusNode();
+
+  TextEditingController _emailText = TextEditingController();
+  FocusNode _emailFocusNode = FocusNode();
+
+  TextEditingController _taxText = TextEditingController();
+  FocusNode _taxFocusNode = FocusNode();
+
+  TextEditingController _representativeText = TextEditingController();
+  FocusNode _representativeFocusNode = FocusNode();
+
   bool showMoreAddress = false;
   bool showMoreAll = false;
+  bool selectedPersonal = true;
 
   String _imgAvatar = "";
 
-  File _image;
+  // File _image;
   PickedFile _pickedFile;
   final _picker = ImagePicker();
 
@@ -80,6 +100,15 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
 
   List<AllocatorData> allocatorData = <AllocatorData>[];
 
+  List<GetStatusWorkData> statusWorkData = [];
+  GetStatusWorkData statusWorkSelected = GetStatusWorkData();
+
+  List<WorkListStaffModel> _modelStaffSelected = [];
+
+  List<TagData> tagsData;
+
+  String tagsString = "";
+
   List<CustomerTypeModel> customerTypeData = [
     CustomerTypeModel(
         customerTypeName: AppLocalizations.text(LangKey.personal),
@@ -96,13 +125,35 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
       customerTypeID: 1,
       selected: true);
 
-  DetailPotentialData detailPotential = DetailPotentialData(
+  AddLeadModelRequest detailPotential = AddLeadModelRequest(
+      avatar: "",
+      customerType: "",
+      customerSource: 0,
+      fullName: "",
+      taxCode: "",
+      phone: "",
+      email: "",
+      representative: "",
+      pipelineCode: "",
+      journeyCode: "",
+      saleId: 0,
+      tagId: [],
+      gender: "",
+      bussinessId: 0,
+      businessClue: "",
+      birthday: "",
+      employees: 0,
+      position: "",
       provinceId: 0,
       districtId: 0,
+      wardId: 0,
       address: "",
-      saleId: 0,
-      businessClue: "",
-      zalo: "");
+      zalo: "",
+      fanpage: "",
+      contactFullName: "",
+      contactPhone: "",
+      contactEmail: "",
+      contactAddress: "");
 
   ObjectPopDetailModel modelResponse = ObjectPopDetailModel();
   @override
@@ -137,26 +188,6 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
       });
     }
     super.didChangeMetrics();
-  }
-
-  Future<void> _pickImage() async {
-    _pickedFile = await _picker.getImage(source: ImageSource.gallery);
-
-    if (_pickedFile != null) {
-      _image = File(_pickedFile.path);
-
-      UploadImageModelResponse result =
-          await LeadConnection.upload(context, _image);
-
-      if (result != null) {
-        _imgAvatar = result.data.link;
-        setState(() {
-          print(_image);
-        });
-      } else {
-        LeadConnection.showMyDialog(context, AppLocalizations.text(LangKey.uploadImageFail));
-      }
-    }
   }
 
   @override
@@ -216,110 +247,171 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 fontWeight: FontWeight.normal),
           ),
 
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              AppLocalizations.text(LangKey.picture),
-              style: TextStyle(
-                  fontSize: AppTextSizes.size15,
-                  color: const Color(0xFF858080),
-                  fontWeight: FontWeight.normal),
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(8),
+          //   child: Text(
+          //     AppLocalizations.text(LangKey.picture),
+          //     style: TextStyle(
+          //         fontSize: AppTextSizes.size15,
+          //         color: const Color(0xFF858080),
+          //         fontWeight: FontWeight.normal),
+          //   ),
+          // ),
 
-          Center(
-              child: Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  InkWell(
-            onTap: () {
-                  print("chon anh");
-                  _pickImage();
-            },
-            child: (_imgAvatar != "")
-                    ? _buildAvatarWithImage(_imgAvatar)
-                    : _buildAvatarImg(_fullNameText.text),
-          ),
+          // Center(
+          //     child: Stack(
+          //   clipBehavior: Clip.none,
+          //   children: [
+          //     InkWell(
+          //       onTap: () {
+          //         print("chon anh");
+          //         _pickImage();
+          //       },
+          //       child: (_imgAvatar != "")
+          //           ? _buildAvatarWithImage(_imgAvatar)
+          //           : _buildAvatarImg(_fullNameText.text),
+          //     ),
+          //     Positioned(
+          //         left: 60,
+          //         bottom: 55,
+          //         child: InkWell(
+          //           onTap: () {
+          //             _imgAvatar = "";
+          //             setState(() {});
+          //           },
+          //           child: (_imgAvatar != "")
+          //               ? Container(
+          //                   width: 20,
+          //                   height: 20,
+          //                   decoration: BoxDecoration(
+          //                       borderRadius: BorderRadius.circular(100),
+          //                       color: Colors.red),
+          //                   child: Center(
+          //                       child: Icon(
+          //                     Icons.clear,
+          //                     color: Colors.white,
+          //                     size: 15,
+          //                   )),
+          //                 )
+          //               : Container(),
+          //         ))
+          //   ],
+          // )),
 
-          Positioned(
-                    left: 60,
-                    bottom: 55,
-                    child: InkWell(
-                      onTap: () {
-                        _imgAvatar = "";
-                        setState(() {
-                          
-                        });
-                      },
-                      child:  (_imgAvatar != "") ? Container(
-                        width: 20,
-                        height: 20,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Colors.red
-                            ),
-                        child: Center(child: Icon(Icons.clear, color: Colors.white,
-                        size: 15,)),
-                      ) : Container(),
-                    ))
-
-                ],
-              )),
-
-          Container(
-            height: 10,
+          SizedBox(
+            height: 15,
           ),
           // Loại khách hàng
-          _buildTextField(
-              AppLocalizations.text(LangKey.customerStyle),
-              customerTypeSelected?.customerTypeName ?? "",
-              Assets.iconStyleCustomer,
-              true,
-              true,
-              false, ontap: () async {
-            print("loại khách hàng");
-            FocusScope.of(context).unfocus();
+          // _buildTextField(
+          //     AppLocalizations.text(LangKey.customerStyle),
+          //     customerTypeSelected?.customerTypeName ?? "",
+          //     Assets.iconStyleCustomer,
+          //     true,
+          //     true,
+          //     false, ontap: () async {
+          //   print("loại khách hàng");
+          //   FocusScope.of(context).unfocus();
 
-            CustomerTypeModel customerType = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return GestureDetector(
-                    child: CustomerTypeModal(
-                      customerTypeData: customerTypeData,
+          //   CustomerTypeModel customerType =
+          //       await CustomNavigator.showCustomBottomDialog(
+          //     context,
+          //     CustomerTypeModal(customerTypeData: customerTypeData),
+          //   );
+          //   if (customerType != null) {
+          //     customerTypeSelected = customerType;
+          //     setState(() {});
+          //   }
+          //   // print("loại khách hàng");
+          // }),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              InkWell(
+                onTap: () {
+                  detailPotential.customerType = "personal";
+                  customerTypeSelected = customerTypeData[0];
+                  selectedPersonal = true;
+                  setState(() {});
+                },
+                child: Container(
+                  height: 42.0,
+                  width: MediaQuery.of(context).size.width / 2 - 19,
+                  padding: EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      color: selectedPersonal
+                          ? AppColors.primaryColor
+                          : Color(0xFFF2F2F2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ]),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.text(LangKey.personal),
+                      style: TextStyle(
+                          color: selectedPersonal
+                              ? Colors.white
+                              : Color(0xFF8E8E8E),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
                     ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
-                  );
-                });
-            if (customerType != null) {
-              customerTypeSelected = customerType;
-              setState(() {});
-            }
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  detailPotential.customerType = "business";
+                  customerTypeSelected = customerTypeData[1];
+                  selectedPersonal = false;
+                  setState(() {});
+                },
+                child: Container(
+                  height: 42.0,
+                  width: MediaQuery.of(context).size.width / 2 - 19,
+                  padding: EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                      color: !selectedPersonal
+                          ? AppColors.primaryColor
+                          : Color(0xFFF2F2F2),
+                      borderRadius: BorderRadius.circular(10.0),
+                      boxShadow: [
+                        BoxShadow(
+                          offset: Offset(0, 1),
+                          blurRadius: 2,
+                          color: Colors.black.withOpacity(0.3),
+                        )
+                      ]),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.text(LangKey.business),
+                      style: TextStyle(
+                          color: !selectedPersonal
+                              ? Colors.white
+                              : Color(0xFF8E8E8E),
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
 
-            // print("loại khách hàng");
-          }),
-          // Nhập họ và tên
-          _buildTextField(AppLocalizations.text(LangKey.inputFullname), "",
-              Assets.iconPerson, true, false, true,
-              fillText: _fullNameText, focusNode: _fullnameFocusNode),
-          // _buildPhoneNumber("0945160061"),
-          _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
-              Assets.iconCall, false, false, true,
-              fillText: _phoneNumberText,
-              focusNode: _phoneNumberFocusNode,
-              inputType: TextInputType.phone),
+          SizedBox(
+            height: 15.0,
+          ),
 
           // nguồn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.customerSource),
               sourceSelected?.sourceName ?? "",
               Assets.iconSourceCustomer,
-              true,
+              false,
               true,
               false, ontap: () async {
             print("nguồn khách hàng");
@@ -336,50 +428,80 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 customerOptonData = dataType_Source.data;
                 customerSourcesData = customerOptonData.source;
 
-                CustomerOptionSource source = await showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) {
-                      return GestureDetector(
-                        child: CustomerSourceModal(
-                          sources: customerSourcesData,
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        behavior: HitTestBehavior.opaque,
-                      );
-                    });
+                CustomerOptionSource source =
+                    await CustomNavigator.showCustomBottomDialog(
+                  context,
+                  CustomerSourceModal(sources: customerSourcesData),
+                );
                 if (source != null) {
                   sourceSelected = source;
+                  detailPotential.customerSource =
+                    sourceSelected.customerSourceId;
                   setState(() {});
                 }
               }
             } else {
-              CustomerOptionSource source = await showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) {
-                    return GestureDetector(
-                      child: CustomerSourceModal(
-                        sources: customerSourcesData,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      behavior: HitTestBehavior.opaque,
-                    );
-                  });
+              CustomerOptionSource source =
+                  await CustomNavigator.showCustomBottomDialog(
+                context,
+                CustomerSourceModal(sources: customerSourcesData),
+              );
               if (source != null) {
                 sourceSelected = source;
+
+                detailPotential.customerSource =
+                    sourceSelected.customerSourceId;
                 setState(() {});
               }
             }
           }),
+          // // nhap ten doanh nghiep
+          // !selectedPersonal
+          //     ? _buildTextField( AppLocalizations.text(LangKey.enterBusiness),
+          //         "", Assets.iconProvince, true, false, true,
+          //         fillText: _businessText, focusNode: _businessFocusNode)
+          //     : Container(),
+
+          // Nhập họ và tên / doanh nghiep
+          _buildTextField(
+              selectedPersonal
+                  ? AppLocalizations.text(LangKey.inputFullname)
+                  : AppLocalizations.text(LangKey.enterBusiness),
+              "",
+              selectedPersonal ? Assets.iconPerson : Assets.iconProvince,
+              true,
+              false,
+              true,
+              fillText: _fullNameText,
+              focusNode: _fullnameFocusNode),
+
+          // Nhập ma so thue
+          !selectedPersonal
+              ? _buildTextField(AppLocalizations.text(LangKey.tax), "",
+                  Assets.iconTax, false, false, true,
+                  fillText: _taxText, focusNode: _taxFocusNode, inputType: TextInputType.numberWithOptions(
+                  signed: false, decimal: false))
+              : Container(),
+
+          _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
+              Assets.iconCall, true, false, true,
+              fillText: _phoneNumberText,
+              focusNode: _phoneNumberFocusNode,
+              inputType: TextInputType.numberWithOptions(
+                  signed: false, decimal: false)),
+
+          // email
+          _buildTextField(AppLocalizations.text(LangKey.email), "",
+              Assets.iconEmail, false, false, true,
+              fillText: _emailText, focusNode: _emailFocusNode),
+
+          // người đại diện
+          !selectedPersonal
+              ? _buildTextField(AppLocalizations.text(LangKey.representative),
+                  "", Assets.iconRepresentative, false, false, true,
+                  fillText: _representativeText,
+                  focusNode: _representativeFocusNode)
+              : Container(),
 
           // chọn pipeline
           _buildTextField(
@@ -398,31 +520,25 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               if (pipelines != null) {
                 pipeLineData = pipelines.data;
 
-                PipelineData pipeline = await showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) {
-                      return GestureDetector(
-                        child: PipelineModal(
-                          pipeLineData: pipeLineData,
-                        ),
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        behavior: HitTestBehavior.opaque,
-                      );
-                    });
+                PipelineData pipeline =
+                    await CustomNavigator.showCustomBottomDialog(
+                  context,
+                  PipelineModal(pipeLineData: pipeLineData),
+                );
+
                 if (pipeline != null) {
                   if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
                     journeySelected = null;
                   }
 
                   pipelineSelected = pipeline;
+                  detailPotential.pipelineCode =
+                      pipelineSelected.pipelineCode;
                   LeadConnection.showLoading(context);
                   var journeys = await LeadConnection.getJourney(
-                      context, pipelineSelected.pipelineCode);
+                      context,
+                      GetJourneyModelRequest(
+                          pipelineCode: [pipelineSelected.pipelineCode]));
                   Navigator.of(context).pop();
                   if (journeys != null) {
                     journeysData = journeys.data;
@@ -431,31 +547,23 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 }
               }
             } else {
-              PipelineData pipeline = await showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) {
-                    return GestureDetector(
-                      child: PipelineModal(
-                        pipeLineData: pipeLineData,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      behavior: HitTestBehavior.opaque,
-                    );
-                  });
+              PipelineData pipeline =
+                  await CustomNavigator.showCustomBottomDialog(
+                context,
+                PipelineModal(pipeLineData: pipeLineData),
+              );
               if (pipeline != null) {
                 if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
                   journeySelected = null;
                 }
 
                 pipelineSelected = pipeline;
+                detailPotential.pipelineCode = pipelineSelected.pipelineCode;
                 LeadConnection.showLoading(context);
                 var journeys = await LeadConnection.getJourney(
-                    context, pipelineSelected.pipelineCode);
+                    context,
+                    GetJourneyModelRequest(
+                        pipelineCode: [pipelineSelected.pipelineCode]));
                 Navigator.of(context).pop();
                 if (journeys != null) {
                   journeysData = journeys.data;
@@ -465,9 +573,9 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             }
           }),
 
-          // chọn hành trình
+          //  chọn hành trình
           _buildTextField(
-              AppLocalizations.text(LangKey.chooseItinerary),
+              AppLocalizations.text(LangKey.chooseStatus),
               journeySelected?.journeyName ?? "",
               Assets.iconItinerary,
               true,
@@ -476,28 +584,146 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             print("Chọn hành trình");
 
             FocusScope.of(context).unfocus();
+            JourneyData journey = await CustomNavigator.showCustomBottomDialog(
+              context,
+              JourneyModal(journeys: journeysData),
+            );
 
-            JourneyData journey = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return GestureDetector(
-                    child: JourneyModal(
-                      journeys: journeysData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
-                  );
-                });
             if (journey != null) {
               journeySelected = journey;
+              detailPotential.journeyCode = journeySelected.journeyCode;
               setState(() {
                 // await LeadConnection.getDistrict(context, province.provinceid);
               });
+            }
+          }),
+
+          // _buildTextField(
+          //     AppLocalizations.text(LangKey.chooseStatus),
+          //     statusWorkSelected?.manageStatusName ?? "",
+          //     Assets.iconItinerary,
+          //     true,
+          //     true,
+          //     false, ontap: () async {
+          //   FocusScope.of(context).unfocus();
+
+          //   if (statusWorkData.length == 0) {
+          //     LeadConnection.showLoading(context);
+          //     var statusWorkModel = await LeadConnection.getStatusWork(context);
+
+          //     Navigator.of(context).pop();
+          //     if (statusWorkModel != null) {
+          //       statusWorkData = statusWorkModel.data;
+
+          //       GetStatusWorkData status =
+          //           await CustomNavigator.showCustomBottomDialog(
+          //         context,
+          //         StatusWorkModal(statusWorkData: statusWorkData),
+          //       );
+          //       if (status != null) {
+          //         statusWorkSelected = status;
+          //         setState(() {});
+          //       }
+          //     }
+          //   } else {
+          //     GetStatusWorkData status =
+          //         await CustomNavigator.showCustomBottomDialog(
+          //       context,
+          //       StatusWorkModal(statusWorkData: statusWorkData),
+          //     );
+          //     if (status != null) {
+          //       statusWorkSelected = status;
+          //       setState(() {});
+          //     }
+          //   }
+          // }),
+
+          // Chọn người được phân bổ
+          _buildTextField(
+              AppLocalizations.text(LangKey.chooseAllottedPerson),
+              (_modelStaffSelected != null && _modelStaffSelected.length > 0)
+                  ? _modelStaffSelected[0]?.staffName ?? ""
+                  : "",
+              Assets.iconName,
+              true,
+              true,
+              false, ontap: () async {
+            FocusScope.of(context).unfocus();
+            print("Chọn người được phân bổ");
+
+            _modelStaffSelected =
+                await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => PickOneStaffScreen(
+                          models: _modelStaffSelected,
+                        )));
+
+            if (_modelStaffSelected != null && _modelStaffSelected.length > 0) {
+              print(_modelStaffSelected);
+              detailPotential.saleId = _modelStaffSelected[0].staffId;
+              detailPotential.position = _modelStaffSelected[0].departmentName;
+              setState(() {});
+            }
+          }),
+
+          _buildTextField(AppLocalizations.text(LangKey.chooseCards),
+              tagsString, Assets.iconTag, false, true, false, ontap: () async {
+            print("Tag");
+            FocusScope.of(context).unfocus();
+            List<int> tagsSeletecd = [];
+
+            if (tagsData == null || tagsData.length == 0) {
+              LeadConnection.showLoading(context);
+              var tags = await LeadConnection.getTag(context);
+              Navigator.of(context).pop();
+              if (tags != null) {
+                tagsData = tags.data;
+
+                var listTagsSelected = await Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (context) => TagsModal(tagsData: tagsData)));
+
+                if (listTagsSelected != null) {
+                  // widget.detailDeal.tag = [];
+                  tagsString = "";
+                  tagsData = listTagsSelected;
+
+                  for (int i = 0; i < tagsData.length; i++) {
+                    if (tagsData[i].selected) {
+                      tagsSeletecd.add(tagsData[i].tagId);
+                      if (tagsString == "") {
+                        tagsString = tagsData[i].name;
+                      } else {
+                        tagsString += ", ${tagsData[i].name}";
+                      }
+                    }
+                  }
+
+                  detailPotential.tagId = tagsSeletecd;
+                  setState(() {});
+                }
+              }
+            } else {
+              var listTagsSelected = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => TagsModal(tagsData: tagsData)));
+              if (listTagsSelected != null) {
+                // widget.detailDeal.tag = [];
+                tagsString = "";
+                tagsData = listTagsSelected;
+
+                for (int i = 0; i < tagsData.length; i++) {
+                  if (tagsData[i].selected) {
+                    tagsSeletecd.add(tagsData[i].tagId);
+                    if (tagsString == "") {
+                      tagsString = tagsData[i].name;
+                    } else {
+                      tagsString += ", ${tagsData[i].name}";
+                    }
+                  }
+                }
+                detailPotential.tagId = tagsSeletecd;
+                setState(() {});
+              }
             }
           }),
 
@@ -533,9 +759,9 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           showMoreAddress
               ? BuildMoreAddressCreatPotential(
                   provinces: provinces,
-                  allocatorData: allocatorData,
                   requestModel: requestModel,
                   detailPotential: detailPotential,
+                  selectedPersonal: selectedPersonal,
                 )
               : Container()
         ],
@@ -553,63 +779,10 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-          print("theemmm khtn");
-
-          if (_phoneNumberText.text.isNotEmpty) {
-            if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) && (!Validators().isNumber(_phoneNumberText.text.trim()))) {
-            print("so dien thoai sai oy");
-            LeadConnection.showMyDialog(
-                context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat), warning: true);
-            return;
-             }
-          }
-
-          if (_fullNameText.text == "" ||
-              // _phoneNumberText.text == "" ||
-              customerTypeSelected == null ||
-              sourceSelected == null ||
-              pipelineSelected == null ||
-              journeySelected == null) {
-            LeadConnection.showMyDialog(
-                context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo), warning: true);
+          if (customerTypeSelected.customerTypeID == 1) {
+            await addPotentialPersonal();
           } else {
-            
-            LeadConnection.showLoading(context);
-            AddLeadModelResponse result = await LeadConnection.addLead(
-                context,
-                AddLeadModelRequest(
-                    avatar: _imgAvatar,
-                    customerType: customerTypeSelected.customerTypeName,
-                    fullName: _fullNameText.text,
-                    phone: _phoneNumberText.text,
-                    customerSource: sourceSelected.customerSourceId,
-                    pipelineCode: pipelineSelected.pipelineCode,
-                    journeyCode: journeySelected.journeyCode,
-                    provinceId: detailPotential.provinceId,
-                    districtId: detailPotential.districtId,
-                    address: detailPotential.address,
-                    saleId: detailPotential.saleId,
-                    businessClue: detailPotential.businessClue,
-                    zalo: detailPotential.zalo ?? "",
-                    gender: detailPotential.gender,
-                    email: detailPotential.email));
-            Navigator.of(context).pop();
-            if (result != null) {
-              if (result.errorCode == 0) {
-                print(result.errorDescription);
-                await LeadConnection.showMyDialog(
-                    context, result.errorDescription);
-                if (result.data != null) {
-                  modelResponse = ObjectPopDetailModel(
-                      customer_lead_code: "",
-                      customer_lead_id: result.data.customerLeadId,
-                      status: true);
-                }
-                Navigator.of(context).pop(modelResponse.toJson());
-              } else {
-                LeadConnection.showMyDialog(context, result.errorDescription);
-              }
-            }
+            await addPotentialBusiness();
           }
         },
         child: Center(
@@ -646,29 +819,27 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
     );
   }
 
-  Widget _buildAvatarWithImage(String image) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10000.0),
-      child: FittedBox(
-        child: Container(
-          width: 80.0,
-    height: 80.0,
-    padding: const EdgeInsets.all(2.0),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.blueGrey,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(1), BlendMode.dstATop),
-              image: NetworkImage(image)
-            )
-          ),
-        ),
-        fit: BoxFit.fill,
-      ),
-    );
-  }
+  // Widget _buildAvatarWithImage(String image) {
+  //   return ClipRRect(
+  //     borderRadius: BorderRadius.circular(10000.0),
+  //     child: FittedBox(
+  //       child: Container(
+  //         width: 80.0,
+  //         height: 80.0,
+  //         padding: const EdgeInsets.all(2.0),
+  //         decoration: BoxDecoration(
+  //             shape: BoxShape.circle,
+  //             color: Colors.blueGrey,
+  //             image: DecorationImage(
+  //                 fit: BoxFit.cover,
+  //                 colorFilter: ColorFilter.mode(
+  //                     Colors.black.withOpacity(1), BlendMode.dstATop),
+  //                 image: NetworkImage(image))),
+  //       ),
+  //       fit: BoxFit.fill,
+  //     ),
+  //   );
+  // }
 
   Widget _buildTextField(String title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
@@ -677,7 +848,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
       FocusNode focusNode,
       TextInputType inputType}) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 15),
       child: InkWell(
         onTap: (ontap != null) ? ontap : null,
         child: TextField(
@@ -742,17 +913,186 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             if (fillText != null) {
               print(fillText.text);
               if (fillText == _fullNameText) {
-                // _buildAvatarImg(fillText.text);
+                detailPotential.fullName = _fullNameText.text;
+              } else if (fillText == _phoneNumberText) {
+                detailPotential?.phone = _phoneNumberText.text;
+              } else if (fillText == _emailText) {
+                detailPotential?.email = _emailText.text;
+              } else if (fillText == _taxText) {
+                detailPotential?.taxCode = _taxText.text;
+              } else if (fillText == _representativeText) {
+                detailPotential?.representative = _representativeText.text;
               }
             }
           },
-          onSubmitted: (event) {
-            if (fillText == _fullNameText) {
-              _buildAvatarImg(_fullNameText.text);
-            }
-          },
+          // onSubmitted: (event) {
+          //   if (fillText == _fullNameText) {
+          //     _buildAvatarImg(_fullNameText.text);
+          //   }
+          // },
         ),
       ),
     );
+  }
+
+  Future<void> addPotentialPersonal() async {
+    print(detailPotential);
+    print("theemmm khtn");
+
+    if (detailPotential.phone.isNotEmpty) {
+      if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
+          (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+        print("so dien thoai sai oy");
+        LeadConnection.showMyDialog(
+            context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
+            warning: true);
+        return;
+      }
+    }
+
+    if (_fullNameText.text == "" ||
+        _phoneNumberText.text == "" ||
+        detailPotential.pipelineCode == "" ||
+        detailPotential.journeyCode == "" || detailPotential.saleId == 0) {
+      LeadConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
+          warning: true);
+    } else {
+      LeadConnection.showLoading(context);
+      AddLeadModelResponse result = await LeadConnection.addLead(
+          context,
+          AddLeadModelRequest(
+              avatar: "",
+              customerType: "personal",
+              customerSource: detailPotential.customerSource,
+              fullName: _fullNameText.text,
+              taxCode: "",
+              phone: detailPotential.phone,
+              email: detailPotential.email,
+              representative : "",
+              pipelineCode: detailPotential.pipelineCode,
+              journeyCode: detailPotential.journeyCode,
+              saleId:detailPotential.saleId,
+              tagId:detailPotential.tagId,
+              gender:detailPotential.gender,
+              birthday:detailPotential.birthday,
+              bussinessId:0,
+              employees:0,
+              address:detailPotential.address,
+              provinceId: detailPotential.provinceId,
+              districtId: detailPotential.districtId,
+              wardId: detailPotential.wardId,
+              businessClue: detailPotential.businessClue,
+              zalo: detailPotential.zalo ?? "",
+              fanpage: detailPotential.fanpage ?? "",
+              contactAddress: "",
+              contactEmail: "",
+              contactFullName: "",
+              contactPhone: "",
+              position: detailPotential.position
+              ));
+      Navigator.of(context).pop();
+      if (result != null) {
+        if (result.errorCode == 0) {
+          print(result.errorDescription);
+          await LeadConnection.showMyDialog(context, result.errorDescription);
+          if (result.data != null) {
+            modelResponse = ObjectPopDetailModel(
+                customer_lead_code: "",
+                customer_lead_id: result.data.customerLeadId,
+                status: true);
+          }
+          Navigator.of(context).pop(modelResponse.toJson());
+        } else {
+          LeadConnection.showMyDialog(context, result.errorDescription);
+        }
+      }
+    }
+  }
+
+  Future<void> addPotentialBusiness() async {  
+     print(detailPotential);
+    print("Business");
+
+    if (_phoneNumberText.text.isNotEmpty) {
+      if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
+          (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+        print("so dien thoai sai oy");
+        LeadConnection.showMyDialog(
+            context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
+            warning: true);
+        return;
+      }
+    }
+
+    if (detailPotential.contactPhone.isNotEmpty) {
+      if ((!Validators().isValidPhone(detailPotential.contactPhone.trim())) &&
+          (!Validators().isNumber(detailPotential.contactPhone.trim()))) {
+        print("so dien thoai sai oy");
+        LeadConnection.showMyDialog(
+            context, "Số điện thoại người liên hệ không đúng định dạng" ,
+            warning: true);
+        return;
+      }
+    }
+
+    if (_fullNameText.text == "" ||
+        _phoneNumberText.text == "" ||
+        detailPotential.pipelineCode == "" ||
+        detailPotential.journeyCode == "" || detailPotential.saleId == 0) {
+      LeadConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
+          warning: true);
+    } else {
+      LeadConnection.showLoading(context);
+      AddLeadModelResponse result = await LeadConnection.addLead(
+          context,
+          AddLeadModelRequest(
+              avatar: "",
+              customerType: "business",
+              customerSource: detailPotential.customerSource,
+              fullName: _fullNameText.text,
+              taxCode: detailPotential.taxCode,
+              phone: detailPotential.phone,
+              email: detailPotential.email,
+              representative : detailPotential.representative,
+              pipelineCode: detailPotential.pipelineCode,
+              journeyCode: detailPotential.journeyCode,
+              saleId:detailPotential.saleId,
+              tagId:detailPotential.tagId,
+              gender:"",
+              birthday:detailPotential.birthday,
+              bussinessId:detailPotential.bussinessId,
+              employees:detailPotential.employees,
+              address:detailPotential.address,
+              provinceId: detailPotential.provinceId,
+              districtId: detailPotential.districtId,
+              wardId: detailPotential.wardId,
+              businessClue: detailPotential.businessClue,
+              zalo: detailPotential.zalo ?? "",
+              fanpage: detailPotential.fanpage ,
+              contactAddress: detailPotential.contactAddress,
+              contactEmail: detailPotential.contactEmail,
+              contactFullName: detailPotential.contactFullName,
+              contactPhone: detailPotential.contactPhone,
+              position: detailPotential.position
+              ));
+      Navigator.of(context).pop();
+      if (result != null) {
+        if (result.errorCode == 0) {
+          print(result.errorDescription);
+          await LeadConnection.showMyDialog(context, result.errorDescription);
+          if (result.data != null) {
+            modelResponse = ObjectPopDetailModel(
+                customer_lead_code: "",
+                customer_lead_id: result.data.customerLeadId,
+                status: true);
+          }
+          Navigator.of(context).pop(modelResponse.toJson());
+        } else {
+          LeadConnection.showMyDialog(context, result.errorDescription);
+        }
+      }
+    }
   }
 }

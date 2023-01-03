@@ -35,5 +35,26 @@ class Assets {
   static String iconMessenger = "packages/lead_plugin_epoint/assets/icons/ic_mess.png";
   static String iconZalo = "packages/lead_plugin_epoint/assets/icons/ic_zalo.png";
   static String iconFilter = "packages/lead_plugin_epoint/assets/icons/ic-epoint_filter.png";
+  static String iconInteraction = "packages/lead_plugin_epoint/assets/icons/ic_interaction.png";
+  static String iconCalendar = "packages/lead_plugin_epoint/assets/icons/ic_epoint_calendar.png";
+  static String iconCustomerCare = "packages/lead_plugin_epoint/assets/icons/ic_epoint_customer_care.png";
+  static String iconOutdate = "packages/lead_plugin_epoint/assets/icons/ic_epoint_outdate.png";
+  static String iconFABMenu = "packages/lead_plugin_epoint/assets/icons/ic_epoint_fab_menu.png";
+  static String iconTag = "packages/lead_plugin_epoint/assets/icons/ic_epoint_tag.png";
+  static String iconEstablish = "packages/lead_plugin_epoint/assets/icons/ic_epoint_establish.png";
+  static String iconRepresentative = "packages/lead_plugin_epoint/assets/icons/ic_epoint_representative.png";
+  static String iconTax = "packages/lead_plugin_epoint/assets/icons/ic_epoint_tax.png";
+  static String iconBirthday = "packages/lead_plugin_epoint/assets/icons/ic_epoint_birthday.png";
+  static String iconMenu = "packages/lead_plugin_epoint/assets/icons/ic_epoint_menu.png";
+  static String iconWorkTitle = "packages/lead_plugin_epoint/assets/icons/ic_epoint_work_title.png";
+  static String iconStatus = "packages/lead_plugin_epoint/assets/icons/ic_epoint_status_care.png";
+  static String iconProject = "packages/lead_plugin_epoint/assets/icons/ic_epoint_project.png";
+  static String iconNumberEmployees = "packages/lead_plugin_epoint/assets/icons/ic_epoint_number_employees.png";
+
+  static String iconComment = "packages/lead_plugin_epoint/assets/icons/ic_epoint_comment.png";
+  static String iconFiles = "packages/lead_plugin_epoint/assets/icons/ic_epoint_file.png";
+  static String iconTimeDetail = "packages/lead_plugin_epoint/assets/icons/ic_epoint_time_detail.png";
+
+ 
 
 }

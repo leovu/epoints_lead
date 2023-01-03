@@ -26,7 +26,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -38,7 +38,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
               fit: FlexFit.loose,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 15.0 * 1.5,
+                    horizontal: 12.0 * 1.5,
                     vertical:  15.0 * 1.5),
                 decoration: BoxDecoration(
                     color: Colors.white,
@@ -62,7 +62,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                                 height: 48.0,
                                 padding:
                                 EdgeInsets.only(left: 20.0),
-                                child: Icon(Icons.clear,color: Colors.black,size: 15.0,),
+                                child: Icon(Icons.clear,color: Colors.black,size: 20.0,),
                               ),
                             ),
                             opacity: 1.0,

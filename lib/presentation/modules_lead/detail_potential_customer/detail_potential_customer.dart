@@ -405,22 +405,22 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   )
                 ],
               ),
-              Positioned(
-                  bottom: 30,
-                  left: 10,
-                  child: Column(
-                    children: [
-                      buildButtonConvert(
-                          AppLocalizations.text(LangKey.convertCustomers), () {
-                        print("chuyen doi khach hang");
-                      }),
-                      buildButtonConvert(
-                          AppLocalizations.text(
-                              LangKey.convertCustomersWithDeal), () {
-                        print("chuyen doi khach hang co tao deal");
-                      }),
-                    ],
-                  ))
+              // Positioned(
+              //     bottom: 30,
+              //     left: 10,
+              //     child: Column(
+              //       children: [
+              //         buildButtonConvert(
+              //             AppLocalizations.text(LangKey.convertCustomers), () {
+              //           print("chuyen doi khach hang");
+              //         }),
+              //         buildButtonConvert(
+              //             AppLocalizations.text(
+              //                 LangKey.convertCustomersWithDeal), () {
+              //           print("chuyen doi khach hang co tao deal");
+              //         }),
+              //       ],
+              //     ))
             ],
           );
   }
@@ -1004,7 +1004,7 @@ class _SubDetailPotentialCustomerState
   Widget generalInfomationV2() {
     return Container(
       padding: const EdgeInsets.all(8.0),
-      margin: EdgeInsets.only(left: 11, right: 11, bottom: 120),
+      margin: EdgeInsets.only(left: 11, right: 11, bottom: 20),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(5),
@@ -1067,7 +1067,7 @@ class _SubDetailPotentialCustomerState
 
   Widget dealInfomationV2() {
     return Container(
-      margin: EdgeInsets.only(bottom: 120),
+      margin: EdgeInsets.only(bottom: 20),
       child:
           (widget.detail.infoDeal != null && widget.detail.infoDeal.length > 0)
               ? Column(
@@ -1187,7 +1187,7 @@ class _SubDetailPotentialCustomerState
         customerCareItem(),
         customerCareItem(),
         Container(
-          height: 120.0,
+          height: 20.0,
         )
       ],
     );
@@ -1567,7 +1567,7 @@ class _SubDetailPotentialCustomerState
   Widget contactList() {
     return Container(
         padding: EdgeInsets.all(10.0),
-        margin: EdgeInsets.only(bottom: 100),
+        margin: EdgeInsets.only(bottom: 20),
         child: (widget.contactListData != null &&
                 widget.contactListData.length > 0)
             ? Column(
@@ -1578,7 +1578,7 @@ class _SubDetailPotentialCustomerState
   }
 
   Widget contactListItem(ContactListData item) {
-    return Container(
+    return (widget.contactListData != null && widget.contactListData.length > 0) ? Container(
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
           color: Colors.white,
@@ -1704,7 +1704,7 @@ class _SubDetailPotentialCustomerState
               : Container()
         ],
       ),
-    );
+    ) : CustomDataNotFound();
   }
 
   Future<bool> callPhone(String phone) async {

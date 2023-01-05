@@ -30,7 +30,7 @@ packages:
     source: hosted
     version: "2.1.0"
   cached_network_image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: cached_network_image
       url: "https://pub.dartlang.org"
@@ -100,7 +100,7 @@ packages:
     source: hosted
     version: "0.17.2"
   dotted_border:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: dotted_border
       url: "https://pub.dartlang.org"
@@ -142,7 +142,7 @@ packages:
     source: hosted
     version: "6.1.4"
   file_picker:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: file_picker
       url: "https://pub.dartlang.org"
@@ -168,7 +168,7 @@ packages:
     source: hosted
     version: "3.3.0"
   flutter_html:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_html
       url: "https://pub.dartlang.org"
@@ -218,7 +218,7 @@ packages:
     source: hosted
     version: "4.0.1"
   image:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: image
       url: "https://pub.dartlang.org"
@@ -274,7 +274,7 @@ packages:
     source: hosted
     version: "0.6.4"
   keyboard_actions:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: keyboard_actions
       url: "https://pub.dartlang.org"
@@ -406,6 +406,15 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.1"
+  permission:
+    dependency: "direct overridden"
+    description:
+      path: "."
+      ref: "1.0.6"
+      resolved-ref: "224c578ef920843b7c91b1f94bbb3b6e48acef19"
+      url: "https://github.com/leovu/permission"
+    source: git
+    version: "0.0.1"
   petitparser:
     dependency: transitive
     description:
@@ -449,7 +458,7 @@ packages:
     source: hosted
     version: "0.27.7"
   shimmer:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shimmer
       url: "https://pub.dartlang.org"
@@ -622,7 +631,7 @@ packages:
     source: hosted
     version: "1.9.5"
   webview_flutter_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: webview_flutter_plus
       url: "https://pub.dartlang.org"

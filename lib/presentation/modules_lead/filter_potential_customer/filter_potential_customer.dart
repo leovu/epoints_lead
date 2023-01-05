@@ -969,67 +969,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           ),
         ],
       ),
-
-      // Container(height: 10.0),
-
-      // Column(
-      //   crossAxisAlignment: CrossAxisAlignment.start,
-      //   children: [
-      //     Text(
-      //       AppLocalizations.text(LangKey.byWorkSchedule),
-      //       style: TextStyle(
-      //           fontSize: 16.0,
-      //           color: const Color(0xFF0067AC),
-      //           fontWeight: FontWeight.bold),
-      //     ),
-      //     FilterWorkScheduleDate(
-      //       filterScreenModel: filterScreenModel,
-      //       workScheduleDateOptions: workScheduleDateOptions,
-      //       id_work_schedule_date: filterScreenModel.id_work_schedule_date,
-      //     ),
-      //   ],
-      // ),
-
-      // Text(
-      //   AppLocalizations.text(LangKey.byWorkStatus),
-      //   style: TextStyle(
-      //       fontSize: 16.0,
-      //       color: const Color(0xFF0067AC),
-      //       fontWeight: FontWeight.bold),
-      // ),
-      // Container(height: 10.0),
-
-      // _buildTextField(
-      //     AppLocalizations.text(LangKey.chooseWorkStatus),
-      //     statusWorkString,
-      //     Assets.iconName,
-      //     false,
-      //     true,
-      //     false, ontap: () async {
-
-      //       var statuswork = await Navigator.of(context).push(
-      //               MaterialPageRoute(
-      //                   builder: (context) => FilterByWorkStatus(statusWorkData: statusWorkData)));
-
-      //           if (statuswork != null) {
-      //             // widget.detailDeal.tag = [];
-      //             statusWorkString = "";
-      //             statusWorkData = statuswork;
-
-      //             for (int i = 0; i < statusWorkData.length; i++) {
-      //               if (statuswork[i].selected) {
-      //                 // widget.detailDeal.tag.add(tagsSelected[i].tagId);
-      //                 if (statusWorkString == "") {
-      //                   statusWorkString = statusWorkData[i].manageStatusName;
-      //                 } else {
-      //                   statusWorkString += ", ${statusWorkData[i].manageStatusName}";
-      //                 }
-      //               }
-      //             }
-      //             setState(() {});
-      //           }
-
-      // }),
     ];
   }
 

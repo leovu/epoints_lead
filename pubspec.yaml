@@ -20,21 +20,6 @@ dependencies:
   intl: ^0.17.0
   image_picker: ^0.8.6
   draggable_expandable_fab: ^1.0.0
-  rxdart: ^0.27.4
-  shimmer: ^2.0.0
-  cached_network_image: ^3.2.1
-  dotted_border: ^2.0.0+2
-  file_picker: ^5.2.4
-  keyboard_actions: ^4.0.1
-  image: ^3.0.0
-  flutter_html: ^3.0.0-alpha.6
-  webview_flutter_plus: ^0.3.0+2
-dependency_overrides:
-  file_picker: ^5.2.0
-  permission:
-    git:
-      url: https://github.com/leovu/permission
-      ref: 1.0.6
 
 dev_dependencies:
   flutter_test:

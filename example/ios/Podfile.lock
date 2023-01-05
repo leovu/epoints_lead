@@ -43,6 +43,8 @@ PODS:
     - Flutter
   - path_provider_ios (0.0.1):
     - Flutter
+  - permission (0.0.1):
+    - Flutter
   - SDWebImage (5.13.3):
     - SDWebImage/Core (= 5.13.3)
   - SDWebImage/Core (5.13.3)
@@ -61,6 +63,7 @@ DEPENDENCIES:
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - lead_plugin_epoint (from `.symlinks/plugins/lead_plugin_epoint/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
+  - permission (from `.symlinks/plugins/permission/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
   - webview_flutter_wkwebview (from `.symlinks/plugins/webview_flutter_wkwebview/ios`)
@@ -84,6 +87,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/lead_plugin_epoint/ios"
   path_provider_ios:
     :path: ".symlinks/plugins/path_provider_ios/ios"
+  permission:
+    :path: ".symlinks/plugins/permission/ios"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   url_launcher_ios:
@@ -100,6 +105,7 @@ SPEC CHECKSUMS:
   image_picker_ios: b786a5dcf033a8336a657191401bfdf12017dabb
   lead_plugin_epoint: c46baac0de111c10b0528f91e9b1057755a64145
   path_provider_ios: 14f3d2fd28c4fdb42f44e0f751d12861c43cee02
+  permission: 3ceb56b9eb3e07df7384dd79c08b258741703b23
   SDWebImage: af5bbffef2cde09f148d826f9733dcde1a9414cd
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   SwiftyGif: 6c3eafd0ce693cad58bb63d2b2fb9bacb8552780

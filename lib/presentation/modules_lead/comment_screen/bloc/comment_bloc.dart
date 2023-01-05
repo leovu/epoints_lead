@@ -53,6 +53,7 @@ class CommentBloc extends BaseBloc {
   }
 
   workUploadFile(MultipartFileModel model) async {
+    print("upload");
     LeadConnection.showLoading(context);
     ResponseData response = await connection.upload(
         '/manage-work/upload-file',model);

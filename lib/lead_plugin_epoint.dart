@@ -1,8 +1,10 @@
 
 import 'package:flutter/material.dart';
+import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/comment_screen/ui/comment_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
@@ -44,6 +46,7 @@ class LeadPluginEpoint {
     
     LeadConnection.locale = locale;
     LeadConnection.buildContext = context;
+    AppSizes.init(context);
     await AppLocalizations(LeadConnection.locale).load();
     bool result = await LeadConnection.init(token,domain: domain);
     if(result) {

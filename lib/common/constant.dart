@@ -1,0 +1,1 @@
+typedef CustomRefreshCallback = Future<void> Function();

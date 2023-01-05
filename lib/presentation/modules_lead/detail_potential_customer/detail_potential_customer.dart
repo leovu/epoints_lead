@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:draggable_expandable_fab/draggable_expandable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -11,12 +10,13 @@ import 'package:lead_plugin_epoint/model/response/contact_list_model_response.da
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/comment_screen/ui/comment_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
 
-import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
+import 'package:lead_plugin_epoint/widget/custom_scaffold.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPotentialCustomer extends StatefulWidget {
@@ -281,6 +281,27 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         await Global.createJob();
                       }
 
+                      // await Navigator.of(context).push(MaterialPageRoute(
+                      //     builder: (context) => Scaffold(
+                      //           appBar: AppBar(
+                      //             iconTheme: IconThemeData(
+                      //               color: Colors.white,
+                      //             ),
+                      //             // actionsIconTheme: Navigator.of(context).pop(true),
+                      //             backgroundColor: AppColors.primaryColor,
+                      //             title: Text(
+                      //               AppLocalizations.text(
+                      //                   LangKey.enter_comment),
+                      //               style: TextStyle(
+                      //                   color: Colors.white, fontSize: 18.0),
+                      //             ),
+                      //           ),
+                      //           body: CommentScreen(
+                      //             id: 667,
+                      //             onCallback: (event) {},
+                      //           ),
+                      //         )));
+
                       print("iconTask");
                     },
                     child: Image.asset(
@@ -538,7 +559,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
 
                               infoItem(Assets.iconName, detail.saleName ?? ""),
-                              infoItem(Assets.iconInteraction, detail.dateLastCare ?? ""),
+                              infoItem(Assets.iconInteraction,
+                                  detail.dateLastCare ?? ""),
 
                               // Container(
                               //   height: 24,
@@ -803,7 +825,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10000.0),
-        child: CustomAvatar(
+        child: CustomAvatarDetail(
           color: Color(0xFFEEB132),
           name: name,
           textSize: 36.0,
@@ -932,7 +954,14 @@ class _SubDetailPotentialCustomerState
                 : (index == 2)
                     ? customerCare()
                     : (index == 3)
-                        ? Container()
+                        ? Container(
+                          height: AppSizes.maxHeight/2.5,
+                          width: AppSizes.maxWidth,
+                          child: CommentScreen(
+                                      id: 667,
+                                      onCallback: (event) {},
+                                    ),
+                        )
                         : contactList()
       ],
     );
@@ -1578,133 +1607,135 @@ class _SubDetailPotentialCustomerState
   }
 
   Widget contactListItem(ContactListData item) {
-    return (widget.contactListData != null && widget.contactListData.length > 0) ? Container(
-      padding: EdgeInsets.all(10.0),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              CustomAvatarWithURL(
-                name: item.fullName ?? "",
-                size: 50.0,
-              ),
-              Container(
-                width: 10.0,
-              ),
-              Expanded(
-                  child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.fullName ?? "",
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  (item.positon != null && item.positon != "")
-                      ? Container(
-                          margin: EdgeInsets.only(top: 5.0),
-                          child: Text(
-                            item.positon ?? "",
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                color: Color(0XFF8E8E8E),
-                                fontWeight: FontWeight.normal),
-                          ),
-                        )
-                      : Container()
-                ],
-              )),
-              (item.phone != null && item.phone != "")
-                  ? InkWell(
-                      onTap: () async {
-                        print(item.phone ?? "");
-                        await callPhone(item?.phone ?? "");
-                      },
-                      child: Container(
-                        padding: EdgeInsets.all(20.0 / 2),
-                        height: 45,
-                        width: 45,
-                        decoration: BoxDecoration(
-                          color: Color(0xFF06A605),
-                          borderRadius: BorderRadius.circular(50),
-                          // border:  Border.all(color: AppColors.white,)
+    return (widget.contactListData != null && widget.contactListData.length > 0)
+        ? Container(
+            padding: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    CustomAvatarWithURL(
+                      name: item.fullName ?? "",
+                      size: 50.0,
+                    ),
+                    Container(
+                      width: 10.0,
+                    ),
+                    Expanded(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.fullName ?? "",
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.w500),
                         ),
-                        child: Center(
-                            child: Image.asset(
-                          Assets.iconCall,
-                          color: AppColors.white,
-                        )),
-                      ),
-                    )
-                  : Container(),
-            ],
-          ),
-          (item.phone != null && item.phone != "")
-              ? Container(
-                  margin: EdgeInsets.only(top: 5.0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 60,
-                      ),
-                      Text(
-                        item.phone ?? "",
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(),
-          (item.email != null && item.email != "")
-              ? Container(
-                  margin: EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 60,
-                      ),
-                      Text(
-                        item.email ?? "",
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  ),
-                )
-              : Container(),
-          (item.address != null && item.address != "")
-              ? Container(
-                  margin: EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 60,
-                      ),
-                      Text(
-                        item.address ?? "",
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal),
-                      ),
-                    ],
-                  ),
-                )
-              : Container()
-        ],
-      ),
-    ) : CustomDataNotFound();
+                        (item.positon != null && item.positon != "")
+                            ? Container(
+                                margin: EdgeInsets.only(top: 5.0),
+                                child: Text(
+                                  item.positon ?? "",
+                                  style: TextStyle(
+                                      fontSize: 14.0,
+                                      color: Color(0XFF8E8E8E),
+                                      fontWeight: FontWeight.normal),
+                                ),
+                              )
+                            : Container()
+                      ],
+                    )),
+                    (item.phone != null && item.phone != "")
+                        ? InkWell(
+                            onTap: () async {
+                              print(item.phone ?? "");
+                              await callPhone(item?.phone ?? "");
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(20.0 / 2),
+                              height: 45,
+                              width: 45,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF06A605),
+                                borderRadius: BorderRadius.circular(50),
+                                // border:  Border.all(color: AppColors.white,)
+                              ),
+                              child: Center(
+                                  child: Image.asset(
+                                Assets.iconCall,
+                                color: AppColors.white,
+                              )),
+                            ),
+                          )
+                        : Container(),
+                  ],
+                ),
+                (item.phone != null && item.phone != "")
+                    ? Container(
+                        margin: EdgeInsets.only(top: 5.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 60,
+                            ),
+                            Text(
+                              item.phone ?? "",
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(),
+                (item.email != null && item.email != "")
+                    ? Container(
+                        margin: EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 60,
+                            ),
+                            Text(
+                              item.email ?? "",
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container(),
+                (item.address != null && item.address != "")
+                    ? Container(
+                        margin: EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 60,
+                            ),
+                            Text(
+                              item.address ?? "",
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.normal),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Container()
+              ],
+            ),
+          )
+        : CustomDataNotFound();
   }
 
   Future<bool> callPhone(String phone) async {

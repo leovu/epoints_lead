@@ -107,23 +107,100 @@ class CustomNetworkImage extends StatelessWidget {
   }
 }
 
-// class CustomPlaceholder extends StatelessWidget {
 
-//   final double width;
-//   final double height;
+class CustomAvatar extends StatelessWidget {
 
-//   CustomPlaceholder({
-//     this.width,
-//     this.height
-//   });
+  final String url;
+  final String name;
+  final double size;
+  final Color borderColor;
+  final Function onTap;
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Image.asset(
-//       Assets.appIcon,
-//       fit: BoxFit.contain,
-//       width: width,
-//       height: height,
-//     );
-//   }
-// }
+  CustomAvatar({this.url, this.name, this.size, this.borderColor, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    List<String> names = (name ?? "").split(" ");
+    names.remove("");
+    String placeholder;
+    if(names.length == 1 && names[0].isNotEmpty){
+      placeholder = names[0][0];
+    }
+    else if(names.length > 1){
+      placeholder = "${names[names.length - 2][0]}${names[names.length - 1][0]}";
+    }
+    return InkWell(
+      child: CustomNetworkImage(
+        width: size,
+        height: size,
+        radius: size,
+        borderColor: borderColor,
+        url: url,
+        fit: BoxFit.cover,
+        placeholder: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: AppColors.primaryColor.withOpacity(0.5)
+          ),
+          padding: EdgeInsets.all(size / 5),
+          alignment: Alignment.center,
+          child: AutoSizeText(
+              (placeholder ?? "").trim().toUpperCase(),
+            style: AppTextStyles.style15WhiteBold.copyWith(
+              fontSize: size / 5 * 4
+            ),
+            minFontSize: 1.0,
+          ),
+        ),
+      ),
+      onTap: onTap,
+    );
+  }
+}
+
+class CustomAvatarDetail extends StatelessWidget {
+
+  final String name;
+  final double textSize;
+  final Color color;
+
+  CustomAvatarDetail({
+    @required this.name, this.textSize, this.color
+  }):assert(name != null);
+
+  String getFirstChar(String event){
+    if(event.length == 0)
+      return "";
+    return event.substring(0, 1);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+
+    String newName;
+    List<String> models = name.split(" ");
+
+    if(models != null && models.length > 1)
+      newName = getFirstChar(models[0]) + getFirstChar(models[models.length - 1]);
+    else
+      newName = getFirstChar(name);
+
+    return Container(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color == null ?  AppColors.primaryColor : color),
+      child: Center(
+        child: Text(
+          newName,
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: textSize??20.0
+          ),
+        ),
+      ),
+    );
+  }
+}

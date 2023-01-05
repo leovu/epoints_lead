@@ -4,8 +4,7 @@ version: 0.0.1
 homepage:
 
 environment:
-  sdk: '>=2.10.0 <3.0.0'
-  flutter: ">=2.5.0"
+  sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -24,8 +23,18 @@ dependencies:
   rxdart: ^0.27.4
   shimmer: ^2.0.0
   cached_network_image: ^3.2.1
-  dotted_border: ^2.0.0+3
+  dotted_border: ^2.0.0+2
   file_picker: ^5.2.4
+  keyboard_actions: ^4.0.1
+  image: ^3.0.0
+  flutter_html: ^3.0.0-alpha.6
+  webview_flutter_plus: ^0.3.0+2
+dependency_overrides:
+  file_picker: ^5.2.0
+  permission:
+    git:
+      url: https://github.com/leovu/permission
+      ref: 1.0.6
 
 dev_dependencies:
   flutter_test:

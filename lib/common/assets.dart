@@ -41,6 +41,7 @@ class Assets {
   static String iconOutdate = "packages/lead_plugin_epoint/assets/icons/ic_epoint_outdate.png";
   static String iconFABMenu = "packages/lead_plugin_epoint/assets/icons/ic_epoint_fab_menu.png";
   static String iconTag = "packages/lead_plugin_epoint/assets/icons/ic_epoint_tag.png";
+  
   static String iconEstablish = "packages/lead_plugin_epoint/assets/icons/ic_epoint_establish.png";
   static String iconRepresentative = "packages/lead_plugin_epoint/assets/icons/ic_epoint_representative.png";
   static String iconTax = "packages/lead_plugin_epoint/assets/icons/ic_epoint_tax.png";
@@ -54,6 +55,7 @@ class Assets {
   static String iconComment = "packages/lead_plugin_epoint/assets/icons/ic_epoint_comment.png";
   static String iconFiles = "packages/lead_plugin_epoint/assets/icons/ic_epoint_file.png";
   static String iconTimeDetail = "packages/lead_plugin_epoint/assets/icons/ic_epoint_time_detail.png";
+  static String iconCamera = "packages/lead_plugin_epoint/assets/icons/ic_epoint_camera.png";
 
  
 

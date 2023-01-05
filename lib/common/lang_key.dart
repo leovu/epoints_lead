@@ -200,6 +200,21 @@ class LangKey {
   static const String contactPerson = "contact_person";
   static const String deal = "deal";
   static const String call = "call";
+  static const String data_empty = "data_empty";
+  static const String capture = "capture";
+  static const String select_from_gallery = "select_from_gallery";
+  static const String comment_empty = "comment_empty";
+  static const String callback = "callback";
+  static const String image = "image";
+  static const String answering = "answering";
+  static const String enter_comment = "enter_comment";
+
+  static const String camera = "camera";
+  static const String location = "location";
+  static const String storage = "storage";
+  static const String notification = "notification";
+  static const String allow = "allow";
+  static const String message_permission = "message_permission";
   
 
 

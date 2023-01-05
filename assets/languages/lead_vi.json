@@ -193,7 +193,23 @@
     "discuss":"Trao đổi",
     "contact_person":"Người liên hệ",
     "deal":"Cơ hội bán hàng",
-    "call":"Gọi điện"
+    "call":"Gọi điện",
+    "data_empty": "Chưa có dữ liệu",
+    "capture": "Chụp ảnh",
+    "select_from_gallery": "Chọn từ máy",
+
+    "comment_empty": "Chưa có bình luận",
+    "callback": "Phản hồi",
+    "image": "Hình ảnh",
+    "answering": "Đang trả lời",
+    "enter_comment": "Nhập bình luận",
+    "camera": "Camera",
+    "location": "Vị trí",
+    "storage": "Bộ nhớ",
+    "notification": "Thông báo",
+    "allow": "Cho phép",
+    "message_permission": "Chọn Cài đặt vào Thông tin ứng dụng, chọn vào Quyền (Permissions), bật truy cập và vào lại màn hình này để sử dụng quyền"
+    
 
 
   }

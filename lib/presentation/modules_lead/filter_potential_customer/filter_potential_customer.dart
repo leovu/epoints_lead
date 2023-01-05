@@ -903,42 +903,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
           setState(() {});
         }
-
-        // PipelineData pipeline = await showModalBottomSheet(
-        //     context: context,
-        //     useRootNavigator: true,
-        //     isScrollControlled: true,
-        //     backgroundColor: Colors.transparent,
-        //     builder: (context) {
-        //       return GestureDetector(
-        //         child: PipelineModal(
-        //           pipeLineData: pipeLineData,
-        //         ),
-        //         onTap: () {
-        //           Navigator.of(context).pop();
-        //         },
-        //         behavior: HitTestBehavior.opaque,
-        //       );
-        //     });
-        // if (pipeline != null) {
-        //   if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
-        //     journeySelected = null;
-        //   }
-        //   pipelineSelected = pipeline;
-        //   filterScreenModel.filterModel.pipelineName =
-        //       pipelineSelected.pipelineName;
-
-        //   var journeys = await LeadConnection.getJourney(
-        //       context, GetJourneyModelRequest(
-        //               pipelineCode: [
-        //                 pipelineSelected.pipelineCode
-        //               ]
-        //             ));
-        //   if (journeys != null) {
-        //     journeysData = journeys.data;
-        //   }
-        //   setState(() {});
-        // }
       }),
 
       Container(height: 10.0),
@@ -985,32 +949,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           filterScreenModel.filterModel.journeyId = journeySelected;
           setState(() {});
         }
-
-        // JourneyData journey = await showModalBottomSheet(
-        //     context: context,
-        //     useRootNavigator: true,
-        //     isScrollControlled: true,
-        //     backgroundColor: Colors.transparent,
-        //     builder: (context) {
-        //       return GestureDetector(
-        //         child: JourneyModal(
-        //           journeys: journeysData,
-        //         ),
-        //         onTap: () {
-        //           Navigator.of(context).pop();
-        //         },
-        //         behavior: HitTestBehavior.opaque,
-        //       );
-        //     });
-        // if (journey != null) {
-        //   journeySelected = journey;
-        //   filterScreenModel.filterModel.journeyName =
-        //       journeySelected.journeyName;
-
-        //   setState(() {
-        //     // await LeadConnection.getDistrict(context, province.provinceid);
-        //   });
-        // }
       }),
       Container(height: 10.0),
 

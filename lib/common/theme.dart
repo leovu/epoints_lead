@@ -196,6 +196,30 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
+  static TextStyle style12BlackBold = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.black,
+      fontWeight: FontWeight.bold);
+  static TextStyle style12grey200Normal = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.grey200Color,
+      fontWeight: FontWeight.normal);
+   static TextStyle style14PrimaryBold = TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.primaryColor,
+      fontWeight: FontWeight.bold);
+  static TextStyle style12grey500Bold = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.grey500Color,
+      fontWeight: FontWeight.bold);
+  static TextStyle style12grey500Normal = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.grey500Color,
+      fontWeight: FontWeight.normal);
+  static TextStyle style16PrimaryBold = TextStyle(
+      fontSize: AppTextSizes.size16,
+      color: AppColors.primaryColor,
+      fontWeight: FontWeight.bold);
   static TextStyle style15WhiteBold = TextStyle(
       fontSize: AppTextSizes.size15,
       color: AppColors.white,
@@ -511,6 +535,45 @@ class AppAnimation {
   static Duration duration = Duration(milliseconds: 500);
   static Curve curve = Curves.fastOutSlowIn;
 }
+
+class AppSizes {
+  static double maxWidth;
+  static double maxHeight;
+  static double ultraPadding;
+  static double maxPadding;
+  static double minPadding;
+  static double sizeOnTap;
+  static double sizeOnTapCheckIn;
+  static double statusBarHeight;
+  static double bottomHeight;
+  static double sizeAppBar;
+  static double screenHeight;
+  static double iconSize;
+  static double lineSize;
+  static double paddingSearch;
+  static const timelineHeight = 80.0;
+  static const timeWidth = 30.0;
+  static const totalTimeline = 48;
+  static const totalMinuteOfTimeline = 30;
+
+  static init(BuildContext context) {
+    maxWidth = MediaQuery.of(context).size.width;
+    maxHeight = MediaQuery.of(context).size.height;
+    statusBarHeight = MediaQuery.of(context).padding.top;
+    bottomHeight = MediaQuery.of(context).padding.bottom;
+    ultraPadding = maxWidth * 0.1;
+    sizeOnTapCheckIn = 64;
+    sizeOnTap = 40.0;
+    maxPadding = sizeOnTap / 2;
+    minPadding = maxPadding / 2;
+    sizeAppBar = statusBarHeight + kToolbarHeight;
+    screenHeight = maxHeight - statusBarHeight;
+    iconSize = 24;
+    lineSize = 0.5;
+    paddingSearch = 57;
+  }
+}
+
 
 
 class AppFormat {

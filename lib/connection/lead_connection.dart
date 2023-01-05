@@ -294,19 +294,19 @@ class LeadConnection {
     return null;
   }
 
-  static Future<UploadImageModelResponse> upload(
-      BuildContext context, File file) async {
-    showLoading(context);
-    ResponseData responseData =
-        await LeadConnection.connection.upload('/user/upload-file', file);
-    Navigator.of(context).pop();
-    if (responseData.isSuccess) {
-      UploadImageModelResponse data =
-          UploadImageModelResponse.fromJson(responseData.data);
-      return data;
-    }
-    return null;
-  }
+  // static Future<UploadImageModelResponse> upload(
+  //     BuildContext context, File file) async {
+  //   showLoading(context);
+  //   ResponseData responseData =
+  //       await LeadConnection.connection.upload('/user/upload-file', file);
+  //   Navigator.of(context).pop();
+  //   if (responseData.isSuccess) {
+  //     UploadImageModelResponse data =
+  //         UploadImageModelResponse.fromJson(responseData.data);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
   static Future<WorkListBranchResponseModel> workListBranch(
       BuildContext context) async {
@@ -452,7 +452,7 @@ class LeadConnection {
   static Future<List<WorkListFileModel>> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
     ResponseData response =
-        await connection.upload('/manage-work/upload-file', model.file);
+        await connection.upload('/manage-work/upload-file', model);
     if (response.isSuccess) {
       var responseModel = WorkUploadFileResponseModel.fromJson(response.data);
 

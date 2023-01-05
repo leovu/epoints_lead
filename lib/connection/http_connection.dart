@@ -13,16 +13,16 @@ class HTTPConnection {
   static String brandCode = '';
   static String asscessToken = '';
 
-  Future<ResponseData> upload(String path, File file) async {
+  Future<ResponseData> upload(String path, MultipartFileModel model) async {
     final uri = Uri.parse('$domain$path');
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'qc': LeadConnection.locale.languageCode});
     request.files.add(
       http.MultipartFile(
         'file_name',
-        file.readAsBytes().asStream(),
-        file.lengthSync(),
-        filename: file.path.split("/").last,
+        model.file.readAsBytes().asStream(),
+        model.file.lengthSync(),
+        filename: model.file.path.split("/").last,
       ),
     );
     // if(body != null) {

@@ -54,8 +54,8 @@ class CommentBloc extends BaseBloc {
 
   workUploadFile(MultipartFileModel model) async {
     LeadConnection.showLoading(context);
-    ResponseData response = await connection.post(
-        '/manage-work/upload-file',model.toJson());
+    ResponseData response = await connection.upload(
+        '/manage-work/upload-file',model.file);
     Navigator.of(context).pop();
     if(response.isSuccess){
       var responseModel = WorkUploadFileResponseModel.fromJson(response.data);

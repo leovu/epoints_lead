@@ -31,6 +31,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 import 'package:lead_plugin_epoint/utils/custom_document_picker.dart';
+import 'package:lead_plugin_epoint/utils/custom_permission_request.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_chip.dart';
 import 'package:lead_plugin_epoint/widget/custom_column_infomation.dart';
@@ -43,9 +44,9 @@ import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
 
 class CustomerCarePotential extends StatefulWidget {
 
-  DetailPotentialData item;
+  DetailPotentialData detail;
 
-  CustomerCarePotential({Key key,this.item}) : super(key: key);
+  CustomerCarePotential({Key key,this.detail}) : super(key: key);
 
   @override
   _CustomerCarePotentialState createState() => _CustomerCarePotentialState();
@@ -138,12 +139,12 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
   bool showMore = false;
   bool has_approved = false;
 
-  AddJobBloc _bloc;
+  CustomerCareBloc _bloc;
 
   @override
   void initState() {
     super.initState();
-    _bloc = AddJobBloc(context);
+    _bloc = CustomerCareBloc(context);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       // await callApi();
@@ -212,8 +213,8 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
       }) async {
     try {
       bool permission = true;
-      // permission = await CustomPermissionRequest.request(
-      //     context, PermissionRequestType.STORAGE);
+      permission = await CustomPermissionRequest.request(
+          context, PermissionRequestType.STORAGE);
 
       if (!permission) return null;
     } catch (_) {
@@ -630,7 +631,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                       )
                     ],
                   ),
-                  (widget.item.customerType == "business") ? Container(
+                  (widget.detail.customerType == "business") ? Container(
                     margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -657,7 +658,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                         //   width: 11.0,
                         // ),
                         Text(
-                          widget.item.fullName,
+                          widget.detail.fullName,
                           style: TextStyle(
                               fontSize: 15.0,
                               color: const Color(0xFF121212),
@@ -1121,7 +1122,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                   parentId: null,
                   description: _enterWorkDescText.text ?? "",
                   manageProjectId: addWorkModel.manageProjectId,
-                  customerId: widget.item.customerLeadId,
+                  customerId: widget.detail.customerLeadId,
                   listTag: addWorkModel.listTag,
                   typeCardWork: null,
                   priority: 0,
@@ -1138,14 +1139,14 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                 await LeadConnection.showMyDialog(
                     context, result.errorDescription);
 
-                // Navigator.of(context).pop(true);
+                Navigator.of(context).pop(true);
 
-                Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => DetailPotentialCustomer(
-                              customer_lead_code: widget.item.customerLeadCode,
-                                  customerCare: true,
-                                  indexTab: 2,
-                                )));
+                // Navigator.of(context).push(MaterialPageRoute(
+                //             builder: (context) => DetailPotentialCustomer(
+                //               customer_lead_code: widget.item.customerLeadCode,
+                //                   customerCare: true,
+                //                   indexTab: 2,
+                //                 )));
 
               } else {
                 LeadConnection.showMyDialog(context, result.errorDescription);

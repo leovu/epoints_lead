@@ -182,6 +182,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       customerLeadID: detail.customerLeadId
     ));
   }
+
+  Future<bool> _openLink(String link) async {
+    return await launch(link);
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -262,17 +266,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 color: Colors.white,
               )),
           children: [
-            // _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
-                        //     ontap: () async {
-                        //   bool result = await Navigator.of(context).push(
-                        //       MaterialPageRoute(
-                        //           builder: (context) =>
-                        //               CustomerCarePotential(item: item)));
-
-                        //   if (result != null && result) {
-                        //     getData(false);
-                        //   }
-                        //   print("CustomerCare");
                         // }),
             Column(
               children: [
@@ -283,10 +276,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                             bool result = await Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      CustomerCarePotential(item: detail)));
+                                      CustomerCarePotential(detail: detail)));
 
                           if (result != null && result) {
                             getData();
+                            selectedTab(2);
                           }
                     },
                     child: Image.asset(
@@ -427,7 +421,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   Expanded(
                       child: ListView(
                     padding: EdgeInsets.zero,
-                    physics: const AlwaysScrollableScrollPhysics(),
+                    physics: (index == 3) ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
                     controller: _controller,
                     children: buildInfomation(),
                   )),
@@ -497,7 +491,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                           children: [
                             Container(
                               width: AppSizes.maxWidth,
-                              height: AppSizes.maxHeight*3/4,
+                              height: AppSizes.maxHeight - 310,
                               child: _buildComments()),
 
                               // Container(height: 80,)
@@ -896,9 +890,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           ),
           Column(
             children: [
-              (detail.zalo != null && detail.zalo != "")
+              (detail.fanpage != null && detail.fanpage != "")
                   ? InkWell(
-                      onTap: () {},
+                      onTap: () async {
+                        _openLink(detail.zalo);
+                      },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
                         height: 45.0,
@@ -907,9 +903,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       ),
                     )
                   : Container(),
-              (detail.fanpage != null && detail.fanpage != "")
+               (detail.zalo != null && detail.zalo != "")
                   ? InkWell(
-                      onTap: () {},
+                      onTap: () {
+                         _openLink(detail.fanpage);
+                      },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
                         height: 57.0,

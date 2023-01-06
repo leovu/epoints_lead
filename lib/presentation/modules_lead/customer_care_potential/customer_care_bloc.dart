@@ -3,12 +3,11 @@ import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
-import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:rxdart/rxdart.dart';
 
-class AddJobBloc extends BaseBloc {
+class CustomerCareBloc extends BaseBloc {
 
-  AddJobBloc(BuildContext context){
+  CustomerCareBloc(BuildContext context){
     setContext(context);
   }
 

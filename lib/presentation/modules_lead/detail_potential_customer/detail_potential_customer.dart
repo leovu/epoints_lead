@@ -701,7 +701,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   Widget _buildContainer(List<WorkListCommentModel> models){
     // print(MediaQuery.of(context).padding.bottom);
     return Container(
-      // padding: EdgeInsets.only(bottom: 100),
+      padding: EdgeInsets.only(bottom: 60),
       // margin: EdgeInsets.only(bottom: 100),
       child: CustomListView(
         // physics: NeverScrollableScrollPhysics(),

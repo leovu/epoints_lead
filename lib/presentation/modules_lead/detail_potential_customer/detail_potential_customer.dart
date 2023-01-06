@@ -5,26 +5,44 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
+import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
+import 'package:lead_plugin_epoint/model/request/work_create_comment_request_model.dart';
+import 'package:lead_plugin_epoint/model/request/work_list_comment_request_model.dart';
 import 'package:lead_plugin_epoint/model/response/contact_list_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
+import 'package:lead_plugin_epoint/model/response/work_list_comment_model_response.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/comment_screen/bloc/comment_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/comment_screen/ui/comment_screen.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/customer_care_potential/customer_care_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
+import 'package:lead_plugin_epoint/utils/custom_image_picker.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
+import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
+import 'package:lead_plugin_epoint/widget/custom_button.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
-import 'package:lead_plugin_epoint/widget/custom_scaffold.dart';
+import 'package:lead_plugin_epoint/widget/custom_empty.dart';
+import 'package:lead_plugin_epoint/widget/custom_file_view.dart';
+import 'package:lead_plugin_epoint/widget/custom_html.dart';
+import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
+import 'package:lead_plugin_epoint/widget/custom_listview.dart';
+import 'package:lead_plugin_epoint/widget/custom_shimer.dart';
+import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
+import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPotentialCustomer extends StatefulWidget {
   final String customer_lead_code;
   final int indexTab;
   bool customerCare;
+  int id;
+  Function(int) onCallback;
   DetailPotentialCustomer(
-      {Key key, this.customer_lead_code, this.indexTab, this.customerCare})
+      {Key key, this.customer_lead_code, this.indexTab, this.customerCare, this.id, this.onCallback})
       : super(key: key);
 
   @override
@@ -36,27 +54,107 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   final ScrollController _controller = ScrollController();
   List<WorkListStaffModel> models = [];
   List<ContactListData> contactListData;
-
   DetailPotentialData detail;
+  WorkListCommentModel _callbackModel;
+
+   List<DetailPotentialTabModel> tabPotentials = [
+    DetailPotentialTabModel(
+        typeName: AppLocalizations.text(LangKey.generalInfomation),
+        typeID: 0,
+        selected: true),
+    DetailPotentialTabModel(
+        typeName: AppLocalizations.text(LangKey.deal),
+        typeID: 1,
+        selected: false),
+    DetailPotentialTabModel(
+        typeName: AppLocalizations.text(LangKey.customerCare),
+        typeID: 2,
+        selected: false),
+    DetailPotentialTabModel(
+        typeName: AppLocalizations.text(LangKey.discuss),
+        typeID: 3,
+        selected: false),
+    DetailPotentialTabModel(
+        typeName: AppLocalizations.text(LangKey.contactPerson),
+        typeID: 4,
+        selected: false)
+  ];
+
+
+  FocusNode _focusComment = FocusNode();
+  TextEditingController _controllerComment = TextEditingController();
+
+  final double _fileSize = AppSizes.maxWidth * 0.2;
+  final double _imageRadius = 20.0;
+
+  String _file;
+  int index = 0;
   bool allowPop = false;
+  final formatter = NumberFormat.currency(
+    locale: 'vi_VN',
+    decimalDigits: 0,
+    symbol: '',
+  );
+
+  CommentBloc _bloc;
 
   @override
   void initState() {
     super.initState();
+
+    _bloc = CommentBloc(context);
+
+    index = widget.indexTab;
+    for (int i = 0; i < tabPotentials.length; i++) {
+      if (index == tabPotentials[i].typeID) {
+        tabPotentials[i].selected = true;
+      } else {
+        tabPotentials[i].selected = false;
+      }
+    }
+
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       getData();
     });
   }
+    @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+
+
+  _send(){
+    if(_controllerComment.text.isEmpty && _file == null){
+      return;
+    }
+    _bloc.workCreatedComment(WorkCreateCommentRequestModel(
+      customerLeadId: detail.customerLeadId,
+      customerLeadParentCommentId: (_callbackModel?.customerLeadParentCommentId) ?? (_callbackModel?.customerLeadCommentId),
+      message: _controllerComment.text,
+      path: _file
+    ), _controllerComment, widget.onCallback);
+  }
+
+    _showOption(){
+    CustomImagePicker.showPicker(context, (file) {
+      _bloc.workUploadFile(MultipartFileModel(
+          name: "link",
+          file: file
+      ));
+    });
+  }
+
+    openFile(BuildContext context, String name, String path){
+    Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => CustomFileView(path, name)));
+  // CustomNavigator.push(context, CustomFileView(path, name));
+}
+
+  
 
   void getData() async {
-    final moonLanding = DateTime.parse('2022-10-03 07:35:00');
-
-    print(moonLanding.year);
-    print(moonLanding.month);
-    print(moonLanding.day);
-    print(moonLanding.hour);
-    print(moonLanding.minute);
-
     var dataDetail = await LeadConnection.getdetailPotential(
         context, widget.customer_lead_code);
     // var dataDetail = await LeadConnection.getdetailPotential( context, "LEAD_08112022190");
@@ -79,14 +177,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         setState(() {});
       }
     }
-  }
 
-  @override
-  void dispose() {
-    _controller.removeListener(() {});
-    super.dispose();
+    _bloc.workListComment(WorkListCommentRequestModel(
+      customerLeadID: detail.customerLeadId
+    ));
   }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -129,7 +224,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           childrenBoxDecoration: BoxDecoration(
               color: Colors.black.withOpacity(0.45),
               borderRadius: BorderRadius.circular(10.0)),
-          childrenCount: 3,
+          childrenCount:3,
           distance: 10,
           childrenType: ChildrenType.columnChildren,
           childrenAlignment: Alignment.centerRight,
@@ -167,145 +262,35 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 color: Colors.white,
               )),
           children: [
-            // (detail?.saleId == null || detail?.saleId == 0)
-            //     ? Column(
-            //         children: [
-            //           FloatingActionButton(
-            //               backgroundColor: AppColors.primaryColor,
-            //               heroTag: "btn1",
-            //               onPressed: () async {
-            //                 models = await Navigator.of(context).push(
-            //                     MaterialPageRoute(
-            //                         // builder: (context) => AllocatorScreen()));
-            //                         // builder: (context) => ListStaffModal()));
-            //                         builder: (context) =>
-            //                             PickOneStaffScreen(models: models,)));
+            // _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
+                        //     ontap: () async {
+                        //   bool result = await Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //           builder: (context) =>
+                        //               CustomerCarePotential(item: item)));
 
-            //                 if (models != null) {
-            //                   DescriptionModelResponse result =
-            //                       await LeadConnection.assignRevokeLead(
-            //                           context,
-            //                           AssignRevokeLeadRequestModel(
-            //                               type: "assign",
-            //                               customerLeadCode:
-            //                                   detail.customerLeadCode,
-            //                               saleId: models[0].staffId,
-            //                               timeRevokeLead: 30));
-
-            //                   if (result != null) {
-            //                     if (result.errorCode == 0) {
-            //                       print(result.errorDescription);
-            //                       allowPop = true;
-
-            //                       await LeadConnection.showMyDialog(
-            //                           context, result.errorDescription);
-            //                       getData();
-            //                     } else {
-            //                       LeadConnection.showMyDialog(
-            //                           context, result.errorDescription);
-            //                     }
-            //                   }
-            //                   setState(() {
-            //                   }
-            //                   );
-
-            //                   print(models);
-            //                 }
-
-            //                 print("iconAssignment");
-            //               },
-            //               child:
-            //                   Image.asset(Assets.iconAssignment, scale: 2.5)),
-            //           SizedBox(
-            //             height: 5.0,
-            //           ),
-            //           Text(
-            //             AppLocalizations.text(LangKey.assignment),
-            //             style: TextStyle(
-            //                 color: Colors.white,
-            //                 fontSize: 14.0,
-            //                 fontWeight: FontWeight.w400),
-            //           )
-            //         ],
-            //       )
-            //     : Column(
-            //         children: [
-            //           FloatingActionButton(
-            //               backgroundColor: Color(0xFFFFAD02),
-            //               heroTag: "btn1",
-            //               onPressed: () async {
-            //                 DescriptionModelResponse result =
-            //                     await LeadConnection.assignRevokeLead(
-            //                         context,
-            //                         AssignRevokeLeadRequestModel(
-            //                             type: "revoke",
-            //                             customerLeadCode:
-            //                                 detail.customerLeadCode,
-            //                             saleId: detail.saleId,
-            //                             timeRevokeLead: 30));
-
-            //                 if (result != null) {
-            //                   if (result.errorCode == 0) {
-            //                     print(result.errorDescription);
-            //                     allowPop = true;
-
-            //                     await LeadConnection.showMyDialog(
-            //                         context, result.errorDescription);
-            //                     getData();
-            //                   } else {
-            //                     LeadConnection.showMyDialog(
-            //                         context, result.errorDescription);
-            //                   }
-            //                 }
-
-            //                 print("iconRecall");
-            //               },
-            //               child: Image.asset(Assets.iconRecall, scale: 2.5)),
-            //           SizedBox(
-            //             height: 5.0,
-            //           ),
-            //           Text(AppLocalizations.text(LangKey.recall),
-            //               style: TextStyle(
-            //                   color: Colors.white,
-            //                   fontSize: 14.0,
-            //                   fontWeight: FontWeight.w400))
-            //         ],
-            //       ),
+                        //   if (result != null && result) {
+                        //     getData(false);
+                        //   }
+                        //   print("CustomerCare");
+                        // }),
             Column(
               children: [
                 FloatingActionButton(
-                    backgroundColor: Color(0xFFCD6000),
-                    heroTag: "btn2",
+                    backgroundColor: Color(0xFF41AC8D),
+                    heroTag: "btn1",
                     onPressed: () async {
-                      if (Global.createJob != null) {
-                        await Global.createJob();
-                      }
+                                            bool result = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      CustomerCarePotential(item: detail)));
 
-                      // await Navigator.of(context).push(MaterialPageRoute(
-                      //     builder: (context) => Scaffold(
-                      //           appBar: AppBar(
-                      //             iconTheme: IconThemeData(
-                      //               color: Colors.white,
-                      //             ),
-                      //             // actionsIconTheme: Navigator.of(context).pop(true),
-                      //             backgroundColor: AppColors.primaryColor,
-                      //             title: Text(
-                      //               AppLocalizations.text(
-                      //                   LangKey.enter_comment),
-                      //               style: TextStyle(
-                      //                   color: Colors.white, fontSize: 18.0),
-                      //             ),
-                      //           ),
-                      //           body: CommentScreen(
-                      //             id: 667,
-                      //             onCallback: (event) {},
-                      //           ),
-                      //         )));
-
-                      print("iconTask");
+                          if (result != null && result) {
+                            getData();
+                          }
                     },
                     child: Image.asset(
-                      Assets.iconTask,
+                      Assets.iconCustomerCare,
                       scale: 2.5,
                     )),
                 SizedBox(
@@ -318,6 +303,31 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         fontWeight: FontWeight.w400))
               ],
             ),
+            // Column(
+            //   children: [
+            //     FloatingActionButton(
+            //         backgroundColor: Color(0xFFCD6000),
+            //         heroTag: "btn2",
+            //         onPressed: () async {
+            //           if (Global.createJob != null) {
+            //             await Global.createJob();
+            //           }
+            //           print("iconTask");
+            //         },
+            //         child: Image.asset(
+            //           Assets.iconTask,
+            //           scale: 2.5,
+            //         )),
+            //     SizedBox(
+            //       height: 5.0,
+            //     ),
+            //     Text(AppLocalizations.text(LangKey.createJobs),
+            //         style: TextStyle(
+            //             color: Colors.white,
+            //             fontSize: 14.0,
+            //             fontWeight: FontWeight.w400))
+            //   ],
+            // ),
             Column(
               children: [
                 FloatingActionButton(
@@ -426,6 +436,16 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   )
                 ],
               ),
+
+              (index == 3) ?  Positioned(
+                  bottom: 0,
+                  // left: 10,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white
+                    ),
+                    width: AppSizes.maxWidth,
+                    child: _buildChatBox())) : Container()
               // Positioned(
               //     bottom: 30,
               //     left: 10,
@@ -455,15 +475,487 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               padding: EdgeInsets.all(11.0),
               margin: EdgeInsets.only(top: 70),
               child: potentialInformationV2()),
-          SubDetailPotentialCustomer(
-            contactListData: contactListData,
-            detail: detail,
-            indexTab: widget.indexTab,
-          )
+
+
+          SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          scrollDirection: Axis.horizontal,
+          child: buildListOption(),
+        ),
+
+         Container(
+          height: 15,
+        ),
+        (index == 0)
+            ? generalInfomationV2()
+            : (index == 1)
+                ? Center(child: dealInfomationV2())
+                : (index == 2)
+                    ? customerCare()
+                    : (index == 3)
+                        ? Column(
+                          children: [
+                            Container(
+                              width: AppSizes.maxWidth,
+                              height: AppSizes.maxHeight*3/4,
+                              child: _buildComments()),
+
+                              // Container(height: 80,)
+                          ],
+                        )
+                        : contactList(),
+
+        // (index == 3) ? 
+        // _buildChatBox() : Container(),
+
         ],
       )
     ];
   }
+
+   Widget buildListOption() {
+    return Row(
+      children: [
+        option(tabPotentials[0].typeName, tabPotentials[0].selected, 100, () {
+          index = 0;
+          selectedTab(0);
+        }),
+        option(tabPotentials[1].typeName, tabPotentials[1].selected, 100, () {
+          index = 1;
+          selectedTab(1);
+        }),
+        option(tabPotentials[2].typeName, tabPotentials[2].selected, 150, () {
+          index = 2;
+          selectedTab(2);
+        }),
+        option(tabPotentials[3].typeName, tabPotentials[3].selected, 60, () {
+          index = 3;
+          selectedTab(3);
+        }),
+        option(tabPotentials[4].typeName, tabPotentials[4].selected, 100, () {
+          index = 4;
+          selectedTab(4);
+        })
+      ],
+    );
+  }
+
+    Widget option(String title, bool show, double width, Function ontap) {
+    return Column(
+      children: [
+        Container(
+          padding: EdgeInsets.all(15.0 / 1.5),
+          height: 40,
+          child: InkWell(
+            onTap: ontap,
+            child: Center(
+              child: Text(
+                title,
+                style: show
+                    ? TextStyle(
+                        fontSize: AppTextSizes.size16,
+                        color: AppColors.blueColor,
+                        fontWeight: FontWeight.bold)
+                    : TextStyle(
+                        fontSize: AppTextSizes.size16,
+                        color: AppColors.colorTabUnselected,
+                        fontWeight: FontWeight.bold),
+                maxLines: 1,
+              ),
+            ),
+          ),
+        ),
+        show
+            ? Container(
+                decoration: const BoxDecoration(color: AppColors.blueColor),
+                width: width,
+                height: 3.0,
+              )
+            : Container()
+      ],
+    );
+  }
+
+  selectedTab(int index) async {
+    List<DetailPotentialTabModel> models = tabPotentials;
+    for (int i = 0; i < models.length; i++) {
+      models[i].selected = false;
+    }
+    models[index].selected = true;
+
+    setState(() {});
+  }
+
+    Widget _buildComment(WorkListCommentModel model){
+
+    if(model == null){
+      return CustomShimmer(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomSkeleton(
+              width: AppSizes.sizeOnTap,
+              height: AppSizes.sizeOnTap,
+              radius: AppSizes.sizeOnTap,
+            ),
+            Container(width: AppSizes.minPadding,),
+            Expanded(child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(height: 5.0,),
+                CustomSkeleton(width: AppSizes.maxWidth / 3,),
+                Container(
+                  padding:  EdgeInsets.only(top: 5.0),
+                  child: CustomSkeleton(),
+                ),
+              ],
+            ))
+          ],
+        ),
+      );
+    }
+
+    double avatarSize = model.isSubComment?AppSizes.sizeOnTap / 2:AppSizes.sizeOnTap;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CustomAvatar(
+          size: avatarSize,
+          url: model.staffAvatar,
+          name: model.staffName,
+        ),
+        Container(width: AppSizes.minPadding,),
+        Expanded(child: CustomListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          separatorPadding: 5.0,
+          children: [
+            Container(),
+            Text(
+              model.staffName ?? "",
+              style: AppTextStyles.style12BlackBold,
+            ),
+            if((model.message ?? "").isNotEmpty)
+              CustomHtml(
+                model.message,
+                physics: NeverScrollableScrollPhysics(),
+              ),
+            if((model.path ?? "").isNotEmpty)
+              Container(
+                constraints: BoxConstraints(
+                  maxHeight: AppSizes.maxHeight * 0.2
+                ),
+                child: Row(
+                  children: [
+                    Flexible(
+                        child: Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.borderColor),
+                              borderRadius: BorderRadius.circular(_imageRadius)
+                          ),
+                          child: InkWell(
+                            child: CustomNetworkImage(
+                                url: model.path,
+                                fit: BoxFit.contain,
+                                radius: _imageRadius
+                            ),
+                            onTap: () => openFile(context, AppLocalizations.text(LangKey.image), model.path),
+                          ),
+                        )
+                    )
+                  ],
+                ),
+              ),
+            Row(
+              children: [
+                Text(
+                  model.timeText ?? "",
+                  style: AppTextStyles.style12grey500Normal,
+                ),
+                Container(width: AppSizes.maxPadding,),
+                InkWell(
+                  child: Text(
+                    AppLocalizations.text(LangKey.callback),
+                    style: AppTextStyles.style12grey500Bold,
+                  ),
+                  onTap: () => _bloc.setCallback(model),
+                )
+              ],
+            ),
+            if((model.listObject?.length ?? 0) != 0)
+              CustomListView(
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+                padding: EdgeInsets.zero,
+                separatorPadding: 5.0,
+                children: model.listObject.map((e) => _buildComment(e)).toList(),
+              )
+          ],
+        ))
+      ],
+    );
+  }
+
+  Widget _buildContainer(List<WorkListCommentModel> models){
+    // print(MediaQuery.of(context).padding.bottom);
+    return Container(
+      // padding: EdgeInsets.only(bottom: 100),
+      // margin: EdgeInsets.only(bottom: 100),
+      child: CustomListView(
+        // physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.symmetric(
+            vertical: AppSizes.minPadding,
+            horizontal: AppSizes.maxPadding
+        ),
+        children: models == null
+            ? List.generate(4, (index) => _buildComment(null))
+            : models.map((e) => _buildComment(e)).toList(),
+      ),
+    );
+  }
+
+  Widget _buildEmpty(){
+    return CustomEmpty(
+      title: AppLocalizations.text(LangKey.comment_empty),
+    );
+  }
+
+  Widget _buildComments(){
+    return StreamBuilder(
+      stream: _bloc.outputModels,
+      initialData: null,
+      builder: (_, snapshot){
+        List<WorkListCommentModel> models = snapshot.data;
+        return ContainerDataBuilder(
+          data: models,
+          emptyBuilder: _buildEmpty(),
+          skeletonBuilder: _buildContainer(null),
+          bodyBuilder: () => _buildContainer(models),
+          // onRefresh: () => _onRefresh(),
+        );
+      }
+    );
+  }
+
+  Widget _buildChatBox(){
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(color: Colors.grey)
+        )
+      ),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppSizes.maxPadding,
+        vertical: 5.0
+      ),
+      child: Column(
+        children: [
+          StreamBuilder(
+            stream: _bloc.outputCallback,
+            initialData: null,
+            builder: (_, snapshot){
+              _callbackModel = snapshot.data;
+              if(_callbackModel == null){
+                return Container();
+              }
+              return Container(
+                padding: EdgeInsets.only(bottom: AppSizes.minPadding),
+                child: InkWell(
+                  child: Row(
+                    children: [
+                      Flexible(child: RichText(
+                        text: TextSpan(
+                            text: AppLocalizations.text(LangKey.answering) + " ",
+                            style: AppTextStyles.style12grey200Normal,
+                            children: [
+                              TextSpan(
+                                  text: _callbackModel.staffName ?? "",
+                                  style: AppTextStyles.style12BlackBold
+                              )
+                            ]
+                        ),
+                      )),
+                      Container(width: AppSizes.minPadding,),
+                      Icon(
+                        Icons.close,
+                        color: AppColors.grey200Color,
+                        size: 12.0,
+                      )
+                    ],
+                  ),
+                  onTap: () => _bloc.setCallback(null),
+                ),
+              );
+            }
+          ),
+          StreamBuilder(
+            stream: _bloc.outputFile,
+            initialData: null,
+            builder: (_, snapshot){
+              _file = snapshot.data;
+
+              if(_file == null){
+                return Container();
+              }
+
+              return Container(
+                padding: EdgeInsets.only(bottom: AppSizes.minPadding),
+                child: Row(
+                  children: [
+                    InkWell(
+                      child: CustomNetworkImage(
+                        radius: 10.0,
+                        width: _fileSize,
+                        url: _file,
+                      ),
+                      onTap: () => openFile(context, AppLocalizations.text(LangKey.image), _file),
+                    ),
+                    Container(width: AppSizes.minPadding,),
+                    CustomButton(
+                      text: AppLocalizations.text(LangKey.delete),
+                      backgroundColor: Colors.transparent,
+                      borderColor: AppColors.primaryColor,
+                      style: AppTextStyles.style14PrimaryBold,
+                      isExpand: false,
+                      onTap: () => _bloc.setFile(null),
+                    )
+                  ],
+                ),
+              );
+            }
+          ),
+          Row(
+            children: [
+              InkWell(
+                child: CustomImageIcon(
+                  icon: Assets.iconCamera,
+                  color: AppColors.primaryColor,
+                  size: 30.0,
+                ),
+                onTap: _showOption,
+              ),
+              Container(width: AppSizes.minPadding,),
+              Expanded(child: CustomTextField(
+                focusNode: _focusComment,
+                controller: _controllerComment,
+                backgroundColor: Colors.transparent,
+                borderColor: AppColors.borderColor,
+                hintText: AppLocalizations.text(LangKey.enter_comment),
+              )),
+              Container(width: AppSizes.minPadding,),
+              InkWell(
+                child: Icon(
+                  Icons.send,
+                  color: AppColors.primaryColor,
+                  size: 30.0,
+                ),
+                onTap: _send,
+              ),
+            ],
+          ),
+          Container(height: 15.0,)
+        ],
+      ),
+    );
+  }
+
+   Widget generalInfomationV2() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      margin: EdgeInsets.only(left: 11, right: 11, bottom: 20),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                _infoItemV2(
+                    Assets.iconSex,
+                    (detail.gender == "male")
+                        ? AppLocalizations.text(LangKey.male)
+                        : (detail.gender == "female")
+                            ? AppLocalizations.text(LangKey.female)
+                            : (detail.gender == "other" ||
+                                    detail.gender == "other")
+                                ? AppLocalizations.text(LangKey.other)
+                                : "N/A"),
+                SizedBox(height: 5.0),
+                _infoItemV2(Assets.iconEmail, detail.email ?? "N/A"),
+                SizedBox(height: 5.0),
+                _infoItemV2(Assets.iconAddress, detail.address ?? "N/A"),
+                SizedBox(height: 5.0),
+                _infoItemV2(
+                    Assets.iconWards, detail.businessClueName ?? "N/A")
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              (detail.zalo != null && detail.zalo != "")
+                  ? InkWell(
+                      onTap: () {},
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        height: 45.0,
+                        width: 45.0,
+                        child: Image.asset(Assets.iconMessenger),
+                      ),
+                    )
+                  : Container(),
+              (detail.fanpage != null && detail.fanpage != "")
+                  ? InkWell(
+                      onTap: () {},
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        height: 57.0,
+                        width: 57.0,
+                        child: Image.asset(Assets.iconZalo),
+                      ),
+                    )
+                  : Container()
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+   Widget _infoItemV2(String icon, String title) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 8.0),
+      margin: EdgeInsets.only(left: 7.5),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(right: 10.0),
+            height: 15.0,
+            width: 15.0,
+            child: Image.asset(icon),
+          ),
+          Expanded(
+            child: Text(
+              title,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 4,
+              textAlign: TextAlign.start,
+              style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14.0,
+                  fontWeight: FontWeight.normal),
+              // maxLines: 1,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Widget potentialInformationV2() {
     return Stack(
@@ -476,7 +968,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
-                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+                border: (index != 3) ?  Border.all(width: 1, color: Color(0xFFC3C8D3)) : null
+                ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -486,24 +979,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     margin: EdgeInsets.only(top: 25.0),
                     child: Column(
                       children: [
-                        // Container(
-                        //   height: 24,
-                        //   width: 55,
-                        //   decoration: BoxDecoration(
-                        //       color: Color(0xFF3AEDB6),
-                        //       borderRadius: BorderRadius.circular(4.0)),
-                        //   child: Center(
-                        //     child: Text("Mới",
-                        //         style: TextStyle(
-                        //             color: Color(0xFF11B482),
-                        //             fontSize: 14,
-                        //             fontWeight: FontWeight.normal)),
-                        //   ),
-                        // ),
                         SizedBox(
                           height: 4.0,
                         ),
-                        RichText(
+                       (index != 3) ?  Column(
+                          children: [
+                            RichText(
                             text: TextSpan(
                                 text: detail.customerSourceName ?? "",
                                 style: TextStyle(
@@ -522,6 +1003,26 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                       fontWeight: FontWeight.bold))
                             ])),
                         SizedBox(height: 5),
+
+                         Container(
+                                margin: EdgeInsets.only(left: 8.0,top: 5.0,bottom: 5.0),
+                                decoration: BoxDecoration(
+                                    color: Color(0xFF3AEDB6),
+                                    borderRadius: BorderRadius.circular(4.0)),
+                                child: Flexible(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Text(detail?.journeyName ?? "",
+                                    textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          
+                                            color: Color(0xFF11B482),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.normal)),
+                                  ),
+                                ),
+                              ),
+
                         Text(detail?.phone ?? "",
                             style: TextStyle(
                                 fontSize: 16.0,
@@ -539,11 +1040,16 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                     fontWeight: FontWeight.normal),
                               )
                             : Container()
+                          ],
+                        ) : Container()
                       ],
                     ),
                   ),
                 ),
-                Container(
+               (index != 3) ?  Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 children: [
+                    Container(
                   padding: EdgeInsets.only(right: 8.0),
                   margin: EdgeInsets.only(right: 8.0, top: 16.0),
                   child: Row(
@@ -559,24 +1065,37 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
 
                               infoItem(Assets.iconName, detail.saleName ?? ""),
-                              infoItem(Assets.iconInteraction,
-                                  detail.dateLastCare ?? ""),
+                              infoItem(Assets.iconInteraction, "${detail.dateLastCare ?? ""} (${detail.diffDay ?? ""} ngày)"),
+
+                                  Container(
+                                    margin: EdgeInsets.only(left: 33),
+                                    child: Text(detail?.pipelineName ?? "",
+                                      textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal)),
+                                  ),
 
                               // Container(
-                              //   height: 24,
-                              //   width: 55,
                               //   margin: EdgeInsets.only(left: 8.0),
                               //   decoration: BoxDecoration(
                               //       color: Color(0xFF3AEDB6),
                               //       borderRadius: BorderRadius.circular(4.0)),
-                              //   child: Center(
-                              //     child: Text("Mới",
-                              //         style: TextStyle(
-                              //             color: Color(0xFF11B482),
-                              //             fontSize: 14,
-                              //             fontWeight: FontWeight.normal)),
+                              //   child: Flexible(
+                              //     child: Padding(
+                              //       padding: EdgeInsets.all(8.0),
+                              //       child: Text(detail?.journeyName ?? "",
+                              //       textAlign: TextAlign.center,
+                              //           style: TextStyle(
+                                          
+                              //               color: Color(0xFF11B482),
+                              //               fontSize: 14,
+                              //               fontWeight: FontWeight.normal)),
+                              //     ),
                               //   ),
-                              // )
+                              // ),
                             ],
                           ),
                         ),
@@ -627,7 +1146,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       )
                     ],
                   ),
-                ),
+                ) ,
                 SizedBox(height: 14.0),
                 (detail.tag != null && detail.tag.length > 0)
                     ? Container(
@@ -641,6 +1160,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         ),
                       )
                     : Container(),
+                 ],
+               ) : Container()
               ],
             ),
           ),
@@ -651,6 +1172,105 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           child: _buildAvatar(detail?.fullName ?? ""),
         ),
       ],
+    );
+  }
+
+   Widget dealInfomationV2() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      child:
+          (detail.infoDeal != null && detail.infoDeal.length > 0)
+              ? Column(
+                  children: detail.infoDeal
+                      .map((e) => dealInfomationItem(e))
+                      .toList())
+              : CustomDataNotFound(),
+    );
+  }
+
+    Widget dealInfomationItem(InfoDeal item) {
+    return Container(
+      padding: const EdgeInsets.all(4.0),
+      margin: EdgeInsets.only(left: 11, right: 11, bottom: 8.0),
+      decoration: BoxDecoration(
+          color: Color.fromARGB(255, 37, 16, 16),
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0),
+            margin: EdgeInsets.only(left: 8.0),
+            child: Row(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 10.0),
+                  height: 20.0,
+                  width: 20.0,
+                  child: Image.asset(Assets.iconDeal),
+                ),
+                Expanded(
+                  child: Text(
+                    item.dealName,
+                    // "Deal cua Kiet Quach",
+                    style: TextStyle(
+                        fontSize: 16.0,
+                        color: AppColors.primaryColor,
+                        fontWeight: FontWeight.w500),
+                    // maxLines: 1,
+                  ),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                  height: 24,
+                  decoration: BoxDecoration(
+                      color: AppColors.primaryColor,
+                      borderRadius: BorderRadius.circular(5.0)),
+                  child: Center(
+                    child: Text(item.journeyName ?? "N/A",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                )
+              ],
+            ),
+          ),
+          _infoItemV2(
+            Assets.iconTime,
+            item.createdAt,
+          ),
+          _infoItemV2(Assets.iconName, item.staffName ?? ""),
+          _infoItemV2(Assets.iconInteraction, item.dateLastCare ?? ""),
+          Container(
+            padding: const EdgeInsets.only(left: 6.0, bottom: 6.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 10.0),
+                  height: 15.0,
+                  width: 15.0,
+                  child: Image.asset(Assets.iconTag),
+                ),
+                Expanded(
+                  child: Text(
+                    "${NumberFormat("#,###", "vi-VN").format(item.amount)} VNĐ",
+                    textAlign: TextAlign.start,
+                    style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.bold),
+                    // maxLines: 1,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -684,6 +1304,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       ),
     );
   }
+
+  
 
   Widget _actionItem(String icon, Color color,
       {num number, bool show = false, Function ontap}) {
@@ -760,439 +1382,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _infoItem(String title, String content,
-      {TextStyle style, String icon, String icon2}) {
-    return Container(
-      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-      margin: EdgeInsets.only(left: 15.0 / 2),
-      child: Row(
-        children: [
-          Container(
-            width: (MediaQuery.of(context).size.width) / 1.9,
-            child: Row(
-              children: [
-                if (icon != null)
-                  Container(
-                    margin: const EdgeInsets.only(right: 8.0),
-                    height: 15.0,
-                    width: 15.0,
-                    child: Image.asset(icon),
-                  ),
-                Container(
-                  margin: const EdgeInsets.only(right: 8.0),
-                  child: Text(
-                    title,
-                    style: AppTextStyles.style15BlackNormal,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-              child: Text(
-            content,
-            style: style ?? AppTextStyles.style15BlackNormal,
-            // maxLines: 1,
-          )),
-          if (icon2 != null)
-            Container(
-              margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-              height: 30.0,
-              width: 30.0,
-              child: Image.asset(icon2),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Future<bool> callPhone(String phone) async {
-    final regSpace = RegExp(r"\s+");
-    // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
-    return await launch("tel:" + phone.replaceAll(regSpace, ""));
-  }
-
-  Widget _buildAvatar(String name) {
-    return Container(
-      width: 87.0,
-      height: 87.0,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 2.0,
-          color: AppColors.primaryColor,
-        ),
-        shape: BoxShape.circle,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10000.0),
-        child: CustomAvatarDetail(
-          color: Color(0xFFEEB132),
-          name: name,
-          textSize: 36.0,
-        ),
-      ),
-    );
-  }
-
-  Widget buildButtonConvert(String title, Function ontap) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10.0),
-      height: 41,
-      width: MediaQuery.of(context).size.width - 20,
-      decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(5)),
-      child: InkWell(
-        onTap: ontap,
-        child: Center(
-          child: Text(
-            // AppLocalizations.text(LangKey.convertCustomers),
-            title,
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 14.0,
-                fontWeight: FontWeight.w700),
-            maxLines: 1,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class DetailPotentialTabModel {
-  String typeName;
-  int typeID;
-  bool selected;
-
-  DetailPotentialTabModel({this.typeName, this.typeID, this.selected});
-
-  factory DetailPotentialTabModel.fromJson(Map<String, dynamic> parsedJson) {
-    return DetailPotentialTabModel(
-        typeName: parsedJson['typeName'],
-        typeID: parsedJson['typeID'],
-        selected: parsedJson['selected']);
-  }
-}
-
-class SubDetailPotentialCustomer extends StatefulWidget {
-  DetailPotentialData detail;
-  List<ContactListData> contactListData;
-
-  final int indexTab;
-  SubDetailPotentialCustomer(
-      {Key key, this.detail, this.indexTab, this.contactListData})
-      : super(key: key);
-
-  @override
-  _SubDetailPotentialCustomerState createState() =>
-      _SubDetailPotentialCustomerState();
-}
-
-class _SubDetailPotentialCustomerState
-    extends State<SubDetailPotentialCustomer> {
-  int index = 0;
-  final formatter = NumberFormat.currency(
-    locale: 'vi_VN',
-    decimalDigits: 0,
-    symbol: '',
-  );
-
-  List<DetailPotentialTabModel> tabPotentials = [
-    DetailPotentialTabModel(
-        typeName: AppLocalizations.text(LangKey.generalInfomation),
-        typeID: 0,
-        selected: true),
-    DetailPotentialTabModel(
-        typeName: AppLocalizations.text(LangKey.deal),
-        typeID: 1,
-        selected: false),
-    DetailPotentialTabModel(
-        typeName: AppLocalizations.text(LangKey.customerCare),
-        typeID: 2,
-        selected: false),
-    DetailPotentialTabModel(
-        typeName: AppLocalizations.text(LangKey.discuss),
-        typeID: 3,
-        selected: false),
-    DetailPotentialTabModel(
-        typeName: AppLocalizations.text(LangKey.contactPerson),
-        typeID: 4,
-        selected: false)
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    index = widget.indexTab;
-    for (int i = 0; i < tabPotentials.length; i++) {
-      if (index == tabPotentials[i].typeID) {
-        tabPotentials[i].selected = true;
-      } else {
-        tabPotentials[i].selected = false;
-      }
-    }
-    setState(() {});
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          child: buildListOption(),
-        ),
-        Container(
-          height: 15,
-        ),
-        (index == 0)
-            ? generalInfomationV2()
-            : (index == 1)
-                ? dealInfomationV2()
-                : (index == 2)
-                    ? customerCare()
-                    : (index == 3)
-                        ? Container(
-                          height: AppSizes.maxHeight/2.5,
-                          width: AppSizes.maxWidth,
-                          child: CommentScreen(
-                                      id: 667,
-                                      onCallback: (event) {},
-                                    ),
-                        )
-                        : contactList()
-      ],
-    );
-  }
-
-  Widget buildListOption() {
-    return Row(
-      children: [
-        option(tabPotentials[0].typeName, tabPotentials[0].selected, 100, () {
-          index = 0;
-          selectedTab(0);
-        }),
-        option(tabPotentials[1].typeName, tabPotentials[1].selected, 100, () {
-          index = 1;
-          selectedTab(1);
-        }),
-        option(tabPotentials[2].typeName, tabPotentials[2].selected, 150, () {
-          index = 2;
-          selectedTab(2);
-        }),
-        option(tabPotentials[3].typeName, tabPotentials[3].selected, 60, () {
-          index = 3;
-          selectedTab(3);
-        }),
-        option(tabPotentials[4].typeName, tabPotentials[4].selected, 100, () {
-          index = 4;
-          selectedTab(4);
-        })
-      ],
-    );
-  }
-
-  Widget option(String title, bool show, double width, Function ontap) {
-    return Column(
-      children: [
-        Container(
-          padding: EdgeInsets.all(15.0 / 1.5),
-          height: 40,
-          child: InkWell(
-            onTap: ontap,
-            child: Center(
-              child: Text(
-                title,
-                style: show
-                    ? TextStyle(
-                        fontSize: AppTextSizes.size16,
-                        color: AppColors.blueColor,
-                        fontWeight: FontWeight.bold)
-                    : TextStyle(
-                        fontSize: AppTextSizes.size16,
-                        color: AppColors.colorTabUnselected,
-                        fontWeight: FontWeight.bold),
-                maxLines: 1,
-              ),
-            ),
-          ),
-        ),
-        show
-            ? Container(
-                decoration: const BoxDecoration(color: AppColors.blueColor),
-                width: width,
-                height: 3.0,
-              )
-            : Container()
-      ],
-    );
-  }
-
-  Widget generalInfomationV2() {
-    return Container(
-      padding: const EdgeInsets.all(8.0),
-      margin: EdgeInsets.only(left: 11, right: 11, bottom: 20),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                _infoItemV2(
-                    Assets.iconSex,
-                    (widget.detail.gender == "male")
-                        ? AppLocalizations.text(LangKey.male)
-                        : (widget.detail.gender == "female")
-                            ? AppLocalizations.text(LangKey.female)
-                            : (widget.detail.gender == "other" ||
-                                    widget.detail.gender == "other")
-                                ? AppLocalizations.text(LangKey.other)
-                                : ""),
-                SizedBox(height: 5.0),
-                _infoItemV2(Assets.iconEmail, widget.detail.email ?? ""),
-                SizedBox(height: 5.0),
-                _infoItemV2(Assets.iconAddress, widget.detail.address ?? ""),
-                SizedBox(height: 5.0),
-                _infoItemV2(
-                    Assets.iconWards, widget.detail.businessClueName ?? "")
-              ],
-            ),
-          ),
-          Column(
-            children: [
-              (widget.detail.zalo != null && widget.detail.zalo != "")
-                  ? InkWell(
-                      onTap: () {},
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        height: 45.0,
-                        width: 45.0,
-                        child: Image.asset(Assets.iconMessenger),
-                      ),
-                    )
-                  : Container(),
-              (widget.detail.fanpage != null && widget.detail.fanpage != "")
-                  ? InkWell(
-                      onTap: () {},
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        height: 57.0,
-                        width: 57.0,
-                        child: Image.asset(Assets.iconZalo),
-                      ),
-                    )
-                  : Container()
-            ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget dealInfomationV2() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20),
-      child:
-          (widget.detail.infoDeal != null && widget.detail.infoDeal.length > 0)
-              ? Column(
-                  children: widget.detail.infoDeal
-                      .map((e) => dealInfomationItem(e))
-                      .toList())
-              : CustomDataNotFound(),
-    );
-  }
-
-  Widget dealInfomationItem(InfoDeal item) {
-    return Container(
-      padding: const EdgeInsets.all(4.0),
-      margin: EdgeInsets.only(left: 11, right: 11, bottom: 8.0),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0),
-            margin: EdgeInsets.only(left: 8.0),
-            child: Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10.0),
-                  height: 20.0,
-                  width: 20.0,
-                  child: Image.asset(Assets.iconDeal),
-                ),
-                Expanded(
-                  child: Text(
-                    item.dealName,
-                    // "Deal cua Kiet Quach",
-                    style: TextStyle(
-                        fontSize: 16.0,
-                        color: AppColors.primaryColor,
-                        fontWeight: FontWeight.w500),
-                    // maxLines: 1,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                  height: 24,
-                  decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: Center(
-                    child: Text("Mới - 80%",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w600)),
-                  ),
-                )
-              ],
-            ),
-          ),
-          _infoItemV2(
-            Assets.iconTime,
-            item.createdAt,
-          ),
-          _infoItemV2(Assets.iconName, "Linh gard"),
-          _infoItemV2(Assets.iconInteraction, item.dateLastCare ?? ""),
-          Container(
-            padding: const EdgeInsets.only(left: 6.0, bottom: 6.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10.0),
-                  height: 15.0,
-                  width: 15.0,
-                  child: Image.asset(Assets.iconTag),
-                ),
-                Expanded(
-                  child: Text(
-                    "${NumberFormat("#,###", "vi-VN").format(item.amount)} VNĐ",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold),
-                    // maxLines: 1,
-                  ),
-                ),
-              ],
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
   Widget customerCare() {
     // return Container(
     //   margin: EdgeInsets.only(bottom: 120.0),
@@ -1201,42 +1390,37 @@ class _SubDetailPotentialCustomerState
     //   ),
     // );
 
-    // return Container(
-    //   margin: EdgeInsets.only(bottom: 120),
-    //   child: (widget.detail.careHistory != null && widget.detail.careHistory.length > 0 )
-    //                     ? Column(
-    //                         children:
-    //                             widget.detail.careHistory.map((e) => customerCareItem(e)).toList())
-    //                     : CustomDataNotFound(),
-    // );
-
-    return Column(
-      children: [
-        customerCareItem(),
-        customerCareItem(),
-        customerCareItem(),
-        Container(
-          height: 20.0,
-        )
-      ],
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      child: (detail.customerCare != null && detail.customerCare.length > 0 )
+                        ? Column(
+                            children:
+                                detail.customerCare.map((e) => customerCareItem(e)).toList())
+                        : Center(child: CustomDataNotFound()),
     );
+
+    // return Column(
+    //   children: [
+    //     customerCareItem(),
+    //     customerCareItem(),
+    //     customerCareItem(),
+    //     Container(
+    //       height: 20.0,
+    //     )
+    //   ],
+    // );
   }
 
-  // Widget customerCareHistory() {
-  // return Container(
-  //   margin: EdgeInsets.only(bottom: 120),
-  //   child: (widget.detail.customerCare != null && widget.detail.customerCare.length > 0 )
-  //                     ? Column(
-  //                         children:
-  //                             widget.detail.careHistory.map((e) => customerCareItem(e)).toList())
-  //                     : CustomDataNotFound(
-  //                     ),
-  // );
-  // }
+   Widget customerCareItem(CustomerCare item) {
 
-  // Widget customerCareItem(CareHistory item) {
+         final createTime = DateTime.parse(item.createdAt ?? "");
 
-  Widget customerCareItem() {
+    print(createTime.year);
+    print(createTime.month);
+    print(createTime.day);
+    print(createTime.hour);
+    print(createTime.minute);
+
     return InkWell(
       onTap: () async {},
       child: Container(
@@ -1257,13 +1441,13 @@ class _SubDetailPotentialCustomerState
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
+                    children:  [
                       Text(
-                        '09:45',
+                        "${createTime.hour}:${createTime.minute}",
                         style: TextStyle(color: Colors.grey),
                       ),
                       Text(
-                        '22,\ntháng 12,\nnăm 2022',
+                        '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
@@ -1288,14 +1472,14 @@ class _SubDetailPotentialCustomerState
                     children: [
                       //Cái này là dòng tiêu đề
                       Container(
-                        padding: const EdgeInsets.only(right: 10.0),
+                        padding:  EdgeInsets.only(right: 10.0),
                         child: Row(
-                          children: const [
+                          children:  [
                             Expanded(
                               child: Text.rich(
                                 TextSpan(
                                   text:
-                                      '[012345678] Tên công việc này dài quá trời dài',
+                                      "[${item.manageWorkCode}] ${item.manageWorkTitle}",
                                   style: TextStyle(
                                     color: Color(0xFF0067AC),
                                     fontWeight: FontWeight.bold,
@@ -1362,7 +1546,7 @@ class _SubDetailPotentialCustomerState
                             Row(
                               children: [
                                 Text(
-                                  "15",
+                                 "${item.countFile}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.0,
@@ -1384,7 +1568,7 @@ class _SubDetailPotentialCustomerState
                             Row(
                               children: [
                                 Text(
-                                  "12",
+                                 "${item.countComment}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.0,
@@ -1406,7 +1590,7 @@ class _SubDetailPotentialCustomerState
                             Row(
                               children: [
                                 Text(
-                                  "12",
+                                  "${item.daysLate}",
                                   style: TextStyle(
                                       color: Colors.red,
                                       fontSize: 14.0,
@@ -1431,7 +1615,8 @@ class _SubDetailPotentialCustomerState
                         child: Row(
                           children: [
                             CustomAvatarWithURL(
-                              name: "NV.Trixie Miami",
+                              name: item.staffFullName ?? "N/A",
+                              url: item.staffAvatar ?? "",
                               size: 50.0,
                             ),
                             Container(
@@ -1442,7 +1627,7 @@ class _SubDetailPotentialCustomerState
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "NV.Trixie Miami",
+                                  item.staffFullName ?? "N/A",
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: AppColors.primaryColor,
@@ -1454,13 +1639,13 @@ class _SubDetailPotentialCustomerState
                         ),
                       ),
 
-                      Container(
+                      (item.listTag != null && item.listTag.length > 0) ? Container(
                         child: Wrap(
-                          children: List.generate(5, (index) => _tagItem()),
+                          children: List.generate(item.listTag.length, (index) => _tagItem(item.listTag[index])),
                           spacing: 10,
                           runSpacing: 10,
                         ),
-                      )
+                      ) : Container()
 
                       //cái này là button gọi điện
                     ],
@@ -1474,7 +1659,7 @@ class _SubDetailPotentialCustomerState
     );
   }
 
-  Widget _tagItem() {
+   Widget _tagItem(ListTagDetail item) {
     return Container(
       height: 30,
       margin: EdgeInsets.only(top: 10.0),
@@ -1497,7 +1682,7 @@ class _SubDetailPotentialCustomerState
             width: 5.0,
           ),
           Text(
-            "Tag1",
+            item.tagName,
             textAlign: TextAlign.start,
             style: TextStyle(
                 color: AppColors.primaryColor,
@@ -1510,104 +1695,21 @@ class _SubDetailPotentialCustomerState
     );
   }
 
-  Widget customerCareInfoItem(String title) {
-    return Container(
-        padding: EdgeInsets.all(8.0),
-        margin: EdgeInsets.only(bottom: 5.0),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-        child: Row(
-          children: [
-            Expanded(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(title,
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold)),
-                SizedBox(height: 8.0),
-                RichText(
-                    text: TextSpan(
-                        text: "Loại công việc: ",
-                        style: TextStyle(
-                            fontSize: 14.0,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                        children: [
-                      TextSpan(
-                          text: "Gọi điện",
-                          style: TextStyle(
-                              color: Colors.black,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.normal))
-                    ])),
-                SizedBox(height: 8.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    // Container(
-                    //   height: 16,
-                    //   width: 16,
-                    //   margin: EdgeInsets.only(right: 5.0),
-                    //   decoration: BoxDecoration(
-                    //       borderRadius: BorderRadius.circular(1000.0),
-                    //       color: Colors.orange),
-                    // ),
-
-                    _buildAvatarWithImage(
-                        "https://i.ex-cdn.com/mgn.vn/files/content/2022/11/10/sofm-101-1240.jpg"),
-
-                    SizedBox(width: 5.0),
-
-                    Text(
-                      "NV.Trixie Miami",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w600),
-                    )
-                  ],
-                )
-              ],
-            )),
-            Container(
-              padding: EdgeInsets.only(left: 6.0, right: 6.0),
-              height: 24,
-              decoration: BoxDecoration(
-                  color: Color(0xFF068229),
-                  borderRadius: BorderRadius.circular(525.0)),
-              child: Center(
-                child: Text("Đã hoàn thành",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w600)),
-              ),
-            )
-          ],
-        ));
-  }
-
-  Widget contactList() {
+   Widget contactList() {
     return Container(
         padding: EdgeInsets.all(10.0),
         margin: EdgeInsets.only(bottom: 20),
-        child: (widget.contactListData != null &&
-                widget.contactListData.length > 0)
+        child: (contactListData != null &&
+                contactListData.length > 0)
             ? Column(
-                children: widget.contactListData
+                children: contactListData
                     .map((e) => contactListItem(e))
                     .toList())
-            : CustomDataNotFound());
+            : Center(child: CustomDataNotFound()));
   }
 
-  Widget contactListItem(ContactListData item) {
-    return (widget.contactListData != null && widget.contactListData.length > 0)
+    Widget contactListItem(ContactListData item) {
+    return (contactListData != null && contactListData.length > 0)
         ? Container(
             padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
@@ -1738,377 +1840,121 @@ class _SubDetailPotentialCustomerState
         : CustomDataNotFound();
   }
 
-  Future<bool> callPhone(String phone) async {
-    final regSpace = RegExp(r"\s+");
-    // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
-    return await launch("tel:" + phone.replaceAll(regSpace, ""));
-  }
 
-  Widget _buildAvatarWithImage(String image) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10000.0),
-      child: FittedBox(
-        child: Container(
-          width: 16.0,
-          height: 16.0,
-          padding: const EdgeInsets.all(2.0),
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blueGrey,
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(1), BlendMode.dstATop),
-                  image: NetworkImage(image))),
-        ),
-        fit: BoxFit.fill,
-      ),
-    );
-  }
-
-  Widget _infoItemV2(String icon, String title) {
-    return Container(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      margin: EdgeInsets.only(left: 7.5),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 10.0),
-            height: 15.0,
-            width: 15.0,
-            child: Image.asset(icon),
-          ),
-          Expanded(
-            child: Text(
-              title,
-              overflow: TextOverflow.ellipsis,
-              maxLines: 4,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.normal),
-              // maxLines: 1,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // Widget generalInfomation() {
-  //   return Container(
-  //     padding: const EdgeInsets.all(8.0),
-  //     margin: EdgeInsets.only(bottom: 20.0),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         Padding(
-  //           padding: const EdgeInsets.all(8),
-  //           child: Text(
-  //             AppLocalizations.text(LangKey.picture),
-  //             style: TextStyle(
-  //                 fontSize: AppTextSizes.size15,
-  //                 color: const Color(0xFF858080),
-  //                 fontWeight: FontWeight.normal),
-  //           ),
-  //         ),
-
-  //         Center(
-  //           child: (widget.detail.avatar == "")
-  //               ? _buildAvatarImg(widget.detail.fullName)
-  //               : _buildAvatarWithImage(widget.detail.avatar),
-  //         ),
-
-  //         const Divider(),
-
-  //         _infoItem(
-  //             AppLocalizations.text(LangKey.email), widget.detail?.email ?? "",
-  //             icon: Assets.iconEmail),
-  //         const Divider(),
-  //         sexInfo(widget.detail?.gender ?? ""),
-  //         const Divider(),
-  //         _infoItem(AppLocalizations.text(LangKey.provinceCity),
-  //             "${widget.detail?.provinceType ?? ""} ${widget.detail?.provinceName ?? ""}",
-  //             icon: Assets.iconProvince),
-  //         const Divider(),
-  //         _infoItem(AppLocalizations.text(LangKey.district),
-  //             "${widget.detail?.districtType ?? ""} ${widget.detail?.districtName ?? ""}",
-  //             icon: Assets.iconDistrict),
-  //         const Divider(),
-  //         // _infoItem(AppLocalizations.text(LangKey.wards),
-  //         //     "${widget.detail?.wardType ?? ""} ${widget.detail?.wardName ?? ""}",
-  //         //     icon: Assets.iconWards),
-  //         // const Divider(),
-  //         _infoItem(AppLocalizations.text(LangKey.address),
-  //             widget.detail?.address ?? "",
-  //             icon: Assets.iconAddress),
-  //         const Divider(),
-  //         _infoItem(AppLocalizations.text(LangKey.businessFocalPoint),
-  //             widget.detail?.businessClue ?? "",
-  //             icon: Assets.iconPoint),
-  //         const Divider(),
-  //         _channelItem(
-  //             AppLocalizations.text(LangKey.zalo), widget.detail?.zalo ?? "",
-  //             icon: Assets.iconSource,
-  //             icon2: Assets.iconZalo,
-  //             style: TextStyle(
-  //                 fontSize: AppTextSizes.size16,
-  //                 color: AppColors.bluePrimary,
-  //                 fontWeight: FontWeight.w500), ontap: () {
-  //           _openChathub(widget.detail?.zalo ?? "");
-  //         }),
-  //         const Divider(),
-  //         _channelItem(AppLocalizations.text(LangKey.fanpage),
-  //             widget.detail?.fanpage ?? "",
-  //             icon: Assets.iconFanpage,
-  //             icon2: Assets.iconMessenger,
-  //             style: TextStyle(
-  //                 fontSize: AppTextSizes.size16,
-  //                 color: AppColors.bluePrimary,
-  //                 fontWeight: FontWeight.w500), ontap: () {
-  //           _openChathub(widget.detail?.fanpage ?? "");
-  //         })
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _infoItem(String title, String content,
-  //     {TextStyle style, String icon, String icon2}) {
-  //   return Container(
-  //     padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-  //     margin: EdgeInsets.only(left: 15.0 / 2),
-  //     child: Row(
-  //       children: [
-  //         Container(
-  //           width: (MediaQuery.of(context).size.width) / 1.9,
-  //           child: Row(
-  //             children: [
-  //               if (icon != null)
-  //                 Container(
-  //                   margin: const EdgeInsets.only(right: 8.0),
-  //                   height: 15.0,
-  //                   width: 15.0,
-  //                   child: Image.asset(icon),
-  //                 ),
-  //               Container(
-  //                 margin: const EdgeInsets.only(right: 8.0),
-  //                 child: Text(
-  //                   title,
-  //                   style: AppTextStyles.style15BlackNormal,
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         Expanded(
-  //             child: Text(
-  //           content,
-  //           style: style ?? AppTextStyles.style15BlackNormal,
-  //           // maxLines: 1,
-  //         )),
-  //         if (icon2 != null)
-  //           Container(
-  //             margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-  //             height: 30.0,
-  //             width: 30.0,
-  //             child: Image.asset(icon2),
-  //           ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  // Widget _channelItem(String title, String content,
-  //     {TextStyle style, String icon, String icon2, Function ontap}) {
-  //   return Container(
-  //     padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-  //     margin: EdgeInsets.only(left: 15.0 / 2),
-  //     child: Row(
-  //       children: [
-  //         Container(
-  //           width: (MediaQuery.of(context).size.width) / 1.9,
-  //           child: Row(
-  //             children: [
-  //               if (icon != null)
-  //                 Container(
-  //                   margin: const EdgeInsets.only(right: 8.0),
-  //                   height: 15.0,
-  //                   width: 15.0,
-  //                   child: Image.asset(icon),
-  //                 ),
-  //               Container(
-  //                 margin: const EdgeInsets.only(right: 8.0),
-  //                 child: Text(
-  //                   title,
-  //                   style: AppTextStyles.style15BlackNormal,
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //         Expanded(
-  //             child: InkWell(
-  //           onTap: ontap,
-  //           child: Text(
-  //             content,
-  //             style: style ?? AppTextStyles.style15BlackNormal,
-  //             // maxLines: 1,
-  //           ),
-  //         )),
-  //         if (icon2 != null)
-  //           Container(
-  //             margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-  //             height: 30.0,
-  //             width: 30.0,
-  //             child: Image.asset(icon2),
-  //           ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Future _openChathub(String link) async {
-    return await launch(link);
-  }
-
-  Widget featureDeveloping() {
-    return Container(
-      margin: EdgeInsets.only(top: 50.0, bottom: 100.0),
-      child: Column(
-        children: [
-          SizedBox(
-            height: 204,
-            width: 295,
-            child: Image.asset(Assets.imgFeatureDeveloping),
-          ),
-          Center(
-              child: Text(
-            AppLocalizations.text(LangKey.featureDeveloping),
-            style: AppTextStyles.style18BlueBold,
-            maxLines: 1,
-          ))
-        ],
-      ),
-    );
-  }
-
-  Widget sexInfo(String sex) {
+  Widget _infoItem(String title, String content,
+      {TextStyle style, String icon, String icon2}) {
     return Container(
       padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
       margin: EdgeInsets.only(left: 15.0 / 2),
       child: Row(
         children: [
           Container(
-            width: (MediaQuery.of(context).size.width) / 2,
+            width: (MediaQuery.of(context).size.width) / 1.9,
             child: Row(
               children: [
+                if (icon != null)
+                  Container(
+                    margin: const EdgeInsets.only(right: 8.0),
+                    height: 15.0,
+                    width: 15.0,
+                    child: Image.asset(icon),
+                  ),
                 Container(
-                  margin: const EdgeInsets.only(right: 10.0),
-                  height: 20.0,
-                  width: 20.0,
-                  child: Image.asset(Assets.iconSex),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(right: 10.0),
+                  margin: const EdgeInsets.only(right: 8.0),
                   child: Text(
-                    AppLocalizations.text(LangKey.sex),
+                    title,
                     style: AppTextStyles.style15BlackNormal,
-                    maxLines: 1,
                   ),
                 ),
               ],
             ),
           ),
-          sex != ""
-              ? Container(
-                  height: 40,
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                      color: AppColors.darkGrey,
-                      borderRadius: BorderRadius.circular(10)),
-                  child: Row(
-                    children: [
-                      sex != "other"
-                          ? Container(
-                              margin: const EdgeInsets.only(
-                                right: 4.0,
-                              ),
-                              height: 20.0,
-                              width: 20.0,
-                              child: sex == "male"
-                                  ? Image.asset(Assets.iconMale)
-                                  : Image.asset(Assets.iconFemale),
-                            )
-                          : Container(),
-                      Text(
-                        sex == "other"
-                            ? AppLocalizations.text(LangKey.other)
-                            : sex == "male"
-                                ? AppLocalizations.text(LangKey.male)
-                                : AppLocalizations.text(LangKey.female),
-                        style: AppTextStyles.style15BlackNormal,
-                        maxLines: 1,
-                      )
-                    ],
-                  ),
-                )
-              : Container()
+          Expanded(
+              child: Text(
+            content,
+            style: style ?? AppTextStyles.style15BlackNormal,
+            // maxLines: 1,
+          )),
+          if (icon2 != null)
+            Container(
+              margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+              height: 30.0,
+              width: 30.0,
+              child: Image.asset(icon2),
+            ),
         ],
       ),
     );
   }
 
-  // Widget _buildAvatarImg(String name) {
-  //   return Container(
-  //     width: 65.0,
-  //     height: 65.0,
-  //     padding: const EdgeInsets.all(2.0),
-  //     decoration: const BoxDecoration(
-  //       shape: BoxShape.circle,
-  //       color: AppColors.lightGrey,
-  //     ),
-  //     child: ClipRRect(
-  //       borderRadius: BorderRadius.circular(10000.0),
-  //       child: CustomAvatar(
-  //         name: name,
-  //         textSize: AppTextSizes.size22,
-  //       ),
-  //     ),
-  //   );
-  // }
+  Future<bool> callPhone(String phone) async {
+    final regSpace = RegExp(r"\s+");
+    // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
+    return await launch("tel:" + phone.replaceAll(regSpace, ""));
+  }
 
-  // Widget _buildAvatarWithImage(String image) {
-  //   return ClipRRect(
-  //     borderRadius: BorderRadius.circular(10000.0),
-  //     child: FittedBox(
-  //       child: Container(
-  //         width: 80.0,
-  //         height: 80.0,
-  //         padding: const EdgeInsets.all(2.0),
-  //         decoration: BoxDecoration(
-  //             shape: BoxShape.circle,
-  //             color: Colors.blueGrey,
-  //             image: DecorationImage(
-  //                 fit: BoxFit.cover,
-  //                 colorFilter: ColorFilter.mode(
-  //                     Colors.black.withOpacity(1), BlendMode.dstATop),
-  //                 image: NetworkImage(image))),
-  //       ),
-  //       fit: BoxFit.fill,
-  //     ),
-  //   );
-  // }
+  Widget _buildAvatar(String name) {
+    return Container(
+      width: 87.0,
+      height: 87.0,
+      decoration: BoxDecoration(
+        border: Border.all(
+          width: 2.0,
+          color: AppColors.primaryColor,
+        ),
+        shape: BoxShape.circle,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(10000.0),
+        child: CustomAvatarDetail(
+          color: Color(0xFFEEB132),
+          name: name,
+          textSize: 36.0,
+        ),
+      ),
+    );
+  }
 
-  selectedTab(int index) async {
-    List<DetailPotentialTabModel> models = tabPotentials;
-    for (int i = 0; i < models.length; i++) {
-      models[i].selected = false;
-    }
-    models[index].selected = true;
+  Widget buildButtonConvert(String title, Function ontap) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 10.0),
+      height: 41,
+      width: MediaQuery.of(context).size.width - 20,
+      decoration: BoxDecoration(
+          color: AppColors.primaryColor,
+          borderRadius: BorderRadius.circular(5)),
+      child: InkWell(
+        onTap: ontap,
+        child: Center(
+          child: Text(
+            // AppLocalizations.text(LangKey.convertCustomers),
+            title,
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 14.0,
+                fontWeight: FontWeight.w700),
+            maxLines: 1,
+          ),
+        ),
+      ),
+    );
+  }
 
-    setState(() {});
+ 
+  
+}
+
+class DetailPotentialTabModel {
+  String typeName;
+  int typeID;
+  bool selected;
+
+  DetailPotentialTabModel({this.typeName, this.typeID, this.selected});
+
+  factory DetailPotentialTabModel.fromJson(Map<String, dynamic> parsedJson) {
+    return DetailPotentialTabModel(
+        typeName: parsedJson['typeName'],
+        typeID: parsedJson['typeID'],
+        selected: parsedJson['selected']);
   }
 }

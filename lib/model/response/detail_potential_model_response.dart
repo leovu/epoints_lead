@@ -457,6 +457,7 @@ class CustomerCare {
   int countFile;
   int countComment;
   int daysLate;
+  List<ListTagDetail> listTag;
 
   CustomerCare(
       {this.manageWorkId,
@@ -479,6 +480,7 @@ class CustomerCare {
       this.manageStatusId,
       this.manageStatusName,
       this.manageStatusColor,
+      this.listTag,
       this.countFile,
       this.countComment,
       this.daysLate});
@@ -507,6 +509,12 @@ class CustomerCare {
     countFile = json['count_file'];
     countComment = json['count_comment'];
     daysLate = json['days_late'];
+    if (json['list_tag'] != null) {
+      listTag = <ListTagDetail>[];
+      json['list_tag'].forEach((v) {
+        listTag.add(new ListTagDetail.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -534,6 +542,38 @@ class CustomerCare {
     data['count_file'] = this.countFile;
     data['count_comment'] = this.countComment;
     data['days_late'] = this.daysLate;
+    if (this.listTag != null) {
+      data['list_tag'] = this.listTag.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class ListTagDetail {
+  int manageWorkTagId;
+  int manageWorkId;
+  int manageTagId;
+  String tagName;
+
+  ListTagDetail(
+      {this.manageWorkTagId,
+      this.manageWorkId,
+      this.manageTagId,
+      this.tagName});
+
+  ListTagDetail.fromJson(Map<String, dynamic> json) {
+    manageWorkTagId = json['manage_work_tag_id'];
+    manageWorkId = json['manage_work_id'];
+    manageTagId = json['manage_tag_id'];
+    tagName = json['tag_name'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['manage_work_tag_id'] = this.manageWorkTagId;
+    data['manage_work_id'] = this.manageWorkId;
+    data['manage_tag_id'] = this.manageTagId;
+    data['tag_name'] = this.tagName;
     return data;
   }
 }

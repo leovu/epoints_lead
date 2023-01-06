@@ -35,7 +35,7 @@ class _LeadScreen extends State<LeadScreen> {
   final TextEditingController _searchtext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
 
-   List<WorkListStaffModel> models = [];
+  List<WorkListStaffModel> models = [];
 
   List<ListCustomLeadItems> items;
   List<String> listFunction = [
@@ -52,21 +52,20 @@ class _LeadScreen extends State<LeadScreen> {
   int nextPage = 2;
 
   ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest(
-      search: "",
-          page: 1,
-          statusAssign: "",
-          customerType: "",
-          tagId: [],
-          customerSourceId: [],
-          staffId: [],
-          pipelineId: [],
-          journeyId: [],
-          careHistory: "",
-          isConvert: "",
-          createdAt: "",
-          allocationDate: "",
-
-      );
+    search: "",
+    page: 1,
+    statusAssign: "",
+    customerType: "",
+    tagId: [],
+    customerSourceId: [],
+    staffId: [],
+    pipelineId: [],
+    journeyId: [],
+    careHistory: "",
+    isConvert: "",
+    createdAt: "",
+    allocationDate: "",
+  );
 
   FilterScreenModel filterScreenModel = FilterScreenModel();
 
@@ -89,8 +88,7 @@ class _LeadScreen extends State<LeadScreen> {
           id_history_care_date: "",
           id_work_schedule_date: "",
           id_created_at: "",
-          id_allocation_date: ""
-          );
+          id_allocation_date: "");
       getData(false);
     });
   }
@@ -112,20 +110,20 @@ class _LeadScreen extends State<LeadScreen> {
             createdAt: filterModel.createdAt,
             allocationDate: filterModel.allocationDate));
 
-          //           ListCustomLeadModelRequest(
-          //   search: _searchtext.text,
-          //   page: filterModel.page,
-          //   statusAssign: filterModel.statusAssign,
-          //   customerType: filterModel.customerType,
-          //   tagId: filterModel.tagId,
-          // customerSourceId: filterModel.customerSourceId,
-          // staffId: filterModel.staffId,
-          // pipelineId: filterModel.pipelineId,
-          // journeyId: filterModel.journeyId,
-          // careHistory: filterModel.careHistory,
-          // isConvert: filterModel.isConvert,
-          //   createdAt: filterModel.createdAt,
-          //   allocationDate: filterModel.allocationDate));
+    //           ListCustomLeadModelRequest(
+    //   search: _searchtext.text,
+    //   page: filterModel.page,
+    //   statusAssign: filterModel.statusAssign,
+    //   customerType: filterModel.customerType,
+    //   tagId: filterModel.tagId,
+    // customerSourceId: filterModel.customerSourceId,
+    // staffId: filterModel.staffId,
+    // pipelineId: filterModel.pipelineId,
+    // journeyId: filterModel.journeyId,
+    // careHistory: filterModel.careHistory,
+    // isConvert: filterModel.isConvert,
+    //   createdAt: filterModel.createdAt,
+    //   allocationDate: filterModel.allocationDate));
 
     if (model != null) {
       models = [];
@@ -217,9 +215,13 @@ class _LeadScreen extends State<LeadScreen> {
             if (status) {
               getData(false);
             }
-          } 
+          }
         },
-       child: const Icon(Icons.add,color: Colors.white, size: 50,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 50,
+        ),
       ),
     );
   }
@@ -237,7 +239,7 @@ class _LeadScreen extends State<LeadScreen> {
               physics: const AlwaysScrollableScrollPhysics(),
               controller: _controller,
               // separator: const Divider(),
-              children: [ 
+              children: [
                 (items == null)
                     ? Container()
                     : (items.length > 0)
@@ -463,8 +465,9 @@ class _LeadScreen extends State<LeadScreen> {
             onTap: () async {
               bool result = await Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => DetailPotentialCustomer(
-                        customer_lead_code: item.customerLeadCode,indexTab: 0,
-                      )));
+                      customer_lead_code: item.customerLeadCode,
+                      indexTab: 0,
+                      id: 667)));
 
               if (result != null && result) {
                 getData(false);
@@ -498,13 +501,21 @@ class _LeadScreen extends State<LeadScreen> {
                                           fontWeight: FontWeight.normal),
                                       children: [
                                     TextSpan(
-                                        text: (item.customerSourceName != "" && item.customerSourceName != null) ?  ( " - " + item?.leadFullName ?? ""): ( "" + item?.leadFullName ?? "" ) ,
+                                        text: (item.customerSourceName != "" &&
+                                                item.customerSourceName != null)
+                                            ? (" - " + item?.leadFullName ?? "")
+                                            : ("" + item?.leadFullName ?? ""),
                                         style: TextStyle(
                                             color: AppColors.primaryColor,
                                             fontSize: 16.0,
                                             fontWeight: FontWeight.bold))
                                   ])),
-                              SizedBox(height: 5),
+                              SizedBox(height: 5.0),
+
+                              statusPotential(item.journeyName ?? "N/A",
+                          Color(0xFF3AEDB6), Color(0xFF11B482)),
+                          SizedBox(height: 5.0,),
+
                               Text(item?.phone ?? "",
                                   style: TextStyle(
                                       fontSize: 16.0,
@@ -565,23 +576,25 @@ class _LeadScreen extends State<LeadScreen> {
                           width: 15.0,
                           child: Image.asset(Assets.iconInteraction),
                         ),
-                        (item.dateLastCare != null) ? Expanded(
-                          child: RichText(
-                              text: TextSpan(
-                                  text: item.dateLastCare + " ",
-                                  style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal),
-                                  children: [
-                                TextSpan(
-                                    text: "(${item.diffDay} ngày)",
-                                    style: TextStyle(
-                                        color: AppColors.primaryColor,
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.normal))
-                              ])),
-                        ) : Container(),
+                        (item.dateLastCare != null)
+                            ? Expanded(
+                                child: RichText(
+                                    text: TextSpan(
+                                        text: item.dateLastCare + " ",
+                                        style: TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.normal),
+                                        children: [
+                                      TextSpan(
+                                          text: "(${item.diffDay} ngày)",
+                                          style: TextStyle(
+                                              color: AppColors.primaryColor,
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.normal))
+                                    ])),
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -589,20 +602,35 @@ class _LeadScreen extends State<LeadScreen> {
                   // Container(
                   //   margin: EdgeInsets.only(left: 8.0, bottom: 8.0),
                   //   child: Row(children: [
-                  //     statusPotential("Mới", Color(0xFF3AEDB6), Color(0xFF11B482)),
-                  //     statusPotential("Vừa", Color.fromRGBO(199, 135, 0, 0.59), Color(0xFFC78700))
+                  //     statusPotential(item.pipelineName ?? "N/A",
+                  //         Color(0xFF3AEDB6), Color(0xFF11B482)),
+                  //     // statusPotential(item.journeyName ?? "N/A",
+                  //     //     Color(0xFF3AEDB6), Color(0xFF11B482))
                   //   ]),
                   // ),
 
-                  item.tag.length > 0  ? Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Wrap(
-                      children: List.generate(item.tag.length,
-                          (index) => _optionItem(item.tag[index])),
-                      spacing: 10,
-                      runSpacing: 10,
-                    ),
-                  ) : Container(),
+                  Container(
+                                    margin: EdgeInsets.only(left: 33,bottom: 10.0),
+                                    child: Text(item?.pipelineName ?? "",
+                                      textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal)),
+                                  ),
+
+                  item.tag.length > 0
+                      ? Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Wrap(
+                            children: List.generate(item.tag.length,
+                                (index) => _optionItem(item.tag[index])),
+                            spacing: 10,
+                            runSpacing: 10,
+                          ),
+                        )
+                      : Container(),
 
                   Container(
                     margin:
@@ -610,128 +638,135 @@ class _LeadScreen extends State<LeadScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        _actionItem(Assets.iconCalendar, Color(0xFF26A7AD), 
-                            show: true, number: item?.relatedWork ?? 0, ontap: () async{
+                        _actionItem(Assets.iconCalendar, Color(0xFF26A7AD),
+                            show: true,
+                            number: item?.relatedWork ?? 0, ontap: () async {
+                          bool result = await Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (context) => DetailPotentialCustomer(
+                                        customer_lead_code:
+                                            item.customerLeadCode,
+                                        indexTab: 2,
+                                        id: 667,
+                                      )));
 
-                            bool result = await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => DetailPotentialCustomer(
-                        customer_lead_code: item.customerLeadCode,indexTab: 2,
-                      )));
-
-              if (result != null && result) {
-                getData(false);
-              }
+                          if (result != null && result) {
+                            getData(false);
+                          }
                           print("1");
                         }),
                         _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                            show: true, number: item?.appointment ?? 0, ontap: ()  async {
+                            show: true,
+                            number: item?.appointment ?? 0, ontap: () async {
+                          bool result = await Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => DetailPotentialCustomer(
+                                      customer_lead_code: item.customerLeadCode,
+                                      indexTab: 2,
+                                      id: 667)));
 
-                            bool result = await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => DetailPotentialCustomer(
-                        customer_lead_code: item.customerLeadCode,indexTab: 2,
-                      )));
-
-              if (result != null && result) {
-                getData(false);
-              }
+                          if (result != null && result) {
+                            getData(false);
+                          }
                           print("2");
                         }),
-                        _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
-                            ontap: () async {
-                              bool result = await Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                      builder: (context) => CustomerCarePotential(item:item)));
+                        // _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
+                        //     ontap: () async {
+                        //   bool result = await Navigator.of(context).push(
+                        //       MaterialPageRoute(
+                        //           builder: (context) =>
+                        //               CustomerCarePotential(item: item)));
 
-                                      if (result!= null && result) {
-                                        getData(false);
-                                      }
-                          print("CustomerCare");
-                        }),
-                      //   _actionItem(Assets.iconTask, Color(0xFFCD6000),
-                      //       ontap: () {
-                      //     print("4");
-                      //   }),
-                      //   (item.staffFullName == null) ? _actionItem(Assets.iconAssignment, Color(0xFF0067AC),
-                      //     ontap: () async {
+                        //   if (result != null && result) {
+                        //     getData(false);
+                        //   }
+                        //   print("CustomerCare");
+                        // }),
+                        //   _actionItem(Assets.iconTask, Color(0xFFCD6000),
+                        //       ontap: () {
+                        //     print("4");
+                        //   }),
+                        //   (item.staffFullName == null) ? _actionItem(Assets.iconAssignment, Color(0xFF0067AC),
+                        //     ontap: () async {
 
-                      //       models = await Navigator.of(context).push(
-                      //           MaterialPageRoute(
-                      //               builder: (context) =>
-                      //                   PickOneStaffScreen(
-                      //                     models: models,
-                      //                   )));
+                        //       models = await Navigator.of(context).push(
+                        //           MaterialPageRoute(
+                        //               builder: (context) =>
+                        //                   PickOneStaffScreen(
+                        //                     models: models,
+                        //                   )));
 
-                      //       if (models != null && models.length > 0) {
-                      //         int staffID = models[0].staffId;
+                        //       if (models != null && models.length > 0) {
+                        //         int staffID = models[0].staffId;
 
-                      //         if (staffID != null) {
-                      //           DescriptionModelResponse result =
-                      //               await LeadConnection.assignRevokeLead(
-                      //                   context,
-                      //                   AssignRevokeLeadRequestModel(
-                      //                       type: "assign",
-                      //                       customerLeadCode: item.customerLeadCode,
-                      //                       saleId: staffID,
-                      //                       timeRevokeLead: 30));
+                        //         if (staffID != null) {
+                        //           DescriptionModelResponse result =
+                        //               await LeadConnection.assignRevokeLead(
+                        //                   context,
+                        //                   AssignRevokeLeadRequestModel(
+                        //                       type: "assign",
+                        //                       customerLeadCode: item.customerLeadCode,
+                        //                       saleId: staffID,
+                        //                       timeRevokeLead: 30));
 
-                      //           if (result != null) {
-                      //             if (result.errorCode == 0) {
-                      //               print(result.errorDescription);
+                        //           if (result != null) {
+                        //             if (result.errorCode == 0) {
+                        //               print(result.errorDescription);
 
-                      //               await LeadConnection.showMyDialog(
-                      //                   context, result.errorDescription);
-                      //               getData(false);
-                      //             } else {
-                      //               LeadConnection.showMyDialog(
-                      //                   context, result.errorDescription);
-                      //             }
-                      //           }
-                      //         }
+                        //               await LeadConnection.showMyDialog(
+                        //                   context, result.errorDescription);
+                        //               getData(false);
+                        //             } else {
+                        //               LeadConnection.showMyDialog(
+                        //                   context, result.errorDescription);
+                        //             }
+                        //           }
+                        //         }
 
-                      //         print(models);
-                      //       }
+                        //         print(models);
+                        //       }
 
-                      //       print("iconAssignment");
+                        //       print("iconAssignment");
 
-                      //   print("5");
-                      // }):
+                        //   print("5");
+                        // }):
 
-                      // _actionItem(Assets.iconRecall, Color(0xFFFFAD02),
-                      //     ontap: () async {
-                      //       LeadConnection.showMyDialogWithFunction(
-                      //           context,
-                      //           AppLocalizations.text(
-                      //               LangKey.warningRecallStaff),
-                      //           ontap: () async {
-                      //         DescriptionModelResponse result =
-                      //             await LeadConnection.assignRevokeLead(
-                      //                 context,
-                      //                 AssignRevokeLeadRequestModel(
-                      //                     type: "revoke",
-                      //                     customerLeadCode: item.customerLeadCode,
-                      //                     saleId: item.saleId,
-                      //                     timeRevokeLead: 30));
+                        // _actionItem(Assets.iconRecall, Color(0xFFFFAD02),
+                        //     ontap: () async {
+                        //       LeadConnection.showMyDialogWithFunction(
+                        //           context,
+                        //           AppLocalizations.text(
+                        //               LangKey.warningRecallStaff),
+                        //           ontap: () async {
+                        //         DescriptionModelResponse result =
+                        //             await LeadConnection.assignRevokeLead(
+                        //                 context,
+                        //                 AssignRevokeLeadRequestModel(
+                        //                     type: "revoke",
+                        //                     customerLeadCode: item.customerLeadCode,
+                        //                     saleId: item.saleId,
+                        //                     timeRevokeLead: 30));
 
-                      //         Navigator.of(context).pop();
+                        //         Navigator.of(context).pop();
 
-                      //         if (result != null) {
-                      //           if (result.errorCode == 0) {
-                      //             print(result.errorDescription);
+                        //         if (result != null) {
+                        //           if (result.errorCode == 0) {
+                        //             print(result.errorDescription);
 
-                      //             await LeadConnection.showMyDialog(
-                      //                 context, result.errorDescription);
-                      //             getData(false);
-                      //           } else {
-                      //             LeadConnection.showMyDialog(
-                      //                 context, result.errorDescription);
-                      //           }
-                      //         }
-                      //       });
+                        //             await LeadConnection.showMyDialog(
+                        //                 context, result.errorDescription);
+                        //             getData(false);
+                        //           } else {
+                        //             LeadConnection.showMyDialog(
+                        //                 context, result.errorDescription);
+                        //           }
+                        //         }
+                        //       });
 
-                      //       print("iconAssignment");
+                        //       print("iconAssignment");
 
-                      //   print("5");
-                      // })
+                        //   print("5");
+                        // })
                       ],
                     ),
                   )
@@ -799,17 +834,14 @@ class _LeadScreen extends State<LeadScreen> {
 
   Widget statusPotential(String title, Color color, Color colorText) {
     return Container(
-      height: 24,
-      width: 55,
       margin: EdgeInsets.only(right: 8.0),
-      decoration: BoxDecoration(
-          color: color, borderRadius: BorderRadius.circular(4.0)),
-      child: Center(
+      decoration:
+          BoxDecoration(color: color, borderRadius: BorderRadius.circular(4.0)),
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
         child: Text(title,
             style: TextStyle(
-                color: colorText,
-                fontSize: 14,
-                fontWeight: FontWeight.normal)),
+                color: colorText, fontSize: 14, fontWeight: FontWeight.normal)),
       ),
     );
   }

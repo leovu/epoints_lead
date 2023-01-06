@@ -13,21 +13,27 @@ import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/add_work_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/get_status_work_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_type_work_response_model.dart';
-import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
+// import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_project_model_response.dart';
 import 'package:lead_plugin_epoint/model/type_card_model.dart';
+import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modal/list_projects_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/status_work_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/type_of_work_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/customer_care_potential/customer_care_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
+import 'package:lead_plugin_epoint/utils/custom_document_picker.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
+import 'package:lead_plugin_epoint/widget/custom_chip.dart';
+import 'package:lead_plugin_epoint/widget/custom_column_infomation.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
@@ -37,7 +43,7 @@ import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
 
 class CustomerCarePotential extends StatefulWidget {
 
-  ListCustomLeadItems item;
+  DetailPotentialData item;
 
   CustomerCarePotential({Key key,this.item}) : super(key: key);
 
@@ -132,9 +138,12 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
   bool showMore = false;
   bool has_approved = false;
 
+  AddJobBloc _bloc;
+
   @override
   void initState() {
     super.initState();
+    _bloc = AddJobBloc(context);
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       // await callApi();
@@ -170,29 +179,30 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
     super.didChangeMetrics();
   }
 
-  _showDocumentPicker() async {
-    List<File> files = await openMultiDocument(
+  _uploadFile() async {
+    File file = await CustomDocumentPicker.openDocument(
         context,
         params: [
+          "txt",
           "pdf",
           "doc",
           "docx",
           "xls",
           "xlsx",
           "xlsm",
+          "pptx",
+          "ppt",
+          "jpeg",
+          "jpg",
+          "png"
         ]
     );
 
-    if((files?.length ?? 0) != 0){
-      // LeadConnection.showLoading(context);
-      for(var e in files){
-        await LeadConnection.workUploadFile(context,MultipartFileModel(
-            name: "link",
-            file: e
-        ));
-      }
-      
-      Navigator.of(context).pop();
+    if(file != null){
+      _bloc.workUploadFile(MultipartFileModel(
+          name: "link",
+          file: file
+      ));
     }
   }
 
@@ -218,6 +228,13 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
     return files == null ? null : files.files.map((e) => File(e.path)).toList();
   }
+
+    String getNameFromPath(String path){
+  String event = path ?? "";
+  return event.contains("/")
+      ? event.split("/").last
+      : event;
+}
 
 
 
@@ -435,12 +452,45 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               focusNode: _enterWorkDescFocusNode,
             ),
           ),
-          Container(
+
+          CustomColumnInformation(
+            title: "File",
+            child: Column(
+              children: [
+                StreamBuilder(
+                    stream: _bloc.outputFiles,
+                    initialData: null,
+                    builder: (_, snapshot){
+                      List<WorkUploadFileResponseModel> models = snapshot.data ?? [];
+                      return models.isEmpty?Container():Container(
+                        padding: EdgeInsets.only(bottom: AppSizes.minPadding),
+                        alignment: Alignment.centerLeft,
+                        child: Wrap(
+                          spacing: AppSizes.minPadding,
+                          runSpacing: AppSizes.minPadding,
+                          children: models.map((e) => Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomChip(
+                                radius: 5.0,
+                                backgroundColor: Color(0xFFC4C4C4),
+                                text: getNameFromPath(e.path),
+                                style: AppTextStyles.style13WhiteNormal,
+                                onClose: () => _bloc.removeFile(e),
+                              )
+                            ],
+                          )).toList(),
+                        ),
+                      );
+                    }
+                ),
+                Container(
             margin: EdgeInsets.only(bottom: 10),
             child: InkWell(
               onTap: () {
                 // selectFile();
               // _showDocumentPicker();
+              _uploadFile();
                 
               },
               child: DottedBorder(
@@ -467,6 +517,11 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               ),
             ),
           ),
+              ],
+            ),
+          ),
+
+          
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -602,7 +657,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                         //   width: 11.0,
                         // ),
                         Text(
-                          widget.item.leadFullName,
+                          widget.item.fullName,
                           style: TextStyle(
                               fontSize: 15.0,
                               color: const Color(0xFF121212),

@@ -1,15 +1,15 @@
 class WorkListCommentRequestModel {
-  int manageWorkId;
+  int customerLeadID;
 
-  WorkListCommentRequestModel({this.manageWorkId});
+  WorkListCommentRequestModel({this.customerLeadID});
 
   WorkListCommentRequestModel.fromJson(Map<String, dynamic> json) {
-    manageWorkId = json['manage_work_id'];
+    customerLeadID = json['customer_lead_id'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['manage_work_id'] = this.manageWorkId;
+    data['customer_lead_id'] = this.customerLeadID;
     return data;
   }
 }

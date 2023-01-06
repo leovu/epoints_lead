@@ -4,12 +4,6 @@ class WorkListCommentResponseModel {
   WorkListCommentResponseModel({this.data});
 
   WorkListCommentResponseModel.fromJson(Map<String, dynamic> json) {
-    // if (json != null) {
-    //   data = <WorkListCommentModel>[];
-    //   json.forEach((v) {
-    //     data.add(new WorkListCommentModel.fromJson(v));
-    //   });
-    // }
 
     if (json['Data'] != null) {
       data = <WorkListCommentModel>[];
@@ -29,9 +23,9 @@ class WorkListCommentResponseModel {
 }
 
 class WorkListCommentModel {
-  int manageCommentId;
-  int manageWorkId;
-  int manageParentCommentId;
+  int customerLeadCommentId;
+  int customerLeadId;
+  int customerLeadParentCommentId;
   int staffId;
   String staffName;
   String staffAvatar;
@@ -42,9 +36,9 @@ class WorkListCommentModel {
   bool isSubComment;
 
   WorkListCommentModel(
-      {this.manageCommentId,
-        this.manageWorkId,
-        this.manageParentCommentId,
+      {this.customerLeadCommentId,
+        this.customerLeadId,
+        this.customerLeadParentCommentId,
         this.staffId,
         this.staffName,
         this.staffAvatar,
@@ -54,9 +48,9 @@ class WorkListCommentModel {
         this.listObject});
 
   WorkListCommentModel.fromJson(Map<String, dynamic> json) {
-    manageCommentId = json['manage_comment_id'];
-    manageWorkId = json['manage_work_id'];
-    manageParentCommentId = json['manage_parent_comment_id'];
+    customerLeadCommentId = json['customer_lead_comment_id'];
+    customerLeadId = json['customer_lead_id'];
+    customerLeadParentCommentId = json['customer_lead_parent_comment_id'];
     staffId = json['staff_id'];
     staffName = json['staff_name'];
     staffAvatar = json['staff_avatar'];
@@ -76,9 +70,9 @@ class WorkListCommentModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['manage_comment_id'] = this.manageCommentId;
-    data['manage_work_id'] = this.manageWorkId;
-    data['manage_parent_comment_id'] = this.manageParentCommentId;
+    data['customer_lead_comment_id'] = this.customerLeadCommentId;
+    data['customer_lead_id'] = this.customerLeadId;
+    data['customer_lead_parent_comment_id'] = this.customerLeadParentCommentId;
     data['staff_id'] = this.staffId;
     data['staff_name'] = this.staffName;
     data['staff_avatar'] = this.staffAvatar;

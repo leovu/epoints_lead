@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
-import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class CustomPermissionRequest {
   static Future<bool> request(BuildContext context, PermissionRequestType type) async {

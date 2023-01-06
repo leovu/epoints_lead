@@ -49,7 +49,6 @@ class CommentScreenState extends State<CommentScreen> with AutomaticKeepAliveCli
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _bloc = CommentBloc(context);
 
@@ -58,14 +57,13 @@ class CommentScreenState extends State<CommentScreen> with AutomaticKeepAliveCli
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _bloc.dispose();
     super.dispose();
   }
 
   Future _onRefresh(){
     return _bloc.workListComment(WorkListCommentRequestModel(
-      manageWorkId: widget.id
+      customerLeadID: widget.id
     ));
   }
 
@@ -81,8 +79,8 @@ class CommentScreenState extends State<CommentScreen> with AutomaticKeepAliveCli
       return;
     }
     _bloc.workCreatedComment(WorkCreateCommentRequestModel(
-      manageWorkId: widget.id,
-      manageParentCommentId: (_callbackModel?.manageParentCommentId) ?? (_callbackModel?.manageCommentId),
+      customerLeadId: widget.id,
+      customerLeadParentCommentId: (_callbackModel?.customerLeadParentCommentId) ?? (_callbackModel?.customerLeadCommentId),
       message: _controllerComment.text,
       path: _file
     ), _controllerComment, widget.onCallback);

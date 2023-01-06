@@ -449,15 +449,14 @@ class LeadConnection {
     return null;
   }
 
-  static Future<List<WorkListFileModel>> workUploadFile(
+  static Future<WorkUploadFileResponseModel> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
     ResponseData response =
         await connection.upload('/manage-work/upload-file', model);
     if (response.isSuccess) {
-      var responseModel = WorkUploadFileResponseModel.fromJson(response.data);
+      WorkUploadFileResponseModel responseModel = WorkUploadFileResponseModel.fromJson(response.data);
 
-      return workUploadFileDocument(WorkUploadFileDocumentRequestModel(
-          manageWorkId: null, path: responseModel.path));
+      return responseModel;
     }
     return null;
   }
@@ -481,7 +480,7 @@ class LeadConnection {
       BuildContext context, WorkListCommentRequestModel model) async {
     // showLoading(context);
     ResponseData responseData = await connection
-        .post('/manage-work/list-comment', model.toJson());
+        .post('/customer-lead/list-comment', model.toJson());
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =
           WorkListCommentResponseModel.fromJson(responseData.data);
@@ -494,7 +493,7 @@ class LeadConnection {
       BuildContext context, WorkCreateCommentRequestModel model) async {
     showLoading(context);
     ResponseData responseData =
-        await connection.post('/manage-work/created-comment', model.toJson());
+        await connection.post('/customer-lead/created-comment', model.toJson());
         Navigator.of(context).pop();
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =

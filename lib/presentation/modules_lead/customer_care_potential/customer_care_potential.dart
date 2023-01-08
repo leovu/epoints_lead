@@ -43,10 +43,9 @@ import 'package:lead_plugin_epoint/widget/custom_size_transaction.dart';
 import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
 
 class CustomerCarePotential extends StatefulWidget {
-
   DetailPotentialData detail;
 
-  CustomerCarePotential({Key key,this.detail}) : super(key: key);
+  CustomerCarePotential({Key key, this.detail}) : super(key: key);
 
   @override
   _CustomerCarePotentialState createState() => _CustomerCarePotentialState();
@@ -181,36 +180,30 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
   }
 
   _uploadFile() async {
-    File file = await CustomDocumentPicker.openDocument(
-        context,
-        params: [
-          "txt",
-          "pdf",
-          "doc",
-          "docx",
-          "xls",
-          "xlsx",
-          "xlsm",
-          "pptx",
-          "ppt",
-          "jpeg",
-          "jpg",
-          "png"
-        ]
-    );
+    File file = await CustomDocumentPicker.openDocument(context, params: [
+      "txt",
+      "pdf",
+      "doc",
+      "docx",
+      "xls",
+      "xlsx",
+      "xlsm",
+      "pptx",
+      "ppt",
+      "jpeg",
+      "jpg",
+      "png"
+    ]);
 
-    if(file != null){
-      _bloc.workUploadFile(MultipartFileModel(
-          name: "link",
-          file: file
-      ));
+    if (file != null) {
+      _bloc.workUploadFile(MultipartFileModel(name: "link", file: file));
     }
   }
 
-    static Future<List<File>> openMultiDocument(
-      BuildContext context, {
-        List<String> params,
-      }) async {
+  static Future<List<File>> openMultiDocument(
+    BuildContext context, {
+    List<String> params,
+  }) async {
     try {
       bool permission = true;
       permission = await CustomPermissionRequest.request(
@@ -222,22 +215,15 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
     }
 
     FilePickerResult files = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: params,
-        allowMultiple: true
-    );
+        type: FileType.custom, allowedExtensions: params, allowMultiple: true);
 
     return files == null ? null : files.files.map((e) => File(e.path)).toList();
   }
 
-    String getNameFromPath(String path){
-  String event = path ?? "";
-  return event.contains("/")
-      ? event.split("/").last
-      : event;
-}
-
-
+  String getNameFromPath(String path) {
+    String event = path ?? "";
+    return event.contains("/") ? event.split("/").last : event;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -461,68 +447,73 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                 StreamBuilder(
                     stream: _bloc.outputFiles,
                     initialData: null,
-                    builder: (_, snapshot){
-                      List<WorkUploadFileResponseModel> models = snapshot.data ?? [];
-                      return models.isEmpty?Container():Container(
-                        padding: EdgeInsets.only(bottom: AppSizes.minPadding),
-                        alignment: Alignment.centerLeft,
-                        child: Wrap(
-                          spacing: AppSizes.minPadding,
-                          runSpacing: AppSizes.minPadding,
-                          children: models.map((e) => Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              CustomChip(
-                                radius: 5.0,
-                                backgroundColor: Color(0xFFC4C4C4),
-                                text: getNameFromPath(e.path),
-                                style: AppTextStyles.style13WhiteNormal,
-                                onClose: () => _bloc.removeFile(e),
-                              )
-                            ],
-                          )).toList(),
-                        ),
-                      );
-                    }
-                ),
+                    builder: (_, snapshot) {
+                      List<WorkUploadFileResponseModel> models =
+                          snapshot.data ?? [];
+                      return models.isEmpty
+                          ? Container()
+                          : Container(
+                              padding:
+                                  EdgeInsets.only(bottom: AppSizes.minPadding),
+                              alignment: Alignment.centerLeft,
+                              child: Wrap(
+                                spacing: AppSizes.minPadding,
+                                runSpacing: AppSizes.minPadding,
+                                children: models
+                                    .map((e) => Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            CustomChip(
+                                              radius: 5.0,
+                                              backgroundColor:
+                                                  Color(0xFFC4C4C4),
+                                              text: getNameFromPath(e.path),
+                                              style: AppTextStyles
+                                                  .style13WhiteNormal,
+                                              onClose: () =>
+                                                  _bloc.removeFile(e),
+                                            )
+                                          ],
+                                        ))
+                                    .toList(),
+                              ),
+                            );
+                    }),
                 Container(
-            margin: EdgeInsets.only(bottom: 10),
-            child: InkWell(
-              onTap: () {
-                // selectFile();
-              // _showDocumentPicker();
-              _uploadFile();
-                
-              },
-              child: DottedBorder(
-                color: AppColors.borderColor,
-                borderType: BorderType.RRect,
-                radius: Radius.circular(10),
-                padding: EdgeInsets.all(6),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
-                  child: Container(
-                    height: 40.0,
-                    width: MediaQuery.of(context).size.width,
-                    child: Center(
-                      child: Text(
-                          AppLocalizations.text(
-                              LangKey.pressUploadPhotosAndVideos),
-                          style: TextStyle(
-                              color: Color(0xFF9E9E9E),
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w400)),
+                  margin: EdgeInsets.only(bottom: 10),
+                  child: InkWell(
+                    onTap: () {
+                      // selectFile();
+                      // _showDocumentPicker();
+                      _uploadFile();
+                    },
+                    child: DottedBorder(
+                      color: AppColors.borderColor,
+                      borderType: BorderType.RRect,
+                      radius: Radius.circular(10),
+                      padding: EdgeInsets.all(6),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(12)),
+                        child: Container(
+                          height: 40.0,
+                          width: MediaQuery.of(context).size.width,
+                          child: Center(
+                            child: Text(
+                                AppLocalizations.text(
+                                    LangKey.pressUploadPhotosAndVideos),
+                                style: TextStyle(
+                                    color: Color(0xFF9E9E9E),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w400)),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          ),
               ],
             ),
           ),
-
-          
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -631,44 +622,46 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                       )
                     ],
                   ),
-                  (widget.detail.customerType == "business") ? Container(
-                    margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Flexible(
-                        //   fit: FlexFit.loose,
-                        //   child: Container(
-                        //     height: 36.0,
-                        //     // width: 70.0,
-                        //     decoration: BoxDecoration(
-                        //         color: Colors.white,
-                        //         boxShadow: [
-                        //           BoxShadow(
-                        //             offset: Offset(0, 1),
-                        //             blurRadius: 2,
-                        //             color: Colors.black.withOpacity(0.3),
-                        //           )
-                        //         ],
-                        //         borderRadius: BorderRadius.circular(5.0)),
-                        //     child: Image.asset(Assets.imgFeatureDeveloping),
-                        //   ),
-                        // ),
-                        // SizedBox(
-                        //   width: 11.0,
-                        // ),
-                        Text(
-                          widget.detail.fullName,
-                          style: TextStyle(
-                              fontSize: 15.0,
-                              color: const Color(0xFF121212),
-                              fontWeight: FontWeight.w600),
+                  (widget.detail.customerType == "business")
+                      ? Container(
+                          margin: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Flexible(
+                              //   fit: FlexFit.loose,
+                              //   child: Container(
+                              //     height: 36.0,
+                              //     // width: 70.0,
+                              //     decoration: BoxDecoration(
+                              //         color: Colors.white,
+                              //         boxShadow: [
+                              //           BoxShadow(
+                              //             offset: Offset(0, 1),
+                              //             blurRadius: 2,
+                              //             color: Colors.black.withOpacity(0.3),
+                              //           )
+                              //         ],
+                              //         borderRadius: BorderRadius.circular(5.0)),
+                              //     child: Image.asset(Assets.imgFeatureDeveloping),
+                              //   ),
+                              // ),
+                              // SizedBox(
+                              //   width: 11.0,
+                              // ),
+                              Text(
+                                widget.detail.fullName,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    color: const Color(0xFF121212),
+                                    fontWeight: FontWeight.w600),
+                              )
+                            ],
+                          ),
                         )
-                      ],
-                    ),
-                  ) : Container(
-                    height: 15.0,
-                  ),
+                      : Container(
+                          height: 15.0,
+                        ),
 
                   _buildTextField(
                       AppLocalizations.text(LangKey.chooseSupporter),
@@ -750,7 +743,8 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
                           for (int i = 0; i < tagsData.length; i++) {
                             if (tagsData[i].selected) {
-                              listTag.add(ListTag(manageTagId: tagsData[i].tagId));
+                              listTag
+                                  .add(ListTag(manageTagId: tagsData[i].tagId));
                               if (tagsString == "") {
                                 tagsString = tagsData[i].name;
                               } else {
@@ -1001,7 +995,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
             child: CustomMenuBottomSheet(
               title: AppLocalizations.text(LangKey.toDate),
               widget: CustomDatePicker(
-                initTime: selectedDate ,
+                initTime: selectedDate,
                 maximumTime: DateTime(2050, 12, 31),
                 minimumTime: _fromDate ?? _now,
                 dateOrder: DatePickerDateOrder.dmy,
@@ -1022,25 +1016,6 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
         });
   }
 
-  Widget _richTextTitle(String title, bool madantory) {
-    return RichText(
-        text: TextSpan(
-            text: title + ":",
-            style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.black,
-                fontWeight: FontWeight.normal),
-            children: [
-          madantory
-              ? TextSpan(
-                  text: "*",
-                  style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold))
-              : TextSpan(text: "")
-        ]));
-  }
 
   Widget typeOfWorkItem(String title, bool selected, Function ontap) {
     return InkWell(
@@ -1089,50 +1064,51 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-
-          if ( (_titleText.text == "") || (_toDateText.text == "") || (addWorkModel.manageStatusId == 0) || (addWorkModel.processorId == 0)) {
-
-            LeadConnection.showMyDialog(context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
-
+          if ((_titleText.text == "") ||
+              (_toDateText.text == "") ||
+              (addWorkModel.manageStatusId == 0) ||
+              (addWorkModel.processorId == 0)) {
+            LeadConnection.showMyDialog(context,
+                AppLocalizations.text(LangKey.warningChooseAllRequiredInfo));
           } else {
             LeadConnection.showLoading(context);
             DescriptionModelResponse result = await LeadConnection.addWork(
-              context,
-              AddWorkRequestModel(
-                  manageWorkTitle: _titleText.text ?? "",
-                  manageWorkCustomerType: "lead",
-                  manageTypeWorkId: addWorkModel.manageTypeWorkId,
-                  from_date:  _fromDateText.text ?? "",
-                  to_date:_toDateText.text ?? "" ,
-                  // date_start: _fromDateText.text ?? "",
-                  // date_finish: _toDateText.text ?? "",
-                  time: null,
-                  timeType: null,
-                  processorId: addWorkModel.processorId,
-                  approveId: null,
-                  remindWork: _switchValue ? RemindWork(
-                    dateRemind: _toDateText.text ?? "",
-                    timeType: "m",
-                    time: 15,
-                    description: "Nhắc nhở " + _enterWorkDescText.text  
-
-                  ) : null,
-                  progress: null,
-                  staffSupport: addWorkModel.staffSupport,
-                  parentId: null,
-                  description: _enterWorkDescText.text ?? "",
-                  manageProjectId: addWorkModel.manageProjectId,
-                  customerId: widget.detail.customerLeadId,
-                  listTag: addWorkModel.listTag,
-                  typeCardWork: null,
-                  priority: 0,
-                  manageStatusId: addWorkModel.manageStatusId,
-                  isApproveId: has_approved ? 1 : 0,
-                  repeatWork: null,
-                  createObjectType: "",
-                  createObjectId: null));
-          Navigator.of(context).pop();
-      if (result != null) {
+                context,
+                AddWorkRequestModel(
+                    manageWorkTitle: _titleText.text ?? "",
+                    manageWorkCustomerType: "lead",
+                    manageTypeWorkId: addWorkModel.manageTypeWorkId,
+                    from_date: _fromDateText.text ?? "",
+                    to_date: _toDateText.text ?? "",
+                    // date_start: _fromDateText.text ?? "",
+                    // date_finish: _toDateText.text ?? "",
+                    time: null,
+                    timeType: null,
+                    processorId: addWorkModel.processorId,
+                    approveId: null,
+                    remindWork: _switchValue
+                        ? RemindWork(
+                            dateRemind: _toDateText.text ?? "",
+                            timeType: "m",
+                            time: 15,
+                            description: "Nhắc nhở " + _enterWorkDescText.text)
+                        : null,
+                    progress: null,
+                    staffSupport: addWorkModel.staffSupport,
+                    parentId: null,
+                    description: _enterWorkDescText.text ?? "",
+                    manageProjectId: addWorkModel.manageProjectId,
+                    customerId: widget.detail.customerLeadId,
+                    listTag: addWorkModel.listTag,
+                    typeCardWork: null,
+                    priority: 0,
+                    manageStatusId: addWorkModel.manageStatusId,
+                    isApproveId: has_approved ? 1 : 0,
+                    repeatWork: null,
+                    createObjectType: "",
+                    createObjectId: null));
+            Navigator.of(context).pop();
+            if (result != null) {
               if (result.errorCode == 0) {
                 print(result.errorDescription);
 

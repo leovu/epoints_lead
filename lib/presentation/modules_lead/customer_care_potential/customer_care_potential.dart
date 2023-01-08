@@ -888,7 +888,6 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
                       addWorkModel.manageProjectId =
                           projectSelected.manageProjectId;
-                      // widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
                       setState(() {});
                     }
                   }),

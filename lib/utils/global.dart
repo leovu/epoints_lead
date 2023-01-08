@@ -12,6 +12,8 @@ class Global {
 
   static Function createJob;
 
+  static Function editJob;
+
   // static List<TagData> tagDatas = [];
 
 

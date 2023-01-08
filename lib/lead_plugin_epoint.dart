@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
@@ -18,59 +17,69 @@ class LeadPluginEpoint {
   Future<String> getPlatformVersion() {
     return LeadPluginEpointPlatform.instance.getPlatformVersion();
   }
-  static Future<Future<Object>> openLead(BuildContext context, Locale locale) async {
 
+  static Future<Future<Object>> openLead(
+      BuildContext context, Locale locale) async {
     // await AppSizes.init(context);
     await AppLocalizations(locale).load();
 
-    return Navigator.of(context).push(
-        MaterialPageRoute(
-            builder: (context) => LeadScreen()));
-
+    return Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => LeadScreen()));
   }
 
-  static Future<dynamic>open(BuildContext context, Locale locale,String token, int create, {String domain, String brandCode, String fullname, String phone, String customerLeadCode, Function createJob}) async {
-    if(domain != null) {
+  static Future<dynamic> open(
+      BuildContext context, Locale locale, String token, int create,
+      {String domain,
+      String brandCode,
+      String fullname,
+      String phone,
+      String customerLeadCode,
+      Function createJob,
+      Function editJob}) async {
+    if (domain != null) {
       HTTPConnection.domain = domain;
     }
-    if(brandCode != null) {
+    if (brandCode != null) {
       HTTPConnection.brandCode = brandCode;
     }
-    if(token != null) {
+    if (token != null) {
       HTTPConnection.asscessToken = token;
     }
-     if (createJob != null) {
+    if (createJob != null) {
       Global.createJob = createJob;
-
     }
-    
+
+    if (editJob != null) {
+      Global.editJob = editJob;
+    }
+
     LeadConnection.locale = locale;
     LeadConnection.buildContext = context;
     AppSizes.init(context);
     await AppLocalizations(LeadConnection.locale).load();
-    bool result = await LeadConnection.init(token,domain: domain);
-    if(result) {
-      if (create == 0 ) {
-        Map<String, dynamic> event =  await Navigator.of(context).push(
+    bool result = await LeadConnection.init(token, domain: domain);
+    if (result) {
+      if (create == 0) {
+        Map<String, dynamic> event = await Navigator.of(context).push(
             MaterialPageRoute(
-                builder: (context) => CreatePotentialCustomer(fullname: fullname, phoneNumber: phone)));
+                builder: (context) => CreatePotentialCustomer(
+                    fullname: fullname, phoneNumber: phone)));
         return event;
       } else if (create == 1) {
-        await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => DetailPotentialCustomer(customer_lead_code: customerLeadCode)));
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                DetailPotentialCustomer(customer_lead_code: customerLeadCode)));
         return null;
       } else if (create == 3) {
-        await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => EditPotentialCustomer(customer_lead_code: "LEAD_29122022233")));
-      }  else {
-        await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => LeadScreen()));
+        await Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) =>
+                EditPotentialCustomer(customer_lead_code: "LEAD_29122022233")));
+      } else {
+        await Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => LeadScreen()));
         return null;
       }
-    }else {
+    } else {
       loginError(LeadConnection.buildContext, 'Fail');
       return null;
     }
@@ -88,10 +97,10 @@ class LeadPluginEpoint {
               children: <Widget>[
                 Center(
                     child: Text(
-                      'Cảnh báo\n',
-                      style:
+                  'Cảnh báo\n',
+                  style:
                       TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
-                    )),
+                )),
                 Center(child: Text(title)),
               ],
             ),

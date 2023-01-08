@@ -161,7 +161,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     if (dataDetail != null) {
       if (dataDetail.errorCode == 0) {
         detail = dataDetail.data;
-        setState(() {});
+        selectedTab(2);
+        // setState(() {});
       } else {
         await LeadConnection.showMyDialog(context, dataDetail.errorDescription);
         Navigator.of(context).pop();
@@ -1420,7 +1421,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     print(createTime.minute);
 
     return InkWell(
-      onTap: () async {},
+      onTap: () async {
+
+        var result = await Global.editJob(item.manageWorkId);
+          if (result != null && result) {
+            getData();
+          } 
+      },
       child: Container(
         child: Container(
           margin: EdgeInsets.all(10),

@@ -363,7 +363,7 @@ class InfoDeal {
   String pipelineCode;
   String journeyCode;
   String dealName;
-  String probability;
+  int probability;
   String createdAt;
   int saleId;
   String staffName;

@@ -174,15 +174,15 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       }
     }
 
-    var contactList =
-        await LeadConnection.getContactList(context, widget.customer_lead_code);
-    // var dataDetail = await LeadConnection.getdetailPotential( context, "LEAD_08112022190");
-    if (contactList != null) {
-      if (contactList.errorCode == 0) {
-        contactListData = contactList.data;
-        setState(() {});
-      }
-    }
+    // var contactList =
+    //     await LeadConnection.getContactList(context, widget.customer_lead_code);
+    // // var dataDetail = await LeadConnection.getdetailPotential( context, "LEAD_08112022190");
+    // if (contactList != null) {
+    //   if (contactList.errorCode == 0) {
+    //     contactListData = contactList.data;
+    //     setState(() {});
+    //   }
+    // }
 
     _bloc.workListComment(WorkListCommentRequestModel(
       customerLeadID: detail.customerLeadId
@@ -765,7 +765,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 child: InkWell(
                   child: Row(
                     children: [
-                      Flexible(child: RichText(
+                      RichText(
                         text: TextSpan(
                             text: AppLocalizations.text(LangKey.answering) + " ",
                             style: AppTextStyles.style12grey200Normal,
@@ -776,7 +776,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               )
                             ]
                         ),
-                      )),
+                      ),
                       Container(width: AppSizes.minPadding,),
                       Icon(
                         Icons.close,
@@ -1013,17 +1013,15 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                 decoration: BoxDecoration(
                                     color: Color(0xFF3AEDB6),
                                     borderRadius: BorderRadius.circular(4.0)),
-                                child: Flexible(
-                                  child: Padding(
-                                    padding: EdgeInsets.all(8.0),
-                                    child: Text(detail?.journeyName ?? "",
-                                    textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          
-                                            color: Color(0xFF11B482),
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.normal)),
-                                  ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: Text(detail?.journeyName ?? "",
+                                  textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        
+                                          color: Color(0xFF11B482),
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.normal)),
                                 ),
                               ),
 

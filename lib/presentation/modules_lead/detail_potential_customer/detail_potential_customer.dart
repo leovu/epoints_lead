@@ -136,6 +136,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     ), _controllerComment, widget.onCallback);
   }
 
+    Future _onRefresh(){
+    return _bloc.workListComment(WorkListCommentRequestModel(
+      customerLeadID: detail.customerLeadId
+    ));
+  }
+
     _showOption(){
     CustomImagePicker.showPicker(context, (file) {
       _bloc.workUploadFile(MultipartFileModel(
@@ -161,8 +167,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     if (dataDetail != null) {
       if (dataDetail.errorCode == 0) {
         detail = dataDetail.data;
-        selectedTab(2);
-        // setState(() {});
+        setState(() {});
       } else {
         await LeadConnection.showMyDialog(context, dataDetail.errorDescription);
         Navigator.of(context).pop();
@@ -728,7 +733,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           emptyBuilder: _buildEmpty(),
           skeletonBuilder: _buildContainer(null),
           bodyBuilder: () => _buildContainer(models),
-          // onRefresh: () => _onRefresh(),
+          onRefresh: () => _onRefresh(),
         );
       }
     );
@@ -1192,7 +1197,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       padding: const EdgeInsets.all(4.0),
       margin: EdgeInsets.only(left: 11, right: 11, bottom: 8.0),
       decoration: BoxDecoration(
-          color: Color.fromARGB(255, 37, 16, 16),
+          // color: Color.fromARGB(255, 37, 16, 16),
           borderRadius: BorderRadius.circular(5),
           border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
       child: Column(
@@ -1425,7 +1430,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
         var result = await Global.editJob(item.manageWorkId);
           if (result != null && result) {
-            getData();
+            await getData();
+            selectedTab(2);
           } 
       },
       child: Container(
@@ -1510,10 +1516,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
                       InkWell(
                         child: Container(
-                          height: 30,
-                          width: 100,
+                          // height: 30,
+                          // width: 100,
                           margin: EdgeInsets.only(top: 10.0),
-                          padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                          // padding: EdgeInsets.only(left: 5.0, right: 5.0),
                           decoration: BoxDecoration(boxShadow: [
                             BoxShadow(
                               offset: Offset(0, 1),
@@ -1521,25 +1527,17 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               color: Colors.black.withOpacity(0.3),
                             )
                           ], color: Colors.white),
-                          child: Row(
-                            children: [
-                              Image.asset(
-                                Assets.iconCall,
-                                scale: 3.0,
-                              ),
-                              SizedBox(
-                                width: 5.0,
-                              ),
-                              Text(
-                                AppLocalizations.text(LangKey.call),
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                    color: AppColors.primaryColor,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w500),
-                                // maxLines: 1,
-                              )
-                            ],
+                          child: Padding(
+                            padding: EdgeInsets.all(6.0),
+                            child: Text(
+                              item.manageTypeWorkName ?? "N/A",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: AppColors.primaryColor,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500),
+                              // maxLines: 1,
+                            ),
                           ),
                         ),
                       ),

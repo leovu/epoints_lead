@@ -1100,7 +1100,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                     customerId: widget.detail.customerLeadId,
                     listTag: addWorkModel.listTag,
                     typeCardWork: null,
-                    priority: 0,
+                    priority: 1,
                     manageStatusId: addWorkModel.manageStatusId,
                     isApproveId: has_approved ? 1 : 0,
                     repeatWork: null,

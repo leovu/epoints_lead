@@ -639,7 +639,6 @@ class _LeadScreen extends State<LeadScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         _actionItem(Assets.iconCalendar, Color(0xFF26A7AD),
-                            show: true,
                             number: item?.relatedWork ?? 0, ontap: () async {
                           bool result = await Navigator.of(context)
                               .push(MaterialPageRoute(
@@ -655,7 +654,6 @@ class _LeadScreen extends State<LeadScreen> {
                           print("1");
                         }),
                         _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                            show: true,
                             number: item?.appointment ?? 0, ontap: () async {
                           bool result = await Navigator.of(context).push(
                               MaterialPageRoute(
@@ -783,7 +781,7 @@ class _LeadScreen extends State<LeadScreen> {
   }
 
   Widget _actionItem(String icon, Color color,
-      {num number, bool show = false, Function ontap}) {
+      {num number, Function ontap}) {
     return InkWell(
       onTap: ontap,
       child: Container(
@@ -803,7 +801,7 @@ class _LeadScreen extends State<LeadScreen> {
                   ),
                 ),
               ),
-              show
+              (number > 0)
                   ? Positioned(
                       left: 30,
                       bottom: 30,
@@ -818,7 +816,7 @@ class _LeadScreen extends State<LeadScreen> {
                             borderRadius: BorderRadius.circular(100),
                             color: Color(0xFFF45E38)),
                         child: Center(
-                            child: Text("${number ?? 0}",
+                            child: Text((number > 9) ? "9+" : "${number ?? 0}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14.0,

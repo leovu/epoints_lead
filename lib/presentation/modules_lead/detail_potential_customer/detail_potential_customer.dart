@@ -1321,14 +1321,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                       children: [
                                         _actionItem(Assets.iconCalendar,
                                             Color(0xFF26A7AD),
-                                            show: true,
                                             number: detail.relatedWork ?? 0,
                                             ontap: () {
                                           print("1");
                                         }),
                                         _actionItem(Assets.iconOutdate,
                                             Color(0xFFDD2C00),
-                                            show: true,
                                             number: detail.appointment ?? 0,
                                             ontap: () {
                                           print("2");
@@ -1466,7 +1464,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   ),
                   Expanded(
                     child: Text(
-                      "${NumberFormat("#,###", "vi-VN").format(item.amount)} VNĐ",
+                      "${NumberFormat("#,###", "vi-VN").format(item.amount ?? 0)} VNĐ",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           color: AppColors.primaryColor,
@@ -1516,7 +1514,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   }
 
   Widget _actionItem(String icon, Color color,
-      {num number, bool show = false, Function ontap}) {
+      {num number, Function ontap}) {
     return InkWell(
       onTap: ontap,
       child: Container(
@@ -1536,7 +1534,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   ),
                 ),
               ),
-              show
+              (number > 0)
                   ? Positioned(
                       left: 30,
                       bottom: 30,
@@ -1551,7 +1549,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             borderRadius: BorderRadius.circular(100),
                             color: Color(0xFFF45E38)),
                         child: Center(
-                            child: Text("${number ?? 0}",
+                            child: Text((number > 9) ? "9+" : "${number ?? 0}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14.0,

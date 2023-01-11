@@ -33,6 +33,7 @@ class Assets {
   static String iconItinerary = "packages/lead_plugin_epoint/assets/icons/ic_epoint_itinerary.png";
   static String iconPoint = "packages/lead_plugin_epoint/assets/icons/ic_epoint_business_focal_point.png";
   static String iconMessenger = "packages/lead_plugin_epoint/assets/icons/ic_mess.png";
+  static String iconFacebook = "packages/lead_plugin_epoint/assets/icons/ic_epoint_facebook.png";
   static String iconZalo = "packages/lead_plugin_epoint/assets/icons/ic_zalo.png";
   static String iconFilter = "packages/lead_plugin_epoint/assets/icons/ic-epoint_filter.png";
   static String iconInteraction = "packages/lead_plugin_epoint/assets/icons/ic_interaction.png";
@@ -56,6 +57,8 @@ class Assets {
   static String iconFiles = "packages/lead_plugin_epoint/assets/icons/ic_epoint_file.png";
   static String iconTimeDetail = "packages/lead_plugin_epoint/assets/icons/ic_epoint_time_detail.png";
   static String iconCamera = "packages/lead_plugin_epoint/assets/icons/ic_epoint_camera.png";
+  static String iconPosition = "packages/lead_plugin_epoint/assets/icons/ic_epoint_position.png";
+
 
  
 

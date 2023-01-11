@@ -215,6 +215,7 @@ class LangKey {
   static const String notification = "notification";
   static const String allow = "allow";
   static const String message_permission = "message_permission";
+  static const String choose_position = "choose_position";
   
 
 

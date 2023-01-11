@@ -9,13 +9,14 @@ import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/work_create_comment_request_model.dart';
 import 'package:lead_plugin_epoint/model/request/work_list_comment_request_model.dart';
+import 'package:lead_plugin_epoint/model/response/care_lead_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/contact_list_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/detail_lead_info_deal_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_comment_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/comment_screen/bloc/comment_bloc.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/comment_screen/ui/comment_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/customer_care_potential/customer_care_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/custom_image_picker.dart';
@@ -40,9 +41,16 @@ class DetailPotentialCustomer extends StatefulWidget {
   final int indexTab;
   bool customerCare;
   int id;
+  String typeCustomer;
   Function(int) onCallback;
   DetailPotentialCustomer(
-      {Key key, this.customer_lead_code, this.indexTab, this.customerCare, this.id, this.onCallback})
+      {Key key,
+      this.customer_lead_code,
+      this.indexTab,
+      this.typeCustomer,
+      this.customerCare,
+      this.id,
+      this.onCallback})
       : super(key: key);
 
   @override
@@ -54,10 +62,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   final ScrollController _controller = ScrollController();
   List<WorkListStaffModel> models = [];
   List<ContactListData> contactListData;
+  List<CareLeadData> customerCareLead;
   DetailPotentialData detail;
   WorkListCommentModel _callbackModel;
+  List<DetailLeadInfoDealData> detailLeadInfoDealData;
 
-   List<DetailPotentialTabModel> tabPotentials = [
+  List<DetailPotentialTabModel> tabPotentials = [
     DetailPotentialTabModel(
         typeName: AppLocalizations.text(LangKey.generalInfomation),
         typeID: 0,
@@ -79,7 +89,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         typeID: 4,
         selected: false)
   ];
-
 
   FocusNode _focusComment = FocusNode();
   TextEditingController _controllerComment = TextEditingController();
@@ -104,6 +113,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
     _bloc = CommentBloc(context);
 
+    if (widget.typeCustomer != "business") {
+      tabPotentials.removeLast();
+    }
+
     index = widget.indexTab;
     for (int i = 0; i < tabPotentials.length; i++) {
       if (index == tabPotentials[i].typeID) {
@@ -117,48 +130,45 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       getData();
     });
   }
-    @override
+
+  @override
   void dispose() {
     _bloc.dispose();
     super.dispose();
   }
 
-
-  _send(){
-    if(_controllerComment.text.isEmpty && _file == null){
+  _send() {
+    if (_controllerComment.text.isEmpty && _file == null) {
       return;
     }
-    _bloc.workCreatedComment(WorkCreateCommentRequestModel(
-      customerLeadId: detail.customerLeadId,
-      customerLeadParentCommentId: (_callbackModel?.customerLeadParentCommentId) ?? (_callbackModel?.customerLeadCommentId),
-      message: _controllerComment.text,
-      path: _file
-    ), _controllerComment, widget.onCallback);
+    _bloc.workCreatedComment(
+        WorkCreateCommentRequestModel(
+            customerLeadId: detail.customerLeadId,
+            customerLeadParentCommentId:
+                (_callbackModel?.customerLeadParentCommentId) ??
+                    (_callbackModel?.customerLeadCommentId),
+            message: _controllerComment.text,
+            path: _file),
+        _controllerComment,
+        widget.onCallback);
   }
 
-    Future _onRefresh(){
-    return _bloc.workListComment(WorkListCommentRequestModel(
-      customerLeadID: detail.customerLeadId
-    ));
+  Future _onRefresh() {
+    return _bloc.workListComment(
+        WorkListCommentRequestModel(customerLeadID: detail.customerLeadId));
   }
 
-    _showOption(){
+  _showOption() {
     CustomImagePicker.showPicker(context, (file) {
-      _bloc.workUploadFile(MultipartFileModel(
-          name: "link",
-          file: file
-      ));
+      _bloc.workUploadFile(MultipartFileModel(name: "link", file: file));
     });
   }
 
-    openFile(BuildContext context, String name, String path){
+  openFile(BuildContext context, String name, String path) {
     Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => CustomFileView(path, name)));
-  // CustomNavigator.push(context, CustomFileView(path, name));
-}
-
-  
+        MaterialPageRoute(builder: (context) => CustomFileView(path, name)));
+    // CustomNavigator.push(context, CustomFileView(path, name));
+  }
 
   void getData() async {
     var dataDetail = await LeadConnection.getdetailPotential(
@@ -174,24 +184,22 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       }
     }
 
-    // var contactList =
-    //     await LeadConnection.getContactList(context, widget.customer_lead_code);
-    // // var dataDetail = await LeadConnection.getdetailPotential( context, "LEAD_08112022190");
-    // if (contactList != null) {
-    //   if (contactList.errorCode == 0) {
-    //     contactListData = contactList.data;
-    //     setState(() {});
+    // if (widget.typeCustomer == "business") {
+    //   var contactList = await LeadConnection.getContactList(
+    //       context, widget.customer_lead_code);
+    //   if (contactList != null) {
+    //     if (contactList.errorCode == 0) {
+    //       contactListData = contactList.data;
+    //       setState(() {});
+    //     }
     //   }
     // }
-
-    _bloc.workListComment(WorkListCommentRequestModel(
-      customerLeadID: detail.customerLeadId
-    ));
   }
 
   Future<bool> _openLink(String link) async {
     return await launch(link);
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -234,7 +242,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           childrenBoxDecoration: BoxDecoration(
               color: Colors.black.withOpacity(0.45),
               borderRadius: BorderRadius.circular(10.0)),
-          childrenCount:3,
+          childrenCount: 3,
           distance: 10,
           childrenType: ChildrenType.columnChildren,
           childrenAlignment: Alignment.centerRight,
@@ -272,22 +280,22 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 color: Colors.white,
               )),
           children: [
-                        // }),
+            // }),
             Column(
               children: [
                 FloatingActionButton(
                     backgroundColor: Color(0xFF41AC8D),
                     heroTag: "btn1",
                     onPressed: () async {
-                                            bool result = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      CustomerCarePotential(detail: detail)));
+                      bool result = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  CustomerCarePotential(detail: detail)));
 
-                          if (result != null && result) {
-                            getData();
-                            selectedTab(2);
-                          }
+                      if (result != null && result) {
+                        getData();
+                        selectedTab(2);
+                      }
                     },
                     child: Image.asset(
                       Assets.iconCustomerCare,
@@ -427,7 +435,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   Expanded(
                       child: ListView(
                     padding: EdgeInsets.zero,
-                    physics: (index == 3) ? NeverScrollableScrollPhysics() : AlwaysScrollableScrollPhysics(),
+                    physics: (index == 3)
+                        ? NeverScrollableScrollPhysics()
+                        : AlwaysScrollableScrollPhysics(),
                     controller: _controller,
                     children: buildInfomation(),
                   )),
@@ -437,15 +447,15 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 ],
               ),
 
-              (index == 3) ?  Positioned(
-                  bottom: 0,
-                  // left: 10,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white
-                    ),
-                    width: AppSizes.maxWidth,
-                    child: _buildChatBox())) : Container()
+              (index == 3)
+                  ? Positioned(
+                      bottom: 0,
+                      // left: 10,
+                      child: Container(
+                          decoration: BoxDecoration(color: Colors.white),
+                          width: AppSizes.maxWidth,
+                          child: _buildChatBox()))
+                  : Container()
               // Positioned(
               //     bottom: 30,
               //     left: 10,
@@ -476,55 +486,55 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               margin: EdgeInsets.only(top: 70),
               child: potentialInformationV2()),
 
-
           SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          scrollDirection: Axis.horizontal,
-          child: buildListOption(),
-        ),
+            physics: const AlwaysScrollableScrollPhysics(),
+            scrollDirection: Axis.horizontal,
+            child: buildListOption(),
+          ),
 
-         Container(
-          height: 15,
-        ),
-        (index == 0)
-            ? generalInfomationV2()
-            : (index == 1)
-                ? Center(child: dealInfomationV2())
-                : (index == 2)
-                    ? customerCare()
-                    : (index == 3)
-                        ? Column(
-                          children: [
-                            Container(
-                              width: AppSizes.maxWidth,
-                              height: AppSizes.maxHeight - 310,
-                              child: _buildComments()),
+          Container(
+            height: 15,
+          ),
+          (index == 0)
+              ? generalInfomationV2()
+              : (index == 1)
+                  ? Center(child: dealInfomationV2())
+                  : (index == 2)
+                      ? customerCare()
+                      : (index == 3)
+                          ? Column(
+                              children: [
+                                Container(
+                                    width: AppSizes.maxWidth,
+                                    height: AppSizes.maxHeight - 310,
+                                    child: _buildComments()),
 
-                              // Container(height: 80,)
-                          ],
-                        )
-                        : contactList(),
+                                // Container(height: 80,)
+                              ],
+                            )
+                          : contactList(),
 
-        // (index == 3) ? 
-        // _buildChatBox() : Container(),
-
+          // (index == 3) ?
+          // _buildChatBox() : Container(),
         ],
       )
     ];
   }
 
-   Widget buildListOption() {
+  Widget buildListOption() {
     return Row(
       children: [
         option(tabPotentials[0].typeName, tabPotentials[0].selected, 100, () {
           index = 0;
           selectedTab(0);
         }),
-        option(tabPotentials[1].typeName, tabPotentials[1].selected, 100, () {
+        option(tabPotentials[1].typeName, tabPotentials[1].selected, 100,
+            () async {
           index = 1;
           selectedTab(1);
         }),
-        option(tabPotentials[2].typeName, tabPotentials[2].selected, 150, () {
+        option(tabPotentials[2].typeName, tabPotentials[2].selected, 150,
+            () async {
           index = 2;
           selectedTab(2);
         }),
@@ -532,15 +542,91 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           index = 3;
           selectedTab(3);
         }),
-        option(tabPotentials[4].typeName, tabPotentials[4].selected, 100, () {
-          index = 4;
-          selectedTab(4);
-        })
+        (widget.typeCustomer == "business")
+            ? option(tabPotentials[4].typeName, tabPotentials[4].selected, 100,
+                () async {
+                index = 4;
+                selectedTab(4);
+              })
+            : Container()
       ],
     );
   }
 
-    Widget option(String title, bool show, double width, Function ontap) {
+  selectedTab(int index) async {
+
+    List<DetailPotentialTabModel> models = tabPotentials;
+    for (int i = 0; i < models.length; i++) {
+      models[i].selected = false;
+    }
+    models[index].selected = true;
+
+    switch (index) {
+      case 0:
+        break;
+
+      case 1:
+      if (detailLeadInfoDealData == null) {
+            LeadConnection.showLoading(context);
+            var infoDeal = await LeadConnection.getDetailLeadInfoDeal(
+                context, widget.customer_lead_code);
+
+            Navigator.of(context).pop();
+            if (infoDeal != null) {
+              if (infoDeal.errorCode == 0) {
+                detailLeadInfoDealData = infoDeal.data;
+                setState(() {});
+              }
+            }
+          }
+
+           setState(() {});
+        break;
+
+      case 2:
+      if (customerCareLead == null) {
+         LeadConnection.showLoading(context);
+            CareLeadResponseModel careList = await LeadConnection.getCareLead(
+                context, detail.customerLeadId);
+                 Navigator.of(context).pop();
+            if (careList != null) {
+              if (careList.errorCode == 0) {
+                customerCareLead = careList.data;
+                setState(() {});
+              }
+            }
+          }
+  
+           setState(() {});
+        break;
+
+      case 3:
+      _bloc.workListComment(WorkListCommentRequestModel(
+              customerLeadID: detail.customerLeadId));
+               setState(() {});
+        break;
+
+      case 4:
+      if (contactListData == null) {
+                  var contactList = await LeadConnection.getContactList(
+                      context, widget.customer_lead_code);
+                  if (contactList != null) {
+                    if (contactList.errorCode == 0) {
+                      contactListData = contactList.data;
+                      setState(() {});
+                    }
+                  } else {
+                    LeadConnection.showMyDialog(
+                        context, contactList.errorDescription);
+                  }
+                }
+                 setState(() {});
+        break;
+      default:
+    }
+  }
+
+  Widget option(String title, bool show, double width, Function ontap) {
     return Column(
       children: [
         Container(
@@ -576,19 +662,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  selectedTab(int index) async {
-    List<DetailPotentialTabModel> models = tabPotentials;
-    for (int i = 0; i < models.length; i++) {
-      models[i].selected = false;
-    }
-    models[index].selected = true;
-
-    setState(() {});
-  }
-
-    Widget _buildComment(WorkListCommentModel model){
-
-    if(model == null){
+  Widget _buildComment(WorkListCommentModel model) {
+    if (model == null) {
       return CustomShimmer(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -598,14 +673,21 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               height: AppSizes.sizeOnTap,
               radius: AppSizes.sizeOnTap,
             ),
-            Container(width: AppSizes.minPadding,),
-            Expanded(child: Column(
+            Container(
+              width: AppSizes.minPadding,
+            ),
+            Expanded(
+                child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(height: 5.0,),
-                CustomSkeleton(width: AppSizes.maxWidth / 3,),
                 Container(
-                  padding:  EdgeInsets.only(top: 5.0),
+                  height: 5.0,
+                ),
+                CustomSkeleton(
+                  width: AppSizes.maxWidth / 3,
+                ),
+                Container(
+                  padding: EdgeInsets.only(top: 5.0),
                   child: CustomSkeleton(),
                 ),
               ],
@@ -615,7 +697,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       );
     }
 
-    double avatarSize = model.isSubComment?AppSizes.sizeOnTap / 2:AppSizes.sizeOnTap;
+    double avatarSize =
+        model.isSubComment ? AppSizes.sizeOnTap / 2 : AppSizes.sizeOnTap;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -625,8 +708,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           url: model.staffAvatar,
           name: model.staffName,
         ),
-        Container(width: AppSizes.minPadding,),
-        Expanded(child: CustomListView(
+        Container(
+          width: AppSizes.minPadding,
+        ),
+        Expanded(
+            child: CustomListView(
           shrinkWrap: true,
           physics: NeverScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
@@ -637,34 +723,31 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               model.staffName ?? "",
               style: AppTextStyles.style12BlackBold,
             ),
-            if((model.message ?? "").isNotEmpty)
+            if ((model.message ?? "").isNotEmpty)
               CustomHtml(
                 model.message,
                 physics: NeverScrollableScrollPhysics(),
               ),
-            if((model.path ?? "").isNotEmpty)
+            if ((model.path ?? "").isNotEmpty)
               Container(
-                constraints: BoxConstraints(
-                  maxHeight: AppSizes.maxHeight * 0.2
-                ),
+                constraints:
+                    BoxConstraints(maxHeight: AppSizes.maxHeight * 0.2),
                 child: Row(
                   children: [
                     Flexible(
                         child: Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.borderColor),
-                              borderRadius: BorderRadius.circular(_imageRadius)
-                          ),
-                          child: InkWell(
-                            child: CustomNetworkImage(
-                                url: model.path,
-                                fit: BoxFit.contain,
-                                radius: _imageRadius
-                            ),
-                            onTap: () => openFile(context, AppLocalizations.text(LangKey.image), model.path),
-                          ),
-                        )
-                    )
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.borderColor),
+                          borderRadius: BorderRadius.circular(_imageRadius)),
+                      child: InkWell(
+                        child: CustomNetworkImage(
+                            url: model.path,
+                            fit: BoxFit.contain,
+                            radius: _imageRadius),
+                        onTap: () => openFile(context,
+                            AppLocalizations.text(LangKey.image), model.path),
+                      ),
+                    ))
                   ],
                 ),
               ),
@@ -674,7 +757,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   model.timeText ?? "",
                   style: AppTextStyles.style12grey500Normal,
                 ),
-                Container(width: AppSizes.maxPadding,),
+                Container(
+                  width: AppSizes.maxPadding,
+                ),
                 InkWell(
                   child: Text(
                     AppLocalizations.text(LangKey.callback),
@@ -684,13 +769,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 )
               ],
             ),
-            if((model.listObject?.length ?? 0) != 0)
+            if ((model.listObject?.length ?? 0) != 0)
               CustomListView(
                 shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 padding: EdgeInsets.zero,
                 separatorPadding: 5.0,
-                children: model.listObject.map((e) => _buildComment(e)).toList(),
+                children:
+                    model.listObject.map((e) => _buildComment(e)).toList(),
               )
           ],
         ))
@@ -698,7 +784,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _buildContainer(List<WorkListCommentModel> models){
+  Widget _buildContainer(List<WorkListCommentModel> models) {
     // print(MediaQuery.of(context).padding.bottom);
     return Container(
       padding: EdgeInsets.only(bottom: 60),
@@ -706,9 +792,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       child: CustomListView(
         // physics: NeverScrollableScrollPhysics(),
         padding: EdgeInsets.symmetric(
-            vertical: AppSizes.minPadding,
-            horizontal: AppSizes.maxPadding
-        ),
+            vertical: AppSizes.minPadding, horizontal: AppSizes.maxPadding),
         children: models == null
             ? List.generate(4, (index) => _buildComment(null))
             : models.map((e) => _buildComment(e)).toList(),
@@ -716,116 +800,112 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _buildEmpty(){
+  Widget _buildEmpty() {
     return CustomEmpty(
       title: AppLocalizations.text(LangKey.comment_empty),
     );
   }
 
-  Widget _buildComments(){
+  Widget _buildComments() {
     return StreamBuilder(
-      stream: _bloc.outputModels,
-      initialData: null,
-      builder: (_, snapshot){
-        List<WorkListCommentModel> models = snapshot.data;
-        return ContainerDataBuilder(
-          data: models,
-          emptyBuilder: _buildEmpty(),
-          skeletonBuilder: _buildContainer(null),
-          bodyBuilder: () => _buildContainer(models),
-          onRefresh: () => _onRefresh(),
-        );
-      }
-    );
+        stream: _bloc.outputModels,
+        initialData: null,
+        builder: (_, snapshot) {
+          List<WorkListCommentModel> models = snapshot.data;
+          return ContainerDataBuilder(
+            data: models,
+            emptyBuilder: _buildEmpty(),
+            skeletonBuilder: _buildContainer(null),
+            bodyBuilder: () => _buildContainer(models),
+            onRefresh: () => _onRefresh(),
+          );
+        });
   }
 
-  Widget _buildChatBox(){
+  Widget _buildChatBox() {
     return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: Colors.grey)
-        )
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: AppSizes.maxPadding,
-        vertical: 5.0
-      ),
+      decoration:
+          BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+      padding:
+          EdgeInsets.symmetric(horizontal: AppSizes.maxPadding, vertical: 5.0),
       child: Column(
         children: [
           StreamBuilder(
-            stream: _bloc.outputCallback,
-            initialData: null,
-            builder: (_, snapshot){
-              _callbackModel = snapshot.data;
-              if(_callbackModel == null){
-                return Container();
-              }
-              return Container(
-                padding: EdgeInsets.only(bottom: AppSizes.minPadding),
-                child: InkWell(
+              stream: _bloc.outputCallback,
+              initialData: null,
+              builder: (_, snapshot) {
+                _callbackModel = snapshot.data;
+                if (_callbackModel == null) {
+                  return Container();
+                }
+                return Container(
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
+                  child: InkWell(
+                    child: Row(
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                              text: AppLocalizations.text(LangKey.answering) +
+                                  " ",
+                              style: AppTextStyles.style12grey200Normal,
+                              children: [
+                                TextSpan(
+                                    text: _callbackModel.staffName ?? "",
+                                    style: AppTextStyles.style12BlackBold)
+                              ]),
+                        ),
+                        Container(
+                          width: AppSizes.minPadding,
+                        ),
+                        Icon(
+                          Icons.close,
+                          color: AppColors.grey200Color,
+                          size: 12.0,
+                        )
+                      ],
+                    ),
+                    onTap: () => _bloc.setCallback(null),
+                  ),
+                );
+              }),
+          StreamBuilder(
+              stream: _bloc.outputFile,
+              initialData: null,
+              builder: (_, snapshot) {
+                _file = snapshot.data;
+
+                if (_file == null) {
+                  return Container();
+                }
+
+                return Container(
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
                   child: Row(
                     children: [
-                      RichText(
-                        text: TextSpan(
-                            text: AppLocalizations.text(LangKey.answering) + " ",
-                            style: AppTextStyles.style12grey200Normal,
-                            children: [
-                              TextSpan(
-                                  text: _callbackModel.staffName ?? "",
-                                  style: AppTextStyles.style12BlackBold
-                              )
-                            ]
+                      InkWell(
+                        child: CustomNetworkImage(
+                          radius: 10.0,
+                          width: _fileSize,
+                          url: _file,
                         ),
+                        onTap: () => openFile(context,
+                            AppLocalizations.text(LangKey.image), _file),
                       ),
-                      Container(width: AppSizes.minPadding,),
-                      Icon(
-                        Icons.close,
-                        color: AppColors.grey200Color,
-                        size: 12.0,
+                      Container(
+                        width: AppSizes.minPadding,
+                      ),
+                      CustomButton(
+                        text: AppLocalizations.text(LangKey.delete),
+                        backgroundColor: Colors.transparent,
+                        borderColor: AppColors.primaryColor,
+                        style: AppTextStyles.style14PrimaryBold,
+                        isExpand: false,
+                        onTap: () => _bloc.setFile(null),
                       )
                     ],
                   ),
-                  onTap: () => _bloc.setCallback(null),
-                ),
-              );
-            }
-          ),
-          StreamBuilder(
-            stream: _bloc.outputFile,
-            initialData: null,
-            builder: (_, snapshot){
-              _file = snapshot.data;
-
-              if(_file == null){
-                return Container();
-              }
-
-              return Container(
-                padding: EdgeInsets.only(bottom: AppSizes.minPadding),
-                child: Row(
-                  children: [
-                    InkWell(
-                      child: CustomNetworkImage(
-                        radius: 10.0,
-                        width: _fileSize,
-                        url: _file,
-                      ),
-                      onTap: () => openFile(context, AppLocalizations.text(LangKey.image), _file),
-                    ),
-                    Container(width: AppSizes.minPadding,),
-                    CustomButton(
-                      text: AppLocalizations.text(LangKey.delete),
-                      backgroundColor: Colors.transparent,
-                      borderColor: AppColors.primaryColor,
-                      style: AppTextStyles.style14PrimaryBold,
-                      isExpand: false,
-                      onTap: () => _bloc.setFile(null),
-                    )
-                  ],
-                ),
-              );
-            }
-          ),
+                );
+              }),
           Row(
             children: [
               InkWell(
@@ -836,15 +916,20 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 ),
                 onTap: _showOption,
               ),
-              Container(width: AppSizes.minPadding,),
-              Expanded(child: CustomTextField(
+              Container(
+                width: AppSizes.minPadding,
+              ),
+              Expanded(
+                  child: CustomTextField(
                 focusNode: _focusComment,
                 controller: _controllerComment,
                 backgroundColor: Colors.transparent,
                 borderColor: AppColors.borderColor,
                 hintText: AppLocalizations.text(LangKey.enter_comment),
               )),
-              Container(width: AppSizes.minPadding,),
+              Container(
+                width: AppSizes.minPadding,
+              ),
               InkWell(
                 child: Icon(
                   Icons.send,
@@ -855,13 +940,21 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               ),
             ],
           ),
-          Container(height: 15.0,)
+          Container(
+            height: 15.0,
+          )
         ],
       ),
     );
   }
 
-   Widget generalInfomationV2() {
+  Widget generalInfomationV2() {
+    return detail.customerType == "personal"
+        ? generalInfomationPersonal()
+        : generalInfomationBusiness();
+  }
+
+  Widget generalInfomationPersonal() {
     return Container(
       padding: const EdgeInsets.all(8.0),
       margin: EdgeInsets.only(left: 11, right: 11, bottom: 20),
@@ -884,13 +977,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                     detail.gender == "other")
                                 ? AppLocalizations.text(LangKey.other)
                                 : "N/A"),
-                SizedBox(height: 5.0),
                 _infoItemV2(Assets.iconEmail, detail.email ?? "N/A"),
-                SizedBox(height: 5.0),
                 _infoItemV2(Assets.iconAddress, detail.address ?? "N/A"),
-                SizedBox(height: 5.0),
-                _infoItemV2(
-                    Assets.iconWards, detail.businessClueName ?? "N/A")
+                _infoItemV2(Assets.iconBirthday, detail.birthday ?? "N/A"),
+                _infoItemV2(Assets.iconSource, detail.zalo ?? "N/A"),
+                _infoItemV2(Assets.iconFanpage, detail.fanpage ?? "N/A"),
               ],
             ),
           ),
@@ -903,16 +994,16 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
-                        height: 45.0,
-                        width: 45.0,
-                        child: Image.asset(Assets.iconMessenger),
+                        height: 40.0,
+                        width: 40.0,
+                        child: Image.asset(Assets.iconFacebook),
                       ),
                     )
                   : Container(),
-               (detail.zalo != null && detail.zalo != "")
+              (detail.zalo != null && detail.zalo != "")
                   ? InkWell(
                       onTap: () {
-                         _openLink(detail.fanpage);
+                        _openLink(detail.fanpage);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -929,9 +1020,74 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-   Widget _infoItemV2(String icon, String title) {
+  Widget generalInfomationBusiness() {
     return Container(
-      padding: const EdgeInsets.only(bottom: 8.0),
+      padding: const EdgeInsets.all(8.0),
+      margin: EdgeInsets.only(left: 11, right: 11, bottom: 20),
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(5),
+          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                _infoItemV2(Assets.iconTax, "MST: " + detail.taxCode ?? "N/A"),
+                _infoItemV2(Assets.iconEmail, detail.email ?? "N/A"),
+                _infoItemV2(Assets.iconAddress, detail.address ?? "N/A"),
+                _infoItemV2(
+                    Assets.iconRepresentative, detail.representative ?? "N/A"),
+                _infoItemV2(Assets.iconBirthday, detail.birthday ?? "N/A"),
+                _infoItemV2(Assets.iconMenu, detail.businessName ?? "N/A"),
+                _infoItemV2(
+                    Assets.iconNumberEmployees,
+                    (detail.employees != null)
+                        ? "${detail.employees ?? 0} nhân viên"
+                        : "N/A"),
+                _infoItemV2(Assets.iconSource, detail.zalo ?? "N/A"),
+                _infoItemV2(Assets.iconFanpage, detail.fanpage ?? "N/A"),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              (detail.fanpage != null && detail.fanpage != "")
+                  ? InkWell(
+                      onTap: () async {
+                        _openLink(detail.zalo);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        height: 40.0,
+                        width: 40.0,
+                        child: Image.asset(Assets.iconFacebook),
+                      ),
+                    )
+                  : Container(),
+              (detail.zalo != null && detail.zalo != "")
+                  ? InkWell(
+                      onTap: () {
+                        _openLink(detail.fanpage);
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 8.0, right: 8.0),
+                        height: 57.0,
+                        width: 57.0,
+                        child: Image.asset(Assets.iconZalo),
+                      ),
+                    )
+                  : Container()
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _infoItemV2(String icon, String title) {
+    return Container(
+      padding: const EdgeInsets.only(bottom: 13.0),
       margin: EdgeInsets.only(left: 7.5),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -960,7 +1116,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-
   Widget potentialInformationV2() {
     return Stack(
       clipBehavior: Clip.none,
@@ -972,8 +1127,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
-                border: (index != 3) ?  Border.all(width: 1, color: Color(0xFFC3C8D3)) : null
-                ),
+                border: (index != 3)
+                    ? Border.all(width: 1, color: Color(0xFFC3C8D3))
+                    : null),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -986,190 +1142,223 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         SizedBox(
                           height: 4.0,
                         ),
-                       (index != 3) ?  Column(
-                          children: [
-                            RichText(
-                            text: TextSpan(
-                                text: detail.customerSourceName ?? "",
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal),
+                        (index != 3)
+                            ? Column(
+                                // crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                              TextSpan(
-                                  text: (detail.customerSourceName != "" &&
-                                          detail.customerSourceName != null)
-                                      ? (" - " + detail?.fullName ?? "")
-                                      : ("" + detail?.fullName ?? ""),
-                                  style: TextStyle(
-                                      color: AppColors.primaryColor,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold))
-                            ])),
-                        SizedBox(height: 5),
-
-                         Container(
-                                margin: EdgeInsets.only(left: 8.0,top: 5.0,bottom: 5.0),
-                                decoration: BoxDecoration(
-                                    color: Color(0xFF3AEDB6),
-                                    borderRadius: BorderRadius.circular(4.0)),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Text(detail?.journeyName ?? "",
-                                  textAlign: TextAlign.center,
+                                  RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                          text: detail.customerSourceName ?? "",
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.normal),
+                                          children: [
+                                            TextSpan(
+                                                text: (detail.customerSourceName !=
+                                                            "" &&
+                                                        detail.customerSourceName !=
+                                                            null)
+                                                    ? (" - " +
+                                                            detail?.fullName ??
+                                                        "")
+                                                    : ("" + detail?.fullName ??
+                                                        ""),
+                                                style: TextStyle(
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold))
+                                          ])),
+                                  SizedBox(height: 5),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF3AEDB6),
+                                        borderRadius:
+                                            BorderRadius.circular(4.0)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(detail?.journeyName ?? "",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Color(0xFF11B482),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal)),
+                                    ),
+                                  ),
+                                  Text(detail?.phone ?? "",
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        
-                                          color: Color(0xFF11B482),
-                                          fontSize: 14,
+                                          fontSize: 16.0,
+                                          color: Colors.black,
                                           fontWeight: FontWeight.normal)),
-                                ),
-                              ),
-
-                        Text(detail?.phone ?? "",
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal)),
-                        SizedBox(height: 5),
-                        (detail.customerType == "business")
-                            ? Text(
-                                detail.fullName,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    overflow: TextOverflow.visible,
-                                    fontSize: 16.0,
-                                    color: Color(0xFF8E8E8E),
-                                    fontWeight: FontWeight.normal),
+                                  SizedBox(height: 5),
+                                  (detail.customerType == "business")
+                                      ? Text(
+                                          AppLocalizations.text(
+                                              LangKey.business),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.visible,
+                                              fontSize: 16.0,
+                                              color: Color(0xFF8E8E8E),
+                                              fontWeight: FontWeight.normal),
+                                        )
+                                      : Text(
+                                          AppLocalizations.text(
+                                              LangKey.personal),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.visible,
+                                              fontSize: 16.0,
+                                              color: Color(0xFF8E8E8E),
+                                              fontWeight: FontWeight.normal),
+                                        )
+                                ],
                               )
                             : Container()
-                          ],
-                        ) : Container()
                       ],
                     ),
                   ),
                 ),
-               (index != 3) ?  Column(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 children: [
-                    Container(
-                  padding: EdgeInsets.only(right: 8.0),
-                  margin: EdgeInsets.only(right: 8.0, top: 16.0),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Container(
-                          // width: MediaQuery.of(context).size.width / 2 - 50,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
-                              // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
-
-                              infoItem(Assets.iconName, detail.saleName ?? ""),
-                              infoItem(Assets.iconInteraction, "${detail.dateLastCare ?? ""} (${detail.diffDay ?? ""} ngày)"),
-
-                                  Container(
-                                    margin: EdgeInsets.only(left: 33),
-                                    child: Text(detail?.pipelineName ?? "",
-                                      textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.normal)),
-                                  ),
-
-                              // Container(
-                              //   margin: EdgeInsets.only(left: 8.0),
-                              //   decoration: BoxDecoration(
-                              //       color: Color(0xFF3AEDB6),
-                              //       borderRadius: BorderRadius.circular(4.0)),
-                              //   child: Flexible(
-                              //     child: Padding(
-                              //       padding: EdgeInsets.all(8.0),
-                              //       child: Text(detail?.journeyName ?? "",
-                              //       textAlign: TextAlign.center,
-                              //           style: TextStyle(
-                                          
-                              //               color: Color(0xFF11B482),
-                              //               fontSize: 14,
-                              //               fontWeight: FontWeight.normal)),
-                              //     ),
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                (index != 3)
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          InkWell(
-                            onTap: () async {
-                              print(detail.phone);
-                              await callPhone(detail?.phone ?? "");
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(20.0 / 2),
-                              height: 45,
-                              width: 45,
-                              decoration: BoxDecoration(
-                                color: Color(0xFF06A605),
-                                borderRadius: BorderRadius.circular(50),
-                                // border:  Border.all(color: AppColors.white,)
-                              ),
-                              child: Center(
-                                  child: Image.asset(
-                                Assets.iconCall,
-                                color: AppColors.white,
-                              )),
+                          Container(
+                            padding: EdgeInsets.only(right: 8.0),
+                            margin: EdgeInsets.only(right: 8.0, top: 16.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    // width: MediaQuery.of(context).size.width / 2 - 50,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
+                                        // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
+
+                                        infoItem(Assets.iconName,
+                                            detail.saleName ?? ""),
+                                        infoItem(Assets.iconInteraction,
+                                            "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
+
+                                        Container(
+                                          margin: EdgeInsets.only(left: 33),
+                                          child: Text(
+                                              detail?.pipelineName ?? "",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight:
+                                                      FontWeight.normal)),
+                                        ),
+
+                                        // Container(
+                                        //   margin: EdgeInsets.only(left: 8.0),
+                                        //   decoration: BoxDecoration(
+                                        //       color: Color(0xFF3AEDB6),
+                                        //       borderRadius: BorderRadius.circular(4.0)),
+                                        //   child: Flexible(
+                                        //     child: Padding(
+                                        //       padding: EdgeInsets.all(8.0),
+                                        //       child: Text(detail?.journeyName ?? "",
+                                        //       textAlign: TextAlign.center,
+                                        //           style: TextStyle(
+
+                                        //               color: Color(0xFF11B482),
+                                        //               fontSize: 14,
+                                        //               fontWeight: FontWeight.normal)),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        print(detail.phone);
+                                        await callPhone(detail?.phone ?? "");
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(20.0 / 2),
+                                        height: 45,
+                                        width: 45,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFF06A605),
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          // border:  Border.all(color: AppColors.white,)
+                                        ),
+                                        child: Center(
+                                            child: Image.asset(
+                                          Assets.iconCall,
+                                          color: AppColors.white,
+                                        )),
+                                      ),
+                                    ),
+                                    SizedBox(height: 15.0),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        _actionItem(Assets.iconCalendar,
+                                            Color(0xFF26A7AD),
+                                            show: true,
+                                            number: detail.relatedWork ?? 0,
+                                            ontap: () {
+                                          print("1");
+                                        }),
+                                        _actionItem(Assets.iconOutdate,
+                                            Color(0xFFDD2C00),
+                                            show: true,
+                                            number: detail.appointment ?? 0,
+                                            ontap: () {
+                                          print("2");
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ],
                             ),
                           ),
-                          SizedBox(height: 15.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              _actionItem(
-                                  Assets.iconCalendar, Color(0xFF26A7AD),
-                                  show: true,
-                                  number: detail.relatedWork ?? 0, ontap: () {
-                                print("1");
-                              }),
-                              _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                                  show: true,
-                                  number: detail.appointment ?? 0, ontap: () {
-                                print("2");
-                              }),
-                            ],
-                          ),
+                          SizedBox(height: 14.0),
+                          (detail.tag != null && detail.tag.length > 0)
+                              ? Container(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  margin: EdgeInsets.only(left: 8.0),
+                                  child: Wrap(
+                                    children: List.generate(
+                                        detail.tag.length,
+                                        (index) =>
+                                            _optionItem(detail.tag[index])),
+                                    spacing: 10,
+                                    runSpacing: 10,
+                                  ),
+                                )
+                              : Container(),
                         ],
                       )
-                    ],
-                  ),
-                ) ,
-                SizedBox(height: 14.0),
-                (detail.tag != null && detail.tag.length > 0)
-                    ? Container(
-                        padding: EdgeInsets.only(bottom: 8.0),
-                        margin: EdgeInsets.only(left: 8.0),
-                        child: Wrap(
-                          children: List.generate(detail.tag.length,
-                              (index) => _optionItem(detail.tag[index])),
-                          spacing: 10,
-                          runSpacing: 10,
-                        ),
-                      )
-                    : Container(),
-                 ],
-               ) : Container()
+                    : Container()
               ],
             ),
           ),
         ),
         Positioned(
-          left: MediaQuery.of(context).size.width / 2 - 60.5,
+          left: (MediaQuery.of(context).size.width - 16) / 2 - 43.5,
           top: -60,
           child: _buildAvatar(detail?.fullName ?? ""),
         ),
@@ -1177,101 +1366,113 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-   Widget dealInfomationV2() {
+  Widget dealInfomationV2() {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child:
-          (detail.infoDeal != null && detail.infoDeal.length > 0)
+          (detailLeadInfoDealData != null && detailLeadInfoDealData.length > 0)
               ? Column(
-                  children: detail.infoDeal
+                  children: detailLeadInfoDealData
                       .map((e) => dealInfomationItem(e))
                       .toList())
               : CustomDataNotFound(),
     );
   }
 
-    Widget dealInfomationItem(InfoDeal item) {
-    return Container(
-      padding: const EdgeInsets.all(4.0),
-      margin: EdgeInsets.only(left: 11, right: 11, bottom: 8.0),
-      decoration: BoxDecoration(
-          // color: Color.fromARGB(255, 37, 16, 16),
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0),
-            margin: EdgeInsets.only(left: 8.0),
-            child: Row(
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10.0),
-                  height: 20.0,
-                  width: 20.0,
-                  child: Image.asset(Assets.iconDeal),
-                ),
-                Expanded(
-                  child: Text(
-                    item.dealName,
-                    // "Deal cua Kiet Quach",
-                    style: TextStyle(
-                        fontSize: 16.0,
+  Widget dealInfomationItem(DetailLeadInfoDealData item) {
+    return InkWell(
+      onTap: () async {
+
+        if (Global.openDetailDeal != null) {
+          var result = await Global.openDetailDeal(item.dealCode);
+        if (result != null && result) {
+          await getData();
+          selectedTab(2);
+        }
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(4.0),
+        margin: EdgeInsets.only(left: 11, right: 11, bottom: 8.0),
+        decoration: BoxDecoration(
+            // color: Color.fromARGB(255, 37, 16, 16),
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0),
+              margin: EdgeInsets.only(left: 8.0),
+              child: Row(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    height: 20.0,
+                    width: 20.0,
+                    child: Image.asset(Assets.iconDeal),
+                  ),
+                  Expanded(
+                    child: Text(
+                      item.dealName,
+                      // "Deal cua Kiet Quach",
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          color: AppColors.primaryColor,
+                          fontWeight: FontWeight.w500),
+                      // maxLines: 1,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 4.0, right: 4.0),
+                    height: 24,
+                    decoration: BoxDecoration(
                         color: AppColors.primaryColor,
-                        fontWeight: FontWeight.w500),
-                    // maxLines: 1,
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 4.0, right: 4.0),
-                  height: 24,
-                  decoration: BoxDecoration(
-                      color: AppColors.primaryColor,
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: Center(
-                    child: Text(item.journeyName ?? "N/A",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14.0,
-                            fontWeight: FontWeight.w600)),
-                  ),
-                )
-              ],
+                        borderRadius: BorderRadius.circular(5.0)),
+                    child: Center(
+                      child: Text(item.journeyName ?? "N/A",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600)),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ),
-          _infoItemV2(
-            Assets.iconTime,
-            item.createdAt,
-          ),
-          _infoItemV2(Assets.iconName, item.staffName ?? ""),
-          _infoItemV2(Assets.iconInteraction, item.dateLastCare ?? ""),
-          Container(
-            padding: const EdgeInsets.only(left: 6.0, bottom: 6.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(right: 10.0),
-                  height: 15.0,
-                  width: 15.0,
-                  child: Image.asset(Assets.iconTag),
-                ),
-                Expanded(
-                  child: Text(
-                    "${NumberFormat("#,###", "vi-VN").format(item.amount)} VNĐ",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.bold),
-                    // maxLines: 1,
-                  ),
-                ),
-              ],
+            _infoItemV2(
+              Assets.iconTime,
+              item.createdAt,
             ),
-          )
-        ],
+            _infoItemV2(Assets.iconName, item.staffName ?? ""),
+            _infoItemV2(Assets.iconInteraction, item.createdAt ?? ""),
+            Container(
+              padding: const EdgeInsets.only(left: 6.0, bottom: 6.0),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 10.0),
+                    height: 15.0,
+                    width: 15.0,
+                    child: Image.asset(Assets.iconTag),
+                  ),
+                  Expanded(
+                    child: Text(
+                      "${NumberFormat("#,###", "vi-VN").format(item.amount)} VNĐ",
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold),
+                      // maxLines: 1,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -1306,8 +1507,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       ),
     );
   }
-
-  
 
   Widget _actionItem(String icon, Color color,
       {num number, bool show = false, Function ontap}) {
@@ -1385,37 +1584,18 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   }
 
   Widget customerCare() {
-    // return Container(
-    //   margin: EdgeInsets.only(bottom: 120.0),
-    //   child: Column(
-    //     children: [customerCareItem(), customerCareItem(), customerCareItem()],
-    //   ),
-    // );
-
     return Container(
       margin: EdgeInsets.only(bottom: 20),
-      child: (detail.customerCare != null && detail.customerCare.length > 0 )
-                        ? Column(
-                            children:
-                                detail.customerCare.map((e) => customerCareItem(e)).toList())
-                        : Center(child: CustomDataNotFound()),
+      child: (customerCareLead != null && customerCareLead.length > 0)
+          ? Column(
+              children:
+                  customerCareLead.map((e) => customerCareItem(e)).toList())
+          : Center(child: CustomDataNotFound()),
     );
-
-    // return Column(
-    //   children: [
-    //     customerCareItem(),
-    //     customerCareItem(),
-    //     customerCareItem(),
-    //     Container(
-    //       height: 20.0,
-    //     )
-    //   ],
-    // );
   }
 
-   Widget customerCareItem(CustomerCare item) {
-
-         final createTime = DateTime.parse(item.createdAt ?? "");
+  Widget customerCareItem(CareLeadData item) {
+    final createTime = DateTime.parse(item.createdAt ?? "");
 
     print(createTime.year);
     print(createTime.month);
@@ -1425,12 +1605,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
     return InkWell(
       onTap: () async {
-
         var result = await Global.editJob(item.manageWorkId);
-          if (result != null && result) {
-            await getData();
-            selectedTab(2);
-          } 
+        if (result != null && result) {
+          await getData();
+          selectedTab(2);
+        }
       },
       child: Container(
         child: Container(
@@ -1450,7 +1629,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children:  [
+                    children: [
                       Text(
                         "${createTime.hour}:${createTime.minute}",
                         style: TextStyle(color: Colors.grey),
@@ -1481,9 +1660,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     children: [
                       //Cái này là dòng tiêu đề
                       Container(
-                        padding:  EdgeInsets.only(right: 10.0),
+                        padding: EdgeInsets.only(right: 10.0),
                         child: Row(
-                          children:  [
+                          children: [
                             Expanded(
                               child: Text.rich(
                                 TextSpan(
@@ -1547,7 +1726,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             Row(
                               children: [
                                 Text(
-                                 "${item.countFile}",
+                                  "${item.countFile}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.0,
@@ -1569,7 +1748,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             Row(
                               children: [
                                 Text(
-                                 "${item.countComment}",
+                                  "${item.countComment}",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 14.0,
@@ -1640,13 +1819,16 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         ),
                       ),
 
-                      (item.listTag != null && item.listTag.length > 0) ? Container(
-                        child: Wrap(
-                          children: List.generate(item.listTag.length, (index) => _tagItem(item.listTag[index])),
-                          spacing: 10,
-                          runSpacing: 10,
-                        ),
-                      ) : Container()
+                      (item.listTag != null && item.listTag.length > 0)
+                          ? Container(
+                              child: Wrap(
+                                children: List.generate(item.listTag.length,
+                                    (index) => _tagItem(item.listTag[index])),
+                                spacing: 10,
+                                runSpacing: 10,
+                              ),
+                            )
+                          : Container()
 
                       //cái này là button gọi điện
                     ],
@@ -1660,7 +1842,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-   Widget _tagItem(ListTagDetail item) {
+  Widget _tagItem(ListTagCareLead item) {
     return Container(
       height: 30,
       margin: EdgeInsets.only(top: 10.0),
@@ -1696,20 +1878,18 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-   Widget contactList() {
+  Widget contactList() {
     return Container(
         padding: EdgeInsets.all(10.0),
         margin: EdgeInsets.only(bottom: 20),
-        child: (contactListData != null &&
-                contactListData.length > 0)
+        child: (contactListData != null && contactListData.length > 0)
             ? Column(
-                children: contactListData
-                    .map((e) => contactListItem(e))
-                    .toList())
+                children:
+                    contactListData.map((e) => contactListItem(e)).toList())
             : Center(child: CustomDataNotFound()));
   }
 
-    Widget contactListItem(ContactListData item) {
+  Widget contactListItem(ContactListData item) {
     return (contactListData != null && contactListData.length > 0)
         ? Container(
             padding: EdgeInsets.all(10.0),
@@ -1841,7 +2021,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         : CustomDataNotFound();
   }
 
-
   Widget _infoItem(String title, String content,
       {TextStyle style, String icon, String icon2}) {
     return Container(
@@ -1940,9 +2119,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       ),
     );
   }
-
- 
-  
 }
 
 class DetailPotentialTabModel {

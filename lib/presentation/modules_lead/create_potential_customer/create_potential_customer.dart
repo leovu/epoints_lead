@@ -658,7 +658,6 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             if (_modelStaffSelected != null && _modelStaffSelected.length > 0) {
               print(_modelStaffSelected);
               detailPotential.saleId = _modelStaffSelected[0].staffId;
-              detailPotential.position = _modelStaffSelected[0].departmentName;
               setState(() {});
             }
           }),
@@ -856,6 +855,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           focusNode: focusNode,
           keyboardType: (inputType != null) ? inputType : TextInputType.text,
           decoration: InputDecoration(
+            
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(

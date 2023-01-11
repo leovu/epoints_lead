@@ -20,8 +20,10 @@ import 'package:lead_plugin_epoint/model/request/work_create_comment_request_mod
 import 'package:lead_plugin_epoint/model/request/work_list_comment_request_model.dart';
 import 'package:lead_plugin_epoint/model/request/work_upload_file_document_request_model.dart';
 import 'package:lead_plugin_epoint/model/response/add_lead_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/care_lead_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/contact_list_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/detail_lead_info_deal_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_branch_model_response.dart';
@@ -40,6 +42,7 @@ import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:lead_plugin_epoint/model/response/list_business_areas_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_project_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/upload_image_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_branch_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_comment_model_response.dart';
@@ -102,6 +105,19 @@ class LeadConnection {
     if (responseData.isSuccess) {
       DetailPotentialModelResponse data =
           DetailPotentialModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+  static Future<DetailLeadInfoDealResponseModel> getDetailLeadInfoDeal(
+      BuildContext context, String customer_lead_code) async {
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/detail-lead-info-deal',
+        {"customer_lead_code": customer_lead_code});
+    if (responseData.isSuccess) {
+      DetailLeadInfoDealResponseModel data =
+          DetailLeadInfoDealResponseModel.fromJson(responseData.data);
       return data;
     }
     return null;
@@ -283,12 +299,40 @@ class LeadConnection {
 
   static Future<ContactListModelResponse> getContactList(
       BuildContext context, String customer_lead_code) async {
+    showLoading(context);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/contact-list',
         {"customer_lead_code": customer_lead_code});
+    Navigator.of(context).pop();
     if (responseData.isSuccess) {
       ContactListModelResponse data =
           ContactListModelResponse.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+  static Future<PositionResponseModel> getPosition(BuildContext context) async {
+    showLoading(context);
+    ResponseData responseData =
+        await connection.post('/customer-lead/customer-lead/position', {});
+    Navigator.of(context).pop();
+    if (responseData.isSuccess) {
+      PositionResponseModel data =
+          PositionResponseModel.fromJson(responseData.data);
+      return data;
+    }
+    return null;
+  }
+
+  static Future<CareLeadResponseModel> getCareLead(
+      BuildContext context, int customer_lead_id) async {
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/care-lead',
+        {"customer_lead_id": customer_lead_id});
+    if (responseData.isSuccess) {
+      CareLeadResponseModel data =
+          CareLeadResponseModel.fromJson(responseData.data);
       return data;
     }
     return null;
@@ -454,7 +498,8 @@ class LeadConnection {
     ResponseData response =
         await connection.upload('/manage-work/upload-file', model);
     if (response.isSuccess) {
-      WorkUploadFileResponseModel responseModel = WorkUploadFileResponseModel.fromJson(response.data);
+      WorkUploadFileResponseModel responseModel =
+          WorkUploadFileResponseModel.fromJson(response.data);
 
       return responseModel;
     }
@@ -479,8 +524,8 @@ class LeadConnection {
   static Future<WorkListCommentResponseModel> workListComment(
       BuildContext context, WorkListCommentRequestModel model) async {
     // showLoading(context);
-    ResponseData responseData = await connection
-        .post('/customer-lead/list-comment', model.toJson());
+    ResponseData responseData =
+        await connection.post('/customer-lead/list-comment', model.toJson());
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =
           WorkListCommentResponseModel.fromJson(responseData.data);
@@ -494,7 +539,7 @@ class LeadConnection {
     showLoading(context);
     ResponseData responseData =
         await connection.post('/customer-lead/created-comment', model.toJson());
-        Navigator.of(context).pop();
+    Navigator.of(context).pop();
     if (responseData.isSuccess) {
       WorkListCommentResponseModel data =
           WorkListCommentResponseModel.fromJson(responseData.data);

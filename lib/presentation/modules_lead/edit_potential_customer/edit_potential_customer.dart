@@ -13,6 +13,7 @@ import 'package:lead_plugin_epoint/model/request/edit_potential_model_request.da
 import 'package:lead_plugin_epoint/model/request/get_journey_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/get_list_staff_request_model.dart';
 import 'package:lead_plugin_epoint/model/response/add_lead_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/contact_list_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
@@ -26,6 +27,7 @@ import 'package:lead_plugin_epoint/model/response/get_status_work_response_model
 import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_business_areas_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
@@ -41,7 +43,9 @@ import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 class EditPotentialCustomer extends StatefulWidget {
   DetailPotentialData detailPotential;
   String customer_lead_code;
-  EditPotentialCustomer({Key key, this.detailPotential, this.customer_lead_code}) : super(key: key);
+  EditPotentialCustomer(
+      {Key key, this.detailPotential, this.customer_lead_code})
+      : super(key: key);
 
   @override
   _EditPotentialCustomerState createState() => _EditPotentialCustomerState();
@@ -106,11 +110,15 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
   List<WorkListStaffModel> _modelStaffSelected = [];
 
-   List<ListBusinessAreasItem> listBusinessData;
+  List<ListBusinessAreasItem> listBusinessData;
 
   List<TagData> tagsData;
 
   String tagsString = "";
+
+  List<ContactListData> contactListData;
+
+  List<PositionData> positionData;
 
   AddLeadModelRequest detailPotential = AddLeadModelRequest(
       avatar: "",
@@ -150,6 +158,25 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       LeadConnection.showLoading(context);
 
       if (widget.detailPotential != null) {
+        bool business = false;
+        if (widget.detailPotential.customerType == "business") {
+          business = true;
+          var contactList = await LeadConnection.getContactList(
+              context, widget.detailPotential.customerLeadCode);
+          if (contactList != null) {
+            if (contactList.errorCode == 0) {
+              contactListData = contactList.data;
+              setState(() {});
+            }
+          } else {
+            LeadConnection.showMyDialog(
+                context, "Không tìm thấy thông tin người liên hệ");
+          }
+        } else {
+          business = false;
+          contactListData = null;
+        }
+
         detailPotential = AddLeadModelRequest(
             avatar: "",
             customerType: widget.detailPotential.customerType ?? "",
@@ -167,75 +194,135 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             bussinessId: widget.detailPotential.bussinessId ?? 0,
             businessClue: "",
             birthday: widget.detailPotential.birthday ?? "",
-            employees:  widget.detailPotential.employees ?? 0,
-            position: widget.detailPotential.position ?? "",
+            employees: widget.detailPotential.employees ?? 0,
             provinceId: widget.detailPotential.provinceId ?? 0,
             districtId: widget.detailPotential.districtId ?? 0,
             wardId: widget.detailPotential.wardId ?? 0,
             address: widget.detailPotential.address ?? "",
             zalo: widget.detailPotential.zalo ?? "",
             fanpage: widget.detailPotential.fanpage ?? "",
-            contactFullName: widget.detailPotential.contactList.length > 0 ? widget.detailPotential.contactList[0].fullName ?? "" : "",
-            contactPhone: widget.detailPotential.contactList.length > 0 ? widget.detailPotential.contactList[0].phone ?? "": "",
-            contactEmail: widget.detailPotential.contactList.length > 0 ? widget.detailPotential.contactList[0].email ?? "": "",
-            contactAddress: widget.detailPotential.contactList.length > 0 ? widget.detailPotential.contactList[0].address ?? "": "");
+            contactFullName: (business &&
+                    contactListData != null &&
+                    contactListData.length > 0)
+                ? contactListData[0].fullName ?? ""
+                : "",
+            contactPhone: (business &&
+                    contactListData != null &&
+                    contactListData.length > 0)
+                ? contactListData[0].phone ?? ""
+                : "",
+            contactEmail: (business &&
+                    contactListData != null &&
+                    contactListData.length > 0)
+                ? contactListData[0].email ?? ""
+                : "",
+            position: (business &&
+                    contactListData != null &&
+                    contactListData.length > 0)
+                ? contactListData[0].positon ?? ""
+                : "",
+            contactAddress: (business &&
+                    contactListData != null &&
+                    contactListData.length > 0)
+                ? contactListData[0].address ?? ""
+                : "");
 
-            if (widget.detailPotential.tag.length > 0) {
-              for (int i = 0; i < widget.detailPotential.tag.length; i++) {
-                detailPotential.tagId.add(widget.detailPotential.tag[i].tagId);
-              }
-            };
+        if (widget.detailPotential.tag.length > 0) {
+          for (int i = 0; i < widget.detailPotential.tag.length; i++) {
+            detailPotential.tagId.add(widget.detailPotential.tag[i].tagId);
+          }
+        }
+        ;
       } else {
+        DetailPotentialModelResponse dataDetail =
+            await LeadConnection.getdetailPotential(
+                context, widget.customer_lead_code);
 
-        DetailPotentialModelResponse dataDetail = await LeadConnection.getdetailPotential( context, widget.customer_lead_code);
-    // var dataDetail = await LeadConnection.getdetailPotential( context, "LEAD_08112022190");
-    if (dataDetail != null) {
-      if (dataDetail.errorCode == 0) {
-         detailPotential = AddLeadModelRequest(
-            avatar: "",
-            customerType: dataDetail.data.customerType ?? "",
-            customerSource: dataDetail.data.customerSource ?? "",
-            fullName: dataDetail.data.fullName ?? "",
-            taxCode: dataDetail.data.taxCode,
-            phone: dataDetail.data.phone ?? "",
-            email: dataDetail.data.email ?? "",
-            representative: dataDetail.data.representative ?? "",
-            pipelineCode: dataDetail.data.pipelineCode ?? 0,
-            journeyCode: dataDetail.data.journeyCode ?? 0,
-            saleId: dataDetail.data.saleId ?? 0,
-            tagId: [],
-            gender: dataDetail.data.gender ?? "",
-            bussinessId: dataDetail.data.bussinessId ?? 0,
-            businessClue: "",
-            birthday: dataDetail.data.birthday ?? "",
-            employees:  dataDetail.data.employees ?? 0,
-            position: dataDetail.data.position ?? "",
-            provinceId: dataDetail.data.provinceId ?? 0,
-            districtId: dataDetail.data.districtId ?? 0,
-            wardId: dataDetail.data.wardId ?? 0,
-            address: dataDetail.data.address ?? "",
-            zalo: dataDetail.data.zalo ?? "",
-            fanpage: dataDetail.data.fanpage ?? "",
-            contactFullName: dataDetail.data.contactList.length > 0 ? dataDetail.data.contactList[0].fullName ?? "" : "",
-            contactPhone: dataDetail.data.contactList.length > 0 ? dataDetail.data.contactList[0].phone ?? "": "",
-            contactEmail: dataDetail.data.contactList.length > 0 ? dataDetail.data.contactList[0].email ?? "": "",
-            contactAddress: dataDetail.data.contactList.length > 0 ? dataDetail.data.contactList[0].address ?? "": "");
+        if (dataDetail != null) {
+          if (dataDetail.errorCode == 0) {
+            bool business = false;
+            if (dataDetail.data.customerType == "business") {
+              business = true;
+              var contactList = await LeadConnection.getContactList(
+                  context, dataDetail.data.customerLeadCode);
+              if (contactList != null) {
+                if (contactList.errorCode == 0) {
+                  contactListData = contactList.data;
+                  setState(() {});
+                }
+              } else {
+                LeadConnection.showMyDialog(
+                    context, "Không tìm thấy thông tin người liên hệ");
+              }
+            } else {
+              business = false;
+              contactListData = null;
+            }
+
+            detailPotential = AddLeadModelRequest(
+                avatar: "",
+                customerType: dataDetail.data.customerType ?? "",
+                customerSource: dataDetail.data.customerSource ?? "",
+                fullName: dataDetail.data.fullName ?? "",
+                taxCode: dataDetail.data.taxCode,
+                phone: dataDetail.data.phone ?? "",
+                email: dataDetail.data.email ?? "",
+                representative: dataDetail.data.representative ?? "",
+                pipelineCode: dataDetail.data.pipelineCode ?? 0,
+                journeyCode: dataDetail.data.journeyCode ?? 0,
+                saleId: dataDetail.data.saleId ?? 0,
+                tagId: [],
+                gender: dataDetail.data.gender ?? "",
+                bussinessId: dataDetail.data.bussinessId ?? 0,
+                businessClue: "",
+                birthday: dataDetail.data.birthday ?? "",
+                employees: dataDetail.data.employees ?? 0,
+                provinceId: dataDetail.data.provinceId ?? 0,
+                districtId: dataDetail.data.districtId ?? 0,
+                wardId: dataDetail.data.wardId ?? 0,
+                address: dataDetail.data.address ?? "",
+                zalo: dataDetail.data.zalo ?? "",
+                fanpage: dataDetail.data.fanpage ?? "",
+                contactFullName: (business &&
+                        contactListData != null &&
+                        contactListData.length > 0)
+                    ? contactListData[0].fullName ?? ""
+                    : "",
+                contactPhone: (business &&
+                        contactListData != null &&
+                        contactListData.length > 0)
+                    ? contactListData[0].phone ?? ""
+                    : "",
+                contactEmail: (business &&
+                        contactListData != null &&
+                        contactListData.length > 0)
+                    ? contactListData[0].email ?? ""
+                    : "",
+                position: (business &&
+                        contactListData != null &&
+                        contactListData.length > 0)
+                    ? contactListData[0].positon ?? ""
+                    : "",
+                contactAddress: (business &&
+                        contactListData != null &&
+                        contactListData.length > 0)
+                    ? contactListData[0].address ?? ""
+                    : "");
 
             if (dataDetail.data.tag.length > 0) {
               for (int i = 0; i < dataDetail.data.tag.length; i++) {
                 detailPotential.tagId.add(dataDetail.data.tag[i].tagId);
               }
-            };
-        setState(() {});
-      } else {
-        await LeadConnection.showMyDialog(context, dataDetail.errorDescription);
-        Navigator.of(context).pop();
+            }
+            ;
+            setState(() {});
+          } else {
+            await LeadConnection.showMyDialog(
+                context, dataDetail.errorDescription);
+            Navigator.of(context).pop();
+          }
+        }
       }
-    }
-
-      }
-
-      
 
       await callApi();
     });
@@ -283,12 +370,16 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     }
 
     ListBusinessAreasModelResponse model =
-          await LeadConnection.getListBusinessAreas(context);
-     
-      if (model != null) {
-        listBusinessData = model.data;
-      }
-      
+        await LeadConnection.getListBusinessAreas(context);
+
+    if (model != null) {
+      listBusinessData = model.data;
+    }
+
+    PositionResponseModel positions = await LeadConnection.getPosition(context);
+    if (positions != null) {
+      positionData = positions.data;
+    }
 
     var tags = await LeadConnection.getTag(context);
     if (tags != null) {
@@ -317,23 +408,21 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       }
     }
 
-
     var listStaff = await LeadConnection.workListStaff(
         context, WorkListStaffRequestModel(manageProjectId: null));
     if (listStaff != null) {
       _modelStaff = listStaff.data ?? [];
 
       try {
-        var item = _modelStaff.firstWhere((element) => element.staffId == detailPotential.saleId);
-    if (item != null) {
-      _modelStaffSelected.add(item);
-    } else {
-      _modelStaffSelected = [];
+        var item = _modelStaff
+            .firstWhere((element) => element.staffId == detailPotential.saleId);
+        if (item != null) {
+          _modelStaffSelected.add(item);
+        } else {
+          _modelStaffSelected = [];
+        }
+      } catch (e) {}
     }
-      } catch (e) {
-      }
-    }
-
 
     initModel();
   }
@@ -366,7 +455,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       if (itemCustomerType != null) {
         itemCustomerType.selected = true;
         customerTypeSelected = itemCustomerType;
-        selectedPersonal = itemCustomerType.customerTypeName == "Personal" ? true : false;
+        selectedPersonal =
+            itemCustomerType.customerTypeName == "Personal" ? true : false;
       }
 
       // var itemCustomerSource = customerSourcesData.firstWhere((element) =>
@@ -381,7 +471,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       //   itemPipeline.selected = true;
       // }
 
-
     } catch (_) {}
 
     try {
@@ -391,17 +480,15 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         itemCustomerSource.selected = true;
         customerSourceSelected = itemCustomerSource;
       }
-    } catch (e) {
-    }
+    } catch (e) {}
     try {
-        var itemPipeline = pipeLineData.firstWhere((element) =>
+      var itemPipeline = pipeLineData.firstWhere((element) =>
           element.pipelineCode == (detailPotential?.pipelineCode ?? 0));
       if (itemPipeline != null) {
         itemPipeline.selected = true;
         pipelineSelected = itemPipeline;
       }
-    } catch (e) {
-    }
+    } catch (e) {}
 
     // for (int i = 0; i < customerSourcesData.length; i++) {
     //   if ((widget.detailPotential?.customerSourceName ?? "").toLowerCase() ==
@@ -430,13 +517,12 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
       try {
         var itemJourney = journeysData.firstWhere((element) =>
-          element.journeyCode == detailPotential?.journeyCode ?? 0);
-      if (itemJourney != null) {
-        itemJourney.selected = true;
-        journeySelected = itemJourney;
-      }
-      } catch (e) {
-      }
+            element.journeyCode == detailPotential?.journeyCode ?? 0);
+        if (itemJourney != null) {
+          itemJourney.selected = true;
+          journeySelected = itemJourney;
+        }
+      } catch (e) {}
     }
 
     // for (int i = 0; i < journeysData.length; i++) {
@@ -448,8 +534,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     //     journeysData[i].selected = false;
     //   }
     // }
-
-  
 
     Navigator.of(context).pop();
 
@@ -750,7 +834,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                 });
             if (source != null) {
               customerSourceSelected = source;
-              detailPotential.customerSource = customerSourceSelected.customerSourceId;
+              detailPotential.customerSource =
+                  customerSourceSelected.customerSourceId;
               setState(() {});
             }
           }),
@@ -773,8 +858,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   Assets.iconTax, false, false, true,
                   fillText: _taxText, focusNode: _taxFocusNode)
               : Container(),
-
-          
 
           _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
               Assets.iconCall, false, false, true,
@@ -940,31 +1023,29 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             print("Tag");
             FocusScope.of(context).unfocus();
 
-             List<int> tagsSeletecd = [];
+            List<int> tagsSeletecd = [];
 
-            
-              var listTagsSelected = await Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => TagsModal(tagsData: tagsData)));
-              if (listTagsSelected != null) {
-                // widget.detailDeal.tag = [];
-                tagsString = "";
-                tagsData = listTagsSelected;
+            var listTagsSelected = await Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (context) => TagsModal(tagsData: tagsData)));
+            if (listTagsSelected != null) {
+              // widget.detailDeal.tag = [];
+              tagsString = "";
+              tagsData = listTagsSelected;
 
-                for (int i = 0; i < tagsData.length; i++) {
-                  if (tagsData[i].selected) {
-                    tagsSeletecd.add(tagsData[i].tagId);
+              for (int i = 0; i < tagsData.length; i++) {
+                if (tagsData[i].selected) {
+                  tagsSeletecd.add(tagsData[i].tagId);
 
-                    if (tagsString == "") {
-                      tagsString = tagsData[i].name;
-                    } else {
-                      tagsString += ", ${tagsData[i].name}";
-                    }
+                  if (tagsString == "") {
+                    tagsString = tagsData[i].name;
+                  } else {
+                    tagsString += ", ${tagsData[i].name}";
                   }
                 }
-                detailPotential.tagId = tagsSeletecd;
-                setState(() {});
-              
+              }
+              detailPotential.tagId = tagsSeletecd;
+              setState(() {});
             }
           }),
 
@@ -1000,12 +1081,12 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           showMoreAddress
               ? BuildMoreAddressEditPotential(
                   provinces: provinces,
-                  // allocatorData: allocatorData,
                   requestModel: requestModel,
                   detailPotential: detailPotential,
                   modelStaff: _modelStaff,
                   selectedPersonal: selectedPersonal,
-                  listBusinessData: listBusinessData)
+                  listBusinessData: listBusinessData,
+                  positionData: positionData,)
               : Container()
         ],
       ),
@@ -1156,23 +1237,23 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           onChanged: (event) {
             print(event.toLowerCase());
             if (fillText == _fullNameText) {
-                detailPotential.fullName = _fullNameText.text;
-              } else if (fillText == _phoneNumberText) {
-                detailPotential?.phone = _phoneNumberText.text;
-              } else if (fillText == _emailText) {
-                detailPotential?.email = _emailText.text;
-              } else if (fillText == _taxText) {
-                detailPotential?.taxCode = _taxText.text;
-              } else if (fillText == _representativeText) {
-                detailPotential?.representative = _representativeText.text;
-              }
+              detailPotential.fullName = _fullNameText.text;
+            } else if (fillText == _phoneNumberText) {
+              detailPotential?.phone = _phoneNumberText.text;
+            } else if (fillText == _emailText) {
+              detailPotential?.email = _emailText.text;
+            } else if (fillText == _taxText) {
+              detailPotential?.taxCode = _taxText.text;
+            } else if (fillText == _representativeText) {
+              detailPotential?.representative = _representativeText.text;
+            }
           },
         ),
       ),
     );
   }
 
-    Future<void> editPotentialPersonal() async {
+  Future<void> editPotentialPersonal() async {
     print(detailPotential);
     print("theemmm khtn");
 
@@ -1190,7 +1271,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     if (_fullNameText.text == "" ||
         _phoneNumberText.text == "" ||
         detailPotential.pipelineCode == "" ||
-        detailPotential.journeyCode == "" || detailPotential.saleId == 0) {
+        detailPotential.journeyCode == "" ||
+        detailPotential.saleId == 0) {
       LeadConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
@@ -1199,7 +1281,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       DescriptionModelResponse result = await LeadConnection.updateLead(
           context,
           EditPotentialRequestModel(
-            customerLeadCode: widget.detailPotential.customerLeadCode ?? "",
+              customerLeadCode: widget.detailPotential.customerLeadCode ?? "",
               avatar: "",
               customerType: "personal",
               customerSource: detailPotential.customerSource,
@@ -1207,16 +1289,16 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               taxCode: "",
               phone: detailPotential.phone,
               email: detailPotential.email,
-              representative : "",
+              representative: "",
               pipelineCode: pipelineSelected.pipelineCode,
               journeyCode: journeySelected.journeyCode,
-              saleId:detailPotential.saleId,
-              tagId:detailPotential.tagId,
-              gender:detailPotential.gender,
-              birthday:detailPotential.birthday,
-              bussinessId:0,
-              employees:0,
-              address:detailPotential.address,
+              saleId: detailPotential.saleId,
+              tagId: detailPotential.tagId,
+              gender: detailPotential.gender,
+              birthday: detailPotential.birthday,
+              bussinessId: 0,
+              employees: 0,
+              address: detailPotential.address,
               provinceId: detailPotential.provinceId,
               districtId: detailPotential.districtId,
               wardId: detailPotential.wardId,
@@ -1227,26 +1309,24 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               contactEmail: "",
               contactFullName: "",
               contactPhone: "",
-              position: detailPotential.position
-              ));
+              position: detailPotential.position));
       Navigator.of(context).pop();
       if (result != null) {
-              if (result.errorCode == 0) {
-                print(result.errorDescription);
+        if (result.errorCode == 0) {
+          print(result.errorDescription);
 
-                await LeadConnection.showMyDialog(
-                    context, result.errorDescription);
+          await LeadConnection.showMyDialog(context, result.errorDescription);
 
-                Navigator.of(context).pop(true);
-              } else {
-                LeadConnection.showMyDialog(context, result.errorDescription);
-              }
-            }
+          Navigator.of(context).pop(true);
+        } else {
+          LeadConnection.showMyDialog(context, result.errorDescription);
+        }
+      }
     }
   }
 
-  Future<void> editPotentialBusiness() async {  
-     print(detailPotential);
+  Future<void> editPotentialBusiness() async {
+    print(detailPotential);
     print("Business");
 
     if (_phoneNumberText.text.isNotEmpty) {
@@ -1265,7 +1345,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           (!Validators().isNumber(detailPotential.contactPhone.trim()))) {
         print("so dien thoai sai oy");
         LeadConnection.showMyDialog(
-            context, "Số điện thoại người liên hệ không đúng định dạng" ,
+            context, "Số điện thoại người liên hệ không đúng định dạng",
             warning: true);
         return;
       }
@@ -1273,8 +1353,9 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
     if (_fullNameText.text == "" ||
         _phoneNumberText.text == "" ||
-        detailPotential.pipelineCode == ""||
-        detailPotential.journeyCode == "" || detailPotential.saleId == 0) {
+        detailPotential.pipelineCode == "" ||
+        detailPotential.journeyCode == "" ||
+        detailPotential.saleId == 0) {
       LeadConnection.showMyDialog(
           context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
@@ -1283,7 +1364,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       DescriptionModelResponse result = await LeadConnection.updateLead(
           context,
           EditPotentialRequestModel(
-            customerLeadCode: widget.detailPotential.customerLeadCode,
+              customerLeadCode: widget.detailPotential.customerLeadCode,
               avatar: "",
               customerType: "business",
               customerSource: detailPotential.customerSource,
@@ -1291,42 +1372,39 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               taxCode: detailPotential.taxCode,
               phone: detailPotential.phone,
               email: detailPotential.email,
-              representative : detailPotential.representative,
+              representative: detailPotential.representative,
               pipelineCode: pipelineSelected.pipelineCode,
               journeyCode: journeySelected.journeyCode,
-              saleId:detailPotential.saleId,
-              tagId:detailPotential.tagId,
-              gender:"",
-              birthday:detailPotential.birthday,
-              bussinessId:detailPotential.bussinessId,
-              employees:detailPotential.employees,
-              address:detailPotential.address,
+              saleId: detailPotential.saleId,
+              tagId: detailPotential.tagId,
+              gender: "",
+              birthday: detailPotential.birthday,
+              bussinessId: detailPotential.bussinessId,
+              employees: detailPotential.employees,
+              address: detailPotential.address,
               provinceId: detailPotential.provinceId,
               districtId: detailPotential.districtId,
               wardId: detailPotential.wardId,
               businessClue: detailPotential.businessClue,
               zalo: detailPotential.zalo ?? "",
-              fanpage: detailPotential.fanpage ,
+              fanpage: detailPotential.fanpage,
               contactAddress: detailPotential.contactAddress,
               contactEmail: detailPotential.contactEmail,
               contactFullName: detailPotential.contactFullName,
               contactPhone: detailPotential.contactPhone,
-              position: detailPotential.position
-              ));
+              position: detailPotential.position));
       Navigator.of(context).pop();
       if (result != null) {
-              if (result.errorCode == 0) {
-                print(result.errorDescription);
+        if (result.errorCode == 0) {
+          print(result.errorDescription);
 
-                await LeadConnection.showMyDialog(
-                    context, result.errorDescription);
+          await LeadConnection.showMyDialog(context, result.errorDescription);
 
-                Navigator.of(context).pop(true);
-              } else {
-                LeadConnection.showMyDialog(context, result.errorDescription);
-              }
-            }
+          Navigator.of(context).pop(true);
+        } else {
+          LeadConnection.showMyDialog(context, result.errorDescription);
+        }
+      }
     }
   }
-
 }

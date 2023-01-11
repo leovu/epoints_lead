@@ -1,4 +1,3 @@
-import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 
 class Global {
 
@@ -13,6 +12,8 @@ class Global {
   static Function createJob;
 
   static Function editJob;
+
+  static Function openDetailDeal;
 
   // static List<TagData> tagDatas = [];
 

@@ -10,21 +10,22 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/gender_model.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
-import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_district_model_response.dart';
-import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/get_province_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_business_areas_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/modal/business_areas_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/district_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modal/position_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/province_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/ward_modal.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
+import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class BuildMoreAddressCreatPotential extends StatefulWidget {
   AddLeadModelRequest detailPotential;
@@ -104,6 +105,9 @@ class _BuildMoreAddressCreatPotentialState
         selected: false)
   ];
   GenderModel genderSelected = GenderModel();
+
+  List<PositionData> positionData;
+  PositionData positionSelected;
   // List<WorkListStaffModel> _modelStaffSelected = [];
 
   bool showMoreAll = false;
@@ -184,10 +188,6 @@ class _BuildMoreAddressCreatPotentialState
                   }
                 }),
 
-          // _buildTextField(AppLocalizations.text(LangKey.email), "",
-          //     Assets.iconEmail, false, false, true,
-          //     fillText: _emailText, focusNode: _emailFocusNode),
-
           widget.selectedPersonal
               ? _buildTextField(
                   AppLocalizations.text(LangKey.choose_birth_day),
@@ -196,7 +196,7 @@ class _BuildMoreAddressCreatPotentialState
                   false,
                   true,
                   false, ontap: () async {
-                    FocusScope.of(context).unfocus();
+                  FocusScope.of(context).unfocus();
                   _showBirthDay();
                 })
               : _buildTextField(
@@ -206,7 +206,7 @@ class _BuildMoreAddressCreatPotentialState
                   false,
                   true,
                   false, ontap: () async {
-                    FocusScope.of(context).unfocus();
+                  FocusScope.of(context).unfocus();
                   _showEstablishDate();
                 }),
           //    _buildTextField(
@@ -522,88 +522,7 @@ class _BuildMoreAddressCreatPotentialState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Chọn người được phân bổ
-        // _buildTextField(
-        //     AppLocalizations.text(LangKey.chooseAllottedPerson),
-        //     (_modelStaffSelected.length > 0 && _modelStaffSelected != null)
-        //         ? _modelStaffSelected[0]?.staffName ?? ""
-        //         : "",
-        //     Assets.iconName,
-        //     false,
-        //     true,
-        //     false, ontap: () async {
-        //   FocusScope.of(context).unfocus();
-        //   print("Chọn người được phân bổ");
-
-        //   _modelStaffSelected =
-        //       await Navigator.of(context).push(MaterialPageRoute(
-        //           builder: (context) => PickOneStaffScreen(
-        //                 models: _modelStaffSelected,
-        //               )));
-
-        //   if (_modelStaffSelected != null && _modelStaffSelected.length > 0) {
-        //     print(_modelStaffSelected);
-        //     widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
-        //     setState(() {});
-        //   }
-
-        // if (widget.allocatorData == null ||
-        //     widget.allocatorData.length == 0) {
-        //   LeadConnection.showLoading(context);
-        //   var allocators = await LeadConnection.getAllocator(context);
-        //   Navigator.of(context).pop();
-
-        //   if (allocators != null) {
-        //     widget.allocatorData = allocators.data;
-
-        //     AllocatorData allocator = await showModalBottomSheet(
-        //         context: context,
-        //         useRootNavigator: true,
-        //         isScrollControlled: true,
-        //         backgroundColor: Colors.transparent,
-        //         builder: (context) {
-        //           return GestureDetector(
-        //             child: AllocatorModal(
-        //               allocatorData: widget.allocatorData,
-        //               allocatorSelected:allocatorSelected
-        //             ),
-        //             onTap: () {
-        //               Navigator.of(context).pop();
-        //             },
-        //             behavior: HitTestBehavior.opaque,
-        //           );
-        //         });
-        //     if (allocator != null) {
-        //       allocatorSelected = allocator;
-        //       widget.detailPotential?.saleId = allocatorSelected.staffId;
-        //       setState(() {});
-        //     }
-        //   }
-        // } else {
-        //   AllocatorData allocator = await showModalBottomSheet(
-        //       context: context,
-        //       useRootNavigator: true,
-        //       isScrollControlled: true,
-        //       backgroundColor: Colors.transparent,
-        //       builder: (context) {
-        //         return GestureDetector(
-        //           child: AllocatorModal(
-        //             allocatorData: widget.allocatorData,
-        //             allocatorSelected:allocatorSelected
-        //           ),
-        //           onTap: () {
-        //             Navigator.of(context).pop();
-        //           },
-        //           behavior: HitTestBehavior.opaque,
-        //         );
-        //       });
-        //   if (allocator != null) {
-        //     allocatorSelected = allocator;
-        //     widget.detailPotential?.saleId = allocatorSelected.staffId;
-        //     setState(() {});
-        //   }
-        // }
-        // }),
+      
         // Đầu mối doanh nghiệp
         // _buildTextField(
         //     AppLocalizations.text(LangKey.businessFocalPoint),
@@ -668,13 +587,36 @@ class _BuildMoreAddressCreatPotentialState
                       fillText: _phoneNumberText,
                       focusNode: _phoneNumberFocusNode,
                       inputType: TextInputType.numberWithOptions(
-                      signed: false, decimal: false)),
+                          signed: false, decimal: false)),
 
                   // email
                   _buildTextField(AppLocalizations.text(LangKey.email), "",
                       Assets.iconEmail, false, false, true,
                       fillText: _emailContactPersonText,
                       focusNode: _emailContactPersonFocusNode),
+
+                  _buildTextField(
+                      AppLocalizations.text(LangKey.choose_position),
+                      positionSelected?.staffTitleName ?? "",
+                      Assets.iconPosition,
+                      false,
+                      true,
+                      false, ontap: () async {
+                    FocusScope.of(context).unfocus();
+
+                    if (positionData == null || positionData.length == 0) {
+                      LeadConnection.showLoading(context);
+                      var positions = await LeadConnection.getPosition(context);
+                      Navigator.of(context).pop();
+                      if (positions != null) {
+                        positionData = positions.data;
+
+                        _loadPositionModal();
+                      }
+                    } else {
+                      _loadPositionModal();
+                    }
+                  }),
 
                   _buildTextField(AppLocalizations.text(LangKey.inputAddress),
                       "", Assets.iconAddress, false, false, true,
@@ -685,6 +627,18 @@ class _BuildMoreAddressCreatPotentialState
             : Container()
       ],
     );
+  }
+
+  void _loadPositionModal() async {
+    PositionData position = await CustomNavigator.showCustomBottomDialog(
+      context,
+      PositionModal(positionData: positionData),
+    );
+    if (position != null) {
+      positionSelected = position;
+      widget.detailPotential.position = positionSelected.staffTitleName;
+      setState(() {});
+    }
   }
 
   Widget sexInfo(int index) {

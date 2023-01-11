@@ -1,40 +1,38 @@
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
-import 'package:lead_plugin_epoint/model/response/get_customer_option_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_item_bottom_sheet.dart';
-
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
-class CustomerSourceModal extends StatefulWidget {
-  List<CustomerOptionSource> sources = <CustomerOptionSource>[];
-   CustomerSourceModal({ Key key , this.sources}) : super(key: key);
+class PositionModal extends StatefulWidget {
+  List<PositionData> positionData;
+   PositionModal({ Key key, this.positionData }) : super(key: key);
 
   @override
-  _CustomerSourceModalState createState() => _CustomerSourceModalState();
+  _PositionModalState createState() => _PositionModalState();
 }
 
-class _CustomerSourceModalState extends State<CustomerSourceModal> {
-//  final ScrollController _controller = ScrollController();
+class _PositionModalState extends State<PositionModal> {
 
   @override
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
-      title: AppLocalizations.text(LangKey.customerSource),
-      widget: (widget.sources.length > 0) ? CustomListView(
+      title: AppLocalizations.text(LangKey.choose_position),
+      widget: (widget.positionData.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
-                    children: (widget.sources ?? [])
+                    children: (widget.positionData ?? [])
                         .asMap()
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.sourceName ?? "",
+                          element?.staffTitleName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.sources.length - 1,
+                          index < widget.positionData.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -45,9 +43,8 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
     );
   }
 
-
   selectedItem(int index) async {
-    List<CustomerOptionSource> models = widget.sources;
+    List<PositionData> models = widget.positionData;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

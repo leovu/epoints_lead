@@ -15,14 +15,17 @@ import 'package:lead_plugin_epoint/model/response/get_province_model_response.da
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_business_areas_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/modal/business_areas_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/district_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modal/position_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/province_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/ward_modal.dart';
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
+import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class BuildMoreAddressEditPotential extends StatefulWidget {
   AddLeadModelRequest detailPotential;
@@ -30,6 +33,7 @@ class BuildMoreAddressEditPotential extends StatefulWidget {
   AddLeadModelRequest requestModel = AddLeadModelRequest();
   List<WorkListStaffModel> modelStaff = <WorkListStaffModel>[];
   List<ListBusinessAreasItem> listBusinessData = [];
+  List<PositionData> positionData;
   bool selectedPersonal;
 
   BuildMoreAddressEditPotential(
@@ -40,7 +44,8 @@ class BuildMoreAddressEditPotential extends StatefulWidget {
       this.detailPotential,
       this.modelStaff,
       this.listBusinessData,
-      this.selectedPersonal})
+      this.selectedPersonal,
+      this.positionData})
       : super(key: key);
 
   @override
@@ -85,6 +90,8 @@ class _BuildMoreAddressEditPotentialState
   ListBusinessAreasItem businessSelected;
 
   WardData wardSelected = WardData();
+
+  PositionData positionSelected;
 
   DateTime selectedBirthDay;
   DateTime selectedEstablishDate;
@@ -179,6 +186,16 @@ class _BuildMoreAddressEditPotentialState
           genderSelected = genderData[i];
         }
       }
+
+
+      try {
+        var item = widget.positionData.firstWhere((element) =>
+            element.staffTitleName.toLowerCase() == widget.detailPotential.position.toLowerCase());
+        if (item != null) {
+          item.selected = true;
+          positionSelected = item;
+        }
+      } catch (e) {}
 
       try {
         var item = widget.provinces.firstWhere((element) =>
@@ -484,6 +501,7 @@ class _BuildMoreAddressEditPotentialState
               ),
             ],
           ),
+
           // điền địa chỉ
           _buildTextField(AppLocalizations.text(LangKey.inputAddress), "",
               Assets.iconAddress, false, false, true,
@@ -523,6 +541,18 @@ class _BuildMoreAddressEditPotentialState
         ],
       ),
     );
+  }
+
+   void _loadPositionModal() async {
+    PositionData position = await CustomNavigator.showCustomBottomDialog(
+      context,
+      PositionModal(positionData: widget.positionData),
+    );
+    if (position != null) {
+      positionSelected = position;
+      widget.detailPotential.position = positionSelected.staffTitleName;
+      setState(() {});
+    }
   }
 
   _showBirthDay() {
@@ -734,6 +764,29 @@ class _BuildMoreAddressEditPotentialState
                       Assets.iconEmail, false, false, true,
                       fillText: _emailContactPersonText,
                       focusNode: _emailContactPersonFocusNode),
+                  
+                  _buildTextField(
+                      AppLocalizations.text(LangKey.choose_position),
+                      positionSelected?.staffTitleName ?? "",
+                      Assets.iconPosition,
+                      false,
+                      true,
+                      false, ontap: () async {
+                    FocusScope.of(context).unfocus();
+
+                    if (widget.positionData == null || widget.positionData.length == 0) {
+                      LeadConnection.showLoading(context);
+                      var positions = await LeadConnection.getPosition(context);
+                      Navigator.of(context).pop();
+                      if (positions != null) {
+                        widget.positionData = positions.data;
+
+                        _loadPositionModal();
+                      }
+                    } else {
+                      _loadPositionModal();
+                    }
+                  }),
 
                   _buildTextField(AppLocalizations.text(LangKey.inputAddress),
                       "", Assets.iconAddress, false, false, true,

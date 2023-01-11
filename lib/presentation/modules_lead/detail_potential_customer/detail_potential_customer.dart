@@ -293,6 +293,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                   CustomerCarePotential(detail: detail)));
 
                       if (result != null && result) {
+                        allowPop = true;
                         getData();
                         selectedTab(2);
                       }
@@ -396,6 +397,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     if (result != null) {
                       if (result) {
                         allowPop = true;
+                        selectedTab(index);
                         getData();
                         ;
                       }
@@ -563,10 +565,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
     switch (index) {
       case 0:
+      setState(() {
+        
+      });
         break;
 
       case 1:
-      if (detailLeadInfoDealData == null) {
+      if (detailLeadInfoDealData == null || allowPop) {
             LeadConnection.showLoading(context);
             var infoDeal = await LeadConnection.getDetailLeadInfoDeal(
                 context, widget.customer_lead_code);
@@ -584,7 +589,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         break;
 
       case 2:
-      if (customerCareLead == null) {
+      if (customerCareLead == null || allowPop) {
          LeadConnection.showLoading(context);
             CareLeadResponseModel careList = await LeadConnection.getCareLead(
                 context, detail.customerLeadId);
@@ -607,7 +612,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         break;
 
       case 4:
-      if (contactListData == null) {
+      if (contactListData == null || allowPop) {
                   var contactList = await LeadConnection.getContactList(
                       context, widget.customer_lead_code);
                   if (contactList != null) {
@@ -1358,9 +1363,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           ),
         ),
         Positioned(
-          left: (MediaQuery.of(context).size.width - 16) / 2 - 43.5,
+          left: 0,
+          // left: (MediaQuery.of(context).size.width - 16) / 2 - 43.5,
+          right: 0,
           top: -60,
-          child: _buildAvatar(detail?.fullName ?? ""),
+          child: Center(child: _buildAvatar(detail?.fullName ?? "")),
         ),
       ],
     );

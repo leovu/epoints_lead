@@ -99,6 +99,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   String _file;
   int index = 0;
   bool allowPop = false;
+  bool reloadContactList = false;
+  bool reloadCSKH = false;
   final formatter = NumberFormat.currency(
     locale: 'vi_VN',
     decimalDigits: 0,
@@ -293,7 +295,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                   CustomerCarePotential(detail: detail)));
 
                       if (result != null && result) {
-                        allowPop = true;
+                        reloadCSKH = true;
                         getData();
                         selectedTab(2);
                       }
@@ -305,7 +307,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text(AppLocalizations.text(LangKey.createJobs),
+                Text("Chăm sóc KH",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
@@ -396,7 +398,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
                     if (result != null) {
                       if (result) {
-                        allowPop = true;
+                        reloadContactList = true;
                         selectedTab(index);
                         getData();
                         ;
@@ -556,7 +558,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   }
 
   selectedTab(int index) async {
-
     List<DetailPotentialTabModel> models = tabPotentials;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
@@ -565,67 +566,68 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
     switch (index) {
       case 0:
-      setState(() {
-        
-      });
+        setState(() {});
         break;
 
       case 1:
-      if (detailLeadInfoDealData == null || allowPop) {
-            LeadConnection.showLoading(context);
-            var infoDeal = await LeadConnection.getDetailLeadInfoDeal(
-                context, widget.customer_lead_code);
+        if (detailLeadInfoDealData == null) {
+          LeadConnection.showLoading(context);
+          var infoDeal = await LeadConnection.getDetailLeadInfoDeal(
+              context, widget.customer_lead_code);
 
-            Navigator.of(context).pop();
-            if (infoDeal != null) {
-              if (infoDeal.errorCode == 0) {
-                detailLeadInfoDealData = infoDeal.data;
-                setState(() {});
-              }
+          Navigator.of(context).pop();
+          if (infoDeal != null) {
+            if (infoDeal.errorCode == 0) {
+              detailLeadInfoDealData = infoDeal.data;
+              setState(() {});
             }
           }
+        }
 
-           setState(() {});
+        setState(() {});
         break;
 
       case 2:
-      if (customerCareLead == null || allowPop) {
-         LeadConnection.showLoading(context);
-            CareLeadResponseModel careList = await LeadConnection.getCareLead(
-                context, detail.customerLeadId);
-                 Navigator.of(context).pop();
-            if (careList != null) {
-              if (careList.errorCode == 0) {
-                customerCareLead = careList.data;
-                setState(() {});
-              }
+        if (customerCareLead == null || reloadCSKH) {
+          reloadCSKH = false;
+          LeadConnection.showLoading(context);
+          CareLeadResponseModel careList =
+              await LeadConnection.getCareLead(context, detail.customerLeadId);
+          Navigator.of(context).pop();
+          if (careList != null) {
+            if (careList.errorCode == 0) {
+              customerCareLead = careList.data;
+              setState(() {});
             }
           }
-  
-           setState(() {});
+        }
+
+        setState(() {});
         break;
 
       case 3:
-      _bloc.workListComment(WorkListCommentRequestModel(
-              customerLeadID: detail.customerLeadId));
-               setState(() {});
+        _bloc.workListComment(
+            WorkListCommentRequestModel(customerLeadID: detail.customerLeadId));
+        setState(() {});
         break;
 
       case 4:
-      if (contactListData == null || allowPop) {
-                  var contactList = await LeadConnection.getContactList(
-                      context, widget.customer_lead_code);
-                  if (contactList != null) {
-                    if (contactList.errorCode == 0) {
-                      contactListData = contactList.data;
-                      setState(() {});
-                    }
-                  } else {
-                    LeadConnection.showMyDialog(
-                        context, contactList.errorDescription);
-                  }
-                }
-                 setState(() {});
+        if (contactListData == null || reloadContactList) {
+          reloadContactList = false;
+          LeadConnection.showLoading(context);
+          var contactList = await LeadConnection.getContactList(
+              context, widget.customer_lead_code);
+          Navigator.of(context).pop();
+          if (contactList != null) {
+            if (contactList.errorCode == 0) {
+              contactListData = contactList.data;
+              setState(() {});
+            }
+          } else {
+            LeadConnection.showMyDialog(context, contactList.errorDescription);
+          }
+        }
+        setState(() {});
         break;
       default:
     }
@@ -1387,13 +1389,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   Widget dealInfomationItem(DetailLeadInfoDealData item) {
     return InkWell(
       onTap: () async {
-
         if (Global.openDetailDeal != null) {
           var result = await Global.openDetailDeal(item.dealCode);
-        if (result != null && result) {
-          await getData();
-          selectedTab(2);
-        }
+          if (result != null && result) {
+            await getData();
+            selectedTab(2);
+          }
         }
       },
       child: Container(
@@ -1513,8 +1514,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _actionItem(String icon, Color color,
-      {num number, Function ontap}) {
+  Widget _actionItem(String icon, Color color, {num number, Function ontap}) {
     return InkWell(
       onTap: ontap,
       child: Container(

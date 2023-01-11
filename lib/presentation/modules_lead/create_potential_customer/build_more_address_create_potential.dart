@@ -268,6 +268,7 @@ class _BuildMoreAddressCreatPotentialState
                   if (provinceSeleted?.provinceid != province.provinceid) {
                     distictSelected = null;
                     wardSelected = null;
+                    _addressText.text = "";
                   }
                   provinceSeleted = province;
                   widget.detailPotential.provinceId =
@@ -295,6 +296,7 @@ class _BuildMoreAddressCreatPotentialState
                 if (provinceSeleted?.provinceid != province.provinceid) {
                   distictSelected = null;
                   wardSelected = null;
+                  _addressText.text = "";
                 }
                 provinceSeleted = province;
                 widget.detailPotential.provinceId = provinceSeleted.provinceid;
@@ -341,6 +343,7 @@ class _BuildMoreAddressCreatPotentialState
                   if (distict != null) {
                     if (distictSelected?.districtid != distict.districtid) {
                       wardSelected = null;
+                       _addressText.text = "";
                     }
                     distictSelected = distict;
                     widget.detailPotential.districtId =
@@ -391,6 +394,13 @@ class _BuildMoreAddressCreatPotentialState
                       wardSelected = ward;
                       widget.detailPotential.wardId = wardSelected.wardid;
 
+                      String wards = (wardSelected.name != null) ? "${wardSelected.name}, "  : "";
+                String district = (distictSelected.name != null) ? "${distictSelected.name}, "  : "";
+                String provine = (provinceSeleted.name != null) ? "${provinceSeleted.name}, "  : "";
+                _addressText.text = wards + district + provine;
+
+                widget.detailPotential.address = _addressText.text;
+
                       setState(() {});
                     }
                   }),
@@ -438,6 +448,33 @@ class _BuildMoreAddressCreatPotentialState
         ],
       ),
     );
+  }
+
+  void loadProvince() async {
+    ProvinceData province = await showModalBottomSheet(
+                  context: context,
+                  useRootNavigator: true,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (context) {
+                    return ProvinceModal(
+                        provinces: widget.provinces,
+                        provinceSeleted: provinceSeleted);
+                  });
+              if (province != null) {
+                if (provinceSeleted?.provinceid != province.provinceid) {
+                  distictSelected = null;
+                  wardSelected = null;
+                }
+                provinceSeleted = province;
+                widget.detailPotential.provinceId = provinceSeleted.provinceid;
+                var dataDistrict = await LeadConnection.getDistrict(
+                    context, provinceSeleted.provinceid);
+                if (dataDistrict != null) {
+                  districts = dataDistrict.data;
+                }
+                setState(() {});
+              }
   }
 
   _showBirthDay() {

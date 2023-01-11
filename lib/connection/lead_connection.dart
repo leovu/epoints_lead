@@ -299,11 +299,9 @@ class LeadConnection {
 
   static Future<ContactListModelResponse> getContactList(
       BuildContext context, String customer_lead_code) async {
-    showLoading(context);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/contact-list',
         {"customer_lead_code": customer_lead_code});
-    Navigator.of(context).pop();
     if (responseData.isSuccess) {
       ContactListModelResponse data =
           ContactListModelResponse.fromJson(responseData.data);

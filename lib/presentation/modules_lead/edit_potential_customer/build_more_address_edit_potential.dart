@@ -396,6 +396,7 @@ class _BuildMoreAddressEditPotentialState
               if (provinceSeleted?.provinceid != province.provinceid) {
                 distictSelected = null;
                 wardSelected = null;
+                _addressText.text = "";
               }
               provinceSeleted = province;
               widget.detailPotential.provinceId = provinceSeleted.provinceid;
@@ -443,6 +444,7 @@ class _BuildMoreAddressEditPotentialState
                   if (distict != null) {
                     if (distictSelected?.districtid != distict.districtid) {
                       wardSelected = null;
+                      _addressText.text = "";
                     }
                     distictSelected = distict;
                     widget.detailPotential.districtId =
@@ -493,6 +495,13 @@ class _BuildMoreAddressEditPotentialState
                     if (ward != null) {
                       wardSelected = ward;
                       widget.detailPotential.wardId = wardSelected.wardid;
+
+                      String wards = (wardSelected.name != null) ? "${wardSelected.name}, "  : "";
+                String district = (distictSelected.name != null) ? "${distictSelected.name}, "  : "";
+                String provine = (provinceSeleted.name != null) ? "${provinceSeleted.name}, "  : "";
+                _addressText.text = wards + district + provine;
+
+                widget.detailPotential.address = _addressText.text;
 
                       setState(() {});
                     }

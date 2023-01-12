@@ -302,7 +302,7 @@ class LeadConnection {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/contact-list',
         {"customer_lead_code": customer_lead_code});
-    if (responseData.isSuccess) {
+    if (responseData.isSuccess && responseData.data != null) {
       ContactListModelResponse data =
           ContactListModelResponse.fromJson(responseData.data);
       return data;
@@ -402,7 +402,7 @@ class LeadConnection {
       BuildContext context) async {
     ResponseData responseData =
         await connection.post('/customer-lead/customer-lead/get-type-work', {});
-    if (responseData.isSuccess) {
+    if (responseData.isSuccess && responseData.data != null) {
       GetTypeWorkModelResponse data =
           GetTypeWorkModelResponse.fromJson(responseData.data);
       return data;
@@ -429,7 +429,7 @@ class LeadConnection {
     ResponseData responseData = await connection.post(
         '/project-management/list-project', model.toJson());
     Navigator.of(context).pop();
-    if (responseData.isSuccess) {
+    if (responseData.isSuccess && responseData.data != null) {
       if (responseData.data != null) {
         ListProjectModelResponse data =
             ListProjectModelResponse.fromJson(responseData.data);

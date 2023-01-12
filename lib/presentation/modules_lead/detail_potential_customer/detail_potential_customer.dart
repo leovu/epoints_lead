@@ -297,6 +297,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       if (result != null && result) {
                         reloadCSKH = true;
                         getData();
+                        index = 2;
                         selectedTab(2);
                       }
                     },

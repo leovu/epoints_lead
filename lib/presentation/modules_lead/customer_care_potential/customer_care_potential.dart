@@ -294,6 +294,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               false,
               fillText: _customerCareContentText,
               focusNode: _customerCareContentFocusNode, ontap: () async {
+                 FocusScope.of(context).unfocus();
             if (typeOfWorkData.length == 0) {
               LeadConnection.showLoading(context);
               var types = await LeadConnection.getTypeWork(context);

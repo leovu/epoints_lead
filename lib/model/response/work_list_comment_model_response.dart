@@ -1,12 +1,15 @@
 class WorkListCommentResponseModel {
   List<WorkListCommentModel> data;
-
+  int errorCode;
+  String errorDescription;
   WorkListCommentResponseModel({this.data});
 
   WorkListCommentResponseModel.fromJson(Map<String, dynamic> json) {
-
+    errorCode = json['ErrorCode'];
+    errorDescription = json['ErrorDescription'];
     if (json['Data'] != null) {
       data = <WorkListCommentModel>[];
+
       json['Data'].forEach((v) {
         data.add(new WorkListCommentModel.fromJson(v));
       });
@@ -15,6 +18,8 @@ class WorkListCommentResponseModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['ErrorCode'] = this.errorCode;
+    data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
       data['Data'] = this.data.map((v) => v.toJson()).toList();
     }
@@ -37,15 +42,15 @@ class WorkListCommentModel {
 
   WorkListCommentModel(
       {this.customerLeadCommentId,
-        this.customerLeadId,
-        this.customerLeadParentCommentId,
-        this.staffId,
-        this.staffName,
-        this.staffAvatar,
-        this.message,
-        this.timeText,
-        this.path,
-        this.listObject});
+      this.customerLeadId,
+      this.customerLeadParentCommentId,
+      this.staffId,
+      this.staffName,
+      this.staffAvatar,
+      this.message,
+      this.timeText,
+      this.path,
+      this.listObject});
 
   WorkListCommentModel.fromJson(Map<String, dynamic> json) {
     customerLeadCommentId = json['customer_lead_comment_id'];

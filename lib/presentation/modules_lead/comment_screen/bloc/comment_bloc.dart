@@ -67,23 +67,26 @@ class CommentBloc extends BaseBloc {
 
   workCreatedComment(WorkCreateCommentRequestModel model,
       TextEditingController controller, Function(int) onCallback) async {
-    var response = await LeadConnection.workCreatedComment(context, model);
-    if (response != null) {
+    WorkListCommentResponseModel response = await LeadConnection.workCreatedComment(context, model);
+     if(response.errorCode == 0){
       _models = response.data ?? [];
-      setModels(_models);
+    } else {
+      LeadConnection.showMyDialog(context, response.errorDescription);
+    }
+
+    setModels(_models);
       setFile(null);
       setCallback(null);
       controller.text = "";
 
-      if (onCallback != null) {
+      if(onCallback != null){
         int total = 0;
-        for (var e in _models) {
+        for(var e in _models){
           total += _getTotalComment(e);
         }
 
         onCallback(total);
       }
-    }
   }
 
   int _getTotalComment(WorkListCommentModel model) {

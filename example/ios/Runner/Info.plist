@@ -51,5 +51,7 @@
     <string>aaaa</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>photo</string>
+	<key>NSCameraUsageDescription</key>
+	<string>APPNAME requires access to your phone camera.</string>
 </dict>
 </plist>

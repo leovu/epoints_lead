@@ -328,7 +328,7 @@ class LeadConnection {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/care-lead',
         {"customer_lead_id": customer_lead_id});
-    if (responseData.isSuccess) {
+    if (responseData.isSuccess && responseData != null) {
       CareLeadResponseModel data =
           CareLeadResponseModel.fromJson(responseData.data);
       return data;

@@ -46,7 +46,7 @@ class CustomChip extends StatelessWidget {
       text??"",
       style: style??AppTextStyles.style20WhiteBold,
       minFontSize: 1,
-      maxLines: 2,
+      maxLines: 1,
       overflow: TextOverflow.ellipsis,
       textAlign: TextAlign.center,
     );

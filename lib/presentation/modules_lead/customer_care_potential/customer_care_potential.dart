@@ -466,16 +466,18 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                                     .map((e) => Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            CustomChip(
-                                              isExpand: false,
-                                              radius: 5.0,
-                                              backgroundColor:
-                                                  Color(0xFFC4C4C4),
-                                              text: getNameFromPath(e.path),
-                                              style: AppTextStyles
-                                                  .style13WhiteNormal,
-                                              onClose: () =>
-                                                  _bloc.removeFile(e),
+                                            Flexible(
+                                              child: CustomChip(
+                                                isExpand: true,
+                                                radius: 5.0,
+                                                backgroundColor:
+                                                    Color(0xFFC4C4C4),
+                                                text: getNameFromPath(e.path),
+                                                style: AppTextStyles
+                                                    .style13WhiteNormal,
+                                                onClose: () =>
+                                                    _bloc.removeFile(e),
+                                              ),
                                             )
                                           ],
                                         ))

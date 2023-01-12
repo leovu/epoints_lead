@@ -17,27 +17,27 @@ class CustomerCareBloc extends BaseBloc {
     super.dispose();
   }
 
-   List<WorkUploadFileResponseModel> _files = [];
+   List<WorkUploadFileResponse> _files = [];
 
 
-  final _streamFiles = BehaviorSubject<List<WorkUploadFileResponseModel>>();
-  ValueStream<List<WorkUploadFileResponseModel>> get outputFiles => _streamFiles.stream;
-  setFiles(List<WorkUploadFileResponseModel> event) => set(_streamFiles, event);
+  final _streamFiles = BehaviorSubject<List<WorkUploadFileResponse>>();
+  ValueStream<List<WorkUploadFileResponse>> get outputFiles => _streamFiles.stream;
+  setFiles(List<WorkUploadFileResponse> event) => set(_streamFiles, event);
 
 
   workUploadFile(MultipartFileModel model) async {
     LeadConnection.showLoading(context);
-    var result = await LeadConnection.workUploadFile(context, model);
+    WorkUploadFileResponseModel result = await LeadConnection.workUploadFile(context, model);
     Navigator.of(context).pop();
     if(result != null){
-      WorkUploadFileResponseModel response = result;
+      WorkUploadFileResponse response = result.data;
 
       _files.add(response);
       setFiles(_files);
     }
   }
 
-  removeFile(WorkUploadFileResponseModel model){
+  removeFile(WorkUploadFileResponse model){
     _files.remove(model);
     setFiles(_files);
   }

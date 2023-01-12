@@ -86,14 +86,14 @@ class LeadConnection {
     return null;
   }
 
-  // static Future<String> uploadImage(filepath, url) async {
-  //   var request = http.MultipartRequest('POST', Uri.parse(url));
-  //   request.files.add(http.MultipartFile.fromBytes(
-  //       'picture', File(filepath).readAsBytesSync(),
-  //       filename: filepath.split("/").last));
-  //   var res = await request.send();
-  //   if (res != null) {}
-  // }
+  static Future<String> uploadImage(filepath, url) async {
+    var request = http.MultipartRequest('POST', Uri.parse(url));
+    request.files.add(http.MultipartFile.fromBytes(
+        'picture', File(filepath).readAsBytesSync(),
+        filename: filepath.split("/").last));
+    var res = await request.send();
+    if (res != null) {}
+  }
 
   static Future<DetailPotentialModelResponse> getdetailPotential(
       BuildContext context, String customer_lead_code) async {
@@ -336,20 +336,6 @@ class LeadConnection {
     return null;
   }
 
-  // static Future<UploadImageModelResponse> upload(
-  //     BuildContext context, File file) async {
-  //   showLoading(context);
-  //   ResponseData responseData =
-  //       await LeadConnection.connection.upload('/user/upload-file', file);
-  //   Navigator.of(context).pop();
-  //   if (responseData.isSuccess) {
-  //     UploadImageModelResponse data =
-  //         UploadImageModelResponse.fromJson(responseData.data);
-  //     return data;
-  //   }
-  //   return null;
-  // }
-
   static Future<WorkListBranchResponseModel> workListBranch(
       BuildContext context) async {
     // showLoading(context);
@@ -493,16 +479,31 @@ class LeadConnection {
 
   static Future<WorkUploadFileResponseModel> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
-    ResponseData response =
-        await connection.upload('/manage-work/upload-file', model);
+    ResponseData response =  await connection.upload('/manage-work/upload-file', model);
     if (response.isSuccess) {
       WorkUploadFileResponseModel responseModel =
           WorkUploadFileResponseModel.fromJson(response.data);
 
       return responseModel;
+    } else {
+      showMyDialog(context, "Lỗi máy chủ");
     }
     return null;
   }
+
+  //  static Future<UploadImageModelResponse> upload(
+  //     BuildContext context, MultipartFileModel model) async {
+  //   showLoading(context);
+  //   ResponseData responseData =
+  //       await LeadConnection.connection.upload('/user/upload-file', model);
+  //   Navigator.of(context).pop();
+  //   if (responseData.isSuccess) {
+  //     UploadImageModelResponse data =
+  //         UploadImageModelResponse.fromJson(responseData.data);
+  //     return data;
+  //   }
+  //   return null;
+  // }
 
   static Future<List<WorkListFileModel>> workUploadFileDocument(
       WorkUploadFileDocumentRequestModel model) async {

@@ -335,6 +335,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               false,
               true,
               false, ontap: () async {
+                 FocusScope.of(context).unfocus();
             _showFromDate();
           }),
 
@@ -448,13 +449,14 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                     stream: _bloc.outputFiles,
                     initialData: null,
                     builder: (_, snapshot) {
-                      List<WorkUploadFileResponseModel> models =
+                      List<WorkUploadFileResponse> models =
                           snapshot.data ?? [];
                       return models.isEmpty
                           ? Container()
                           : Container(
                               padding:
                                   EdgeInsets.only(bottom: AppSizes.minPadding),
+                                  margin: EdgeInsets.only(right: 5.0),
                               alignment: Alignment.centerLeft,
                               child: Wrap(
                                 spacing: AppSizes.minPadding,
@@ -464,6 +466,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             CustomChip(
+                                              isExpand: false,
                                               radius: 5.0,
                                               backgroundColor:
                                                   Color(0xFFC4C4C4),
@@ -483,8 +486,6 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                   margin: EdgeInsets.only(bottom: 10),
                   child: InkWell(
                     onTap: () {
-                      // selectFile();
-                      // _showDocumentPicker();
                       _uploadFile();
                     },
                     child: DottedBorder(
@@ -1063,6 +1064,16 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
+
+          List<String> list_document = []; 
+          List<WorkUploadFileResponse> models = _bloc.outputFiles.value;
+          if (models.length > 0) {
+            models.forEach((element) {
+              list_document.add(element.path);
+            });
+          }
+
+          print(models);
           if ((_titleText.text == "") ||
               (_toDateText.text == "") ||
               (addWorkModel.manageStatusId == 0) ||
@@ -1105,7 +1116,9 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                     isApproveId: has_approved ? 1 : 0,
                     repeatWork: null,
                     createObjectType: "",
-                    createObjectId: null));
+                    createObjectId: null,
+                    listDocument: list_document
+                    ));
             Navigator.of(context).pop();
             if (result != null) {
               if (result.errorCode == 0) {

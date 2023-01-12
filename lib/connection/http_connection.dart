@@ -16,7 +16,7 @@ class HTTPConnection {
   Future<ResponseData> upload(String path, MultipartFileModel model) async {
     final uri = Uri.parse('$domain$path');
     var request = http.MultipartRequest('POST', uri);
-    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'lang': LeadConnection.locale.languageCode});
+    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'lang': LeadConnection.locale.languageCode, 'branch-id':'1'});
     request.files.add(
       http.MultipartFile(
         model.name,
@@ -34,6 +34,7 @@ class HTTPConnection {
     var streamResponse = await request.send();
     var response = await http.Response.fromStream(streamResponse);
     if(response.statusCode == 200) {
+      print(response.body);
       ResponseData data = ResponseData();
       data.isSuccess = true;
       try {
@@ -53,15 +54,39 @@ class HTTPConnection {
     }
   }
 
-  //  Future<String> uploadImage(filepath, url) async {
-  //   var request = http.MultipartRequest('POST', Uri.parse(url));
-  //   request.files.add(http.MultipartFile('image',
-  //       File(filepath).readAsBytes().asStream(), File(filepath).lengthSync(),
-  //       filename: filepath.split("/").last));
-  //   var res = await request.send();
+//  Future<Map<String, String>> _headers(Map<String, String> content) async {
+//     Map<String, String> headers = {
+//       HttpHeaders.contentTypeHeader: listFile == null ? _typeApplication : _typeMultipart,
+//       "lang": Globals.prefs.getString(SharedPrefsKey.language, value: null) ?? LangKey.langDefault
+//     };
 
-    
-  // }
+//     if(!(emptyHeader ?? false)){
+//       String token = Globals.prefs.getString(tokenKey);
+//       if (token != "")
+//         headers[HttpHeaders.authorizationHeader] = "Bearer " + token;
+
+//       String brandCode = Globals.prefs.getString(SharedPrefsKey.brand_code, value: Globals.config.clientKey);
+//       if (brandCode != ""){
+//         if(showBrandCode){
+//           headers["brand-code"] = brandCode;
+//         }
+//         headers["client-key"] = brandCode;
+//       }
+
+//       if(Globals.model != null){
+//         headers["branch-id"] = (Globals.model.branchId ?? 0).toString();
+//       }
+//     }
+
+//     if (content != null) {
+//       content.forEach((key, value) {
+//         headers[key] = value;
+//       });
+//     }
+
+//     return headers;
+//   }
+
 
   
   Future<ResponseData>post(String path, Map<String, dynamic> body) async {

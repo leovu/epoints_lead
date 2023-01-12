@@ -9,10 +9,9 @@ import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
 class CommentBloc extends BaseBloc {
-
   static HTTPConnection connection = HTTPConnection();
 
-  CommentBloc(BuildContext context){
+  CommentBloc(BuildContext context) {
     setContext(context);
   }
 
@@ -28,11 +27,13 @@ class CommentBloc extends BaseBloc {
   List<WorkListCommentModel> _models;
 
   final _streamModels = BehaviorSubject<List<WorkListCommentModel>>();
-  ValueStream<List<WorkListCommentModel>> get outputModels => _streamModels.stream;
+  ValueStream<List<WorkListCommentModel>> get outputModels =>
+      _streamModels.stream;
   setModels(List<WorkListCommentModel> event) => set(_streamModels, event);
 
   final _streamCallback = BehaviorSubject<WorkListCommentModel>();
-  ValueStream<WorkListCommentModel> get outputCallback => _streamCallback.stream;
+  ValueStream<WorkListCommentModel> get outputCallback =>
+      _streamCallback.stream;
   setCallback(WorkListCommentModel event) => set(_streamCallback, event);
 
   final _streamFile = BehaviorSubject<String>();
@@ -41,11 +42,9 @@ class CommentBloc extends BaseBloc {
 
   workListComment(WorkListCommentRequestModel model) async {
     var response = await LeadConnection.workListComment(context, model);
-    if(response != null){
-
+    if (response != null) {
       _models = response.data ?? [];
-    }
-    else{
+    } else {
       _models = [];
     }
 
@@ -53,37 +52,32 @@ class CommentBloc extends BaseBloc {
   }
 
   workUploadFile(MultipartFileModel model) async {
-    print("upload");
     LeadConnection.showLoading(context);
-    ResponseData response = await connection.upload(
-        '/manage-work/upload-file',model);
+    ResponseData response =
+        await connection.upload('/manage-work/upload-file', model);
     Navigator.of(context).pop();
-    if(response.isSuccess){
-      var responseModel = WorkUploadFileResponseModel.fromJson(response.data);
-
-      setFile(responseModel.path);
-
-      Navigator.of(context).pop();
+    if (response.isSuccess) {
+      WorkUploadFileResponseModel responseModel =
+          WorkUploadFileResponseModel.fromJson(response.data);
+        setFile(responseModel.data.path);
+    } else {
+      LeadConnection.showMyDialog(context, "Lỗi máy chủ");
     }
   }
 
-
-
-  workCreatedComment(WorkCreateCommentRequestModel model, TextEditingController controller, Function(int) onCallback) async {
-    LeadConnection.showLoading(context);
+  workCreatedComment(WorkCreateCommentRequestModel model,
+      TextEditingController controller, Function(int) onCallback) async {
     var response = await LeadConnection.workCreatedComment(context, model);
-    Navigator.of(context).pop();
-    if(response != null){
-
+    if (response != null) {
       _models = response.data ?? [];
       setModels(_models);
       setFile(null);
       setCallback(null);
       controller.text = "";
 
-      if(onCallback != null){
+      if (onCallback != null) {
         int total = 0;
-        for(var e in _models){
+        for (var e in _models) {
           total += _getTotalComment(e);
         }
 
@@ -92,10 +86,10 @@ class CommentBloc extends BaseBloc {
     }
   }
 
-  int _getTotalComment(WorkListCommentModel model){
+  int _getTotalComment(WorkListCommentModel model) {
     int total = 1;
-    if((model.listObject?.length ?? 0) != 0){
-      for(var e in model.listObject){
+    if ((model.listObject?.length ?? 0) != 0) {
+      for (var e in model.listObject) {
         total += _getTotalComment(e);
       }
     }

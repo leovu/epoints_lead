@@ -1,12 +1,9 @@
 
-
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
-import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/utils/custom_permission_request.dart';
 import 'package:lead_plugin_epoint/widget/custom_bottom_option.dart';
 import 'package:lead_plugin_epoint/widget/custom_bottom_sheet.dart';
@@ -94,9 +91,9 @@ class CustomImagePicker {
       return null;
 
     if(source == ImageSource.camera){
-      LeadConnection.showLoading(context);
+      // CustomNavigator.showProgressDialog(context);
       File file = await _orientationImage(context, pickedFile);
-      Navigator.of(context).pop();
+      // CustomNavigator.hideProgressDialog();
       return file;
     }
 
@@ -108,7 +105,7 @@ class CustomImagePicker {
     img.Image originalImage = img.decodeImage(imageBytes);
     img.Image fixedImage;
     // if(originalImage.exif?.orientation == 8){
-    //   fixedImage = img.flipVertical(originalImage);
+      fixedImage = img.flipVertical(originalImage);
     // }
 
     if(fixedImage != null){

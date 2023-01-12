@@ -26,6 +26,7 @@ class AddWorkRequestModel {
   RepeatWork repeatWork;
   String createObjectType;
   int createObjectId;
+  List<String> listDocument;
 
   AddWorkRequestModel(
       {this.manageWorkTitle,
@@ -53,7 +54,8 @@ class AddWorkRequestModel {
       this.isApproveId,
       this.repeatWork,
       this.createObjectType,
-      this.createObjectId});
+      this.createObjectId,
+      this.listDocument});
 
   AddWorkRequestModel.fromJson(Map<String, dynamic> json) {
     manageWorkTitle = json['manage_work_title'];
@@ -98,6 +100,8 @@ class AddWorkRequestModel {
         : null;
     createObjectType = json['create_object_type'];
     createObjectId = json['create_object_id'];
+    listDocument = json['list_document'].cast<String>();
+    
   }
 
   Map<String, dynamic> toJson() {
@@ -139,6 +143,8 @@ class AddWorkRequestModel {
     }
     data['create_object_type'] = this.createObjectType;
     data['create_object_id'] = this.createObjectId;
+    data['list_document'] = this.listDocument;
+
     return data;
   }
 }

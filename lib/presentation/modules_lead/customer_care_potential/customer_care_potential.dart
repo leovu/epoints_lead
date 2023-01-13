@@ -969,7 +969,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                 _fromDate = selectedDate;
 
                 _fromDateText.text =
-                    DateFormat("dd/MM/yyyy").format(selectedDate).toString();
+                    DateFormat("yyyy-MM-dd").format(selectedDate).toString();
                 Navigator.of(context).pop();
 
                 setState(() {});
@@ -1009,7 +1009,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               onTapConfirm: () {
                 _toDate = selectedDate;
                 _toDateText.text =
-                    DateFormat("dd/MM/yyyy").format(selectedDate).toString();
+                    DateFormat("yyyy-MM-dd").format(selectedDate).toString();
                 Navigator.of(context).pop();
                 setState(() {});
               },

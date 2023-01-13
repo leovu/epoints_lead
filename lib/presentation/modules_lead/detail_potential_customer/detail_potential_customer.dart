@@ -1696,30 +1696,40 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         ),
                       ),
 
-                      InkWell(
-                        child: Container(
-                          // height: 30,
-                          // width: 100,
-                          margin: EdgeInsets.only(top: 10.0),
-                          // padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                              offset: Offset(0, 1),
-                              blurRadius: 2,
-                              color: Colors.black.withOpacity(0.3),
-                            )
-                          ], color: Colors.white),
-                          child: Padding(
-                            padding: EdgeInsets.all(6.0),
-                            child: Text(
-                              item.manageTypeWorkName ?? "N/A",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: AppColors.primaryColor,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.w500),
-                              // maxLines: 1,
-                            ),
+                      Container(
+                        margin: EdgeInsets.only(top: 10.0),
+                        padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                        decoration: BoxDecoration(boxShadow: [
+                          BoxShadow(
+                            offset: Offset(0, 1),
+                            blurRadius: 2,
+                            color: Colors.black.withOpacity(0.3),
+                          )
+                        ], color: Colors.white),
+                        child: Padding(
+                          padding: EdgeInsets.all(6.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              CustomNetworkImage(
+                                width: 15,
+                                height: 15,
+                                url: item?.manageTypeWorkIcon ??
+                                    "https://epoint-bucket.s3.ap-southeast-1.amazonaws.com/0f73a056d6c12b508a05eea29735e8a52022/07/14/3Ujo25165778317714072022.png",
+                                fit: BoxFit.fill,
+                                backgroundColor: Colors.transparent,
+                              ),
+                              SizedBox(width: 5.0,),
+                              Text(
+                                item.manageTypeWorkName ?? "N/A",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: AppColors.primaryColor,
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500),
+                                // maxLines: 1,
+                              ),
+                            ],
                           ),
                         ),
                       ),

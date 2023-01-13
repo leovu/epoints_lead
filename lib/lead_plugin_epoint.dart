@@ -78,7 +78,7 @@ class LeadPluginEpoint {
       } else if (create == 3) {
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
-                EditPotentialCustomer(customer_lead_code: "LEAD_29122022233")));
+                EditPotentialCustomer(customer_lead_code: customerLeadCode)));
       } else {
         await Navigator.of(context)
             .push(MaterialPageRoute(builder: (context) => LeadScreen()));

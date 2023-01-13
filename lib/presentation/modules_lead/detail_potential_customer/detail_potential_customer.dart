@@ -575,7 +575,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           LeadConnection.showLoading(context);
           var infoDeal = await LeadConnection.getDetailLeadInfoDeal(
               context, widget.customer_lead_code);
-
           Navigator.of(context).pop();
           if (infoDeal != null) {
             if (infoDeal.errorCode == 0) {

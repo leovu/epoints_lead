@@ -16,7 +16,7 @@ class CustomBottomOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomListView(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      padding: EdgeInsets.only(left: 20.0,right: 20.0,bottom: 30.0),
       shrinkWrap: true,
       separator: CustomLine(),
       children: (options?.length ?? 0) == 0? [CustomEmpty(

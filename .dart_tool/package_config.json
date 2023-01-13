@@ -111,7 +111,7 @@
     },
     {
       "name": "file_picker",
-      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-5.2.4",
+      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-5.2.5",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -195,7 +195,7 @@
     },
     {
       "name": "image_picker_ios",
-      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_ios-0.8.6+4",
+      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker_ios-0.8.6+5",
       "packageUri": "lib/",
       "languageVersion": "2.14"
     },
@@ -243,9 +243,9 @@
     },
     {
       "name": "mime",
-      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/mime-1.0.3",
+      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/mime-1.0.4",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.18"
     },
     {
       "name": "octo_image",
@@ -375,13 +375,13 @@
     },
     {
       "name": "sqflite",
-      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.2.2",
+      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.2.3",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
     {
       "name": "sqflite_common",
-      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite_common-2.4.0+2",
+      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite_common-2.4.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -405,9 +405,9 @@
     },
     {
       "name": "synchronized",
-      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.0+3",
+      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/synchronized-3.0.1",
       "packageUri": "lib/",
-      "languageVersion": "2.14"
+      "languageVersion": "2.18"
     },
     {
       "name": "term_glyph",
@@ -525,7 +525,7 @@
     },
     {
       "name": "xdg_directories",
-      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0+2",
+      "rootUri": "file:///Users/trantanduc/develope/flutter/.pub-cache/hosted/pub.dartlang.org/xdg_directories-0.2.0+3",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -542,7 +542,7 @@
       "languageVersion": "2.7"
     }
   ],
-  "generated": "2023-01-11T16:34:46.962054Z",
+  "generated": "2023-01-13T07:04:19.863553Z",
   "generator": "pub",
   "generatorVersion": "2.18.4"
 }

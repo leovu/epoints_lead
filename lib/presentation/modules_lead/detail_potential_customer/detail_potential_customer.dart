@@ -440,27 +440,22 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   Expanded(
                       child: ListView(
                     padding: EdgeInsets.zero,
-                    physics: (index == 3)
-                        ? NeverScrollableScrollPhysics()
-                        : AlwaysScrollableScrollPhysics(),
+                    physics: AlwaysScrollableScrollPhysics(),
                     controller: _controller,
                     children: buildInfomation(),
                   )),
                   Container(
                     height: 20.0,
-                  )
+                  ),
+                  (index == 3)
+                  ? Container(
+                      decoration: BoxDecoration(color: Colors.white),
+                      width: AppSizes.maxWidth,
+                      child: _buildChatBox())
+                  : Container()
                 ],
               ),
 
-              (index == 3)
-                  ? Positioned(
-                      bottom: 0,
-                      // left: 10,
-                      child: Container(
-                          decoration: BoxDecoration(color: Colors.white),
-                          width: AppSizes.maxWidth,
-                          child: _buildChatBox()))
-                  : Container()
               // Positioned(
               //     bottom: 30,
               //     left: 10,
@@ -489,7 +484,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           Container(
               padding: EdgeInsets.all(11.0),
               margin: EdgeInsets.only(top: 70),
-              child: potentialInformationV2()),
+              child: potentialInformationV3()),
 
           SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
@@ -511,7 +506,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               children: [
                                 Container(
                                     width: AppSizes.maxWidth,
-                                    height: AppSizes.maxHeight - 310,
+                                    height: AppSizes.maxHeight - 350,
                                     child: _buildComments()),
 
                                 // Container(height: 80,)
@@ -1358,6 +1353,249 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         ],
                       )
                     : Container()
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          // left: (MediaQuery.of(context).size.width - 16) / 2 - 43.5,
+          right: 0,
+          top: -60,
+          child: Center(child: _buildAvatar(detail?.fullName ?? "")),
+        ),
+      ],
+    );
+  }
+
+  Widget potentialInformationV3() {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          // margin: EdgeInsets.only(bottom: 32.0),
+          // padding: EdgeInsets.only(bot),
+          child: Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                border:  Border.all(width: 1, color: Color(0xFFC3C8D3))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Container(
+                    padding: EdgeInsets.only(right: 8.0, top: 8.0),
+                    margin: EdgeInsets.only(top: 25.0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 4.0,
+                        ), 
+                        Column(
+                                children: [
+                                  RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                          text: detail.customerSourceName ?? "",
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.normal),
+                                          children: [
+                                            TextSpan(
+                                                text: (detail.customerSourceName !=
+                                                            "" &&
+                                                        detail.customerSourceName !=
+                                                            null)
+                                                    ? (" - " +
+                                                            detail?.fullName ??
+                                                        "")
+                                                    : ("" + detail?.fullName ??
+                                                        ""),
+                                                style: TextStyle(
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold))
+                                          ])),
+                                  SizedBox(height: 5),
+                                  Container(
+                                    margin:
+                                        EdgeInsets.only(top: 5.0, bottom: 5.0),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF3AEDB6),
+                                        borderRadius:
+                                            BorderRadius.circular(4.0)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(detail?.journeyName ?? "",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              color: Color(0xFF11B482),
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.normal)),
+                                    ),
+                                  ),
+                                  Text(detail?.phone ?? "",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal)),
+                                  SizedBox(height: 5),
+                                  (detail.customerType == "business")
+                                      ? Text(
+                                          AppLocalizations.text(
+                                              LangKey.business),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.visible,
+                                              fontSize: 16.0,
+                                              color: Color(0xFF8E8E8E),
+                                              fontWeight: FontWeight.normal),
+                                        )
+                                      : Text(
+                                          AppLocalizations.text(
+                                              LangKey.personal),
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.visible,
+                                              fontSize: 16.0,
+                                              color: Color(0xFF8E8E8E),
+                                              fontWeight: FontWeight.normal),
+                                        )
+                                ],
+                              )
+                      ],
+                    ),
+                  ),
+                ),
+                Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.only(right: 8.0),
+                            margin: EdgeInsets.only(right: 8.0, top: 16.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    // width: MediaQuery.of(context).size.width / 2 - 50,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
+                                        // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
+
+                                        infoItem(Assets.iconName,
+                                            detail.saleName ?? ""),
+                                        infoItem(Assets.iconInteraction,
+                                            "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
+
+                                        Container(
+                                          margin: EdgeInsets.only(left: 33),
+                                          child: Text(
+                                              detail?.pipelineName ?? "",
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 15,
+                                                  fontWeight:
+                                                      FontWeight.normal)),
+                                        ),
+
+                                        // Container(
+                                        //   margin: EdgeInsets.only(left: 8.0),
+                                        //   decoration: BoxDecoration(
+                                        //       color: Color(0xFF3AEDB6),
+                                        //       borderRadius: BorderRadius.circular(4.0)),
+                                        //   child: Flexible(
+                                        //     child: Padding(
+                                        //       padding: EdgeInsets.all(8.0),
+                                        //       child: Text(detail?.journeyName ?? "",
+                                        //       textAlign: TextAlign.center,
+                                        //           style: TextStyle(
+
+                                        //               color: Color(0xFF11B482),
+                                        //               fontSize: 14,
+                                        //               fontWeight: FontWeight.normal)),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        print(detail.phone);
+                                        await callPhone(detail?.phone ?? "");
+                                      },
+                                      child: Container(
+                                        padding: EdgeInsets.all(20.0 / 2),
+                                        height: 45,
+                                        width: 45,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFF06A605),
+                                          borderRadius:
+                                              BorderRadius.circular(50),
+                                          // border:  Border.all(color: AppColors.white,)
+                                        ),
+                                        child: Center(
+                                            child: Image.asset(
+                                          Assets.iconCall,
+                                          color: AppColors.white,
+                                        )),
+                                      ),
+                                    ),
+                                    SizedBox(height: 15.0),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        _actionItem(Assets.iconCalendar,
+                                            Color(0xFF26A7AD),
+                                            number: detail.relatedWork ?? 0,
+                                            ontap: () {
+                                          print("1");
+                                        }),
+                                        _actionItem(Assets.iconOutdate,
+                                            Color(0xFFDD2C00),
+                                            number: detail.appointment ?? 0,
+                                            ontap: () {
+                                          print("2");
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: 14.0),
+                          (detail.tag != null && detail.tag.length > 0)
+                              ? Container(
+                                  padding: EdgeInsets.only(bottom: 8.0),
+                                  margin: EdgeInsets.only(left: 8.0),
+                                  child: Wrap(
+                                    children: List.generate(
+                                        detail.tag.length,
+                                        (index) =>
+                                            _optionItem(detail.tag[index])),
+                                    spacing: 10,
+                                    runSpacing: 10,
+                                  ),
+                                )
+                              : Container(),
+                        ],
+                      )
               ],
             ),
           ),

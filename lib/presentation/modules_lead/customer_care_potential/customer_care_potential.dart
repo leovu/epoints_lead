@@ -294,7 +294,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               false,
               fillText: _customerCareContentText,
               focusNode: _customerCareContentFocusNode, ontap: () async {
-                 FocusScope.of(context).unfocus();
+            FocusScope.of(context).unfocus();
             if (typeOfWorkData.length == 0) {
               LeadConnection.showLoading(context);
               var types = await LeadConnection.getTypeWork(context);
@@ -336,7 +336,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               false,
               true,
               false, ontap: () async {
-                 FocusScope.of(context).unfocus();
+            FocusScope.of(context).unfocus();
             _showFromDate();
           }),
 
@@ -450,14 +450,13 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                     stream: _bloc.outputFiles,
                     initialData: null,
                     builder: (_, snapshot) {
-                      List<WorkUploadFileResponse> models =
-                          snapshot.data ?? [];
+                      List<WorkUploadFileResponse> models = snapshot.data ?? [];
                       return models.isEmpty
                           ? Container()
                           : Container(
                               padding:
                                   EdgeInsets.only(bottom: AppSizes.minPadding),
-                                  margin: EdgeInsets.only(right: 5.0),
+                              margin: EdgeInsets.only(right: 5.0),
                               alignment: Alignment.centerLeft,
                               child: Wrap(
                                 spacing: AppSizes.minPadding,
@@ -1019,7 +1018,6 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
         });
   }
 
-
   Widget typeOfWorkItem(String title, bool selected, Function ontap) {
     return InkWell(
       onTap: ontap,
@@ -1067,16 +1065,16 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-
-          List<String> list_document = []; 
-          List<WorkUploadFileResponse> models = _bloc.outputFiles.value;
-          if (models.length > 0) {
-            models.forEach((element) {
-              list_document.add(element.path);
-            });
+          List<String> list_document = [];
+          if (_bloc.outputFiles.hasValue) {
+            List<WorkUploadFileResponse> models = _bloc.outputFiles.value;
+            if (models.length > 0) {
+              models.forEach((element) {
+                list_document.add(element.path);
+              });
+            }
+            print(models);
           }
-
-          print(models);
           if ((_titleText.text == "") ||
               (_toDateText.text == "") ||
               (addWorkModel.manageStatusId == 0) ||
@@ -1120,8 +1118,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                     repeatWork: null,
                     createObjectType: "",
                     createObjectId: null,
-                    listDocument: list_document
-                    ));
+                    listDocument: list_document));
             Navigator.of(context).pop();
             if (result != null) {
               if (result.errorCode == 0) {

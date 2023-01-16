@@ -23,7 +23,7 @@ class CustomEmpty extends StatelessWidget {
         children: [
           Image.asset(
             image ?? Assets.iconSearch,
-            width: 20.0 / 3,
+            width: 20.0,
           ),
           Container(
             height: 10.0,

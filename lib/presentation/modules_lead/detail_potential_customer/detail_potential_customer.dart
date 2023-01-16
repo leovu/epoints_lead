@@ -60,6 +60,7 @@ class DetailPotentialCustomer extends StatefulWidget {
 
 class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   final ScrollController _controller = ScrollController();
+   ScrollController _controllerListFunction = ScrollController();
   List<WorkListStaffModel> models = [];
   List<ContactListData> contactListData;
   List<CareLeadData> customerCareLead;
@@ -489,6 +490,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           SingleChildScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             scrollDirection: Axis.horizontal,
+            controller: _controllerListFunction,
             child: buildListOption(),
           ),
 
@@ -562,10 +564,15 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
     switch (index) {
       case 0:
+      _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         setState(() {});
         break;
 
       case 1:
+       _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+
         if (detailLeadInfoDealData == null) {
           LeadConnection.showLoading(context);
           var infoDeal = await LeadConnection.getDetailLeadInfoDeal(
@@ -583,6 +590,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         break;
 
       case 2:
+       detail.customerType == "business" ? _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent/1.5,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut) : _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);;
         if (customerCareLead == null || reloadCSKH) {
           reloadCSKH = false;
           LeadConnection.showLoading(context);
@@ -600,13 +610,18 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         setState(() {});
         break;
 
-      case 3:
+      case 3: _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+
+
         _bloc.workListComment(
             WorkListCommentRequestModel(customerLeadID: detail.customerLeadId));
         setState(() {});
         break;
 
       case 4:
+      _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
         if (contactListData == null || reloadContactList) {
           reloadContactList = false;
           LeadConnection.showLoading(context);

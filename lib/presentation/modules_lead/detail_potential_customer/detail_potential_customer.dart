@@ -180,6 +180,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     if (dataDetail != null) {
       if (dataDetail.errorCode == 0) {
         detail = dataDetail.data;
+        selectedTab(index);
         setState(() {});
       } else {
         await LeadConnection.showMyDialog(context, dataDetail.errorDescription);
@@ -590,9 +591,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         break;
 
       case 2:
-       detail.customerType == "business" ? _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent/1.5,
+      if (_controllerListFunction.positions.isNotEmpty) {
+detail.customerType == "business" ? _controllerListFunction?.animateTo(_controllerListFunction.position.maxScrollExtent/1.5,
           duration: Duration(milliseconds: 200), curve: Curves.easeInOut) : _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);;
+          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+      }
+       
         if (customerCareLead == null || reloadCSKH) {
           reloadCSKH = false;
           LeadConnection.showLoading(context);

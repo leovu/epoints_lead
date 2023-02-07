@@ -646,6 +646,7 @@ class _LeadScreen extends State<LeadScreen> {
                                         customer_lead_code:
                                             item.customerLeadCode,
                                         indexTab: 2,
+                                        typeCustomer: item.customerType,
                                       )));
 
                           if (result != null && result) {
@@ -659,6 +660,7 @@ class _LeadScreen extends State<LeadScreen> {
                               MaterialPageRoute(
                                   builder: (context) => DetailPotentialCustomer(
                                       customer_lead_code: item.customerLeadCode,
+                                      typeCustomer: item.customerType,
                                       indexTab: 2,)));
 
                           if (result != null && result) {

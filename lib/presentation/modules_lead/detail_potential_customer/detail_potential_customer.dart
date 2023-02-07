@@ -1050,7 +1050,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           Expanded(
             child: Column(
               children: [
-                _infoItemV2(Assets.iconTax, "MST: " + detail.taxCode ?? "N/A"),
+                _infoItemV2(Assets.iconTax, "MST: " + (detail.taxCode ?? "N/A")),
                 _infoItemV2(Assets.iconEmail, detail.email ?? "N/A"),
                 _infoItemV2(Assets.iconAddress, detail.address ?? "N/A"),
                 _infoItemV2(

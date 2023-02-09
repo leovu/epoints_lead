@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
@@ -6,22 +5,18 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/filter_screen_model.dart';
-import 'package:lead_plugin_epoint/model/request/assign_revoke_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/list_customer_lead_model_request.dart';
-import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/customer_care_potential/customer_care_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/multi_staff_screen_potentail/ui/multi_staff_screen.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:ui' as ui;
 
 class LeadScreen extends StatefulWidget {
   const LeadScreen({Key key}) : super(key: key);
@@ -465,9 +460,10 @@ class _LeadScreen extends State<LeadScreen> {
             onTap: () async {
               bool result = await Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => DetailPotentialCustomer(
-                      customer_lead_code: item.customerLeadCode,
-                      indexTab: 0,
-                      typeCustomer: item.customerType,)));
+                        customer_lead_code: item.customerLeadCode,
+                        indexTab: 0,
+                        typeCustomer: item.customerType,
+                      )));
 
               if (result != null && result) {
                 getData(false);
@@ -496,6 +492,7 @@ class _LeadScreen extends State<LeadScreen> {
                                   text: TextSpan(
                                       text: item.customerSourceName ?? "",
                                       style: TextStyle(
+                                        height: 1.5,
                                           fontSize: 16.0,
                                           color: Colors.black,
                                           fontWeight: FontWeight.normal),
@@ -508,14 +505,36 @@ class _LeadScreen extends State<LeadScreen> {
                                         style: TextStyle(
                                             color: AppColors.primaryColor,
                                             fontSize: 16.0,
-                                            fontWeight: FontWeight.bold))
+                                            fontWeight: FontWeight.bold)),
+                                    WidgetSpan(
+                                      child: SizedBox(width: 5.0,)
+                                    ),
+                                            
+                                    WidgetSpan(
+                                      alignment: ui.PlaceholderAlignment.top,
+                                        child: Container(
+                                      margin: EdgeInsets.only(right: 8.0),
+                                      decoration: BoxDecoration(
+                                          color: Color(0xFF3AEDB6),
+                                          borderRadius:
+                                              BorderRadius.circular(4.0)),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(3.0),
+                                        child: Text(item.journeyName ?? "N/A",
+                                            style: TextStyle(
+                                                color: Color.fromARGB(255, 3, 68, 48),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.normal)),
+                                      ),
+                                    )),
                                   ])),
-                              SizedBox(height: 5.0),
 
-                              statusPotential(item.journeyName ?? "N/A",
-                          Color(0xFF3AEDB6), Color(0xFF11B482)),
-                          SizedBox(height: 5.0,),
-
+                              // SizedBox(height: 5.0),
+                              // statusPotential(item.journeyName ?? "N/A",
+                              //     Color(0xFF3AEDB6), Color(0xFF11B482)),
+                              SizedBox(
+                                height: 5.0,
+                              ),
                               Text(item?.phone ?? "",
                                   style: TextStyle(
                                       fontSize: 16.0,
@@ -600,173 +619,81 @@ class _LeadScreen extends State<LeadScreen> {
                   ),
 
                   // Container(
-                  //   margin: EdgeInsets.only(left: 8.0, bottom: 8.0),
-                  //   child: Row(children: [
-                  //     statusPotential(item.pipelineName ?? "N/A",
-                  //         Color(0xFF3AEDB6), Color(0xFF11B482)),
-                  //     // statusPotential(item.journeyName ?? "N/A",
-                  //     //     Color(0xFF3AEDB6), Color(0xFF11B482))
-                  //   ]),
+                  //   margin: EdgeInsets.only(left: 33, bottom: 10.0),
+                  //   child: Text(item?.pipelineName ?? "",
+                  //       textAlign: TextAlign.center,
+                  //       style: TextStyle(
+                  //           color: Colors.black,
+                  //           fontSize: 15,
+                  //           fontWeight: FontWeight.normal)),
                   // ),
+                  infoItem(Assets.iconChance, item?.pipelineName ?? ""),
 
-                  Container(
-                                    margin: EdgeInsets.only(left: 33,bottom: 10.0),
-                                    child: Text(item?.pipelineName ?? "",
-                                      textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            
-                                              color: Colors.black,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.normal)),
-                                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      item.tag.length > 0
+                          ? Container(
+                              width: AppSizes.maxWidth * 0.55,
+                              padding: EdgeInsets.all(8.0),
+                              child: Wrap(
+                                children: List.generate(item.tag.length,
+                                    (index) => _optionItem(item.tag[index])),
+                                spacing: 10,
+                                runSpacing: 10,
+                              ),
+                            )
+                          : Container(),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              bottom: 13.0, right: 10.0, left: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              _actionItem(
+                                  Assets.iconCalendar, Color(0xFF26A7AD),
+                                  number: item?.relatedWork ?? 0,
+                                  ontap: () async {
+                                bool result = await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailPotentialCustomer(
+                                              customer_lead_code:
+                                                  item.customerLeadCode,
+                                              indexTab: 2,
+                                              typeCustomer: item.customerType,
+                                            )));
 
-                  item.tag.length > 0
-                      ? Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: Wrap(
-                            children: List.generate(item.tag.length,
-                                (index) => _optionItem(item.tag[index])),
-                            spacing: 10,
-                            runSpacing: 10,
+                                if (result != null && result) {
+                                  getData(false);
+                                }
+                                print("1");
+                              }),
+                              _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
+                                  number: item?.appointment ?? 0,
+                                  ontap: () async {
+                                bool result = await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailPotentialCustomer(
+                                              customer_lead_code:
+                                                  item.customerLeadCode,
+                                              typeCustomer: item.customerType,
+                                              indexTab: 2,
+                                            )));
+
+                                if (result != null && result) {
+                                  getData(false);
+                                }
+                                print("2");
+                              }),
+                            ],
                           ),
-                        )
-                      : Container(),
-
-                  Container(
-                    margin:
-                        EdgeInsets.only(bottom: 13.0, right: 10.0, top: 21.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        _actionItem(Assets.iconCalendar, Color(0xFF26A7AD),
-                            number: item?.relatedWork ?? 0, ontap: () async {
-                          bool result = await Navigator.of(context)
-                              .push(MaterialPageRoute(
-                                  builder: (context) => DetailPotentialCustomer(
-                                        customer_lead_code:
-                                            item.customerLeadCode,
-                                        indexTab: 2,
-                                        typeCustomer: item.customerType,
-                                      )));
-
-                          if (result != null && result) {
-                            getData(false);
-                          }
-                          print("1");
-                        }),
-                        _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                            number: item?.appointment ?? 0, ontap: () async {
-                          bool result = await Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (context) => DetailPotentialCustomer(
-                                      customer_lead_code: item.customerLeadCode,
-                                      typeCustomer: item.customerType,
-                                      indexTab: 2,)));
-
-                          if (result != null && result) {
-                            getData(false);
-                          }
-                          print("2");
-                        }),
-                        // _actionItem(Assets.iconCustomerCare, Color(0xFF41AC8D),
-                        //     ontap: () async {
-                        //   bool result = await Navigator.of(context).push(
-                        //       MaterialPageRoute(
-                        //           builder: (context) =>
-                        //               CustomerCarePotential(item: item)));
-
-                        //   if (result != null && result) {
-                        //     getData(false);
-                        //   }
-                        //   print("CustomerCare");
-                        // }),
-                        //   _actionItem(Assets.iconTask, Color(0xFFCD6000),
-                        //       ontap: () {
-                        //     print("4");
-                        //   }),
-                        //   (item.staffFullName == null) ? _actionItem(Assets.iconAssignment, Color(0xFF0067AC),
-                        //     ontap: () async {
-
-                        //       models = await Navigator.of(context).push(
-                        //           MaterialPageRoute(
-                        //               builder: (context) =>
-                        //                   PickOneStaffScreen(
-                        //                     models: models,
-                        //                   )));
-
-                        //       if (models != null && models.length > 0) {
-                        //         int staffID = models[0].staffId;
-
-                        //         if (staffID != null) {
-                        //           DescriptionModelResponse result =
-                        //               await LeadConnection.assignRevokeLead(
-                        //                   context,
-                        //                   AssignRevokeLeadRequestModel(
-                        //                       type: "assign",
-                        //                       customerLeadCode: item.customerLeadCode,
-                        //                       saleId: staffID,
-                        //                       timeRevokeLead: 30));
-
-                        //           if (result != null) {
-                        //             if (result.errorCode == 0) {
-                        //               print(result.errorDescription);
-
-                        //               await LeadConnection.showMyDialog(
-                        //                   context, result.errorDescription);
-                        //               getData(false);
-                        //             } else {
-                        //               LeadConnection.showMyDialog(
-                        //                   context, result.errorDescription);
-                        //             }
-                        //           }
-                        //         }
-
-                        //         print(models);
-                        //       }
-
-                        //       print("iconAssignment");
-
-                        //   print("5");
-                        // }):
-
-                        // _actionItem(Assets.iconRecall, Color(0xFFFFAD02),
-                        //     ontap: () async {
-                        //       LeadConnection.showMyDialogWithFunction(
-                        //           context,
-                        //           AppLocalizations.text(
-                        //               LangKey.warningRecallStaff),
-                        //           ontap: () async {
-                        //         DescriptionModelResponse result =
-                        //             await LeadConnection.assignRevokeLead(
-                        //                 context,
-                        //                 AssignRevokeLeadRequestModel(
-                        //                     type: "revoke",
-                        //                     customerLeadCode: item.customerLeadCode,
-                        //                     saleId: item.saleId,
-                        //                     timeRevokeLead: 30));
-
-                        //         Navigator.of(context).pop();
-
-                        //         if (result != null) {
-                        //           if (result.errorCode == 0) {
-                        //             print(result.errorDescription);
-
-                        //             await LeadConnection.showMyDialog(
-                        //                 context, result.errorDescription);
-                        //             getData(false);
-                        //           } else {
-                        //             LeadConnection.showMyDialog(
-                        //                 context, result.errorDescription);
-                        //           }
-                        //         }
-                        //       });
-
-                        //       print("iconAssignment");
-
-                        //   print("5");
-                        // })
-                      ],
-                    ),
+                        ),
+                      ),
+                    ],
                   )
                 ],
               ),
@@ -782,8 +709,7 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color,
-      {num number, Function ontap}) {
+  Widget _actionItem(String icon, Color color, {num number, Function ontap}) {
     return InkWell(
       onTap: ontap,
       child: Container(

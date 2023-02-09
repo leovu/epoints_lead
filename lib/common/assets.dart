@@ -58,8 +58,5 @@ class Assets {
   static String iconTimeDetail = "packages/lead_plugin_epoint/assets/icons/ic_epoint_time_detail.png";
   static String iconCamera = "packages/lead_plugin_epoint/assets/icons/ic_epoint_camera.png";
   static String iconPosition = "packages/lead_plugin_epoint/assets/icons/ic_epoint_position.png";
-
-
- 
-
+  static String iconCreateDeal = "packages/lead_plugin_epoint/assets/icons/ic_epoint_createDeal.png";
 }

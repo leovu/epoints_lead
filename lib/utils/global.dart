@@ -15,8 +15,7 @@ class Global {
 
   static Function openDetailDeal;
 
-  // static List<TagData> tagDatas = [];
-
+  static Function createDeal;
 
 
 }

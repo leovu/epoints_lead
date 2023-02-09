@@ -36,7 +36,8 @@ class LeadPluginEpoint {
       String customerLeadCode,
       Function createJob,
       Function editJob,
-      Function openDetailDeal}) async {
+      Function openDetailDeal,
+      Function createDeal}) async {
     if (domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -49,13 +50,14 @@ class LeadPluginEpoint {
     if (createJob != null) {
       Global.createJob = createJob;
     }
-
     if (editJob != null) {
       Global.editJob = editJob;
     }
-
     if (openDetailDeal != null) {
       Global.openDetailDeal = openDetailDeal;
+    }
+    if (createDeal != null) {
+      Global.createDeal = createDeal;
     }
 
     LeadConnection.locale = locale;

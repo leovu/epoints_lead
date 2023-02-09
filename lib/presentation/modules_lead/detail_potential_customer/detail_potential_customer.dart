@@ -35,6 +35,7 @@ import 'package:lead_plugin_epoint/widget/custom_shimer.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'dart:ui' as ui;
 
 class DetailPotentialCustomer extends StatefulWidget {
   final String customer_lead_code;
@@ -60,7 +61,7 @@ class DetailPotentialCustomer extends StatefulWidget {
 
 class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   final ScrollController _controller = ScrollController();
-   ScrollController _controllerListFunction = ScrollController();
+  ScrollController _controllerListFunction = ScrollController();
   List<WorkListStaffModel> models = [];
   List<ContactListData> contactListData;
   List<CareLeadData> customerCareLead;
@@ -244,13 +245,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           initialOpen: false,
           curveAnimation: Curves.easeOutSine,
           childrenBoxDecoration: BoxDecoration(
-              color: Colors.black.withOpacity(0.45),
+              color: Colors.black.withOpacity(0.35),
               borderRadius: BorderRadius.circular(10.0)),
-          childrenCount: 3,
+          childrenCount: 4,
           distance: 10,
           childrenType: ChildrenType.columnChildren,
           childrenAlignment: Alignment.centerRight,
-          childrenInnerMargin: EdgeInsets.all(20.0),
+          childrenInnerMargin: EdgeInsets.all(15.0),
           openWidget: Container(
               decoration: BoxDecoration(
                   boxShadow: [
@@ -284,7 +285,30 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 color: Colors.white,
               )),
           children: [
-            // }),
+            Column(
+              children: [
+                FloatingActionButton(
+                    backgroundColor: Color(0xFFF45E38),
+                    heroTag: "btn0",
+                    onPressed: () async {
+                      if (Global.createDeal != null) {
+                        await Global.createDeal(detail?.customerLeadCode ?? "");
+                      }
+                    },
+                    child: Image.asset(
+                      Assets.iconCreateDeal,
+                      scale: 2.5,
+                    )),
+                SizedBox(
+                  height: 5.0,
+                ),
+                Text("Tạo deal",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w400))
+              ],
+            ),
             Column(
               children: [
                 FloatingActionButton(
@@ -310,7 +334,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text("Chăm sóc KH",
+                Text("CSKH",
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
@@ -450,11 +474,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     height: 20.0,
                   ),
                   (index == 3)
-                  ? Container(
-                      decoration: BoxDecoration(color: Colors.white),
-                      width: AppSizes.maxWidth,
-                      child: _buildChatBox())
-                  : Container()
+                      ? Container(
+                          decoration: BoxDecoration(color: Colors.white),
+                          width: AppSizes.maxWidth,
+                          child: _buildChatBox())
+                      : Container()
                 ],
               ),
 
@@ -565,14 +589,22 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
     switch (index) {
       case 0:
-      _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        if (_controllerListFunction.positions.isNotEmpty) {
+          _controllerListFunction.animateTo(
+              _controllerListFunction.position.minScrollExtent,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut);
+        }
         setState(() {});
         break;
 
       case 1:
-       _controllerListFunction.animateTo(_controllerListFunction.position.minScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        if (_controllerListFunction.positions.isNotEmpty) {
+          _controllerListFunction.animateTo(
+              _controllerListFunction.position.minScrollExtent,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut);
+        }
 
         if (detailLeadInfoDealData == null) {
           LeadConnection.showLoading(context);
@@ -591,12 +623,18 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         break;
 
       case 2:
-      if (_controllerListFunction.positions.isNotEmpty) {
-detail.customerType == "business" ? _controllerListFunction?.animateTo(_controllerListFunction.position.maxScrollExtent/1.5,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut) : _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
-      }
-       
+        if (_controllerListFunction.positions.isNotEmpty) {
+          detail.customerType == "business"
+              ? _controllerListFunction?.animateTo(
+                  _controllerListFunction.position.maxScrollExtent / 1.5,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeInOut)
+              : _controllerListFunction.animateTo(
+                  _controllerListFunction.position.maxScrollExtent,
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeInOut);
+        }
+
         if (customerCareLead == null || reloadCSKH) {
           reloadCSKH = false;
           LeadConnection.showLoading(context);
@@ -614,9 +652,13 @@ detail.customerType == "business" ? _controllerListFunction?.animateTo(_controll
         setState(() {});
         break;
 
-      case 3: _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
-
+      case 3:
+        if (_controllerListFunction.positions.isNotEmpty) {
+          _controllerListFunction.animateTo(
+              _controllerListFunction.position.maxScrollExtent,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut);
+        }
 
         _bloc.workListComment(
             WorkListCommentRequestModel(customerLeadID: detail.customerLeadId));
@@ -624,8 +666,13 @@ detail.customerType == "business" ? _controllerListFunction?.animateTo(_controll
         break;
 
       case 4:
-      _controllerListFunction.animateTo(_controllerListFunction.position.maxScrollExtent,
-          duration: Duration(milliseconds: 200), curve: Curves.easeInOut);
+        if (_controllerListFunction.positions.isNotEmpty) {
+          _controllerListFunction.animateTo(
+              _controllerListFunction.position.maxScrollExtent,
+              duration: Duration(milliseconds: 200),
+              curve: Curves.easeInOut);
+        }
+
         if (contactListData == null || reloadContactList) {
           reloadContactList = false;
           LeadConnection.showLoading(context);
@@ -1054,7 +1101,8 @@ detail.customerType == "business" ? _controllerListFunction?.animateTo(_controll
           Expanded(
             child: Column(
               children: [
-                _infoItemV2(Assets.iconTax, "MST: " + (detail.taxCode ?? "N/A")),
+                _infoItemV2(
+                    Assets.iconTax, "MST: " + (detail.taxCode ?? "N/A")),
                 _infoItemV2(Assets.iconEmail, detail.email ?? "N/A"),
                 _infoItemV2(Assets.iconAddress, detail.address ?? "N/A"),
                 _infoItemV2(
@@ -1191,7 +1239,7 @@ detail.customerType == "business" ? _controllerListFunction?.animateTo(_controll
                                                         AppColors.primaryColor,
                                                     fontSize: 16.0,
                                                     fontWeight:
-                                                        FontWeight.bold))
+                                                        FontWeight.bold)),
                                           ])),
                                   SizedBox(height: 5),
                                   Container(
@@ -1398,7 +1446,7 @@ detail.customerType == "business" ? _controllerListFunction?.animateTo(_controll
             decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
-                border:  Border.all(width: 1, color: Color(0xFFC3C8D3))),
+                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -1410,173 +1458,193 @@ detail.customerType == "business" ? _controllerListFunction?.animateTo(_controll
                       children: [
                         SizedBox(
                           height: 4.0,
-                        ), 
+                        ),
                         Column(
-                                children: [
-                                  RichText(
-                                      textAlign: TextAlign.center,
-                                      text: TextSpan(
-                                          text: detail.customerSourceName ?? "",
+                          children: [
+                            RichText(
+                                textAlign: TextAlign.center,
+                                text: TextSpan(
+                                    text: detail.customerSourceName ?? "",
+                                    style: TextStyle(
+                                        fontSize: 16.0,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.normal),
+                                    children: [
+                                      TextSpan(
+                                          text: (detail.customerSourceName !=
+                                                      "" &&
+                                                  detail.customerSourceName !=
+                                                      null)
+                                              ? (" - " + detail?.fullName ?? "")
+                                              : ("" + detail?.fullName ?? ""),
                                           style: TextStyle(
+                                              height: 1.5,
+                                              color: AppColors.primaryColor,
                                               fontSize: 16.0,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.normal),
-                                          children: [
-                                            TextSpan(
-                                                text: (detail.customerSourceName !=
-                                                            "" &&
-                                                        detail.customerSourceName !=
-                                                            null)
-                                                    ? (" - " +
-                                                            detail?.fullName ??
-                                                        "")
-                                                    : ("" + detail?.fullName ??
-                                                        ""),
-                                                style: TextStyle(
-                                                    color:
-                                                        AppColors.primaryColor,
-                                                    fontSize: 16.0,
-                                                    fontWeight:
-                                                        FontWeight.bold))
-                                          ])),
-                                  SizedBox(height: 5),
-                                  Container(
-                                    margin:
-                                        EdgeInsets.only(top: 5.0, bottom: 5.0),
-                                    decoration: BoxDecoration(
-                                        color: Color(0xFF3AEDB6),
-                                        borderRadius:
-                                            BorderRadius.circular(4.0)),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(detail?.journeyName ?? "",
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              color: Color(0xFF11B482),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.normal)),
-                                    ),
-                                  ),
-                                  Text(detail?.phone ?? "",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.normal)),
-                                  SizedBox(height: 5),
-                                  (detail.customerType == "business")
-                                      ? Text(
-                                          AppLocalizations.text(
-                                              LangKey.business),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              overflow: TextOverflow.visible,
-                                              fontSize: 16.0,
-                                              color: Color(0xFF8E8E8E),
-                                              fontWeight: FontWeight.normal),
-                                        )
-                                      : Text(
-                                          AppLocalizations.text(
-                                              LangKey.personal),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              overflow: TextOverflow.visible,
-                                              fontSize: 16.0,
-                                              color: Color(0xFF8E8E8E),
-                                              fontWeight: FontWeight.normal),
-                                        )
-                                ],
-                              )
+                                              fontWeight: FontWeight.bold)),
+                                      WidgetSpan(
+                                          child: SizedBox(
+                                        width: 5.0,
+                                      )),
+                                      WidgetSpan(
+                                          alignment:
+                                              ui.PlaceholderAlignment.top,
+                                          child: Container(
+                                            margin: EdgeInsets.only(right: 8.0),
+                                            decoration: BoxDecoration(
+                                                color: Color(0xFF3AEDB6),
+                                                borderRadius:
+                                                    BorderRadius.circular(4.0)),
+                                            child: Padding(
+                                              padding: EdgeInsets.all(3.0),
+                                              child: Text(
+                                                  detail?.journeyName ?? "N/A",
+                                                  style: TextStyle(
+                                                      color: Color.fromARGB(
+                                                          255, 15, 115, 85),
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.normal)),
+                                            ),
+                                          )),
+                                    ])),
+                            SizedBox(height: 5),
+                            // Container(
+                            //   margin:
+                            //       EdgeInsets.only(top: 5.0, bottom: 5.0),
+                            //   decoration: BoxDecoration(
+                            //       color: Color(0xFF3AEDB6),
+                            //       borderRadius:
+                            //           BorderRadius.circular(4.0)),
+                            //   child: Padding(
+                            //     padding: EdgeInsets.all(8.0),
+                            //     child: Text(detail?.journeyName ?? "",
+                            //         textAlign: TextAlign.center,
+                            //         style: TextStyle(
+                            //             color: Color(0xFF11B482),
+                            //             fontSize: 14,
+                            //             fontWeight: FontWeight.normal)),
+                            //   ),
+                            // ),
+                            Text(detail?.phone ?? "",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 16.0,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.normal)),
+                            SizedBox(height: 5),
+                            (detail.customerType == "business")
+                                ? Text(
+                                    AppLocalizations.text(LangKey.business),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        overflow: TextOverflow.visible,
+                                        fontSize: 16.0,
+                                        color: Color(0xFF8E8E8E),
+                                        fontWeight: FontWeight.normal),
+                                  )
+                                : Text(
+                                    AppLocalizations.text(LangKey.personal),
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        overflow: TextOverflow.visible,
+                                        fontSize: 16.0,
+                                        color: Color(0xFF8E8E8E),
+                                        fontWeight: FontWeight.normal),
+                                  )
+                          ],
+                        )
                       ],
                     ),
                   ),
                 ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      // padding: EdgeInsets.only(right: 8.0),
+                      margin: EdgeInsets.only(right: 10.0, top: 16.0),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            padding: EdgeInsets.only(right: 8.0),
-                            margin: EdgeInsets.only(right: 8.0, top: 16.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    // width: MediaQuery.of(context).size.width / 2 - 50,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
-                                        // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
+                          Expanded(
+                            child: Container(
+                              // width: MediaQuery.of(context).size.width / 2 - 50,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
+                                  // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
 
-                                        infoItem(Assets.iconName,
-                                            detail.saleName ?? ""),
-                                        infoItem(Assets.iconInteraction,
-                                            "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
+                                  infoItem(
+                                      Assets.iconName, detail.saleName ?? ""),
+                                  infoItem(Assets.iconInteraction,
+                                      "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
 
-                                        Container(
-                                          margin: EdgeInsets.only(left: 33),
-                                          child: Text(
-                                              detail?.pipelineName ?? "",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Colors.black,
-                                                  fontSize: 15,
-                                                  fontWeight:
-                                                      FontWeight.normal)),
-                                        ),
+                                  infoItem(Assets.iconChance,
+                                      detail?.pipelineName ?? ""),
+                                  // Container(
+                                  //   margin: EdgeInsets.only(left: 33),
+                                  //   child: Text(
+                                  //       detail?.pipelineName ?? "",
+                                  //       textAlign: TextAlign.center,
+                                  //       style: TextStyle(
+                                  //           color: Colors.black,
+                                  //           fontSize: 15,
+                                  //           fontWeight:
+                                  //               FontWeight.normal)),
+                                  // ),
 
-                                        // Container(
-                                        //   margin: EdgeInsets.only(left: 8.0),
-                                        //   decoration: BoxDecoration(
-                                        //       color: Color(0xFF3AEDB6),
-                                        //       borderRadius: BorderRadius.circular(4.0)),
-                                        //   child: Flexible(
-                                        //     child: Padding(
-                                        //       padding: EdgeInsets.all(8.0),
-                                        //       child: Text(detail?.journeyName ?? "",
-                                        //       textAlign: TextAlign.center,
-                                        //           style: TextStyle(
+                                  // Container(
+                                  //   margin: EdgeInsets.only(left: 8.0),
+                                  //   decoration: BoxDecoration(
+                                  //       color: Color(0xFF3AEDB6),
+                                  //       borderRadius: BorderRadius.circular(4.0)),
+                                  //   child: Flexible(
+                                  //     child: Padding(
+                                  //       padding: EdgeInsets.all(8.0),
+                                  //       child: Text(detail?.journeyName ?? "",
+                                  //       textAlign: TextAlign.center,
+                                  //           style: TextStyle(
 
-                                        //               color: Color(0xFF11B482),
-                                        //               fontSize: 14,
-                                        //               fontWeight: FontWeight.normal)),
-                                        //     ),
-                                        //   ),
-                                        // ),
-                                      ],
-                                    ),
+                                  //               color: Color(0xFF11B482),
+                                  //               fontSize: 14,
+                                  //               fontWeight: FontWeight.normal)),
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  print(detail.phone);
+                                  await callPhone(detail?.phone ?? "");
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(20.0 / 2),
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF06A605),
+                                    borderRadius: BorderRadius.circular(50),
+                                    // border:  Border.all(color: AppColors.white,)
                                   ),
+                                  child: Center(
+                                      child: Image.asset(
+                                    Assets.iconCall,
+                                    color: AppColors.white,
+                                  )),
                                 ),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    InkWell(
-                                      onTap: () async {
-                                        print(detail.phone);
-                                        await callPhone(detail?.phone ?? "");
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(20.0 / 2),
-                                        height: 45,
-                                        width: 45,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xFF06A605),
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          // border:  Border.all(color: AppColors.white,)
-                                        ),
-                                        child: Center(
-                                            child: Image.asset(
-                                          Assets.iconCall,
-                                          color: AppColors.white,
-                                        )),
-                                      ),
-                                    ),
-                                    SizedBox(height: 15.0),
-                                    Row(
+                              ),
+                              SizedBox(height: 15.0),
+                              !(detail.tag != null && detail.tag.length > 0)
+                                  ? Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
                                         _actionItem(Assets.iconCalendar,
@@ -1592,36 +1660,82 @@ detail.customerType == "business" ? _controllerListFunction?.animateTo(_controll
                                           print("2");
                                         }),
                                       ],
-                                    ),
+                                    )
+                                  : Container(),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                    // SizedBox(height: 14.0),
+
+                    (detail.tag != null && detail.tag.length > 0)
+                        ? Container(
+                            padding: EdgeInsets.only(right: 10.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                (detail.tag != null && detail.tag.length > 0)
+                                    ? Container(
+                                        padding: EdgeInsets.only(bottom: 8.0),
+                                        margin: EdgeInsets.only(left: 8.0),
+                                        width: (AppSizes.maxWidth - 20) * 0.55,
+                                        child: Wrap(
+                                          children: List.generate(
+                                              detail.tag.length,
+                                              (index) => _optionItem(
+                                                  detail.tag[index])),
+                                          spacing: 10,
+                                          runSpacing: 10,
+                                        ),
+                                      )
+                                    : Container(),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    _actionItem(
+                                        Assets.iconCalendar, Color(0xFF26A7AD),
+                                        number: detail.relatedWork ?? 0,
+                                        ontap: () {
+                                      print("1");
+                                    }),
+                                    _actionItem(
+                                        Assets.iconOutdate, Color(0xFFDD2C00),
+                                        number: detail.appointment ?? 0,
+                                        ontap: () {
+                                      print("2");
+                                    }),
                                   ],
-                                )
+                                ),
                               ],
                             ),
-                          ),
-                          SizedBox(height: 14.0),
-                          (detail.tag != null && detail.tag.length > 0)
-                              ? Container(
-                                  padding: EdgeInsets.only(bottom: 8.0),
-                                  margin: EdgeInsets.only(left: 8.0),
-                                  child: Wrap(
-                                    children: List.generate(
-                                        detail.tag.length,
-                                        (index) =>
-                                            _optionItem(detail.tag[index])),
-                                    spacing: 10,
-                                    runSpacing: 10,
-                                  ),
-                                )
-                              : Container(),
-                        ],
-                      )
+                          )
+                        : Container(),
+                    // (detail.tag != null && detail.tag.length > 0)
+                    //     ? Container(
+                    //         padding: EdgeInsets.only(bottom: 8.0),
+                    //         margin: EdgeInsets.only(left: 8.0),
+                    //         child: Wrap(
+                    //           children: List.generate(
+                    //               detail.tag.length,
+                    //               (index) =>
+                    //                   _optionItem(detail.tag[index])),
+                    //           spacing: 10,
+                    //           runSpacing: 10,
+                    //         ),
+                    //       )
+                    //     : Container(),
+
+                    SizedBox(height: 8.0),
+                  ],
+                )
               ],
             ),
           ),
         ),
         Positioned(
           left: 0,
-          // left: (MediaQuery.of(context).size.width - 16) / 2 - 43.5,
           right: 0,
           top: -60,
           child: Center(child: _buildAvatar(detail?.fullName ?? "")),
@@ -1976,7 +2090,9 @@ detail.customerType == "business" ? _controllerListFunction?.animateTo(_controll
                                 fit: BoxFit.fill,
                                 backgroundColor: Colors.transparent,
                               ),
-                              SizedBox(width: 5.0,),
+                              SizedBox(
+                                width: 5.0,
+                              ),
                               Text(
                                 item.manageTypeWorkName ?? "N/A",
                                 textAlign: TextAlign.center,

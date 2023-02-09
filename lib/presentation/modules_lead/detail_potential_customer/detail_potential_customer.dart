@@ -103,6 +103,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   bool allowPop = false;
   bool reloadContactList = false;
   bool reloadCSKH = false;
+  bool reloadInfoDeal = false;
   final formatter = NumberFormat.currency(
     locale: 'vi_VN',
     decimalDigits: 0,
@@ -292,7 +293,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     heroTag: "btn0",
                     onPressed: () async {
                       if (Global.createDeal != null) {
-                        await Global.createDeal(detail?.customerLeadCode ?? "");
+                        bool result = await Global.createDeal(detail.toJson() ?? "");
+                        if (result != null && result) {
+                          reloadInfoDeal = true;
+                        getData();
+                        index = 1;
+                        selectedTab(1);
+                        }
                       }
                     },
                     child: Image.asset(
@@ -606,7 +613,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               curve: Curves.easeInOut);
         }
 
-        if (detailLeadInfoDealData == null) {
+        if (detailLeadInfoDealData == null || reloadInfoDeal) {
+          reloadInfoDeal = false;
           LeadConnection.showLoading(context);
           var infoDeal = await LeadConnection.getDetailLeadInfoDeal(
               context, widget.customer_lead_code);

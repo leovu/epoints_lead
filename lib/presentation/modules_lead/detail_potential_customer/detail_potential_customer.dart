@@ -1571,7 +1571,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                       "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
                                   infoItem(Assets.iconChance,
                                       detail?.pipelineName ?? ""),
-                                      
                                 ],
                               ),
                             ),
@@ -1637,8 +1636,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                     child: Wrap(
                                       children: List.generate(
                                           detail.tag.length,
-                                          (index) => _optionItem(
-                                              detail.tag[index])),
+                                          (index) =>
+                                              _optionItem(detail.tag[index])),
                                       spacing: 10,
                                       runSpacing: 10,
                                     ),
@@ -1697,8 +1696,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         if (Global.openDetailDeal != null) {
           var result = await Global.openDetailDeal(item.dealCode);
           if (result != null && result) {
+            reloadInfoDeal = true;
             await getData();
-            selectedTab(2);
+            index = 1;
+            selectedTab(1);
           }
         }
       },

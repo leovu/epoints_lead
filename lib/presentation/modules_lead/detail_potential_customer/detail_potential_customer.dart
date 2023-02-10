@@ -1571,6 +1571,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                       "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
                                   infoItem(Assets.iconChance,
                                       detail?.pipelineName ?? ""),
+                                      
                                 ],
                               ),
                             ),

@@ -252,7 +252,9 @@ class DetailPotentialData {
     data['zalo'] = this.zalo;
     data['fanpage'] = this.fanpage;
     data['sale_id'] = this.saleId;
-    data['tag'] = this.tag;
+    if (this.tag != null) {
+      data['tag'] = this.tag.map((v) => v.toJson()).toList();
+    }
     data['sale_name'] = this.saleName;
     data['is_convert'] = this.isConvert;
     data['representative'] = this.representative;

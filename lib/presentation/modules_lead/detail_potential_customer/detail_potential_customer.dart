@@ -293,12 +293,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     heroTag: "btn0",
                     onPressed: () async {
                       if (Global.createDeal != null) {
-                        bool result = await Global.createDeal(detail.toJson() ?? "");
+                        bool result =
+                            await Global.createDeal(detail.toJson() ?? "");
                         if (result != null && result) {
                           reloadInfoDeal = true;
-                        getData();
-                        index = 1;
-                        selectedTab(1);
+                          getData();
+                          index = 1;
+                          selectedTab(1);
                         }
                       }
                     },
@@ -1517,23 +1518,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                           )),
                                     ])),
                             SizedBox(height: 5),
-                            // Container(
-                            //   margin:
-                            //       EdgeInsets.only(top: 5.0, bottom: 5.0),
-                            //   decoration: BoxDecoration(
-                            //       color: Color(0xFF3AEDB6),
-                            //       borderRadius:
-                            //           BorderRadius.circular(4.0)),
-                            //   child: Padding(
-                            //     padding: EdgeInsets.all(8.0),
-                            //     child: Text(detail?.journeyName ?? "",
-                            //         textAlign: TextAlign.center,
-                            //         style: TextStyle(
-                            //             color: Color(0xFF11B482),
-                            //             fontSize: 14,
-                            //             fontWeight: FontWeight.normal)),
-                            //   ),
-                            // ),
                             Text(detail?.phone ?? "",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
@@ -1581,46 +1565,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
-                                  // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
-
                                   infoItem(
                                       Assets.iconName, detail.saleName ?? ""),
                                   infoItem(Assets.iconInteraction,
                                       "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
-
                                   infoItem(Assets.iconChance,
                                       detail?.pipelineName ?? ""),
-                                  // Container(
-                                  //   margin: EdgeInsets.only(left: 33),
-                                  //   child: Text(
-                                  //       detail?.pipelineName ?? "",
-                                  //       textAlign: TextAlign.center,
-                                  //       style: TextStyle(
-                                  //           color: Colors.black,
-                                  //           fontSize: 15,
-                                  //           fontWeight:
-                                  //               FontWeight.normal)),
-                                  // ),
-
-                                  // Container(
-                                  //   margin: EdgeInsets.only(left: 8.0),
-                                  //   decoration: BoxDecoration(
-                                  //       color: Color(0xFF3AEDB6),
-                                  //       borderRadius: BorderRadius.circular(4.0)),
-                                  //   child: Flexible(
-                                  //     child: Padding(
-                                  //       padding: EdgeInsets.all(8.0),
-                                  //       child: Text(detail?.journeyName ?? "",
-                                  //       textAlign: TextAlign.center,
-                                  //           style: TextStyle(
-
-                                  //               color: Color(0xFF11B482),
-                                  //               fontSize: 14,
-                                  //               fontWeight: FontWeight.normal)),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                 ],
                               ),
                             ),
@@ -1650,26 +1600,24 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                   )),
                                 ),
                               ),
-                              SizedBox(height: 15.0),
-                              !(detail.tag != null && detail.tag.length > 0)
-                                  ? Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        _actionItem(Assets.iconCalendar,
-                                            Color(0xFF26A7AD),
-                                            number: detail.relatedWork ?? 0,
-                                            ontap: () {
-                                          print("1");
-                                        }),
-                                        _actionItem(Assets.iconOutdate,
-                                            Color(0xFFDD2C00),
-                                            number: detail.appointment ?? 0,
-                                            ontap: () {
-                                          print("2");
-                                        }),
-                                      ],
-                                    )
-                                  : Container(),
+                              SizedBox(height: 10.0),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  _actionItem(
+                                      Assets.iconCalendar, Color(0xFF26A7AD),
+                                      number: detail.relatedWork ?? 0,
+                                      ontap: () {
+                                    print("1");
+                                  }),
+                                  _actionItem(
+                                      Assets.iconOutdate, Color(0xFFDD2C00),
+                                      number: detail.appointment ?? 0,
+                                      ontap: () {
+                                    print("2");
+                                  }),
+                                ],
+                              )
                             ],
                           )
                         ],
@@ -1680,44 +1628,21 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     (detail.tag != null && detail.tag.length > 0)
                         ? Container(
                             padding: EdgeInsets.only(right: 10.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                (detail.tag != null && detail.tag.length > 0)
-                                    ? Container(
-                                        padding: EdgeInsets.only(bottom: 8.0),
-                                        margin: EdgeInsets.only(left: 8.0),
-                                        width: (AppSizes.maxWidth - 20) * 0.55,
-                                        child: Wrap(
-                                          children: List.generate(
-                                              detail.tag.length,
-                                              (index) => _optionItem(
-                                                  detail.tag[index])),
-                                          spacing: 10,
-                                          runSpacing: 10,
-                                        ),
-                                      )
-                                    : Container(),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    _actionItem(
-                                        Assets.iconCalendar, Color(0xFF26A7AD),
-                                        number: detail.relatedWork ?? 0,
-                                        ontap: () {
-                                      print("1");
-                                    }),
-                                    _actionItem(
-                                        Assets.iconOutdate, Color(0xFFDD2C00),
-                                        number: detail.appointment ?? 0,
-                                        ontap: () {
-                                      print("2");
-                                    }),
-                                  ],
-                                ),
-                              ],
-                            ),
+                            child: (detail.tag != null && detail.tag.length > 0)
+                                ? Container(
+                                    padding: EdgeInsets.only(bottom: 8.0),
+                                    margin: EdgeInsets.only(left: 8.0),
+                                    // width: (AppSizes.maxWidth - 20) * 0.55,
+                                    child: Wrap(
+                                      children: List.generate(
+                                          detail.tag.length,
+                                          (index) => _optionItem(
+                                              detail.tag[index])),
+                                      spacing: 10,
+                                      runSpacing: 10,
+                                    ),
+                                  )
+                                : Container(),
                           )
                         : Container(),
                     // (detail.tag != null && detail.tag.length > 0)
@@ -1735,7 +1660,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     //       )
                     //     : Container(),
 
-                    SizedBox(height: 8.0),
+                    // SizedBox(height: 8.0),
                   ],
                 )
               ],
@@ -1897,7 +1822,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     return InkWell(
       onTap: ontap,
       child: Container(
-          margin: EdgeInsets.only(left: 17),
+          margin: EdgeInsets.only(left: 17, bottom: 10.0),
           child: Stack(
             clipBehavior: Clip.none,
             children: [

@@ -479,222 +479,230 @@ class _LeadScreen extends State<LeadScreen> {
                 children: [
                   Container(
                     padding: EdgeInsets.only(right: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(left: 107, bottom: 6.0),
-                    child: Row(
+                    margin: EdgeInsets.only(left: 107),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              RichText(
-                                  text: TextSpan(
-                                      text: item.customerSourceName ?? "",
-                                      style: TextStyle(
-                                        height: 1.5,
-                                          fontSize: 16.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.normal),
-                                      children: [
-                                    TextSpan(
-                                        text: (item.customerSourceName != "" &&
-                                                item.customerSourceName != null)
-                                            ? (" - " + item?.leadFullName ?? "")
-                                            : ("" + item?.leadFullName ?? ""),
-                                        style: TextStyle(
-                                            color: AppColors.primaryColor,
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.bold)),
-                                    WidgetSpan(
-                                      child: SizedBox(width: 5.0,)
-                                    ),
-                                            
-                                    WidgetSpan(
-                                      alignment: ui.PlaceholderAlignment.top,
-                                        child: Container(
-                                      margin: EdgeInsets.only(right: 8.0),
-                                      decoration: BoxDecoration(
-                                          color: Color(0xFF3AEDB6),
-                                          borderRadius:
-                                              BorderRadius.circular(4.0)),
-                                      child: Padding(
-                                        padding: EdgeInsets.all(3.0),
-                                        child: Text(item.journeyName ?? "N/A",
-                                            style: TextStyle(
-                                                color: Color.fromARGB(255, 3, 68, 48),
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.normal)),
-                                      ),
-                                    )),
-                                  ])),
-
-                              // SizedBox(height: 5.0),
-                              // statusPotential(item.journeyName ?? "N/A",
-                              //     Color(0xFF3AEDB6), Color(0xFF11B482)),
-                              SizedBox(
-                                height: 5.0,
-                              ),
-                              Text(item?.phone ?? "",
-                                  style: TextStyle(
-                                      fontSize: 16.0,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.normal)),
-                              SizedBox(height: 5),
-                              Text(
-                                // "DN- CTY TNHH MỘT THÀNH VIÊN CÔNG NGHỆ XANH CỎ",
-                                "",
-                                maxLines: 4,
+                        RichText(
+                            text: TextSpan(
+                                text: item.customerSourceName ?? "",
                                 style: TextStyle(
-                                    overflow: TextOverflow.ellipsis,
+                                    height: 1.5,
                                     fontSize: 16.0,
-                                    color: Color(0xFF8E8E8E),
+                                    color: Colors.black,
                                     fontWeight: FontWeight.normal),
-                              )
-                            ],
-                          ),
+                                children: [
+                              TextSpan(
+                                  text: (item.customerSourceName != "" &&
+                                          item.customerSourceName != null)
+                                      ? (" - " + item?.leadFullName ?? "")
+                                      : ("" + item?.leadFullName ?? ""),
+                                  style: TextStyle(
+                                      color: AppColors.primaryColor,
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold)),
+                              WidgetSpan(
+                                  child: SizedBox(
+                                width: 5.0,
+                              )),
+                              WidgetSpan(
+                                  alignment: ui.PlaceholderAlignment.top,
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 8.0),
+                                    decoration: BoxDecoration(
+                                        color: Color(0xFF3AEDB6),
+                                        borderRadius:
+                                            BorderRadius.circular(4.0)),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(3.0),
+                                      child: Text(item.journeyName ?? "N/A",
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 3, 68, 48),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.normal)),
+                                    ),
+                                  )),
+                            ])),
+
+                        // SizedBox(height: 5.0),
+                        // statusPotential(item.journeyName ?? "N/A",
+                        //     Color(0xFF3AEDB6), Color(0xFF11B482)),
+                        SizedBox(
+                          height: 5.0,
                         ),
-                        InkWell(
-                          onTap: () async {
-                            print(item.phone);
-                            await callPhone(item?.phone ?? "");
-                          },
-                          child: Container(
-                            padding: EdgeInsets.all(20.0 / 2),
-                            height: 45,
-                            width: 45,
-                            decoration: BoxDecoration(
-                              color: Color(0xFF06A605),
-                              borderRadius: BorderRadius.circular(50),
-                              // border:  Border.all(color: AppColors.white,)
-                            ),
-                            child: Center(
-                                child: Image.asset(
-                              Assets.iconCall,
-                              color: AppColors.white,
-                            )),
-                          ),
-                        )
+                        Text(item?.phone ?? "",
+                            style: TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.normal)),
+                        SizedBox(height: 15.0),
+                        // Text(
+                        //   // "DN- CTY TNHH MỘT THÀNH VIÊN CÔNG NGHỆ XANH CỎ",
+                        //   "",
+                        //   maxLines: 4,
+                        //   style: TextStyle(
+                        //       overflow: TextOverflow.ellipsis,
+                        //       fontSize: 16.0,
+                        //       color: Color(0xFF8E8E8E),
+                        //       fontWeight: FontWeight.normal),
+                        // )
                       ],
                     ),
                   ),
                   // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
                   // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
 
-                  infoItem(Assets.iconName, item?.staffFullName ?? ""),
-                  // infoItem(Assets.iconInteraction, "12/12/2022"),
-
                   Container(
-                    padding: const EdgeInsets.only(left: 8, bottom: 8.0),
-                    margin: EdgeInsets.only(bottom: 8.0),
+                    padding: EdgeInsets.only(right: 8.0, bottom: 8.0),
+                  margin: EdgeInsets.only(right: 8.0),
                     child: Row(
                       children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 10.0),
-                          height: 15.0,
-                          width: 15.0,
-                          child: Image.asset(Assets.iconInteraction),
+                        Expanded(
+                            child: Container(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                              infoItem(Assets.iconName, item?.staffFullName ?? ""),
+                              // infoItem(Assets.iconInteraction, "12/12/2022"),
+
+                              Container(
+                                padding:
+                                    const EdgeInsets.only(left: 8, bottom: 8.0),
+                                margin: EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.only(right: 10.0),
+                                      height: 15.0,
+                                      width: 15.0,
+                                      child: Image.asset(Assets.iconInteraction),
+                                    ),
+                                    (item.dateLastCare != null)
+                                        ? Expanded(
+                                            child: RichText(
+                                                text: TextSpan(
+                                                    text: item.dateLastCare + " ",
+                                                    style: TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.normal),
+                                                    children: [
+                                                  TextSpan(
+                                                      text:
+                                                          "(${item.diffDay} ngày)",
+                                                      style: TextStyle(
+                                                          color: AppColors
+                                                              .primaryColor,
+                                                          fontSize: 14.0,
+                                                          fontWeight:
+                                                              FontWeight.normal))
+                                                ])),
+                                          )
+                                        : Container(),
+                                  ],
+                                ),
+                              ),
+                              infoItem(Assets.iconChance, item?.pipelineName ?? ""),
+                          ],
                         ),
-                        (item.dateLastCare != null)
-                            ? Expanded(
-                                child: RichText(
-                                    text: TextSpan(
-                                        text: item.dateLastCare + " ",
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.normal),
-                                        children: [
-                                      TextSpan(
-                                          text: "(${item.diffDay} ngày)",
-                                          style: TextStyle(
-                                              color: AppColors.primaryColor,
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.normal))
-                                    ])),
-                              )
-                            : Container(),
+                            )),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(bottom: 12.0),
+                              child: InkWell(
+                                onTap: () async {
+                                  print(item.phone);
+                                  await callPhone(item?.phone ?? "");
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(20.0 / 2),
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                    color: Color(0xFF06A605),
+                                    borderRadius: BorderRadius.circular(50),
+                                    // border:  Border.all(color: AppColors.white,)
+                                  ),
+                                  child: Center(
+                                      child: Image.asset(
+                                    Assets.iconCall,
+                                    color: AppColors.white,
+                                  )),
+                                ),
+                              ),
+                            ),
+
+                            // SizedBox(height: ,)
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                _actionItem(
+                                    Assets.iconCalendar, Color(0xFF26A7AD),
+                                    number: item?.relatedWork ?? 0,
+                                    ontap: () async {
+                                  bool result = await Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailPotentialCustomer(
+                                                customer_lead_code:
+                                                    item.customerLeadCode,
+                                                indexTab: 2,
+                                                typeCustomer:
+                                                    item.customerType,
+                                              )));
+
+                                  if (result != null && result) {
+                                    getData(false);
+                                  }
+                                  print("1");
+                                }),
+                                _actionItem(
+                                    Assets.iconOutdate, Color(0xFFDD2C00),
+                                    number: item?.appointment ?? 0,
+                                    ontap: () async {
+                                  bool result = await Navigator.of(context)
+                                      .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailPotentialCustomer(
+                                                customer_lead_code:
+                                                    item.customerLeadCode,
+                                                typeCustomer:
+                                                    item.customerType,
+                                                indexTab: 2,
+                                              )));
+
+                                  if (result != null && result) {
+                                    getData(false);
+                                  }
+                                  print("2");
+                                }),
+                              ],
+                            ),
+                          ],
+                        )
                       ],
                     ),
                   ),
 
-                  // Container(
-                  //   margin: EdgeInsets.only(left: 33, bottom: 10.0),
-                  //   child: Text(item?.pipelineName ?? "",
-                  //       textAlign: TextAlign.center,
-                  //       style: TextStyle(
-                  //           color: Colors.black,
-                  //           fontSize: 15,
-                  //           fontWeight: FontWeight.normal)),
-                  // ),
-                  infoItem(Assets.iconChance, item?.pipelineName ?? ""),
-
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      item.tag.length > 0
-                          ? Container(
-                              width: AppSizes.maxWidth * 0.55,
-                              padding: EdgeInsets.all(8.0),
-                              child: Wrap(
-                                children: List.generate(item.tag.length,
-                                    (index) => _optionItem(item.tag[index])),
-                                spacing: 10,
-                                runSpacing: 10,
-                              ),
-                            )
-                          : Container(),
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              bottom: 13.0, right: 10.0, left: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              _actionItem(
-                                  Assets.iconCalendar, Color(0xFF26A7AD),
-                                  number: item?.relatedWork ?? 0,
-                                  ontap: () async {
-                                bool result = await Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailPotentialCustomer(
-                                              customer_lead_code:
-                                                  item.customerLeadCode,
-                                              indexTab: 2,
-                                              typeCustomer: item.customerType,
-                                            )));
-
-                                if (result != null && result) {
-                                  getData(false);
-                                }
-                                print("1");
-                              }),
-                              _actionItem(Assets.iconOutdate, Color(0xFFDD2C00),
-                                  number: item?.appointment ?? 0,
-                                  ontap: () async {
-                                bool result = await Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            DetailPotentialCustomer(
-                                              customer_lead_code:
-                                                  item.customerLeadCode,
-                                              typeCustomer: item.customerType,
-                                              indexTab: 2,
-                                            )));
-
-                                if (result != null && result) {
-                                  getData(false);
-                                }
-                                print("2");
-                              }),
-                            ],
+                  item.tag.length > 0
+                      ? Container(
+                          // width: AppSizes.maxWidth * 0.55,
+                          padding: EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0),
+                          child: Wrap(
+                            children: List.generate(item.tag.length,
+                                (index) => _optionItem(item.tag[index])),
+                            spacing: 10,
+                            runSpacing: 10,
                           ),
-                        ),
-                      ),
-                    ],
-                  )
+                        )
+                      : Container()
                 ],
               ),
             ),
@@ -713,7 +721,7 @@ class _LeadScreen extends State<LeadScreen> {
     return InkWell(
       onTap: ontap,
       child: Container(
-          margin: EdgeInsets.only(left: 17),
+          margin: EdgeInsets.only(left: 14.0),
           child: Stack(
             clipBehavior: Clip.none,
             children: [

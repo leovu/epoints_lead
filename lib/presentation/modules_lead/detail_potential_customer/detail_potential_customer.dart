@@ -296,6 +296,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         bool result =
                             await Global.createDeal(detail.toJson() ?? "");
                         if (result != null && result) {
+                          allowPop = true;
                           reloadInfoDeal = true;
                           getData();
                           index = 1;
@@ -329,6 +330,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                   CustomerCarePotential(detail: detail)));
 
                       if (result != null && result) {
+                        allowPop = true;
                         reloadCSKH = true;
                         getData();
                         index = 2;
@@ -517,7 +519,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         children: [
           Container(
               padding: EdgeInsets.all(11.0),
-              margin: EdgeInsets.only(top: 70),
+              margin: EdgeInsets.only(top: 55),
               child: potentialInformationV3()),
 
           SingleChildScrollView(
@@ -1214,7 +1216,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 Center(
                   child: Container(
                     padding: EdgeInsets.only(right: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(top: 25.0),
+                    margin: EdgeInsets.only(top: 15.0),
                     child: Column(
                       children: [
                         SizedBox(
@@ -1462,7 +1464,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 Center(
                   child: Container(
                     padding: EdgeInsets.only(right: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(top: 25.0),
+                    margin: EdgeInsets.only(top: 15.0),
                     child: Column(
                       children: [
                         SizedBox(

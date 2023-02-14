@@ -435,6 +435,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
                     if (result != null) {
                       if (result) {
+                        allowPop = true;
                         reloadContactList = true;
                         selectedTab(index);
                         getData();

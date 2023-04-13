@@ -31,7 +31,6 @@ dependencies:
   image_picker: ^0.8.6
   draggable_fab: ^0.1.4
   http: ^0.13.5
-  flutter_html: ^3.0.0-alpha.6
   shimmer: ^2.0.0
   cached_network_image: ^3.2.1
   dotted_border: ^2.0.0+2
@@ -39,6 +38,7 @@ dependencies:
   keyboard_actions: ^4.0.1
   image: ^3.0.0
   webview_flutter_plus: ^0.3.0+2
+  flutter_html: ^3.0.0-alpha.6
 
 dependency_overrides:
   permission:

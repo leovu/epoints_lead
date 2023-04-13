@@ -6,8 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
-import 'package:lead_plugin_epoint/widget/custom_scaffold.dart';
-import 'package:webview_flutter_plus/webview_flutter_plus.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class CustomFileView extends StatefulWidget {
 
@@ -22,7 +21,7 @@ class CustomFileView extends StatefulWidget {
 
 class CustomFileViewState extends State<CustomFileView> {
 
-  WebViewPlusController _controller;
+  WebViewController _controller;
 
   bool _isStarted = false;
 
@@ -30,6 +29,23 @@ class CustomFileViewState extends State<CustomFileView> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    _controller = WebViewController()
+  ..setJavaScriptMode(JavaScriptMode.unrestricted)
+  ..setBackgroundColor(const Color(0x00000000))
+  ..setNavigationDelegate(
+    NavigationDelegate(
+      onProgress: (int progress) {
+        // Update loading bar.
+      },
+      onPageStarted: (String url) {},
+      onPageFinished: (String url) {
+
+      },
+      onWebResourceError: (WebResourceError error) {},
+    ),
+  )
+  ..loadRequest(Uri.parse(Platform.isAndroid?"https://docs.google.com/viewer?embedded=true&url=${widget.url}":widget.url));
   }
 
   @override
@@ -57,45 +73,7 @@ class CustomFileViewState extends State<CustomFileView> {
         height: double.infinity,
         url: widget.url,
         fit: BoxFit.contain,
-      ):WebViewPlus(
-        javascriptMode: JavascriptMode.unrestricted,
-        initialUrl: Platform.isAndroid?"https://docs.google.com/viewer?embedded=true&url=${widget.url}":widget.url,
-        onWebViewCreated: (controller){
-          _controller = controller;
-        },
-        onPageFinished: (url){
-          if(!_isStarted){
-            Future.delayed(Duration(milliseconds: 500)).then((value) => _controller.webViewController.reload());
-          }
-        },
-        onPageStarted: (url){
-          _isStarted = true;
-        },
-      ),
-    );
-  }
-}
-
-class CustomHtmlView extends StatelessWidget {
-
-  final String html;
-
-  const CustomHtmlView(this.html, {Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if(html == null){
-      return Container();
-    }
-    return WebViewPlus(
-      initialUrl: "about:blank",
-      onWebViewCreated: (controller){
-        controller.loadUrl(Uri.dataFromString(
-            html,
-            mimeType: 'text/html',
-            encoding: Encoding.getByName('utf-8')
-        ).toString());
-      },
+      ):WebViewWidget(controller: _controller),
     );
   }
 }

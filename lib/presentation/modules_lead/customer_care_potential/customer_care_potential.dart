@@ -9,6 +9,8 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
+import 'package:lead_plugin_epoint/connection/aws_connection.dart';
+import 'package:lead_plugin_epoint/connection/aws_interaction.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/add_work_model_request.dart';
@@ -196,7 +198,9 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
     ]);
 
     if (file != null) {
-      _bloc.workUploadFile(MultipartFileModel(name: "link", file: file));
+      _bloc.workUploadFile(file);
+      
+
     }
   }
 
@@ -450,7 +454,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                     stream: _bloc.outputFiles,
                     initialData: null,
                     builder: (_, snapshot) {
-                      List<WorkUploadFileResponse> models = snapshot.data ?? [];
+                      List<String> models = snapshot.data ?? [];
                       return models.isEmpty
                           ? Container()
                           : Container(
@@ -471,7 +475,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                                                 radius: 5.0,
                                                 backgroundColor:
                                                     Color(0xFFC4C4C4),
-                                                text: getNameFromPath(e.path),
+                                                text: getNameFromPath(e),
                                                 style: AppTextStyles
                                                     .style13WhiteNormal,
                                                 onClose: () =>
@@ -1067,10 +1071,10 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
         onTap: () async {
           List<String> list_document = [];
           if (_bloc.outputFiles.hasValue) {
-            List<WorkUploadFileResponse> models = _bloc.outputFiles.value;
+            List<String> models = _bloc.outputFiles.value;
             if (models.length > 0) {
               models.forEach((element) {
-                list_document.add(element.path);
+                list_document.add(element);
               });
             }
             print(models);

@@ -1,7 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/connection/http_connection.dart';
+import 'package:lead_plugin_epoint/common/lang_key.dart';
+import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
-import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,27 +19,33 @@ class CustomerCareBloc extends BaseBloc {
     super.dispose();
   }
 
-   List<WorkUploadFileResponse> _files = [];
+   List<String> _files = [];
 
 
-  final _streamFiles = BehaviorSubject<List<WorkUploadFileResponse>>();
-  ValueStream<List<WorkUploadFileResponse>> get outputFiles => _streamFiles.stream;
-  setFiles(List<WorkUploadFileResponse> event) => set(_streamFiles, event);
+  final _streamFiles = BehaviorSubject<List<String>>();
+  ValueStream<List<String>> get outputFiles => _streamFiles.stream;
+  setFiles(List<String> event) => set(_streamFiles, event);
 
 
-  workUploadFile(MultipartFileModel model) async {
+  workUploadFile(File model) async {
     LeadConnection.showLoading(context);
-    WorkUploadFileResponseModel result = await LeadConnection.workUploadFile(context, model);
+
+    
+    String result = await LeadConnection.uploadFileAWS(context, model);
+
+
     Navigator.of(context).pop();
     if(result != null){
-      WorkUploadFileResponse response = result.data;
+      // WorkUploadFileResponse response = result.url;
 
-      _files.add(response);
+      _files.add(result);
       setFiles(_files);
+    } else {
+      LeadConnection.handleError(context, AppLocalizations.text(LangKey.server_error));
     }
   }
 
-  removeFile(WorkUploadFileResponse model){
+  removeFile(String model){
     _files.remove(model);
     setFiles(_files);
   }

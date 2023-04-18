@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
+import 'package:lead_plugin_epoint/connection/network_connectivity.dart';
 import 'package:lead_plugin_epoint/model/request/add_business_areas_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/add_tag_model_request.dart';
@@ -48,7 +50,9 @@ import 'package:lead_plugin_epoint/model/response/work_list_branch_responese_mod
 import 'package:lead_plugin_epoint/model/response/work_list_comment_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_department_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_file_response_model.dart';
+import 'package:lead_plugin_epoint/model/response_model.dart';
 import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
+import 'package:mime/mime.dart';
 
 import '../model/response/list_customer_lead_model_response.dart';
 
@@ -491,20 +495,6 @@ class LeadConnection {
     return null;
   }
 
-  //  static Future<UploadImageModelResponse> upload(
-  //     BuildContext context, MultipartFileModel model) async {
-  //   showLoading(context);
-  //   ResponseData responseData =
-  //       await LeadConnection.connection.upload('/user/upload-file', model);
-  //   Navigator.of(context).pop();
-  //   if (responseData.isSuccess) {
-  //     UploadImageModelResponse data =
-  //         UploadImageModelResponse.fromJson(responseData.data);
-  //     return data;
-  //   }
-  //   return null;
-  // }
-
   static Future<List<WorkListFileModel>> workUploadFileDocument(
       WorkUploadFileDocumentRequestModel model) async {
     List<WorkListFileModel> _fileModels;
@@ -546,6 +536,47 @@ class LeadConnection {
     }
     return null;
   }
+
+
+  static Future<String> uploadFileAWS(
+      BuildContext context, File file) async {
+    // showLoading(context);
+    var data = await _checkConnectivity(context);
+    if (data != null) {
+      handleError(context,AppLocalizations.text(LangKey.server_error));
+    }
+
+    final mimeType = lookupMimeType(file.path);
+
+    final url = await AwsS3.uploadFile(
+        accessKey: "AKIAUO66DKWUKVBVJCJK",
+        secretKey: "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",
+        file: file,
+        bucket: "epoint-bucket",
+        region: "ap-southeast-1",
+        contentType: mimeType
+    );
+
+    if((url ?? "").isEmpty){
+      handleError(context,AppLocalizations.text(LangKey.server_error));
+      return null;
+    } else {
+      return url;
+    }
+  }
+
+   static Future _checkConnectivity(BuildContext context) async {
+    if (!(await NetworkConnectivity.isConnected())) {
+      handleError(context,AppLocalizations.text(LangKey.server_error));
+    }
+    return null;
+  }
+
+
+  static Future handleError(BuildContext context, String title) async {
+    await showMyDialog(context, AppLocalizations.text(LangKey.server_error));
+  }
+
 
   static Future showLoading(BuildContext context) async {
     return await showDialog(

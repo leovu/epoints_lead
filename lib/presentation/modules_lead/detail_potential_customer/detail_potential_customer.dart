@@ -165,7 +165,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
   _showOption() {
     CustomImagePicker.showPicker(context, (file) {
-      _bloc.workUploadFile(MultipartFileModel(name: "link", file: file));
+      _bloc.workUploadFile(file);
     });
   }
 
@@ -310,7 +310,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text("Tạo deal",
+                Text(AppLocalizations.text(LangKey.createDeal),
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,

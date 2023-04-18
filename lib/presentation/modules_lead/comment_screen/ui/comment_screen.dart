@@ -88,10 +88,7 @@ class CommentScreenState extends State<CommentScreen> with AutomaticKeepAliveCli
 
   _showOption(){
     CustomImagePicker.showPicker(context, (file) {
-      _bloc.workUploadFile(MultipartFileModel(
-          name: "link",
-          file: file
-      ));
+      _bloc.workUploadFile(file);
     });
   }
 

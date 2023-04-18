@@ -196,5 +196,6 @@
   "allow": "Cho phép",
   "message_permission": "Chọn Cài đặt vào Thông tin ứng dụng, chọn vào Quyền (Permissions), bật truy cập và vào lại màn hình này để sử dụng quyền",
   "choose_position": "Chọn chức vụ",
-  "server_error": "Lỗi máy chủ"
+  "server_error": "Lỗi máy chủ",
+  "createDeal": "Tạo deal"
 }

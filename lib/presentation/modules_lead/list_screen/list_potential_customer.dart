@@ -97,28 +97,9 @@ class _LeadScreen extends State<LeadScreen> {
             statusAssign: filterModel.statusAssign,
             customerType: filterModel.customerType,
             tagId: filterModel.tagId,
-            // customerSourceName: filterModel.customerSourceName,
             isConvert: filterModel.isConvert,
-            // staffFullName: filterModel.staffFullName,
-            // pipelineName: filterModel.pipelineName,
-            // journeyName: filterModel.journeyName,
             createdAt: filterModel.createdAt,
             allocationDate: filterModel.allocationDate));
-
-    //           ListCustomLeadModelRequest(
-    //   search: _searchtext.text,
-    //   page: filterModel.page,
-    //   statusAssign: filterModel.statusAssign,
-    //   customerType: filterModel.customerType,
-    //   tagId: filterModel.tagId,
-    // customerSourceId: filterModel.customerSourceId,
-    // staffId: filterModel.staffId,
-    // pipelineId: filterModel.pipelineId,
-    // journeyId: filterModel.journeyId,
-    // careHistory: filterModel.careHistory,
-    // isConvert: filterModel.isConvert,
-    //   createdAt: filterModel.createdAt,
-    //   allocationDate: filterModel.allocationDate));
 
     if (model != null) {
       models = [];

@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:lead_plugin_epoint/common/lang_key.dart';
+import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/work_create_comment_request_model.dart';
@@ -17,7 +21,6 @@ class CommentBloc extends BaseBloc {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _streamModels.close();
     _streamCallback.close();
     _streamFile.close();
@@ -51,19 +54,37 @@ class CommentBloc extends BaseBloc {
     setModels(_models);
   }
 
-  workUploadFile(MultipartFileModel model) async {
+  // workUploadFile(MultipartFileModel model) async {
+  //   LeadConnection.showLoading(context);
+  //   ResponseData response =
+  //       await connection.upload('/manage-work/upload-file', model);
+  //   Navigator.of(context).pop();
+  //   if (response.isSuccess) {
+  //     WorkUploadFileResponseModel responseModel =
+  //         WorkUploadFileResponseModel.fromJson(response.data);
+  //       setFile(responseModel.data.path);
+  //   } else {
+  //     LeadConnection.showMyDialog(context, "Lỗi máy chủ");dfds
+  //   }
+  // }
+
+   workUploadFile(File model) async {
     LeadConnection.showLoading(context);
-    ResponseData response =
-        await connection.upload('/manage-work/upload-file', model);
+
+    
+    String result = await LeadConnection.uploadFileAWS(context, model);
+
+
     Navigator.of(context).pop();
-    if (response.isSuccess) {
-      WorkUploadFileResponseModel responseModel =
-          WorkUploadFileResponseModel.fromJson(response.data);
-        setFile(responseModel.data.path);
+    if(result != null){
+      // WorkUploadFileResponse response = result.url;
+
+      setFile(result);
     } else {
-      LeadConnection.showMyDialog(context, "Lỗi máy chủ");
+      LeadConnection.handleError(context, AppLocalizations.text(LangKey.server_error));
     }
   }
+
 
   workCreatedComment(WorkCreateCommentRequestModel model,
       TextEditingController controller, Function(int) onCallback) async {

@@ -103,20 +103,20 @@ class CustomImagePicker {
   }
 
   static Future<File> _orientationImage(BuildContext context, XFile file) async {
-    List<int> imageBytes = await file.readAsBytes();
-    img.Image originalImage = img.decodeImage(imageBytes);
-    img.Image fixedImage;
-    if(originalImage.exif?.orientation == 8){
-      fixedImage = img.flipVertical(originalImage);
-    }
+    // List<int> imageBytes = await file.readAsBytes();
+    // img.Image originalImage = img.decodeImage(imageBytes);
+    // img.Image fixedImage;
+    // if(originalImage.exif?.orientation == 8){
+    //   fixedImage = img.flipVertical(originalImage);
+    // }
 
-    if(fixedImage != null){
-      File newFile = File(file.path);
-      File fixedFile = await newFile.writeAsBytes(
-        img.encodeJpg(fixedImage),
-      );
-      return fixedFile;
-    }
+    // if(fixedImage != null){
+    //   File newFile = File(file.path);
+    //   File fixedFile = await newFile.writeAsBytes(
+    //     img.encodeJpg(fixedImage),
+    //   );
+    //   return fixedFile;
+    // }
 
     return File(file.path);
   }

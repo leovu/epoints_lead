@@ -84,20 +84,20 @@ class CustomMenuBottomSheet extends StatelessWidget {
                     ),
                     // CustomLine(),
                     if((title??"")!="") Divider(),
-                    if (haveBnConfirm)
-                      Expanded(
-                          child: Column(
-                            children: [
-                              Expanded(child: widget),
-                              CustomButton(
-                                text: textConfirm??AppLocalizations.text(LangKey.confirm),
-                                enable: enableButton,
-                                onTap: onTapConfirm,
-                              )
-                            ],
-                          ))
-                    else
-                      widget,
+                    Flexible(
+                        child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(child: widget),
+                        if (haveBnConfirm)
+                          CustomButton(
+                            text: textConfirm ??
+                                AppLocalizations.text(LangKey.confirm),
+                            enable: enableButton,
+                            onTap: onTapConfirm,
+                          )
+                      ],
+                    )),
                     Container(
                       height: 15.0,
                     )

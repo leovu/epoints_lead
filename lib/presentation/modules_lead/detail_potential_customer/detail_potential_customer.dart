@@ -5,7 +5,6 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
-import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/work_create_comment_request_model.dart';
 import 'package:lead_plugin_epoint/model/request/work_list_comment_request_model.dart';
@@ -1918,6 +1917,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       onTap: () async {
         var result = await Global.editJob(item.manageWorkId);
         if (result != null && result) {
+          allowPop = true;
+          reloadCSKH = true;
           await getData();
           selectedTab(2);
         }

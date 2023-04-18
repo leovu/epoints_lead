@@ -538,7 +538,7 @@ class LeadConnection {
   }
 
 
-  static Future<String> uploadFileAWS(
+ static Future<String> uploadFileAWS(
       BuildContext context, File file) async {
     // showLoading(context);
     var data = await _checkConnectivity(context);
@@ -575,7 +575,7 @@ class LeadConnection {
 
   static Future handleError(BuildContext context, String title) async {
     await showMyDialog(context, AppLocalizations.text(LangKey.server_error));
-  }
+  } 
 
 
   static Future showLoading(BuildContext context) async {

@@ -56,6 +56,8 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
           widget.allocateDateOptions[i].selected = false;
         }
       }
+    }  else {
+      widget.id_allocate_date = "";
     }
 
     setState(() {});
@@ -63,6 +65,13 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.id_allocate_date == "" ) {
+      _fromDateText.text = "";
+      _toDateText.text = "";
+      _fromDate = null;
+      _toDate = null;
+
+    } ;
     return (widget.allocateDateOptions != null)
         ? Column(
           crossAxisAlignment: CrossAxisAlignment.start,

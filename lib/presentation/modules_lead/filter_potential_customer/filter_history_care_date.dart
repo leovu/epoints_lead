@@ -55,6 +55,8 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
           widget.historyCareDateOptions[i].selected = false;
         }
       }
+    } else {
+      widget.id_history_care_date = "";
     }
 
     setState(() {});
@@ -62,6 +64,13 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.id_history_care_date == "" ) {
+      _fromDateText.text = "";
+      _toDateText.text = "";
+      _fromDate = null;
+      _toDate = null;
+
+    } ;
     return (widget.historyCareDateOptions != null)
         ? Column(
           crossAxisAlignment: CrossAxisAlignment.start,

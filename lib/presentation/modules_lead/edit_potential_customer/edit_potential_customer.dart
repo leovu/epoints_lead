@@ -637,93 +637,9 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                 fontWeight: FontWeight.normal),
           ),
 
-          // Padding(
-          //   padding: const EdgeInsets.all(8),
-          //   child: Text(
-          //     AppLocalizations.text(LangKey.picture),
-          //     style: TextStyle(
-          //         fontSize: AppTextSizes.size15,
-          //         color: const Color(0xFF858080),
-          //         fontWeight: FontWeight.normal),
-          //   ),
-          // ),
-
-          // Center(
-          //     child: Stack(
-          //       clipBehavior: Clip.none,
-          //       children: [
-          //         InkWell(
-          //   onTap: () {
-          //         print("chon anh");
-          //         _pickImage();
-          //   },
-          //   child: (_imgAvatar != "")
-          //           ? _buildAvatarWithImage(_imgAvatar)
-          //           : _buildAvatarImg(_fullNameText.text ?? ""),
-          // ),
-
-          // Positioned(
-          //           left: 60,
-          //           bottom: 55,
-          //           child: InkWell(
-          //             onTap: () {
-          //               _imgAvatar = "";
-          //               setState(() {
-
-          //               });
-          //             },
-          //             child:  (_imgAvatar != "") ? Container(
-          //               width: 20,
-          //               height: 20,
-          //               decoration: BoxDecoration(
-          //                   borderRadius: BorderRadius.circular(100),
-          //                   color: Colors.red
-          //                   ),
-          //               child: Center(child: Icon(Icons.clear, color: Colors.white,
-          //               size: 15,)),
-          //             ) : Container(),
-          //           ))
-
-          //       ],
-          //     )),
-
           Container(
             height: 10,
           ),
-          // Loại khách hàng
-          // _buildTextField(
-          //     AppLocalizations.text(LangKey.customerStyle),
-          //     customerTypeSelected?.customerTypeName ?? "",
-          //     Assets.iconStyleCustomer,
-          //     true,
-          //     true,
-          //     false, ontap: () async {
-          //   print("loại khách hàng");
-          //   FocusScope.of(context).unfocus();
-
-          //   CustomerTypeModel customerType = await showModalBottomSheet(
-          //       context: context,
-          //       useRootNavigator: true,
-          //       isScrollControlled: true,
-          //       backgroundColor: Colors.transparent,
-          //       builder: (context) {
-          //         return GestureDetector(
-          //           child: CustomerTypeModal(
-          //             customerTypeData: customerTypeData,
-          //           ),
-          //           onTap: () {
-          //             Navigator.of(context).pop();
-          //           },
-          //           behavior: HitTestBehavior.opaque,
-          //         );
-          //       });
-          //   if (customerType != null) {
-          //     customerTypeSelected = customerType;
-          //     setState(() {});
-          //   }
-
-          //   // print("loại khách hàng");
-          // }),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -860,7 +776,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               : Container(),
 
           _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
-              Assets.iconCall, false, false, true,
+              Assets.iconCall, true, false, true,
               fillText: _phoneNumberText,
               focusNode: _phoneNumberFocusNode,
               inputType: TextInputType.phone),

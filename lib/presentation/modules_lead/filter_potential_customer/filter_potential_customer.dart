@@ -359,29 +359,29 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     //   }
     // }
 
-    if (filterScreenModel.filterModel.customerSourceId.length > 0) {
-      for (int i = 0;
-          i < filterScreenModel.filterModel.customerSourceId.length;
-          i++) {
-        try {
-          customerSources
-              .firstWhere((element) =>
-                  element.customerSourceId ==
-                  filterScreenModel.filterModel.customerSourceId[i])
-              .selected = true;
-        } catch (e) {}
-      }
+    // if (filterScreenModel.filterModel.customerSourceId.length > 0) {
+    //   for (int i = 0;
+    //       i < filterScreenModel.filterModel.customerSourceId.length;
+    //       i++) {
+    //     try {
+    //       customerSources
+    //           .firstWhere((element) =>
+    //               element.customerSourceId ==
+    //               filterScreenModel.filterModel.customerSourceId[i])
+    //           .selected = true;
+    //     } catch (e) {}
+    //   }
 
-      for (int i = 0; i < customerSources.length; i++) {
-        if (customerSources[i].selected) {
-          if (customerSourceString == "") {
-            customerSourceString = customerSources[i].sourceName;
-          } else {
-            customerSourceString += ", ${customerSources[i].sourceName}";
-          }
-        }
-      }
-    }
+    //   for (int i = 0; i < customerSources.length; i++) {
+    //     if (customerSources[i].selected) {
+    //       if (customerSourceString == "") {
+    //         customerSourceString = customerSources[i].sourceName;
+    //       } else {
+    //         customerSourceString += ", ${customerSources[i].sourceName}";
+    //       }
+    //     }
+    //   }
+    // }
 
     for (int i = 0; i < convertStatusOptions.length; i++) {
       if (filterScreenModel.filterModel.isConvert != "") {
@@ -539,6 +539,19 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     var pipelines = await LeadConnection.getPipeline(context);
     if (pipelines != null) {
       pipeLineData = pipelines.data;
+
+      List<String> listPipeline = [];
+
+      for (int i = 0; i < pipeLineData.length; i++) {
+        listPipeline.add(pipeLineData[i].pipelineCode);
+      }
+
+      var journeys = await LeadConnection.getJourney(
+          context, GetJourneyModelRequest(pipelineCode: listPipeline));
+      if (journeys != null) {
+        journeysData = journeys.data;
+      }
+
     }
 
     var response = await LeadConnection.workListStaff(
@@ -1142,7 +1155,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                   width: 1.0, color: Colors.blue, style: BorderStyle.solid)),
           child: InkWell(
             onTap: () async {
-              allowPop = true;
+              allowPop = false;
               print("xoa");
               await clearData();
             },
@@ -1272,8 +1285,12 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     for (int i = 0; i < pipeLineData.length; i++) {
       pipeLineData[i].selected = false;
     }
+    pipelineSelected = null;
 
-    journeysData = [];
+     for (int i = 0; i < journeysData.length; i++) {
+      journeysData[i].selected = false;
+    }
+    journeySelected = null;
 
     
 

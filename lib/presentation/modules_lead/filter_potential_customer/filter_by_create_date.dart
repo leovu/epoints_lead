@@ -54,6 +54,8 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
             widget.createDateOptions[i].selected = false;
           }
       }
+    }  else {
+      widget.id_create_date = "";
     }
 
     setState(() {
@@ -63,6 +65,13 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.id_create_date == "" ) {
+      _fromDateText.text = "";
+      _toDateText.text = "";
+      _fromDate = null;
+      _toDate = null;
+
+    } ;
     return (widget.createDateOptions != null)
         ? Column(
           crossAxisAlignment: CrossAxisAlignment.start,

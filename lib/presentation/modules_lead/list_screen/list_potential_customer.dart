@@ -96,10 +96,15 @@ class _LeadScreen extends State<LeadScreen> {
             page: filterModel.page,
             statusAssign: filterModel.statusAssign,
             customerType: filterModel.customerType,
+            staffId: filterModel.staffId,
             tagId: filterModel.tagId,
+            customerSourceId: filterModel.customerSourceId,
             isConvert: filterModel.isConvert,
             createdAt: filterModel.createdAt,
-            allocationDate: filterModel.allocationDate));
+            allocationDate: filterModel.allocationDate,
+            careHistory:filterModel.careHistory,
+            pipelineId: filterModel.pipelineId,
+            journeyId: filterModel.journeyId));
 
     if (model != null) {
       models = [];

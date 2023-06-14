@@ -1,7 +1,7 @@
 class StatusAssignModel {
-  String statusName;
-  String statusID;
-  bool selected;
+  String? statusName;
+  String? statusID;
+  bool? selected;
 
   StatusAssignModel({this.statusName, this.statusID, this.selected});
 

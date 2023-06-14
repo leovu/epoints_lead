@@ -1,7 +1,7 @@
 class AddLeadModelResponse {
-  int errorCode;
-  String errorDescription;
-  AddLeadData data;
+  int? errorCode;
+  String? errorDescription;
+  AddLeadData? data;
 
   AddLeadModelResponse({this.errorCode, this.errorDescription, this.data});
 
@@ -16,14 +16,14 @@ class AddLeadModelResponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class AddLeadData {
-  int customerLeadId;
+  int? customerLeadId;
 
   AddLeadData({this.customerLeadId});
 

@@ -22,26 +22,26 @@ class CustomerCareBloc extends BaseBloc {
    List<String> _files = [];
 
 
-  final _streamFiles = BehaviorSubject<List<String>>();
-  ValueStream<List<String>> get outputFiles => _streamFiles.stream;
+  final _streamFiles = BehaviorSubject<List<String>?>();
+  ValueStream<List<String>?> get outputFiles => _streamFiles.stream;
   setFiles(List<String> event) => set(_streamFiles, event);
 
 
   workUploadFile(File model) async {
-    LeadConnection.showLoading(context);
+    LeadConnection.showLoading(context!);
 
     
-    String result = await LeadConnection.uploadFileAWS(context, model);
+    String? result = await LeadConnection.uploadFileAWS(context, model);
 
 
-    Navigator.of(context).pop();
+    Navigator.of(context!).pop();
     if(result != null){
       // WorkUploadFileResponse response = result.url;
 
       _files.add(result);
       setFiles(_files);
     } else {
-      LeadConnection.handleError(context, AppLocalizations.text(LangKey.server_error));
+      LeadConnection.handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
   }
 

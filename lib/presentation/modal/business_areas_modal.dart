@@ -12,8 +12,8 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class BusinessAreasModal extends StatefulWidget {
-  List<ListBusinessAreasItem> listBusinessData = [];
-  BusinessAreasModal({Key key, this.listBusinessData}) : super(key: key);
+  List<ListBusinessAreasItem>? listBusinessData = [];
+  BusinessAreasModal({Key? key, this.listBusinessData}) : super(key: key);
 
   @override
   _BusinessAreasModalState createState() => _BusinessAreasModalState();
@@ -23,8 +23,8 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<ListBusinessAreasItem> listBusinessData;
-  List<ListBusinessAreasItem> listBusinessDataDisplay;
+  List<ListBusinessAreasItem>? listBusinessData;
+  List<ListBusinessAreasItem>? listBusinessDataDisplay;
 
   @override
   void initState() {
@@ -45,15 +45,15 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
     FocusScope.of(context).unfocus();
     LeadConnection.showLoading(context);
 
-    if (widget.listBusinessData.length == 0) {
-      ListBusinessAreasModelResponse model =
+    if (widget.listBusinessData!.length == 0) {
+      ListBusinessAreasModelResponse? model =
           await LeadConnection.getListBusinessAreas(context);
      
       if (model != null) {
         listBusinessData = model.data;
       }
     } else {
-      ListBusinessAreasModelResponse model =
+      ListBusinessAreasModelResponse? model =
           await LeadConnection.getListBusinessAreas(context);
       if (model != null) {
         listBusinessData = widget.listBusinessData;
@@ -75,7 +75,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.chooseBusinessAreas),
+            AppLocalizations.text(LangKey.chooseBusinessAreas)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           actions: [
@@ -117,7 +117,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
         children: [
           _buildSearch(),
           (listBusinessData != null)
-              ? (listBusinessData.length > 0)
+              ? (listBusinessData!.length > 0)
                   ? Expanded(
                       child: CustomListView(
                       shrinkWrap: true,
@@ -146,17 +146,17 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
 
   List<Widget> _listWidget() {
     return (listBusinessDataDisplay != null)
-        ? (listBusinessDataDisplay.length > 0) ? List.generate(
-            listBusinessDataDisplay.length,
-            (index) => _buildItem(listBusinessDataDisplay[index], () {
-                  selectedItem(listBusinessDataDisplay[index]);
+        ? (listBusinessDataDisplay!.length > 0) ? List.generate(
+            listBusinessDataDisplay!.length,
+            (index) => _buildItem(listBusinessDataDisplay![index], () {
+                  selectedItem(listBusinessDataDisplay![index]);
                 }))
-        : [CustomDataNotFound()] : Expanded(child: Container());
+        : [CustomDataNotFound()] : Expanded(child: Container()) as List<Widget>;
   }
 
   Widget _buildItem(ListBusinessAreasItem item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -165,18 +165,18 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
             child: Row(
               children: [
                 Text(
-                  item.businessName,
+                  item.businessName!,
                   style: TextStyle(
                       fontSize: 15.0,
                       color:
-                          item.selected ? AppColors.primaryColor : Colors.black,
+                          item.selected! ? AppColors.primaryColor : Colors.black,
                       fontWeight:
-                          item.selected ? FontWeight.bold : FontWeight.normal),
+                          item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
               ],
             ),
           ),
-          item.selected
+          item.selected!
               ? Icon(
                   Icons.radio_button_checked_rounded,
                   color: AppColors.primaryColor,
@@ -227,7 +227,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
       setState(() {});
     } else {
       try {
-        List<ListBusinessAreasItem> models = listBusinessData.where((model) {
+        List<ListBusinessAreasItem> models = listBusinessData!.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
@@ -250,11 +250,11 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
 
   selectedItem(ListBusinessAreasItem item) async {
 
-if (item.selected) {
+if (item.selected!) {
       return;
     }
     try {
-      listBusinessData.firstWhere((element) => element.selected).selected =
+      listBusinessData!.firstWhere((element) => element.selected!).selected =
           false;
     } catch (_) {}
     item.selected = true;

@@ -37,14 +37,14 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
 class DetailPotentialCustomer extends StatefulWidget {
-  final String customer_lead_code;
-  final int indexTab;
-  bool customerCare;
-  int id;
-  String typeCustomer;
-  Function(int) onCallback;
+  final String? customer_lead_code;
+  final int? indexTab;
+  bool? customerCare;
+  int? id;
+  String? typeCustomer;
+  Function(int)? onCallback;
   DetailPotentialCustomer(
-      {Key key,
+      {Key? key,
       this.customer_lead_code,
       this.indexTab,
       this.typeCustomer,
@@ -62,11 +62,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   final ScrollController _controller = ScrollController();
   ScrollController _controllerListFunction = ScrollController();
   List<WorkListStaffModel> models = [];
-  List<ContactListData> contactListData;
-  List<CareLeadData> customerCareLead;
-  DetailPotentialData detail;
-  WorkListCommentModel _callbackModel;
-  List<DetailLeadInfoDealData> detailLeadInfoDealData;
+  List<ContactListData>? contactListData;
+  List<CareLeadData>? customerCareLead;
+  DetailPotentialData? detail;
+  WorkListCommentModel? _callbackModel;
+  List<DetailLeadInfoDealData>? detailLeadInfoDealData;
 
   List<DetailPotentialTabModel> tabPotentials = [
     DetailPotentialTabModel(
@@ -94,11 +94,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   FocusNode _focusComment = FocusNode();
   TextEditingController _controllerComment = TextEditingController();
 
-  final double _fileSize = AppSizes.maxWidth * 0.2;
+  final double _fileSize = AppSizes.maxWidth! * 0.2;
   final double _imageRadius = 20.0;
 
-  String _file;
-  int index = 0;
+  String? _file;
+  int? index = 0;
   bool allowPop = false;
   bool reloadContactList = false;
   bool reloadCSKH = false;
@@ -109,7 +109,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     symbol: '',
   );
 
-  CommentBloc _bloc;
+  late CommentBloc _bloc;
 
   @override
   void initState() {
@@ -147,7 +147,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     }
     _bloc.workCreatedComment(
         WorkCreateCommentRequestModel(
-            customerLeadId: detail.customerLeadId,
+            customerLeadId: detail!.customerLeadId,
             customerLeadParentCommentId:
                 (_callbackModel?.customerLeadParentCommentId) ??
                     (_callbackModel?.customerLeadCommentId),
@@ -159,7 +159,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
   Future _onRefresh() {
     return _bloc.workListComment(
-        WorkListCommentRequestModel(customerLeadID: detail.customerLeadId));
+        WorkListCommentRequestModel(customerLeadID: detail!.customerLeadId));
   }
 
   _showOption() {
@@ -168,18 +168,18 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     });
   }
 
-  openFile(BuildContext context, String name, String path) {
+  openFile(BuildContext context, String? name, String? path) {
     Navigator.of(context).push(
         MaterialPageRoute(builder: (context) => CustomFileView(path, name)));
   }
 
-  void getData() async {
+ getData() async {
     var dataDetail = await LeadConnection.getdetailPotential(
         context, widget.customer_lead_code);
     if (dataDetail != null) {
       if (dataDetail.errorCode == 0) {
         detail = dataDetail.data;
-        selectedTab(index);
+        selectedTab(index!);
         setState(() {});
       } else {
         await LeadConnection.showMyDialog(context, dataDetail.errorDescription);
@@ -208,7 +208,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           Navigator.of(context).pop();
         }
         return;
-      },
+      } as Future<bool> Function()?,
       child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -217,7 +217,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           // actionsIconTheme: Navigator.of(context).pop(true),
           backgroundColor: AppColors.primaryColor,
           title: Text(
-            AppLocalizations.text(LangKey.detailPotential),
+            AppLocalizations.text(LangKey.detailPotential)!,
             style: TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
@@ -279,8 +279,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     heroTag: "btn0",
                     onPressed: () async {
                       if (Global.createDeal != null) {
-                        bool result =
-                            await Global.createDeal(detail.toJson() ?? "");
+                        bool? result =
+                            await Global.createDeal!(detail!.toJson() ?? "");
                         if (result != null && result) {
                           reloadInfoDeal = true;
                           getData();
@@ -296,7 +296,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text(AppLocalizations.text(LangKey.createDeal),
+                Text(AppLocalizations.text(LangKey.createDeal)!,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
@@ -309,12 +309,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     backgroundColor: Color(0xFF41AC8D),
                     heroTag: "btn1",
                     onPressed: () async {
-                      bool result = await Navigator.of(context).push(
+                      bool? result = await Navigator.of(context).push(
                           MaterialPageRoute(
                               builder: (context) =>
                                   CustomerCarePotential(detail: detail)));
 
                       if (result != null && result) {
+                        allowPop = true;
                         reloadCSKH = true;
                         getData();
                         index = 2;
@@ -344,9 +345,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       LeadConnection.showMyDialogWithFunction(context,
                           AppLocalizations.text(LangKey.warningDeleteLead),
                           ontap: () async {
-                        DescriptionModelResponse result =
+                        DescriptionModelResponse? result =
                             await LeadConnection.deleteLead(
-                                context, detail.customerLeadCode);
+                                context, detail!.customerLeadCode);
 
                         Navigator.of(context).pop();
 
@@ -374,7 +375,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text(AppLocalizations.text(LangKey.delete),
+                Text(AppLocalizations.text(LangKey.delete)!,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
@@ -386,7 +387,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 FloatingActionButton(
                   heroTag: "btn4",
                   onPressed: () async {
-                    bool result =
+                    bool? result =
                         await Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => EditPotentialCustomer(
                                   detailPotential: detail,
@@ -396,7 +397,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       if (result) {
                         reloadContactList = true;
                         allowPop = true;
-                        selectedTab(index);
+                        selectedTab(index!);
                         getData();
                         ;
                       }
@@ -413,7 +414,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 SizedBox(
                   height: 5.0,
                 ),
-                Text(AppLocalizations.text(LangKey.edit),
+                Text(AppLocalizations.text(LangKey.edit)!,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 14.0,
@@ -508,26 +509,26 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   Widget buildListOption() {
     return Row(
       children: [
-        option(tabPotentials[0].typeName, tabPotentials[0].selected, 100, () {
+        option(tabPotentials[0].typeName!, tabPotentials[0].selected!, 100, () {
           index = 0;
           selectedTab(0);
         }),
-        option(tabPotentials[1].typeName, tabPotentials[1].selected, 100,
+        option(tabPotentials[1].typeName!, tabPotentials[1].selected!, 100,
             () async {
           index = 1;
           selectedTab(1);
         }),
-        option(tabPotentials[2].typeName, tabPotentials[2].selected, 150,
+        option(tabPotentials[2].typeName!, tabPotentials[2].selected!, 150,
             () async {
           index = 2;
           selectedTab(2);
         }),
-        option(tabPotentials[3].typeName, tabPotentials[3].selected, 60, () {
+        option(tabPotentials[3].typeName!, tabPotentials[3].selected!, 60, () {
           index = 3;
           selectedTab(3);
         }),
         (widget.typeCustomer == "business")
-            ? option(tabPotentials[4].typeName, tabPotentials[4].selected, 100,
+            ? option(tabPotentials[4].typeName!, tabPotentials[4].selected!, 100,
                 () async {
                 index = 4;
                 selectedTab(4);
@@ -582,7 +583,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 
       case 2:
         if (_controllerListFunction.positions.isNotEmpty) {
-          detail.customerType == "business"
+          detail!.customerType == "business"
               ? _controllerListFunction?.animateTo(
                   _controllerListFunction.position.maxScrollExtent / 1.5,
                   duration: Duration(milliseconds: 200),
@@ -596,8 +597,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         if (customerCareLead == null || reloadCSKH) {
           reloadCSKH = false;
           LeadConnection.showLoading(context);
-          CareLeadResponseModel careList =
-              await LeadConnection.getCareLead(context, detail.customerLeadId);
+          CareLeadResponseModel? careList =
+              await LeadConnection.getCareLead(context, detail!.customerLeadId);
           Navigator.of(context).pop();
           if (careList != null) {
             if (careList.errorCode == 0) {
@@ -619,7 +620,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         }
 
         _bloc.workListComment(
-            WorkListCommentRequestModel(customerLeadID: detail.customerLeadId));
+            WorkListCommentRequestModel(customerLeadID: detail!.customerLeadId));
         setState(() {});
         break;
 
@@ -643,7 +644,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               setState(() {});
             }
           } else {
-            LeadConnection.showMyDialog(context, contactList.errorDescription);
+            LeadConnection.showMyDialog(context, contactList!.errorDescription);
           }
         }
         setState(() {});
@@ -659,7 +660,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           padding: EdgeInsets.all(15.0 / 1.5),
           height: 40,
           child: InkWell(
-            onTap: ontap,
+            onTap: ontap as void Function()?,
             child: Center(
               child: Text(
                 title,
@@ -688,7 +689,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _buildComment(WorkListCommentModel model) {
+  Widget _buildComment(WorkListCommentModel? model) {
     if (model == null) {
       return CustomShimmer(
         child: Row(
@@ -710,7 +711,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   height: 5.0,
                 ),
                 CustomSkeleton(
-                  width: AppSizes.maxWidth / 3,
+                  width: AppSizes.maxWidth! / 3,
                 ),
                 Container(
                   padding: EdgeInsets.only(top: 5.0),
@@ -723,8 +724,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       );
     }
 
-    double avatarSize =
-        model.isSubComment ? AppSizes.sizeOnTap / 2 : AppSizes.sizeOnTap;
+    double? avatarSize =
+        model.isSubComment ? AppSizes.sizeOnTap! / 2 : AppSizes.sizeOnTap;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -788,7 +789,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 ),
                 InkWell(
                   child: Text(
-                    AppLocalizations.text(LangKey.callback),
+                    AppLocalizations.text(LangKey.callback)!,
                     style: AppTextStyles.style12grey500Bold,
                   ),
                   onTap: () => _bloc.setCallback(model),
@@ -802,7 +803,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 padding: EdgeInsets.zero,
                 separatorPadding: 5.0,
                 children:
-                    model.listObject.map((e) => _buildComment(e)).toList(),
+                    model.listObject!.map((e) => _buildComment(e)).toList(),
               )
           ],
         ))
@@ -810,11 +811,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _buildContainer(List<WorkListCommentModel> models) {
+  Widget _buildContainer(List<WorkListCommentModel>? models) {
     return Container(
       child: CustomListView(
         padding: EdgeInsets.symmetric(
-            vertical: AppSizes.minPadding, horizontal: AppSizes.maxPadding),
+            vertical: AppSizes.minPadding!, horizontal: AppSizes.maxPadding!),
         children: models == null
             ? List.generate(4, (index) => _buildComment(null))
             : models.map((e) => _buildComment(e)).toList(),
@@ -833,7 +834,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         stream: _bloc.outputModels,
         initialData: null,
         builder: (_, snapshot) {
-          List<WorkListCommentModel> models = snapshot.data;
+          List<WorkListCommentModel>? models = snapshot.data as List<WorkListCommentModel>?;
           return ContainerDataBuilder(
             data: models,
             emptyBuilder: _buildEmpty(),
@@ -849,30 +850,30 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
       decoration:
           BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
       padding:
-          EdgeInsets.symmetric(horizontal: AppSizes.maxPadding, vertical: 5.0),
+          EdgeInsets.symmetric(horizontal: AppSizes.maxPadding!, vertical: 5.0),
       child: Column(
         children: [
           StreamBuilder(
               stream: _bloc.outputCallback,
               initialData: null,
               builder: (_, snapshot) {
-                _callbackModel = snapshot.data;
+                _callbackModel = snapshot.data as WorkListCommentModel?;
                 if (_callbackModel == null) {
                   return Container();
                 }
                 return Container(
-                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding!),
                   child: InkWell(
                     child: Row(
                       children: [
                         RichText(
                           text: TextSpan(
-                              text: AppLocalizations.text(LangKey.answering) +
+                              text: AppLocalizations.text(LangKey.answering)! +
                                   " ",
                               style: AppTextStyles.style12grey200Normal,
                               children: [
                                 TextSpan(
-                                    text: _callbackModel.staffName ?? "",
+                                    text: _callbackModel!.staffName ?? "",
                                     style: AppTextStyles.style12BlackBold)
                               ]),
                         ),
@@ -894,14 +895,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               stream: _bloc.outputFile,
               initialData: null,
               builder: (_, snapshot) {
-                _file = snapshot.data;
+                _file = snapshot.data as String?;
 
                 if (_file == null) {
                   return Container();
                 }
 
                 return Container(
-                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding!),
                   child: Row(
                     children: [
                       InkWell(
@@ -971,7 +972,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   }
 
   Widget generalInfomationV2() {
-    return detail.customerType == "personal"
+    return detail!.customerType == "personal"
         ? generalInfomationPersonal()
         : generalInfomationBusiness();
   }
@@ -991,27 +992,27 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               children: [
                 _infoItemV2(
                     Assets.iconSex,
-                    (detail.gender == "male")
-                        ? AppLocalizations.text(LangKey.male)
-                        : (detail.gender == "female")
-                            ? AppLocalizations.text(LangKey.female)
-                            : (detail.gender == "other")
-                                ? AppLocalizations.text(LangKey.other)
+                    (detail!.gender == "male")
+                        ? AppLocalizations.text(LangKey.male)!
+                        : (detail!.gender == "female")
+                            ? AppLocalizations.text(LangKey.female)!
+                            : (detail!.gender == "other")
+                                ? AppLocalizations.text(LangKey.other)!
                                 : "N/A"),
-                _infoItemV2(Assets.iconEmail, detail.email ?? "N/A"),
-                _infoItemV2(Assets.iconAddress, detail.address ?? "N/A"),
-                _infoItemV2(Assets.iconBirthday, detail.birthday ?? "N/A"),
-                _infoItemV2(Assets.iconSource, detail.zalo ?? "N/A"),
-                _infoItemV2(Assets.iconFanpage, detail.fanpage ?? "N/A"),
+                _infoItemV2(Assets.iconEmail, detail!.email ?? "N/A"),
+                _infoItemV2(Assets.iconAddress, detail!.address ?? "N/A"),
+                _infoItemV2(Assets.iconBirthday, detail!.birthday ?? "N/A"),
+                _infoItemV2(Assets.iconSource, detail!.zalo ?? "N/A"),
+                _infoItemV2(Assets.iconFanpage, detail!.fanpage ?? "N/A"),
               ],
             ),
           ),
           Column(
             children: [
-              (detail.fanpage != null && detail.fanpage != "")
+              (detail!.fanpage != null && detail!.fanpage != "")
                   ? InkWell(
                       onTap: () async {
-                        _openLink(detail.zalo);
+                        _openLink(detail!.zalo!);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -1021,10 +1022,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       ),
                     )
                   : Container(),
-              (detail.zalo != null && detail.zalo != "")
+              (detail!.zalo != null && detail!.zalo != "")
                   ? InkWell(
                       onTap: () {
-                        _openLink(detail.fanpage);
+                        _openLink(detail!.fanpage!);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -1055,29 +1056,29 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
             child: Column(
               children: [
                 _infoItemV2(
-                    Assets.iconTax, "MST: " + (detail.taxCode ?? "N/A")),
-                _infoItemV2(Assets.iconEmail, detail.email ?? "N/A"),
-                _infoItemV2(Assets.iconAddress, detail.address ?? "N/A"),
+                    Assets.iconTax, "MST: " + (detail!.taxCode ?? "N/A")),
+                _infoItemV2(Assets.iconEmail, detail!.email ?? "N/A"),
+                _infoItemV2(Assets.iconAddress, detail!.address ?? "N/A"),
                 _infoItemV2(
-                    Assets.iconRepresentative, detail.representative ?? "N/A"),
-                _infoItemV2(Assets.iconBirthday, detail.birthday ?? "N/A"),
-                _infoItemV2(Assets.iconMenu, detail.businessName ?? "N/A"),
+                    Assets.iconRepresentative, detail!.representative ?? "N/A"),
+                _infoItemV2(Assets.iconBirthday, detail!.birthday ?? "N/A"),
+                _infoItemV2(Assets.iconMenu, detail!.businessName ?? "N/A"),
                 _infoItemV2(
                     Assets.iconNumberEmployees,
-                    (detail.employees != null)
-                        ? "${detail.employees ?? 0} nhân viên"
+                    (detail!.employees != null)
+                        ? "${detail!.employees ?? 0} nhân viên"
                         : "N/A"),
-                _infoItemV2(Assets.iconSource, detail.zalo ?? "N/A"),
-                _infoItemV2(Assets.iconFanpage, detail.fanpage ?? "N/A"),
+                _infoItemV2(Assets.iconSource, detail!.zalo ?? "N/A"),
+                _infoItemV2(Assets.iconFanpage, detail!.fanpage ?? "N/A"),
               ],
             ),
           ),
           Column(
             children: [
-              (detail.fanpage != null && detail.fanpage != "")
+              (detail!.fanpage != null && detail!.fanpage != "")
                   ? InkWell(
                       onTap: () async {
-                        _openLink(detail.zalo);
+                        _openLink(detail!.zalo!);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -1087,10 +1088,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                       ),
                     )
                   : Container(),
-              (detail.zalo != null && detail.zalo != "")
+              (detail!.zalo != null && detail!.zalo != "")
                   ? InkWell(
                       onTap: () {
-                        _openLink(detail.fanpage);
+                        _openLink(detail!.fanpage!);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -1167,19 +1168,19 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
-                                    text: detail.customerSourceName ?? "",
+                                    text: detail!.customerSourceName ?? "",
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         color: Colors.black,
                                         fontWeight: FontWeight.normal),
                                     children: [
                                       TextSpan(
-                                          text: (detail.customerSourceName !=
+                                          text: (detail!.customerSourceName !=
                                                       "" &&
-                                                  detail.customerSourceName !=
+                                                  detail!.customerSourceName !=
                                                       null)
-                                              ? (" - " + detail?.fullName ?? "")
-                                              : ("" + detail?.fullName ?? ""),
+                                              ? (" - " + detail!.fullName!)
+                                              : ("" + detail!.fullName!),
                                           style: TextStyle(
                                               height: 1.5,
                                               color: AppColors.primaryColor,
@@ -1219,9 +1220,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal)),
                             SizedBox(height: 5),
-                            (detail.customerType == "business")
+                            (detail!.customerType == "business")
                                 ? Text(
-                                    AppLocalizations.text(LangKey.business),
+                                    AppLocalizations.text(LangKey.business)!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         overflow: TextOverflow.visible,
@@ -1230,7 +1231,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                         fontWeight: FontWeight.normal),
                                   )
                                 : Text(
-                                    AppLocalizations.text(LangKey.personal),
+                                    AppLocalizations.text(LangKey.personal)!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         overflow: TextOverflow.visible,
@@ -1260,9 +1261,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   infoItem(
-                                      Assets.iconName, detail.saleName ?? ""),
+                                      Assets.iconName, detail!.saleName ?? ""),
                                   infoItem(Assets.iconInteraction,
-                                      "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
+                                      "${detail!.dateLastCare ?? ""} (${detail!.diffDay ?? 0} ngày)"),
                                   infoItem(Assets.iconChance,
                                       detail?.pipelineName ?? ""),
                                 ],
@@ -1275,7 +1276,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  print(detail.phone);
+                                  print(detail!.phone);
                                   await callPhone(detail?.phone ?? "");
                                 },
                                 child: Container(
@@ -1300,13 +1301,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                 children: [
                                   _actionItem(
                                       Assets.iconCalendar, Color(0xFF26A7AD),
-                                      number: detail.relatedWork ?? 0,
+                                      number: detail!.relatedWork ?? 0,
                                       ontap: () {
                                     print("1");
                                   }),
                                   _actionItem(
                                       Assets.iconOutdate, Color(0xFFDD2C00),
-                                      number: detail.appointment ?? 0,
+                                      number: detail!.appointment ?? 0,
                                       ontap: () {
                                     print("2");
                                   }),
@@ -1319,19 +1320,19 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     ),
                     // SizedBox(height: 14.0),
 
-                    (detail.tag != null && detail.tag.length > 0)
+                    (detail!.tag != null && detail!.tag!.length > 0)
                         ? Container(
                             padding: EdgeInsets.only(right: 10.0),
-                            child: (detail.tag != null && detail.tag.length > 0)
+                            child: (detail!.tag != null && detail!.tag!.length > 0)
                                 ? Container(
                                     padding: EdgeInsets.only(bottom: 8.0),
                                     margin: EdgeInsets.only(left: 8.0),
                                     // width: (AppSizes.maxWidth - 20) * 0.55,
                                     child: Wrap(
                                       children: List.generate(
-                                          detail.tag.length,
+                                          detail!.tag!.length,
                                           (index) =>
-                                              _optionItem(detail.tag[index])),
+                                              _optionItem(detail!.tag![index])),
                                       spacing: 10,
                                       runSpacing: 10,
                                     ),
@@ -1400,19 +1401,19 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             RichText(
                                 textAlign: TextAlign.center,
                                 text: TextSpan(
-                                    text: detail.customerSourceName ?? "",
+                                    text: detail!.customerSourceName ?? "",
                                     style: TextStyle(
                                         fontSize: 16.0,
                                         color: Colors.black,
                                         fontWeight: FontWeight.normal),
                                     children: [
                                       TextSpan(
-                                          text: (detail.customerSourceName !=
+                                          text: (detail!.customerSourceName !=
                                                       "" &&
-                                                  detail.customerSourceName !=
+                                                  detail!.customerSourceName !=
                                                       null)
-                                              ? (" - " + detail?.fullName ?? "")
-                                              : ("" + detail?.fullName ?? ""),
+                                              ? (" - " + detail!.fullName!)
+                                              : ("" + detail!.fullName!),
                                           style: TextStyle(
                                               height: 1.5,
                                               color: AppColors.primaryColor,
@@ -1452,9 +1453,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                     color: Colors.black,
                                     fontWeight: FontWeight.normal)),
                             SizedBox(height: 5),
-                            (detail.customerType == "business")
+                            (detail!.customerType == "business")
                                 ? Text(
-                                    AppLocalizations.text(LangKey.business),
+                                    AppLocalizations.text(LangKey.business)!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         overflow: TextOverflow.visible,
@@ -1463,7 +1464,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                         fontWeight: FontWeight.normal),
                                   )
                                 : Text(
-                                    AppLocalizations.text(LangKey.personal),
+                                    AppLocalizations.text(LangKey.personal)!,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         overflow: TextOverflow.visible,
@@ -1493,9 +1494,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   infoItem(
-                                      Assets.iconName, detail.saleName ?? ""),
+                                      Assets.iconName, detail!.saleName ?? ""),
                                   infoItem(Assets.iconInteraction,
-                                      "${detail.dateLastCare ?? ""} (${detail.diffDay ?? 0} ngày)"),
+                                      "${detail!.dateLastCare ?? ""} (${detail!.diffDay ?? 0} ngày)"),
                                   infoItem(Assets.iconChance,
                                       detail?.pipelineName ?? ""),
                                 ],
@@ -1508,7 +1509,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  print(detail.phone);
+                                  print(detail!.phone);
                                   await callPhone(detail?.phone ?? "");
                                 },
                                 child: Container(
@@ -1533,13 +1534,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                 children: [
                                   _actionItem(
                                       Assets.iconCalendar, Color(0xFF26A7AD),
-                                      number: detail.relatedWork ?? 0,
+                                      number: detail!.relatedWork ?? 0,
                                       ontap: () {
                                     print("1");
                                   }),
                                   _actionItem(
                                       Assets.iconOutdate, Color(0xFFDD2C00),
-                                      number: detail.appointment ?? 0,
+                                      number: detail!.appointment ?? 0,
                                       ontap: () {
                                     print("2");
                                   }),
@@ -1552,19 +1553,19 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     ),
                     // SizedBox(height: 14.0),
 
-                    (detail.tag != null && detail.tag.length > 0)
+                    (detail!.tag != null && detail!.tag!.length > 0)
                         ? Container(
                             padding: EdgeInsets.only(right: 10.0),
-                            child: (detail.tag != null && detail.tag.length > 0)
+                            child: (detail!.tag != null && detail!.tag!.length > 0)
                                 ? Container(
                                     padding: EdgeInsets.only(bottom: 8.0),
                                     margin: EdgeInsets.only(left: 8.0),
                                     // width: (AppSizes.maxWidth - 20) * 0.55,
                                     child: Wrap(
                                       children: List.generate(
-                                          detail.tag.length,
+                                          detail!.tag!.length,
                                           (index) =>
-                                              _optionItem(detail.tag[index])),
+                                              _optionItem(detail!.tag![index])),
                                       spacing: 10,
                                       runSpacing: 10,
                                     ),
@@ -1608,9 +1609,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child:
-          (detailLeadInfoDealData != null && detailLeadInfoDealData.length > 0)
+          (detailLeadInfoDealData != null && detailLeadInfoDealData!.length > 0)
               ? Column(
-                  children: detailLeadInfoDealData
+                  children: detailLeadInfoDealData!
                       .map((e) => dealInfomationItem(e))
                       .toList())
               : CustomDataNotFound(),
@@ -1621,7 +1622,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     return InkWell(
       onTap: () async {
         if (Global.openDetailDeal != null) {
-          var result = await Global.openDetailDeal(item.dealCode);
+          var result = await Global.openDetailDeal!(item.dealCode);
           if (result != null && result) {
             reloadInfoDeal = true;
             await getData();
@@ -1653,7 +1654,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   ),
                   Expanded(
                     child: Text(
-                      item.dealName,
+                      item.dealName!,
                       // "Deal cua Kiet Quach",
                       style: TextStyle(
                           fontSize: 16.0,
@@ -1681,7 +1682,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
             ),
             _infoItemV2(
               Assets.iconTime,
-              item.createdAt,
+              item.createdAt!,
             ),
             _infoItemV2(Assets.iconName, item.staffName ?? ""),
             _infoItemV2(Assets.iconInteraction, item.createdAt ?? ""),
@@ -1747,9 +1748,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {num number, Function ontap}) {
+  Widget _actionItem(String icon, Color color, {required num number, Function? ontap}) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
           margin: EdgeInsets.only(left: 17, bottom: 10.0),
           child: Stack(
@@ -1811,7 +1812,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               decoration: BoxDecoration(
                   color: Color(0x790067AC),
                   borderRadius: BorderRadius.circular(1000.0))),
-          Text(item.tagName,
+          Text(item.tagName!,
               style: TextStyle(
                   color: Color(0xFF0067AC),
                   fontSize: 14.0,
@@ -1824,10 +1825,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   Widget customerCare() {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
-      child: (customerCareLead != null && customerCareLead.length > 0)
+      child: (customerCareLead != null && customerCareLead!.length > 0)
           ? Column(
               children:
-                  customerCareLead.map((e) => customerCareItem(e)).toList())
+                  customerCareLead!.map((e) => customerCareItem(e)).toList())
           : Center(child: CustomDataNotFound()),
     );
   }
@@ -2071,11 +2072,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         ),
                       ),
 
-                      (item.listTag != null && item.listTag.length > 0)
+                      (item.listTag != null && item.listTag!.length > 0)
                           ? Container(
                               child: Wrap(
-                                children: List.generate(item.listTag.length,
-                                    (index) => _tagItem(item.listTag[index])),
+                                children: List.generate(item.listTag!.length,
+                                    (index) => _tagItem(item.listTag![index])),
                                 spacing: 10,
                                 runSpacing: 10,
                               ),
@@ -2117,7 +2118,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
             width: 5.0,
           ),
           Text(
-            item.tagName,
+            item.tagName!,
             textAlign: TextAlign.start,
             style: TextStyle(
                 color: AppColors.primaryColor,
@@ -2134,15 +2135,15 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     return Container(
         padding: EdgeInsets.all(10.0),
         margin: EdgeInsets.only(bottom: 20),
-        child: (contactListData != null && contactListData.length > 0)
+        child: (contactListData != null && contactListData!.length > 0)
             ? Column(
                 children:
-                    contactListData.map((e) => contactListItem(e)).toList())
+                    contactListData!.map((e) => contactListItem(e)).toList())
             : Center(child: CustomDataNotFound()));
   }
 
-  Widget contactListItem(ContactListData item) {
-    return (contactListData != null && contactListData.length > 0)
+  Widget contactListItem(ContactListData? item) {
+    return (contactListData != null && contactListData!.length > 0)
         ? Container(
             padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
@@ -2154,7 +2155,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                 Row(
                   children: [
                     CustomAvatarWithURL(
-                      name: item.fullName ?? "",
+                      name: item!.fullName ?? "",
                       size: 50.0,
                     ),
                     Container(
@@ -2274,7 +2275,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   }
 
   Widget _infoItem(String title, String content,
-      {TextStyle style, String icon, String icon2}) {
+      {TextStyle? style, String? icon, String? icon2}) {
     return Container(
       padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
       margin: EdgeInsets.only(left: 15.0 / 2),
@@ -2356,7 +2357,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(5)),
       child: InkWell(
-        onTap: ontap,
+        onTap: ontap as void Function()?,
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),
@@ -2374,9 +2375,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
 }
 
 class DetailPotentialTabModel {
-  String typeName;
-  int typeID;
-  bool selected;
+  String? typeName;
+  int? typeID;
+  bool? selected;
 
   DetailPotentialTabModel({this.typeName, this.typeID, this.selected});
 

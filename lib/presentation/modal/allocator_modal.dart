@@ -8,9 +8,9 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class AllocatorModal extends StatefulWidget {
-  List<AllocatorData> allocatorData = <AllocatorData>[];
-  AllocatorData allocatorSelected = AllocatorData();
-  AllocatorModal({Key key, this.allocatorData, this.allocatorSelected})
+  List<AllocatorData>? allocatorData = <AllocatorData>[];
+  AllocatorData? allocatorSelected = AllocatorData();
+  AllocatorModal({Key? key, this.allocatorData, this.allocatorSelected})
       : super(key: key);
 
   @override
@@ -21,9 +21,9 @@ class _AllocatorModalState extends State<AllocatorModal> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<AllocatorData> allocatorData = <AllocatorData>[];
-  AllocatorData allocatorSelected = AllocatorData();
-  GetAllocatorModelReponse _model;
+  List<AllocatorData>? allocatorData = <AllocatorData>[];
+  AllocatorData? allocatorSelected = AllocatorData();
+  GetAllocatorModelReponse? _model;
 
   @override
   void initState() {
@@ -31,12 +31,12 @@ class _AllocatorModalState extends State<AllocatorModal> {
     allocatorData= widget.allocatorData;
     allocatorSelected = widget.allocatorSelected;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      for (int i = 0; i < allocatorData.length; i++) {
+      for (int i = 0; i < allocatorData!.length; i++) {
         if ((widget.allocatorSelected?.staffId ?? "") ==
-            allocatorData[i].staffId) {
-          allocatorData[i].selected = true;
+            allocatorData![i].staffId) {
+          allocatorData![i].selected = true;
         } else {
-          allocatorData[i].selected = false;
+          allocatorData![i].selected = false;
         }
       }
 
@@ -78,7 +78,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.text(LangKey.chooseAllottedPerson),
+                  AppLocalizations.text(LangKey.chooseAllottedPerson)!,
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
@@ -113,11 +113,11 @@ class _AllocatorModalState extends State<AllocatorModal> {
   }
 
   List<Widget> _listWidget() {
-    return (_model.data != null)
+    return (_model!.data != null)
         ? List.generate(
-            _model.data.length,
+            _model!.data!.length,
             (index) => _buildItem(
-                    _model.data[index].fullName, _model.data[index].selected,
+                    _model!.data![index].fullName!, _model!.data![index].selected!,
                     () {
                   selectedItem(index);
                 }))
@@ -126,7 +126,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
 
  Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
@@ -181,9 +181,9 @@ class _AllocatorModalState extends State<AllocatorModal> {
     );
   }
 
-  searchModel(List<AllocatorData> model, String value) {
+  searchModel(List<AllocatorData>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = allocatorData;
+      _model!.data = allocatorData;
       setState(() {});
     } else {
       try {
@@ -198,7 +198,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
           }
           return result;
         }).toList();
-        _model.data = models;
+        _model!.data = models;
         setState(() {});
       } catch (_) {
         setState(() {});
@@ -207,7 +207,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
   }
 
   selectedItem(int index) async {
-    List<AllocatorData> models = _model.data;
+    List<AllocatorData> models = _model!.data!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

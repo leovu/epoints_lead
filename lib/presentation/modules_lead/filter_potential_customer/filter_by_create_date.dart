@@ -12,10 +12,10 @@ import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
 class FilterByCreateDate extends StatefulWidget {
 
-  FilterScreenModel filterScreenModel = FilterScreenModel();
-  List<CreateDateModel> createDateOptions = <CreateDateModel>[];
-  String id_create_date;
-  FilterByCreateDate({Key key, this.createDateOptions, this.filterScreenModel,this.id_create_date})
+  FilterScreenModel? filterScreenModel = FilterScreenModel();
+  List<CreateDateModel>? createDateOptions = <CreateDateModel>[];
+  String? id_create_date;
+  FilterByCreateDate({Key? key, this.createDateOptions, this.filterScreenModel,this.id_create_date})
       : super(key: key);
 
   @override
@@ -24,8 +24,8 @@ class FilterByCreateDate extends StatefulWidget {
 
 class _FilterByCreateDateState extends State<FilterByCreateDate> {
 
-  DateTime _fromDate;
-  DateTime _toDate;
+  DateTime? _fromDate;
+  DateTime? _toDate;
   DateTime _now = DateTime.now();
   final TextEditingController _fromDateText = TextEditingController();
   final TextEditingController _toDateText = TextEditingController();
@@ -35,23 +35,23 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
     super.initState();
     // _toDate = _now;
 
-    if (widget.filterScreenModel.fromDate_created_at != null) {
-      _fromDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.fromDate_created_at);
-      _fromDate = widget.filterScreenModel.fromDate_created_at;
+    if (widget.filterScreenModel!.fromDate_created_at != null) {
+      _fromDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel!.fromDate_created_at!);
+      _fromDate = widget.filterScreenModel!.fromDate_created_at;
     }
 
-    if (widget.filterScreenModel.toDate_created_at != null) {
-      _toDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel.toDate_created_at);
-      _toDate = widget.filterScreenModel.toDate_created_at;
+    if (widget.filterScreenModel!.toDate_created_at != null) {
+      _toDateText.text = DateFormat("dd/MM/yyyy").format(widget.filterScreenModel!.toDate_created_at!);
+      _toDate = widget.filterScreenModel!.toDate_created_at;
     }
 
-    if (widget.filterScreenModel.id_created_at != "") {
-      for (int i = 0; i < widget.createDateOptions.length ; i++) {
-          if (widget.createDateOptions[i].createDateID == int.parse(widget.filterScreenModel.id_created_at) ) {
-            widget.createDateOptions[i].selected = true;
-            widget.id_create_date =  "${widget.createDateOptions[i].createDateID}";
+    if (widget.filterScreenModel!.id_created_at != "") {
+      for (int i = 0; i < widget.createDateOptions!.length ; i++) {
+          if (widget.createDateOptions![i].createDateID == int.parse(widget.filterScreenModel!.id_created_at!) ) {
+            widget.createDateOptions![i].selected = true;
+            widget.id_create_date =  "${widget.createDateOptions![i].createDateID}";
           } else {
-            widget.createDateOptions[i].selected = false;
+            widget.createDateOptions![i].selected = false;
           }
       }
     }  else {
@@ -80,10 +80,10 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                 margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
                 child: Wrap(
                   children: List.generate(
-                      widget.createDateOptions.length,
+                      widget.createDateOptions!.length,
                       (index) => _optionItem(
-                              widget.createDateOptions[index].createDateName,
-                              widget.createDateOptions[index].selected, () {
+                              widget.createDateOptions![index].createDateName,
+                              widget.createDateOptions![index].selected!, () {
                             selectedSource(index);
                           })),
                   spacing: 20,
@@ -96,7 +96,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                       children: [
                         // khung thời gian tự chọn
                         Text(
-                          AppLocalizations.text(LangKey.customerTimeFrame),
+                          AppLocalizations.text(LangKey.customerTimeFrame)!,
                           style: TextStyle(
                               fontSize: 15.0,
                               color: const Color(0xFF8E8E8E),
@@ -114,7 +114,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                                         8,
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.fromDate),
-                                    widget.id_create_date != "" ? _fromDateText : "", () {
+                                    widget.id_create_date != "" ? _fromDateText : "" as TextEditingController, () {
                                   _showFromDatePickerCreateDate();
                                 })),
                             Container(
@@ -131,7 +131,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                                         4,
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.toDate),
-                                    widget.id_create_date != "" ? _toDateText : "", () {
+                                    widget.id_create_date != "" ? _toDateText : "" as TextEditingController, () {
                                   _showToDatePickerCreateDate();
                                 }))
                           ],
@@ -145,7 +145,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
   }
 
   _showFromDatePickerCreateDate() {
-    DateTime selectedDate = widget.filterScreenModel.fromDate_created_at ?? _fromDate ?? _toDate ?? _now;
+    DateTime selectedDate = widget.filterScreenModel!.fromDate_created_at ?? _fromDate ?? _toDate ?? _now;
 
     showModalBottomSheet(
         context: context,
@@ -175,12 +175,12 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                 }
                 
                 _fromDate = selectedDate;
-                widget.filterScreenModel.fromDate_created_at = selectedDate;
+                widget.filterScreenModel!.fromDate_created_at = selectedDate;
 
                 _fromDateText.text =
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
-                widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(_fromDate)} - ${DateFormat("dd/MM/yyyy").format(_toDate ?? _now)}";
-                print(widget.filterScreenModel.filterModel.createdAt);
+                widget.filterScreenModel!.filterModel!.createdAt = "${DateFormat("dd/MM/yyyy").format(_fromDate!)} - ${DateFormat("dd/MM/yyyy").format(_toDate ?? _now)}";
+                print(widget.filterScreenModel!.filterModel!.createdAt);
                 Navigator.of(context).pop();
               },
               haveBnConfirm: true,
@@ -191,10 +191,10 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
 
   _showToDatePickerCreateDate() {
     DateTime selectedDate = _toDate ?? _now;
-    DateTime maximumTime = _now;
+    DateTime? maximumTime = _now;
     if (_toDate?.year == _now.year &&
         _toDate?.month == _now.month &&
-        _toDate?.day > _now.day) maximumTime = _toDate;
+        (_toDate?.day ?? 0) > _now.day) maximumTime = _toDate;
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -222,11 +222,11 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                   Global.validateCreateDate = true;
                 }
                 _toDate = selectedDate;
-                widget.filterScreenModel.toDate_created_at = selectedDate;
+                widget.filterScreenModel!.toDate_created_at = selectedDate;
                 _toDateText.text =
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
-                widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
-                print(widget.filterScreenModel.filterModel.createdAt);
+                widget.filterScreenModel!.filterModel!.createdAt = "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate!)}";
+                print(widget.filterScreenModel!.filterModel!.createdAt);
                 Navigator.of(context).pop();
               },
               haveBnConfirm: true,
@@ -236,9 +236,9 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
   }
 
   Widget _buildDatePicker(
-      String hintText, TextEditingController fillText, Function ontap) {
+      String? hintText, TextEditingController fillText, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: TextField(
         enabled: false,
         controller: fillText,
@@ -264,9 +264,9 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
     );
   }
 
-  Widget _optionItem(String name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -283,7 +283,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(
                           color: Color(0xFF0067AC),
                           fontWeight: FontWeight.w600),
@@ -299,7 +299,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(color: Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -315,50 +315,50 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
       _fromDateText.text = "";
       _toDateText.text = "";
 
-      widget.filterScreenModel.fromDate_created_at = null;
-      widget.filterScreenModel.toDate_created_at = null;
+      widget.filterScreenModel!.fromDate_created_at = null;
+      widget.filterScreenModel!.toDate_created_at = null;
       _fromDate = null;
       _toDate = null;
     } else {
       Global.validateCreateDate = false;
     }
-    List<CreateDateModel> models = widget.createDateOptions;
+    List<CreateDateModel> models = widget.createDateOptions!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
     models[index].selected = true;
 
-    widget.id_create_date =  "${widget.createDateOptions[index].createDateID}";
+    widget.id_create_date =  "${widget.createDateOptions![index].createDateID}";
 
-    widget.filterScreenModel.id_created_at = "${index}";
+    widget.filterScreenModel!.id_created_at = "${index}";
     switch (index) {
       case 0:
-      widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(_now)} - ${DateFormat("dd/MM/yyyy").format(_now)}";
-      print(widget.filterScreenModel.filterModel.createdAt);
+      widget.filterScreenModel!.filterModel!.createdAt = "${DateFormat("dd/MM/yyyy").format(_now)} - ${DateFormat("dd/MM/yyyy").format(_now)}";
+      print(widget.filterScreenModel!.filterModel!.createdAt);
         break;
       case 1:
-        widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 1)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
-         print(widget.filterScreenModel.filterModel.createdAt);
+        widget.filterScreenModel!.filterModel!.createdAt = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 1)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
+         print(widget.filterScreenModel!.filterModel!.createdAt);
         break;
       case 2:
-        widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 7)))} - ${DateFormat("dd/MM/yyyy").format(_now)}";
-         print(widget.filterScreenModel.filterModel.createdAt);
+        widget.filterScreenModel!.filterModel!.createdAt = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 7)))} - ${DateFormat("dd/MM/yyyy").format(_now)}";
+         print(widget.filterScreenModel!.filterModel!.createdAt);
         break;
       case 3:
-        widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 31)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
-         print(widget.filterScreenModel.filterModel.createdAt);
+        widget.filterScreenModel!.filterModel!.createdAt = "${DateFormat("dd/MM/yyyy").format(_now.subtract( Duration(days: 31)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
+         print(widget.filterScreenModel!.filterModel!.createdAt);
         break;
       case 4:
-        widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month +1, 0).toString()))}";
-         print(widget.filterScreenModel.filterModel.createdAt);
+        widget.filterScreenModel!.filterModel!.createdAt = "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month +1, 0).toString()))}";
+         print(widget.filterScreenModel!.filterModel!.createdAt);
         break;
       case 5:
        var lastmonth = _now.month - 1;
-        widget.filterScreenModel.filterModel.createdAt = "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month - 1, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, lastmonth +1, 0).toString()))}";
-         print(widget.filterScreenModel.filterModel.createdAt);
+        widget.filterScreenModel!.filterModel!.createdAt = "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month - 1, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, lastmonth +1, 0).toString()))}";
+         print(widget.filterScreenModel!.filterModel!.createdAt);
         break;
       case 6:
-        widget.filterScreenModel.filterModel.createdAt = "";
+        widget.filterScreenModel!.filterModel!.createdAt = "";
         break;
       default:
     }

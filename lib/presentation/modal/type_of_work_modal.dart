@@ -8,8 +8,8 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
 class TypeOfWorkModal extends StatefulWidget {
-  List<GetTypeWorkData> typeOfWorkData;
-  TypeOfWorkModal({ Key key, this.typeOfWorkData }) : super(key: key);
+  List<GetTypeWorkData>? typeOfWorkData;
+  TypeOfWorkModal({ Key? key, this.typeOfWorkData }) : super(key: key);
 
   @override
   _TypeOfWorkModalState createState() => _TypeOfWorkModalState();
@@ -21,7 +21,7 @@ class _TypeOfWorkModalState extends State<TypeOfWorkModal> {
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.chooseTypeOfWork),
-      widget: (widget.typeOfWorkData.length > 0) ? CustomListView(
+      widget: (widget.typeOfWorkData!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: (widget.typeOfWorkData ?? [])
@@ -32,7 +32,7 @@ class _TypeOfWorkModalState extends State<TypeOfWorkModal> {
                           element?.manageTypeWorkName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.typeOfWorkData.length - 1,
+                          index < widget.typeOfWorkData!.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -44,7 +44,7 @@ class _TypeOfWorkModalState extends State<TypeOfWorkModal> {
 
 
   selectedItem(int index) async {
-    List<GetTypeWorkData> models = widget.typeOfWorkData;
+    List<GetTypeWorkData> models = widget.typeOfWorkData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

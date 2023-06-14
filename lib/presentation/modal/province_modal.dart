@@ -9,9 +9,9 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class ProvinceModal extends StatefulWidget {
-  List<ProvinceData> provinces = <ProvinceData>[];
-  ProvinceData provinceSeleted = ProvinceData();
-  ProvinceModal({Key key, this.provinces, this.provinceSeleted})
+  List<ProvinceData>? provinces = <ProvinceData>[];
+  ProvinceData? provinceSeleted = ProvinceData();
+  ProvinceModal({Key? key, this.provinces, this.provinceSeleted})
       : super(key: key);
 
   @override
@@ -22,9 +22,9 @@ class _ProvinceModalState extends State<ProvinceModal> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  GetProvinceModelReponse _model;
-  List<ProvinceData> provinces = <ProvinceData>[];
-  ProvinceData provinceSeleted = ProvinceData();
+  GetProvinceModelReponse? _model;
+  List<ProvinceData>? provinces = <ProvinceData>[];
+  ProvinceData? provinceSeleted = ProvinceData();
 
   @override
   void initState() {
@@ -32,12 +32,12 @@ class _ProvinceModalState extends State<ProvinceModal> {
     provinces = widget.provinces;
     provinceSeleted = widget.provinceSeleted;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      for (int i = 0; i < provinces.length; i++) {
+      for (int i = 0; i < provinces!.length; i++) {
         if ((provinceSeleted?.provinceid ?? "") ==
-            provinces[i].provinceid) {
-          provinces[i].selected = true;
+            provinces![i].provinceid) {
+          provinces![i].selected = true;
         } else {
-          provinces[i].selected = false;
+          provinces![i].selected = false;
         }
       }
 
@@ -79,7 +79,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.text(LangKey.provinceCity),
+                  AppLocalizations.text(LangKey.provinceCity)!,
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
@@ -143,9 +143,9 @@ class _ProvinceModalState extends State<ProvinceModal> {
     );
   }
 
-  searchModel(List<ProvinceData> model, String value) {
+  searchModel(List<ProvinceData>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = provinces;
+      _model!.data = provinces;
       setState(() {});
     } else {
       try {
@@ -160,7 +160,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
           }
           return result;
         }).toList();
-        _model.data = models;
+        _model!.data = models;
         setState(() {});
       } catch (_) {
         setState(() {});
@@ -169,19 +169,19 @@ class _ProvinceModalState extends State<ProvinceModal> {
   }
 
   List<Widget> _listWidget() {
-    return (_model.data != null)
-        ? (_model.data.length > 0) ? List.generate(
-            _model.data.length,
+    return (_model!.data != null)
+        ? (_model!.data!.length > 0) ? List.generate(
+            _model!.data!.length,
             (index) => _buildItem(
-                    _model.data[index].name, _model.data[index].selected, () {
+                    _model!.data![index].name!, _model!.data![index].selected!, () {
                   selectedItem(index);
                 }))
-        : [CustomDataNotFound()]: Container();
+        : [CustomDataNotFound()]: Container() as List<Widget>;
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
@@ -204,7 +204,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
   }
 
   selectedItem(int index) async {
-    List<ProvinceData> models = _model.data;
+    List<ProvinceData> models = _model!.data!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

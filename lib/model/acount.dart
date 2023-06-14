@@ -1,8 +1,8 @@
 class Account {
-  String accessToken;
-  String tokenType;
-  int expiresIn;
-  User user;
+  String? accessToken;
+  String? tokenType;
+  int? expiresIn;
+  User? user;
 
   Account({accessToken, tokenType, expiresIn, user});
 
@@ -19,15 +19,15 @@ class Account {
     data['token_type'] = tokenType;
     data['expires_in'] = expiresIn;
     if (user != null) {
-      data['user'] = user.toJson();
+      data['user'] = user!.toJson();
     }
     return data;
   }
 }
 
 class User {
-  String accessKey;
-  Staff staff;
+  String? accessKey;
+  Staff? staff;
 
   User({accessKey, staff});
 
@@ -40,20 +40,20 @@ class User {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['access_key'] = accessKey;
     if (staff != null) {
-      data['staff'] = staff.toJson();
+      data['staff'] = staff!.toJson();
     }
     return data;
   }
 }
 
 class Staff {
-  int staffId;
-  String userName;
-  String fullName;
-  String phone;
-  String email;
-  String staffAvatar;
-  Department department;
+  int? staffId;
+  String? userName;
+  String? fullName;
+  String? phone;
+  String? email;
+  String? staffAvatar;
+  Department? department;
 
   Staff(
       {staffId,
@@ -85,15 +85,15 @@ class Staff {
     data['email'] = email;
     data['staff_avatar'] = staffAvatar;
     if (department != null) {
-      data['department'] = department.toJson();
+      data['department'] = department!.toJson();
     }
     return data;
   }
 }
 
 class Department {
-  int departmentId;
-  String departmentName;
+  int? departmentId;
+  String? departmentName;
 
   Department({departmentId, departmentName});
 

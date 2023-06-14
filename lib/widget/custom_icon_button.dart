@@ -5,10 +5,10 @@ import 'package:lead_plugin_epoint/widget/custom_inkwell.dart';
 
 class CustomIconButton extends StatelessWidget {
 
-  final Function onTap;
-  final String icon;
-  final Widget child;
-  final Color color;
+  final Function? onTap;
+  final String? icon;
+  final Widget? child;
+  final Color? color;
   final bool isText;
 
   CustomIconButton({

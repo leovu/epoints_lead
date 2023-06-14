@@ -9,8 +9,8 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
 class JourneyModal extends StatefulWidget {
-  List<JourneyData> journeys = <JourneyData>[];
- JourneyModal({ Key key , this.journeys}) : super(key: key);
+  List<JourneyData>? journeys = <JourneyData>[];
+ JourneyModal({ Key? key , this.journeys}) : super(key: key);
 
   @override
   _JourneyModalState createState() => _JourneyModalState();
@@ -19,13 +19,13 @@ class JourneyModal extends StatefulWidget {
 class _JourneyModalState extends State<JourneyModal> {
   final ScrollController _controller = ScrollController();
 
-  JourneyData journeySelected;
+  JourneyData? journeySelected;
 
   @override
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.chooseStatus),
-      widget: (widget.journeys.length > 0) ? CustomListView(
+      widget: (widget.journeys!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: (widget.journeys ?? [])
@@ -36,7 +36,7 @@ class _JourneyModalState extends State<JourneyModal> {
                           element?.journeyName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.journeys.length - 1,
+                          index < widget.journeys!.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -78,7 +78,7 @@ class _JourneyModalState extends State<JourneyModal> {
   // }
 
   selectedItem(int index) async {
-    List<JourneyData> models = widget.journeys;
+    List<JourneyData> models = widget.journeys!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

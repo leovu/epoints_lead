@@ -1,5 +1,5 @@
 class WorkListDepartmentResponseModel {
-  List<WorkListDepartmentModel> data;
+  List<WorkListDepartmentModel>? data;
 
   WorkListDepartmentResponseModel({this.data});
 
@@ -7,7 +7,7 @@ class WorkListDepartmentResponseModel {
     if (json['Data'] != null) {
       data = <WorkListDepartmentModel>[];
       json['Data'].forEach((v) {
-        data.add(new WorkListDepartmentModel.fromJson(v));
+        data!.add(new WorkListDepartmentModel.fromJson(v));
       });
     }
   }
@@ -15,15 +15,15 @@ class WorkListDepartmentResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class WorkListDepartmentModel {
-  int departmentId;
-  String departmentName;
+  int? departmentId;
+  String? departmentName;
 
   WorkListDepartmentModel({this.departmentId, this.departmentName});
 

@@ -1,7 +1,7 @@
 class PositionResponseModel {
-  int errorCode;
-  String errorDescription;
-  List<PositionData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<PositionData>? data;
 
   PositionResponseModel({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class PositionResponseModel {
     if (json['Data'] != null) {
       data = <PositionData>[];
       json['Data'].forEach((v) {
-        data.add(new PositionData.fromJson(v));
+        data!.add(new PositionData.fromJson(v));
       });
     }
   }
@@ -21,19 +21,19 @@ class PositionResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class PositionData {
-  int staffTitleId;
-  String staffTitleName;
-  String slug;
-  String staffTitleCode;
-  String staffTitleDescription;
-  bool selected;
+  int? staffTitleId;
+  String? staffTitleName;
+  String? slug;
+  String? staffTitleCode;
+  String? staffTitleDescription;
+  bool? selected;
 
   PositionData(
       {this.staffTitleId,

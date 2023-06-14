@@ -1,7 +1,7 @@
 class GetCustomerOptionModelReponse {
-  int errorCode;
-  String errorDescription;
-  CustomerOptionData data;
+  int? errorCode;
+  String? errorDescription;
+  CustomerOptionData? data;
 
   GetCustomerOptionModelReponse(
       {this.errorCode, this.errorDescription, this.data});
@@ -17,15 +17,15 @@ class GetCustomerOptionModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class CustomerOptionData {
-  CustomerOptionType customerType;
-  List<CustomerOptionSource> source;
+  CustomerOptionType? customerType;
+  List<CustomerOptionSource>? source;
 
   CustomerOptionData({this.customerType, this.source});
 
@@ -36,7 +36,7 @@ class CustomerOptionData {
     if (json['Source'] != null) {
       source = <CustomerOptionSource>[];
       json['Source'].forEach((v) {
-        source.add(new CustomerOptionSource.fromJson(v));
+        source!.add(new CustomerOptionSource.fromJson(v));
       });
     }
   }
@@ -44,18 +44,18 @@ class CustomerOptionData {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.customerType != null) {
-      data['Customer_type'] = this.customerType.toJson();
+      data['Customer_type'] = this.customerType!.toJson();
     }
     if (this.source != null) {
-      data['Source'] = this.source.map((v) => v.toJson()).toList();
+      data['Source'] = this.source!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class CustomerOptionType {
-  String personal;
-  String business;
+  String? personal;
+  String? business;
 
   CustomerOptionType({this.personal, this.business});
 
@@ -73,10 +73,10 @@ class CustomerOptionType {
 }
 
 class CustomerOptionSource {
-  int customerSourceId;
-  String sourceName;
-  String customerSourceType;
-  bool selected;
+  int? customerSourceId;
+  String? sourceName;
+  String? customerSourceType;
+  bool? selected;
 
   CustomerOptionSource({this.customerSourceId, this.sourceName, this.customerSourceType, this.selected});
 

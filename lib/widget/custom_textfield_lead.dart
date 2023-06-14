@@ -5,43 +5,43 @@ import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 import 'package:lead_plugin_epoint/widget/custom_inkwell.dart';
 
 class CustomTextField extends StatelessWidget {
-  final FocusNode focusNode;
-  final TextSelectionControls selectionControls;
-  final TextEditingController controller;
-  final String hintText;
-  final TextStyle hintStyle;
-  final String labelText;
-  final String suffixIcon;
-  final Color suffixIconColor;
-  final double suffixSize;
-  final Color backgroundColor;
-  final Function onSuffixIconTap;
-  final String prefixIcon;
-  final Color prefixIconColor;
-  final Function onPrefixIconTap;
+  final FocusNode? focusNode;
+  final TextSelectionControls? selectionControls;
+  final TextEditingController? controller;
+  final String? hintText;
+  final TextStyle? hintStyle;
+  final String? labelText;
+  final String? suffixIcon;
+  final Color? suffixIconColor;
+  final double? suffixSize;
+  final Color? backgroundColor;
+  final Function? onSuffixIconTap;
+  final String? prefixIcon;
+  final Color? prefixIconColor;
+  final Function? onPrefixIconTap;
   final bool obscureText;
-  final TextInputType keyboardType;
-  final TextInputAction textInputAction;
-  final Function(String) onSubmitted;
-  final List<TextInputFormatter> inputFormatters;
-  final Function(String) onChanged;
-  final bool autofocus;
+  final TextInputType? keyboardType;
+  final TextInputAction? textInputAction;
+  final Function(String)? onSubmitted;
+  final List<TextInputFormatter>? inputFormatters;
+  final Function(String)? onChanged;
+  final bool? autofocus;
   final bool readOnly;
-  final Function onTap;
+  final Function? onTap;
   final bool enableBorder;
-  final int maxLines;
-  final int maxLength;
+  final int? maxLines;
+  final int? maxLength;
   final bool isPhone;
-  final TextStyle style;
+  final TextStyle? style;
   final int limitInput;
-  final double verticalPadding;
-  final double horizontalPadding;
+  final double? verticalPadding;
+  final double? horizontalPadding;
   final double verticalMargin;
   final double horizontalMargin;
   final String error;
   final double radius;
-  final Widget suffixChild;
-  final TextCapitalization textCapitalization;
+  final Widget? suffixChild;
+  final TextCapitalization? textCapitalization;
 
   CustomTextField(
       {this.focusNode,
@@ -163,7 +163,7 @@ class CustomTextField extends StatelessWidget {
                   maxLines: maxLines ?? 1,
                   maxLength: maxLength,
                   readOnly: readOnly,
-                  onTap: onTap,
+                  onTap: onTap as void Function()?,
                   textCapitalization:
                       textCapitalization ?? TextCapitalization.none,
                 ),

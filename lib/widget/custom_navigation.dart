@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomNavigator {
    static showCustomBottomDialog(BuildContext context, Widget screen,
-      {bool root = true, isScrollControlled = true, Function func, allowBack= false, disMissAble = true}) {
+      {bool root = true, isScrollControlled = true, Function? func, allowBack= false, disMissAble = true}) {
 
     return showModalBottomSheet(
         context: context,
@@ -13,7 +13,7 @@ class CustomNavigator {
         builder: (context) {
           return GestureDetector(
             child: screen,
-            onTap: func ?? () {
+            onTap: func as void Function()? ?? () {
               if(allowBack){
                 Navigator.pop(context);
               }
@@ -24,7 +24,7 @@ class CustomNavigator {
   }
 
   static canPop(BuildContext context) {
-    ModalRoute<dynamic> parentRoute = ModalRoute.of(context);
+    ModalRoute<dynamic>? parentRoute = ModalRoute.of(context);
     return parentRoute?.canPop ?? false;
   }
 

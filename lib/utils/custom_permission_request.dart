@@ -8,7 +8,7 @@ class CustomPermissionRequest {
   static Future<bool> request(BuildContext context, PermissionRequestType type) async {
     return PermissionRequest.request(type, (){
       assert (context != null);
-      String permission;
+      String? permission;
       if(type == PermissionRequestType.CAMERA){
         permission = AppLocalizations.text(LangKey.camera);
       }
@@ -50,23 +50,23 @@ class PermissionRequest {
   static Future<bool> request(PermissionRequestType type, Function onDontAskAgain) async {
     final channel = MethodChannel("flutter.permission/requestPermission");
     bool event = false;
-    int result = 0;
+    int? result = 0;
 
     try{
       if(type == PermissionRequestType.CAMERA){
-        result = await channel.invokeMethod<int>('camera',{'isRequest':true});
+        result = (await channel.invokeMethod<int>('camera',{'isRequest':true}))!;
       }
       else if(type == PermissionRequestType.LOCATION){
-        result = await channel.invokeMethod<int>('location',{'isRequest':true});
+        result = (await channel.invokeMethod<int>('location',{'isRequest':true}))!;
       }
       else if(type == PermissionRequestType.STORAGE){
-        result = await channel.invokeMethod<int>('storage',{'isRequest':true});
+        result = (await channel.invokeMethod<int>('storage',{'isRequest':true}))!;
       }
       else if(type == PermissionRequestType.NOTIFICATION){
-        result = await channel.invokeMethod<int>('notification',{'isRequest':true});
+        result = (await channel.invokeMethod<int>('notification',{'isRequest':true}))!;
       }
       else if(type == PermissionRequestType.MICROPHONE){
-        result = await channel.invokeMethod<int>('microphone',{'isRequest':true});
+        result = (await channel.invokeMethod<int>('microphone',{'isRequest':true}))!;
       }
     }
     catch(_){}
@@ -81,22 +81,22 @@ class PermissionRequest {
 
   static Future<bool> check(PermissionRequestType type) async {
     final channel = MethodChannel("flutter.permission/checkPermission");
-    int result = 0;
+    int? result = 0;
     try{
       if(type == PermissionRequestType.CAMERA){
-        result = await channel.invokeMethod<int>('camera',{'isRequest':false});
+        result = (await channel.invokeMethod<int>('camera',{'isRequest':false}))!;
       }
       else if(type == PermissionRequestType.LOCATION){
-        result = await channel.invokeMethod<int>('location',{'isRequest':false});
+        result = (await channel.invokeMethod<int>('location',{'isRequest':false}))!;
       }
       else if(type == PermissionRequestType.STORAGE){
-        result = await channel.invokeMethod<int>('storage',{'isRequest':false});
+        result = (await channel.invokeMethod<int>('storage',{'isRequest':false}))!;
       }
       else if(type == PermissionRequestType.NOTIFICATION){
-        result = await channel.invokeMethod<int>('notification',{'isRequest':false});
+        result = (await channel.invokeMethod<int>('notification',{'isRequest':false}))!;
       }
       else if(type == PermissionRequestType.MICROPHONE){
-        result = await channel.invokeMethod<int>('microphone',{'isRequest':false});
+        result = (await channel.invokeMethod<int>('microphone',{'isRequest':false}))!;
       }
     }
     catch(_){}

@@ -1,7 +1,7 @@
 class GetDistrictModelReponse {
-  int errorCode;
-  String errorDescription;
-  List<DistrictData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<DistrictData>? data;
 
   GetDistrictModelReponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class GetDistrictModelReponse {
     if (json['Data'] != null) {
       data = <DistrictData>[];
       json['Data'].forEach((v) {
-        data.add(new DistrictData.fromJson(v));
+        data!.add(new DistrictData.fromJson(v));
       });
     }
   }
@@ -21,17 +21,17 @@ class GetDistrictModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class DistrictData {
-  int districtid;
-  String type;
-  String name;
-  bool selected;
+  int? districtid;
+  String? type;
+  String? name;
+  bool? selected;
 
   DistrictData({this.districtid, this.type, this.name});
 

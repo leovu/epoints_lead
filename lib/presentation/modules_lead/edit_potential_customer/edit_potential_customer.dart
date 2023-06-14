@@ -41,10 +41,10 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class EditPotentialCustomer extends StatefulWidget {
-  DetailPotentialData detailPotential;
-  String customer_lead_code;
+  DetailPotentialData? detailPotential;
+  String? customer_lead_code;
   EditPotentialCustomer(
-      {Key key, this.detailPotential, this.customer_lead_code})
+      {Key? key, this.detailPotential, this.customer_lead_code})
       : super(key: key);
 
   @override
@@ -79,27 +79,27 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   bool selectedPersonal = true;
 
   String _imgAvatar = "";
-  File _image;
-  PickedFile _pickedFile;
+  File? _image;
+  PickedFile? _pickedFile;
   final _picker = ImagePicker();
 
   AddLeadModelRequest requestModel = AddLeadModelRequest();
-  List<ProvinceData> provinces = <ProvinceData>[];
+  List<ProvinceData>? provinces = <ProvinceData>[];
   List<DistrictData> districts = <DistrictData>[];
   List<WardData> wards = <WardData>[];
 
-  CustomerOptionData customerOptonData = CustomerOptionData();
-  List<CustomerOptionSource> customerSourcesData = <CustomerOptionSource>[];
+  CustomerOptionData? customerOptonData = CustomerOptionData();
+  List<CustomerOptionSource>? customerSourcesData = <CustomerOptionSource>[];
   CustomerOptionSource customerSourceSelected = CustomerOptionSource();
 
-  List<PipelineData> pipeLineData = <PipelineData>[];
+  List<PipelineData>? pipeLineData = <PipelineData>[];
   PipelineData pipelineSelected = PipelineData();
 
   List<GetStatusWorkData> statusWorkData = [];
   GetStatusWorkData statusWorkSelected = GetStatusWorkData();
 
-  List<JourneyData> journeysData = <JourneyData>[];
-  JourneyData journeySelected = JourneyData();
+  List<JourneyData>? journeysData = <JourneyData>[];
+  JourneyData? journeySelected = JourneyData();
 
   List<CustomerTypeModel> customerTypeData = <CustomerTypeModel>[];
   CustomerTypeModel customerTypeSelected = CustomerTypeModel();
@@ -110,15 +110,15 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
   List<WorkListStaffModel> _modelStaffSelected = [];
 
-  List<ListBusinessAreasItem> listBusinessData;
+  List<ListBusinessAreasItem>? listBusinessData;
 
-  List<TagData> tagsData;
+  List<TagData>? tagsData;
 
   String tagsString = "";
 
-  List<ContactListData> contactListData;
+  List<ContactListData>? contactListData;
 
-  List<PositionData> positionData;
+  List<PositionData>? positionData;
 
   AddLeadModelRequest detailPotential = AddLeadModelRequest(
       avatar: "",
@@ -159,10 +159,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
       if (widget.detailPotential != null) {
         bool business = false;
-        if (widget.detailPotential.customerType == "business") {
+        if (widget.detailPotential!.customerType == "business") {
           business = true;
           var contactList = await LeadConnection.getContactList(
-              context, widget.detailPotential.customerLeadCode);
+              context, widget.detailPotential!.customerLeadCode);
           if (contactList != null) {
             if (contactList.errorCode == 0) {
               contactListData = contactList.data;
@@ -179,72 +179,72 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
         detailPotential = AddLeadModelRequest(
             avatar: "",
-            customerType: widget.detailPotential.customerType ?? "",
-            customerSource: widget.detailPotential.customerSource ?? "",
-            fullName: widget.detailPotential.fullName ?? "",
-            taxCode: widget.detailPotential.taxCode,
-            phone: widget.detailPotential.phone ?? "",
-            email: widget.detailPotential.email ?? "",
-            representative: widget.detailPotential.representative ?? "",
-            pipelineCode: widget.detailPotential.pipelineCode ?? 0,
-            journeyCode: widget.detailPotential.journeyCode ?? 0,
-            saleId: widget.detailPotential.saleId ?? 0,
+            customerType: widget.detailPotential!.customerType ?? "",
+            customerSource: widget.detailPotential!.customerSource ?? "" as int?,
+            fullName: widget.detailPotential!.fullName ?? "",
+            taxCode: widget.detailPotential!.taxCode,
+            phone: widget.detailPotential!.phone ?? "",
+            email: widget.detailPotential!.email ?? "",
+            representative: widget.detailPotential!.representative ?? "",
+            pipelineCode: widget.detailPotential!.pipelineCode ?? 0 as String?,
+            journeyCode: widget.detailPotential!.journeyCode ?? 0 as String?,
+            saleId: widget.detailPotential!.saleId ?? 0,
             tagId: [],
-            gender: widget.detailPotential.gender ?? "",
-            bussinessId: widget.detailPotential.bussinessId ?? 0,
+            gender: widget.detailPotential!.gender ?? "",
+            bussinessId: widget.detailPotential!.bussinessId ?? 0,
             businessClue: "",
-            birthday: widget.detailPotential.birthday ?? "",
-            employees: widget.detailPotential.employees ?? 0,
-            provinceId: widget.detailPotential.provinceId ?? 0,
-            districtId: widget.detailPotential.districtId ?? 0,
-            wardId: widget.detailPotential.wardId ?? 0,
-            address: widget.detailPotential.address ?? "",
-            zalo: widget.detailPotential.zalo ?? "",
-            fanpage: widget.detailPotential.fanpage ?? "",
+            birthday: widget.detailPotential!.birthday ?? "",
+            employees: widget.detailPotential!.employees ?? 0,
+            provinceId: widget.detailPotential!.provinceId ?? 0,
+            districtId: widget.detailPotential!.districtId ?? 0,
+            wardId: widget.detailPotential!.wardId ?? 0,
+            address: widget.detailPotential!.address ?? "",
+            zalo: widget.detailPotential!.zalo ?? "",
+            fanpage: widget.detailPotential!.fanpage ?? "",
             contactFullName: (business &&
                     contactListData != null &&
-                    contactListData.length > 0)
-                ? contactListData[0].fullName ?? ""
+                    contactListData!.length > 0)
+                ? contactListData![0].fullName ?? ""
                 : "",
             contactPhone: (business &&
                     contactListData != null &&
-                    contactListData.length > 0)
-                ? contactListData[0].phone ?? ""
+                    contactListData!.length > 0)
+                ? contactListData![0].phone ?? ""
                 : "",
             contactEmail: (business &&
                     contactListData != null &&
-                    contactListData.length > 0)
-                ? contactListData[0].email ?? ""
+                    contactListData!.length > 0)
+                ? contactListData![0].email ?? ""
                 : "",
             position: (business &&
                     contactListData != null &&
-                    contactListData.length > 0)
-                ? contactListData[0].positon ?? ""
+                    contactListData!.length > 0)
+                ? contactListData![0].positon ?? ""
                 : "",
             contactAddress: (business &&
                     contactListData != null &&
-                    contactListData.length > 0)
-                ? contactListData[0].address ?? ""
+                    contactListData!.length > 0)
+                ? contactListData![0].address ?? ""
                 : "");
 
-        if (widget.detailPotential.tag.length > 0) {
-          for (int i = 0; i < widget.detailPotential.tag.length; i++) {
-            detailPotential.tagId.add(widget.detailPotential.tag[i].tagId);
+        if (widget.detailPotential!.tag!.length > 0) {
+          for (int i = 0; i < widget.detailPotential!.tag!.length; i++) {
+            detailPotential.tagId!.add(widget.detailPotential!.tag![i].tagId);
           }
         }
         ;
       } else {
-        DetailPotentialModelResponse dataDetail =
+        DetailPotentialModelResponse? dataDetail =
             await LeadConnection.getdetailPotential(
                 context, widget.customer_lead_code);
 
         if (dataDetail != null) {
           if (dataDetail.errorCode == 0) {
             bool business = false;
-            if (dataDetail.data.customerType == "business") {
+            if (dataDetail.data!.customerType == "business") {
               business = true;
               var contactList = await LeadConnection.getContactList(
-                  context, dataDetail.data.customerLeadCode);
+                  context, dataDetail.data!.customerLeadCode);
               if (contactList != null) {
                 if (contactList.errorCode == 0) {
                   contactListData = contactList.data;
@@ -261,57 +261,57 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
             detailPotential = AddLeadModelRequest(
                 avatar: "",
-                customerType: dataDetail.data.customerType ?? "",
-                customerSource: dataDetail.data.customerSource ?? "",
-                fullName: dataDetail.data.fullName ?? "",
-                taxCode: dataDetail.data.taxCode,
-                phone: dataDetail.data.phone ?? "",
-                email: dataDetail.data.email ?? "",
-                representative: dataDetail.data.representative ?? "",
-                pipelineCode: dataDetail.data.pipelineCode ?? 0,
-                journeyCode: dataDetail.data.journeyCode ?? 0,
-                saleId: dataDetail.data.saleId ?? 0,
+                customerType: dataDetail.data!.customerType ?? "",
+                customerSource: dataDetail.data!.customerSource ?? "" as int?,
+                fullName: dataDetail.data!.fullName ?? "",
+                taxCode: dataDetail.data!.taxCode,
+                phone: dataDetail.data!.phone ?? "",
+                email: dataDetail.data!.email ?? "",
+                representative: dataDetail.data!.representative ?? "",
+                pipelineCode: dataDetail.data!.pipelineCode ?? 0 as String?,
+                journeyCode: dataDetail.data!.journeyCode ?? 0 as String?,
+                saleId: dataDetail.data!.saleId ?? 0,
                 tagId: [],
-                gender: dataDetail.data.gender ?? "",
-                bussinessId: dataDetail.data.bussinessId ?? 0,
+                gender: dataDetail.data!.gender ?? "",
+                bussinessId: dataDetail.data!.bussinessId ?? 0,
                 businessClue: "",
-                birthday: dataDetail.data.birthday ?? "",
-                employees: dataDetail.data.employees ?? 0,
-                provinceId: dataDetail.data.provinceId ?? 0,
-                districtId: dataDetail.data.districtId ?? 0,
-                wardId: dataDetail.data.wardId ?? 0,
-                address: dataDetail.data.address ?? "",
-                zalo: dataDetail.data.zalo ?? "",
-                fanpage: dataDetail.data.fanpage ?? "",
+                birthday: dataDetail.data!.birthday ?? "",
+                employees: dataDetail.data!.employees ?? 0,
+                provinceId: dataDetail.data!.provinceId ?? 0,
+                districtId: dataDetail.data!.districtId ?? 0,
+                wardId: dataDetail.data!.wardId ?? 0,
+                address: dataDetail.data!.address ?? "",
+                zalo: dataDetail.data!.zalo ?? "",
+                fanpage: dataDetail.data!.fanpage ?? "",
                 contactFullName: (business &&
                         contactListData != null &&
-                        contactListData.length > 0)
-                    ? contactListData[0].fullName ?? ""
+                        contactListData!.length > 0)
+                    ? contactListData![0].fullName ?? ""
                     : "",
                 contactPhone: (business &&
                         contactListData != null &&
-                        contactListData.length > 0)
-                    ? contactListData[0].phone ?? ""
+                        contactListData!.length > 0)
+                    ? contactListData![0].phone ?? ""
                     : "",
                 contactEmail: (business &&
                         contactListData != null &&
-                        contactListData.length > 0)
-                    ? contactListData[0].email ?? ""
+                        contactListData!.length > 0)
+                    ? contactListData![0].email ?? ""
                     : "",
                 position: (business &&
                         contactListData != null &&
-                        contactListData.length > 0)
-                    ? contactListData[0].positon ?? ""
+                        contactListData!.length > 0)
+                    ? contactListData![0].positon ?? ""
                     : "",
                 contactAddress: (business &&
                         contactListData != null &&
-                        contactListData.length > 0)
-                    ? contactListData[0].address ?? ""
+                        contactListData!.length > 0)
+                    ? contactListData![0].address ?? ""
                     : "");
 
-            if (dataDetail.data.tag.length > 0) {
-              for (int i = 0; i < dataDetail.data.tag.length; i++) {
-                detailPotential.tagId.add(dataDetail.data.tag[i].tagId);
+            if (dataDetail.data!.tag!.length > 0) {
+              for (int i = 0; i < dataDetail.data!.tag!.length; i++) {
+                detailPotential.tagId!.add(dataDetail.data!.tag![i].tagId);
               }
             }
             ;
@@ -328,18 +328,18 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     });
   }
 
-  void callApi() async {
+   callApi() async {
     var dataType_Source = await LeadConnection.getCustomerOption(context);
     if (dataType_Source != null) {
       customerOptonData = dataType_Source.data;
-      customerSourcesData = customerOptonData.source;
+      customerSourcesData = customerOptonData!.source;
 
       customerTypeData.add(CustomerTypeModel(
-          customerTypeName: customerOptonData.customerType.personal,
+          customerTypeName: customerOptonData!.customerType!.personal,
           customerTypeID: 1,
           selected: false));
       customerTypeData.add(CustomerTypeModel(
-          customerTypeName: customerOptonData.customerType.business,
+          customerTypeName: customerOptonData!.customerType!.business,
           customerTypeID: 2,
           selected: false));
     }
@@ -369,14 +369,14 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       _modelStaff = [];
     }
 
-    ListBusinessAreasModelResponse model =
+    ListBusinessAreasModelResponse? model =
         await LeadConnection.getListBusinessAreas(context);
 
     if (model != null) {
       listBusinessData = model.data;
     }
 
-    PositionResponseModel positions = await LeadConnection.getPosition(context);
+    PositionResponseModel? positions = await LeadConnection.getPosition(context);
     if (positions != null) {
       positionData = positions.data;
     }
@@ -385,23 +385,23 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     if (tags != null) {
       tagsData = tags.data;
 
-      if (detailPotential.tagId.length > 0) {
-        for (int i = 0; i < detailPotential.tagId.length; i++) {
+      if (detailPotential.tagId!.length > 0) {
+        for (int i = 0; i < detailPotential.tagId!.length; i++) {
           try {
-            tagsData
-                .firstWhere(
-                    (element) => element.tagId == detailPotential.tagId[i])
-                .selected = true;
+            tagsData!
+                .firstWhereOrNull(
+                    (element) => element.tagId == detailPotential.tagId![i])
+                ?.selected = true;
           } catch (e) {}
         }
 
-        for (int i = 0; i < tagsData.length; i++) {
-          if (tagsData[i].selected) {
+        for (int i = 0; i < tagsData!.length; i++) {
+          if (tagsData![i].selected!) {
             // widget.detailDeal.tag.add(tagsSelected[i].tagId);
             if (tagsString == "") {
-              tagsString = tagsData[i].name;
+              tagsString = tagsData![i].name ?? "";
             } else {
-              tagsString += ", ${tagsData[i].name}";
+              tagsString += ", ${tagsData![i].name}";
             }
           }
         }
@@ -415,7 +415,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
       try {
         var item = _modelStaff
-            .firstWhere((element) => element.staffId == detailPotential.saleId);
+            .firstWhereOrNull((element) => element.staffId == detailPotential.saleId);
         if (item != null) {
           _modelStaffSelected.add(item);
         } else {
@@ -428,11 +428,11 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   }
 
   void initModel() async {
-    _fullNameText.text = detailPotential?.fullName ?? "";
-    _phoneNumberText.text = detailPotential?.phone ?? "";
+    _fullNameText.text = detailPotential.fullName ?? "";
+    _phoneNumberText.text = detailPotential.phone ?? "";
     _emailText.text = detailPotential.email ?? "";
-    _representativeText.text = detailPotential.representative;
-    _taxText.text = detailPotential.taxCode;
+    _representativeText.text = detailPotential.representative ?? "";
+    _taxText.text = detailPotential.taxCode ?? "";
 
     // for (int i = 0; i < customerTypeData.length; i++) {
     //   if ((widget.detailPotential?.customerType ?? "").toLowerCase() ==
@@ -449,9 +449,9 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     // } catch (_) {}
 
     try {
-      var itemCustomerType = customerTypeData.firstWhere((element) =>
-          element.customerTypeName.toLowerCase() ==
-          (detailPotential?.customerType ?? "").toLowerCase());
+      var itemCustomerType = customerTypeData.firstWhereOrNull((element) =>
+          element.customerTypeName!.toLowerCase() ==
+          (detailPotential.customerType ?? "").toLowerCase());
       if (itemCustomerType != null) {
         itemCustomerType.selected = true;
         customerTypeSelected = itemCustomerType;
@@ -459,31 +459,19 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             itemCustomerType.customerTypeName == "Personal" ? true : false;
       }
 
-      // var itemCustomerSource = customerSourcesData.firstWhere((element) =>
-      //     element.customerSourceId == (detailPotential?.customerSource ?? 0));
-      // if (itemCustomerSource != null) {
-      //   itemCustomerSource.selected = true;
-      // }
-
-      // var itemPipeline = pipeLineData.firstWhere((element) =>
-      //     element.pipelineCode == (detailPotential?.pipelineCode ?? 0));
-      // if (itemPipeline != null) {
-      //   itemPipeline.selected = true;
-      // }
-
     } catch (_) {}
 
     try {
-      var itemCustomerSource = customerSourcesData.firstWhere((element) =>
-          element.customerSourceId == (detailPotential?.customerSource ?? 0));
+      var itemCustomerSource = customerSourcesData!.firstWhereOrNull((element) =>
+          element.customerSourceId == (detailPotential.customerSource ?? 0));
       if (itemCustomerSource != null) {
         itemCustomerSource.selected = true;
         customerSourceSelected = itemCustomerSource;
       }
     } catch (e) {}
     try {
-      var itemPipeline = pipeLineData.firstWhere((element) =>
-          element.pipelineCode == (detailPotential?.pipelineCode ?? 0));
+      var itemPipeline = pipeLineData!.firstWhereOrNull((element) =>
+          element.pipelineCode == (detailPotential.pipelineCode ?? 0));
       if (itemPipeline != null) {
         itemPipeline.selected = true;
         pipelineSelected = itemPipeline;
@@ -516,8 +504,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       journeysData = journeys.data;
 
       try {
-        var itemJourney = journeysData.firstWhere((element) =>
-            element.journeyCode == detailPotential?.journeyCode ?? 0);
+        var itemJourney = journeysData!.firstWhereOrNull((element) =>
+            element.journeyCode == detailPotential?.journeyCode ?? 0 as bool);
         if (itemJourney != null) {
           itemJourney.selected = true;
           journeySelected = itemJourney;
@@ -593,7 +581,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.editPotential),
+              AppLocalizations.text(LangKey.editPotential)!,
               style: const TextStyle(color: Colors.white, fontSize: 16.0),
             ),
             // leadingWidth: 20.0,
@@ -630,7 +618,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.text(LangKey.customerInformation),
+            AppLocalizations.text(LangKey.customerInformation)!,
             style: TextStyle(
                 fontSize: AppTextSizes.size16,
                 color: const Color(0xFF0067AC),
@@ -668,7 +656,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                       ]),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.personal),
+                      AppLocalizations.text(LangKey.personal)!,
                       style: TextStyle(
                           color: selectedPersonal
                               ? Colors.white
@@ -703,7 +691,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                       ]),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.business),
+                      AppLocalizations.text(LangKey.business)!,
                       style: TextStyle(
                           color: !selectedPersonal
                               ? Colors.white
@@ -732,7 +720,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
             FocusScope.of(context).unfocus();
 
-            CustomerOptionSource source = await showModalBottomSheet(
+            CustomerOptionSource? source = await showModalBottomSheet(
                 context: context,
                 useRootNavigator: true,
                 isScrollControlled: true,
@@ -804,7 +792,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               false, ontap: () async {
             FocusScope.of(context).unfocus();
             print("Pipeline");
-            PipelineData pipeline = await showModalBottomSheet(
+            PipelineData? pipeline = await showModalBottomSheet(
                 context: context,
                 useRootNavigator: true,
                 isScrollControlled: true,
@@ -859,7 +847,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
             if (journey != null) {
               journeySelected = journey;
-              detailPotential.journeyCode = journeySelected.journeyCode;
+              detailPotential.journeyCode = journeySelected!.journeyCode;
               setState(() {
                 // await LeadConnection.getDistrict(context, province.provinceid);
               });
@@ -919,7 +907,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             FocusScope.of(context).unfocus();
             print("Chọn người được phân bổ");
 
-            List<WorkListStaffModel> _model =
+            List<WorkListStaffModel>? _model =
                 await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => PickOneStaffScreen(
                           models: _modelStaffSelected,
@@ -939,7 +927,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             print("Tag");
             FocusScope.of(context).unfocus();
 
-            List<int> tagsSeletecd = [];
+            List<int?> tagsSeletecd = [];
 
             var listTagsSelected = await Navigator.of(context).push(
                 MaterialPageRoute(
@@ -949,14 +937,14 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               tagsString = "";
               tagsData = listTagsSelected;
 
-              for (int i = 0; i < tagsData.length; i++) {
-                if (tagsData[i].selected) {
-                  tagsSeletecd.add(tagsData[i].tagId);
+              for (int i = 0; i < tagsData!.length; i++) {
+                if (tagsData![i].selected!) {
+                  tagsSeletecd.add(tagsData![i].tagId);
 
                   if (tagsString == "") {
-                    tagsString = tagsData[i].name;
+                    tagsString = tagsData![i].name ?? "";
                   } else {
-                    tagsString += ", ${tagsData[i].name}";
+                    tagsString += ", ${tagsData![i].name}";
                   }
                 }
               }
@@ -1030,7 +1018,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         },
         child: Center(
           child: Text(
-            AppLocalizations.text(LangKey.editPotential),
+            AppLocalizations.text(LangKey.editPotential)!,
             style: TextStyle(
                 fontSize: 12.0,
                 color: Colors.white,
@@ -1083,16 +1071,16 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     );
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -1124,7 +1112,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                               text: "*", style: TextStyle(color: Colors.red))
                       ]))
                 : Text(
-                    content,
+                    content!,
                     style: TextStyle(
                         fontSize: 15.0,
                         color: Colors.black,
@@ -1173,7 +1161,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     print(detailPotential);
     print("theemmm khtn");
 
-    if (detailPotential.phone.isNotEmpty) {
+    if (detailPotential.phone!.isNotEmpty) {
       if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
           (!Validators().isNumber(_phoneNumberText.text.trim()))) {
         print("so dien thoai sai oy");
@@ -1194,10 +1182,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           warning: true);
     } else {
       LeadConnection.showLoading(context);
-      DescriptionModelResponse result = await LeadConnection.updateLead(
+      DescriptionModelResponse? result = await LeadConnection.updateLead(
           context,
           EditPotentialRequestModel(
-              customerLeadCode: widget.detailPotential.customerLeadCode ?? "",
+              customerLeadCode: widget.detailPotential!.customerLeadCode ?? "",
               avatar: "",
               customerType: "personal",
               customerSource: detailPotential.customerSource,
@@ -1207,7 +1195,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               email: detailPotential.email,
               representative: "",
               pipelineCode: pipelineSelected.pipelineCode,
-              journeyCode: journeySelected.journeyCode,
+              journeyCode: journeySelected!.journeyCode,
               saleId: detailPotential.saleId,
               tagId: detailPotential.tagId,
               gender: detailPotential.gender,
@@ -1256,9 +1244,9 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       }
     }
 
-    if (detailPotential.contactPhone.isNotEmpty) {
-      if ((!Validators().isValidPhone(detailPotential.contactPhone.trim())) &&
-          (!Validators().isNumber(detailPotential.contactPhone.trim()))) {
+    if (detailPotential.contactPhone!.isNotEmpty) {
+      if ((!Validators().isValidPhone(detailPotential.contactPhone!.trim())) &&
+          (!Validators().isNumber(detailPotential.contactPhone!.trim()))) {
         print("so dien thoai sai oy");
         LeadConnection.showMyDialog(
             context, "Số điện thoại người liên hệ không đúng định dạng",
@@ -1277,10 +1265,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           warning: true);
     } else {
       LeadConnection.showLoading(context);
-      DescriptionModelResponse result = await LeadConnection.updateLead(
+      DescriptionModelResponse? result = await LeadConnection.updateLead(
           context,
           EditPotentialRequestModel(
-              customerLeadCode: widget.detailPotential.customerLeadCode,
+              customerLeadCode: widget.detailPotential!.customerLeadCode,
               avatar: "",
               customerType: "business",
               customerSource: detailPotential.customerSource,
@@ -1290,7 +1278,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               email: detailPotential.email,
               representative: detailPotential.representative,
               pipelineCode: pipelineSelected.pipelineCode,
-              journeyCode: journeySelected.journeyCode,
+              journeyCode: journeySelected!.journeyCode,
               saleId: detailPotential.saleId,
               tagId: detailPotential.tagId,
               gender: "",

@@ -4,18 +4,18 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 
 class CustomButton extends StatelessWidget {
-  final Color backgroundColor;
-  final Color borderColor;
-  final String icon;
-  final String text;
-  final TextStyle style;
-  final Function onTap;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final String? icon;
+  final String? text;
+  final TextStyle? style;
+  final Function? onTap;
   final bool isExpand;
   final bool isIcon;
-  final Color iconColor;
-  final bool enable;
-  final double heightButton;
-  final Gradient gradient;
+  final Color? iconColor;
+  final bool? enable;
+  final double? heightButton;
+  final Gradient? gradient;
   final double marginHorizontal;
   final double marginVertical;
   final double heightIcon;
@@ -47,7 +47,7 @@ class CustomButton extends StatelessWidget {
           margin: EdgeInsets.symmetric(
               horizontal: marginHorizontal, vertical: marginVertical),
           decoration: BoxDecoration(
-              color: enable
+              color: enable!
                   ? (backgroundColor ?? Color(0xFF0067AC))
                   : (backgroundColor ?? Color(0xFF0067AC))
                       .withOpacity(0.3),
@@ -55,7 +55,7 @@ class CustomButton extends StatelessWidget {
               border: borderColor == null
                   ? null
                   : Border.all(
-                      color: borderColor,
+                      color: borderColor!,
                       width: 1.0,
                       style: BorderStyle.solid)),
           height: heightButton != null ? heightButton : 48.0,
@@ -77,7 +77,7 @@ class CustomButton extends StatelessWidget {
                               size: 20.0,
                             )
                           : Image.asset(
-                              icon,
+                              icon!,
                               width: 20,
                             ),
                     ),
@@ -85,7 +85,7 @@ class CustomButton extends StatelessWidget {
                   ? Flexible(
                       fit: FlexFit.loose,
                       child: AutoSizeText(
-                        text,
+                        text!,
                         style: style ??
                             AppTextStyles.style15WhiteNormal
                                 .copyWith(color: AppColors.white),
@@ -97,7 +97,7 @@ class CustomButton extends StatelessWidget {
                         //     : AppColors.grey600),
                       ))
                   : Text(
-                      text,
+                      text!,
                       style: style ??
                           AppTextStyles.style15WhiteNormal
                               .copyWith(color: AppColors.white),
@@ -106,6 +106,6 @@ class CustomButton extends StatelessWidget {
             ],
           ),
         ),
-        onTap: enable ? onTap : null);
+        onTap: enable! ? onTap as void Function()? : null);
   }
 }

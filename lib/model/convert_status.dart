@@ -1,7 +1,7 @@
 class ConvertStatusModel {
-  String statusName;
-  int statusID;
-  bool selected;
+  String? statusName;
+  int? statusID;
+  bool? selected;
 
   ConvertStatusModel({this.statusName, this.statusID, this.selected});
 

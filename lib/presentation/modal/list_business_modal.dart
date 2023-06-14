@@ -13,7 +13,7 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class ListBusinessModal extends StatefulWidget {
-  const ListBusinessModal({Key key}) : super(key: key);
+  const ListBusinessModal({Key? key}) : super(key: key);
 
   @override
   _ListBusinessModalState createState() => _ListBusinessModalState();
@@ -23,7 +23,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  GetAllocatorModelReponse _model;
+  late GetAllocatorModelReponse _model;
   // List<AllocatorData> allocators = <AllocatorData>[];
   // GetAllocatorModelReponse dataAllocator;
 
@@ -64,7 +64,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.listBusiness),
+            AppLocalizations.text(LangKey.listBusiness)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,
@@ -131,7 +131,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
 
   Widget _buildBusinessItem(Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         padding: EdgeInsets.only(left: 8.0, right: 8.0),
         height: 80.0,
@@ -263,12 +263,12 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
 }
 
 extension NumberParsing on String {
-  double tryParseDouble({bool isRound = false}) {
+  double? tryParseDouble({bool isRound = false}) {
     if (this == null || this == "null") {
       return 0.0;
     }
     String param = this.toString().replaceAll(",", "");
-    double val = double.tryParse(param);
+    double? val = double.tryParse(param);
     return val == null
         ? 0.0
         : (isRound ? double.tryParse(val.toStringAsFixed(2)) : val);

@@ -9,8 +9,8 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class FilterByJourney extends StatefulWidget {
-   List<JourneyData> journeys = <JourneyData>[];
-   FilterByJourney({ Key key, this.journeys }) : super(key: key);
+   List<JourneyData>? journeys = <JourneyData>[];
+   FilterByJourney({ Key? key, this.journeys }) : super(key: key);
 
   @override
   _FilterByJourneyState createState() => _FilterByJourneyState();
@@ -20,8 +20,8 @@ class _FilterByJourneyState extends State<FilterByJourney> {
  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<JourneyData> journeysData;
-  List<JourneyData> journeysDataDisplay;
+  List<JourneyData>? journeysData;
+  List<JourneyData>? journeysDataDisplay;
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _FilterByJourneyState extends State<FilterByJourney> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.byJourney),
+            AppLocalizations.text(LangKey.byJourney)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
@@ -62,7 +62,7 @@ class _FilterByJourneyState extends State<FilterByJourney> {
         children: [
           _buildSearch(),
           (journeysDataDisplay != null)
-              ? (journeysDataDisplay.length > 0)
+              ? (journeysDataDisplay!.length > 0)
                   ? Expanded(
                       child: CustomListView(
                       shrinkWrap: true,
@@ -90,18 +90,18 @@ class _FilterByJourneyState extends State<FilterByJourney> {
   }
 
   List<Widget> _listWidget() {
-    return (journeysDataDisplay != null && journeysDataDisplay.length > 0)
+    return (journeysDataDisplay != null && journeysDataDisplay!.length > 0)
         ? List.generate(
-            journeysDataDisplay.length,
-            (index) => _buildItem(journeysDataDisplay[index], () {
-                  selectedItem(journeysDataDisplay[index]);
+            journeysDataDisplay!.length,
+            (index) => _buildItem(journeysDataDisplay![index], () {
+                  selectedItem(journeysDataDisplay![index]);
                 }))
         : [CustomDataNotFound()];
   }
 
   Widget _buildItem(JourneyData item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -110,18 +110,18 @@ class _FilterByJourneyState extends State<FilterByJourney> {
             child: Row(
               children: [
                 Text(
-                  item.journeyName,
+                  item.journeyName!,
                   style: TextStyle(
                       fontSize: 15.0,
                       color:
-                          item.selected ? AppColors.primaryColor : Colors.black,
+                          item.selected! ? AppColors.primaryColor : Colors.black,
                       fontWeight:
-                          item.selected ? FontWeight.bold : FontWeight.normal),
+                          item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
               ],
             ),
           ),
-          item.selected
+          item.selected!
               ? Icon(
                   Icons.check_box,
                   color: AppColors.primaryColor,
@@ -172,7 +172,7 @@ class _FilterByJourneyState extends State<FilterByJourney> {
       setState(() {});
     } else {
       try {
-        List<JourneyData> models = journeysData.where((model) {
+        List<JourneyData> models = journeysData!.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
@@ -192,7 +192,7 @@ class _FilterByJourneyState extends State<FilterByJourney> {
   }
 
   selectedItem(JourneyData item) async {
-    item.selected = !item.selected;
+    item.selected = !item.selected!;
 
     // var event = models.firstWhere((element) => element.name == item.name);
 

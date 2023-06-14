@@ -1,6 +1,6 @@
 class AddBusinessAreasModelRequest {
-  String name;
-  String description;
+  String? name;
+  String? description;
 
   AddBusinessAreasModelRequest({this.name, this.description});
 

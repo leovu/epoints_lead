@@ -1,23 +1,23 @@
 import 'package:lead_plugin_epoint/model/request/list_customer_lead_model_request.dart';
 
 class FilterScreenModel {
-  ListCustomLeadModelRequest filterModel;
+  ListCustomLeadModelRequest? filterModel;
 
-  DateTime fromDate_created_at;
-  DateTime toDate_created_at;
-  String id_created_at;
+  DateTime? fromDate_created_at;
+  DateTime? toDate_created_at;
+  String? id_created_at;
 
-  DateTime fromDate_allocation_date;
-  DateTime toDate_allocation_date;
-  String id_allocation_date;
+  DateTime? fromDate_allocation_date;
+  DateTime? toDate_allocation_date;
+  String? id_allocation_date;
 
-  DateTime fromDate_history_care_date;
-  DateTime toDate_history_care_date;
-  String id_history_care_date;
+  DateTime? fromDate_history_care_date;
+  DateTime? toDate_history_care_date;
+  String? id_history_care_date;
 
-  DateTime fromDate_work_schedule_date;
-  DateTime toDate_work_schedule_date;
-  String id_work_schedule_date;
+  DateTime? fromDate_work_schedule_date;
+  DateTime? toDate_work_schedule_date;
+  String? id_work_schedule_date;
 
 
 

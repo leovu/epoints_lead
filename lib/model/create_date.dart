@@ -1,7 +1,7 @@
 class CreateDateModel {
-  String createDateName;
-  int createDateID;
-  bool selected;
+  String? createDateName;
+  int? createDateID;
+  bool? selected;
 
   CreateDateModel({this.createDateName, this.createDateID, this.selected});
 

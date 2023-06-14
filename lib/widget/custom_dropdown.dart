@@ -6,16 +6,16 @@ import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 
 class CustomDropdown extends StatelessWidget {
 
-  final List<CustomDropdownModel> menus;
-  final CustomDropdownModel value;
-  final Function(CustomDropdownModel) onChanged;
-  final String hint;
-  final String icon;
+  final List<CustomDropdownModel>? menus;
+  final CustomDropdownModel? value;
+  final Function(CustomDropdownModel?)? onChanged;
+  final String? hint;
+  final String? icon;
   final bool isText;
 
   CustomDropdown({this.icon, this.menus, this.value, this.onChanged, this.hint, this.isText = false});
 
-  Widget _buildBody(String text, {bool isHint = false}){
+  Widget _buildBody(String? text, {bool isHint = false}){
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -65,7 +65,7 @@ class CustomDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(isText){
-      return _buildBody(value.text);
+      return _buildBody(value!.text);
     }
     if(menus == null){
       return CustomShimmer(
@@ -81,9 +81,9 @@ class CustomDropdown extends StatelessWidget {
       itemHeight: null,
       hint: hint == null? null: _buildBody(hint, isHint: true),
       selectedItemBuilder: (_){
-        return menus.map((e) => _buildBody(e.text)).toList();
+        return menus!.map((e) => _buildBody(e.text)).toList();
       },
-      items: menus.map((e) => DropdownMenuItem(
+      items: menus!.map((e) => DropdownMenuItem(
           value: e,
           child: Text(
             e.text ?? "",
@@ -102,7 +102,7 @@ class CustomDropdown extends StatelessWidget {
 
 class CustomDropdownModel{
   final dynamic id;
-  final String text;
+  final String? text;
   final dynamic data;
 
   CustomDropdownModel({this.id, this.text, this.data});

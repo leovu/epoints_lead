@@ -11,8 +11,8 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class FilterByWorkStatus extends StatefulWidget {
-  List<GetStatusWorkData> statusWorkData;
-   FilterByWorkStatus({ Key key, this.statusWorkData }) : super(key: key);
+  List<GetStatusWorkData>? statusWorkData;
+   FilterByWorkStatus({ Key? key, this.statusWorkData }) : super(key: key);
 
   @override
   _FilterByWorkStatusState createState() => _FilterByWorkStatusState();
@@ -22,8 +22,8 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<GetStatusWorkData> statusWorkData;
-  List<GetStatusWorkData> statusWorkDataDisplay;
+  List<GetStatusWorkData>? statusWorkData;
+  List<GetStatusWorkData>? statusWorkDataDisplay;
 
 
   @override
@@ -45,7 +45,7 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
   getData() async {
     keyboardDismissOnTap(context);
 
-    if (statusWorkData == null || statusWorkData.length == 0) {
+    if (statusWorkData == null || statusWorkData!.length == 0) {
               LeadConnection.showLoading(context);
               var statusWorkModel = await LeadConnection.getStatusWork(context);
 
@@ -72,7 +72,7 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.byWorkStatus),
+            AppLocalizations.text(LangKey.byWorkStatus)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
@@ -88,7 +88,7 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
         children: [
           _buildSearch(),
           (statusWorkDataDisplay != null)
-              ? (statusWorkDataDisplay.length > 0)
+              ? (statusWorkDataDisplay!.length > 0)
                   ? Expanded(
                       child: CustomListView(
                       shrinkWrap: true,
@@ -116,18 +116,18 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
   }
 
   List<Widget> _listWidget() {
-    return (statusWorkDataDisplay != null && statusWorkDataDisplay.length > 0)
+    return (statusWorkDataDisplay != null && statusWorkDataDisplay!.length > 0)
         ? List.generate(
-            statusWorkDataDisplay.length,
-            (index) => _buildItem(statusWorkDataDisplay[index], () {
-                  selectedItem(statusWorkDataDisplay[index]);
+            statusWorkDataDisplay!.length,
+            (index) => _buildItem(statusWorkDataDisplay![index], () {
+                  selectedItem(statusWorkDataDisplay![index]);
                 }))
         : [CustomDataNotFound()];
   }
 
   Widget _buildItem(GetStatusWorkData item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -136,16 +136,16 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
             child: Row(
               children: [
                 Text(
-                  item.manageStatusName,
+                  item.manageStatusName!,
                   style: TextStyle(
                       fontSize: 15.0,
-                      color: item.selected ? AppColors.primaryColor : Colors.black,
-                      fontWeight:item.selected ? FontWeight.bold : FontWeight.normal),
+                      color: item.selected! ? AppColors.primaryColor : Colors.black,
+                      fontWeight:item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
               ],
             ),
           ),
-          item.selected
+          item.selected!
               ? Icon(
                   Icons.check_box,
                   color: AppColors.primaryColor,
@@ -196,7 +196,7 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
       setState(() {});
     } else {
       try {
-        List<GetStatusWorkData> models = statusWorkData.where((model) {
+        List<GetStatusWorkData> models = statusWorkData!.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
@@ -216,7 +216,7 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
   }
 
   selectedItem(GetStatusWorkData item) async {
-    item.selected = !item.selected;
+    item.selected = !item.selected!;
 
     // var event = models.firstWhere((element) => element.name == item.name);
 

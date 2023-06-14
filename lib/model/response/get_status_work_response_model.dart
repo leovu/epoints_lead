@@ -1,7 +1,7 @@
 class GetStatusWorkResponseModel {
-  int errorCode;
-  String errorDescription;
-  List<GetStatusWorkData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<GetStatusWorkData>? data;
 
   GetStatusWorkResponseModel(
       {this.errorCode, this.errorDescription, this.data});
@@ -12,7 +12,7 @@ class GetStatusWorkResponseModel {
     if (json['Data'] != null) {
       data = <GetStatusWorkData>[];
       json['Data'].forEach((v) {
-        data.add(new GetStatusWorkData.fromJson(v));
+        data!.add(new GetStatusWorkData.fromJson(v));
       });
     }
   }
@@ -22,18 +22,18 @@ class GetStatusWorkResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class GetStatusWorkData {
-  int manageStatusId;
-  int manageStatusValue;
-  String manageStatusName;
-  String manageStatusColor;
-  bool selected;
+  int? manageStatusId;
+  int? manageStatusValue;
+  String? manageStatusName;
+  String? manageStatusColor;
+  bool? selected;
 
   GetStatusWorkData(
       {this.manageStatusId,

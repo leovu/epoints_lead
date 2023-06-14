@@ -1,17 +1,17 @@
 class ListCustomLeadModelRequest {
-  String search;
-  int page;
-  List<int> tagId;
-  String customerType;
-  String statusAssign;
-  List<int> customerSourceId;
-  String createdAt;
-  String allocationDate;
-  String isConvert;
-  List<int> staffId;
-  List<int> pipelineId;
-  List<int> journeyId;
-  String careHistory;
+  String? search;
+  int? page;
+  List<int?>? tagId;
+  String? customerType;
+  String? statusAssign;
+  List<int?>? customerSourceId;
+  String? createdAt;
+  String? allocationDate;
+  String? isConvert;
+  List<int?>? staffId;
+  List<int?>? pipelineId;
+  List<int?>? journeyId;
+  String? careHistory;
 
   ListCustomLeadModelRequest(
       {this.search,

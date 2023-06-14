@@ -1,8 +1,8 @@
 class GenderModel {
-  String genderName;
-  String genderEnName;
-  int genderID;
-  bool selected;
+  String? genderName;
+  String? genderEnName;
+  int? genderID;
+  bool? selected;
 
   GenderModel({this.genderName,this.genderEnName, this.genderID, this.selected});
 

@@ -8,8 +8,8 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
 class StatusWorkModal extends StatefulWidget {
-  List<GetStatusWorkData> statusWorkData = [];
- StatusWorkModal({ Key key, this.statusWorkData }) : super(key: key);
+  List<GetStatusWorkData>? statusWorkData = [];
+ StatusWorkModal({ Key? key, this.statusWorkData }) : super(key: key);
 
   @override
   _StatusWorkModalState createState() => _StatusWorkModalState();
@@ -20,7 +20,7 @@ class _StatusWorkModalState extends State<StatusWorkModal> {
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.status),
-      widget: (widget.statusWorkData.length > 0) ? CustomListView(
+      widget: (widget.statusWorkData!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: (widget.statusWorkData ?? [])
@@ -31,7 +31,7 @@ class _StatusWorkModalState extends State<StatusWorkModal> {
                           element?.manageStatusName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.statusWorkData.length - 1,
+                          index < widget.statusWorkData!.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -73,7 +73,7 @@ class _StatusWorkModalState extends State<StatusWorkModal> {
   // }
 
   selectedItem(int index) async {
-    List<GetStatusWorkData> models = widget.statusWorkData;
+    List<GetStatusWorkData> models = widget.statusWorkData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

@@ -6,19 +6,19 @@ import 'package:lead_plugin_epoint/widget/custom_inkwell.dart';
 
 class CustomItemBottomSheet extends StatelessWidget {
   final String text;
-  final String subText;
+  final String? subText;
   final Function function;
-  final bool isSelected;
-  final String icon;
+  final bool? isSelected;
+  final String? icon;
   final bool isEdit;
-  final Function funcEdit;
-  final Widget iconChild;
-  final Color color;
-  final Color colorIcon;
+  final Function? funcEdit;
+  final Widget? iconChild;
+  final Color? color;
+  final Color? colorIcon;
   final bool isPadding;
   final bool isBorder;
   final bool hideIconCheck;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   const CustomItemBottomSheet(this.text, this.function,
       {this.subText,
       this.isSelected = false,
@@ -101,11 +101,11 @@ class CustomItemBottomSheet extends StatelessWidget {
                                 )),
                           ],
                         )),
-                  if (isSelected && !hideIconCheck)
+                  if (isSelected! && !hideIconCheck)
                     Container(
                       width: 10.0,
                     ),
-                  if (isSelected && !hideIconCheck)
+                  if (isSelected! && !hideIconCheck)
                     Icon(Icons.check, color: AppColors.primaryColor,size: 20,),
                 ],
               ),

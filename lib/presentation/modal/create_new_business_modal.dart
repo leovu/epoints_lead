@@ -5,7 +5,7 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 
 class CreateNewBusinessModal extends StatefulWidget {
-  CreateNewBusinessModal({Key key}) : super(key: key);
+  CreateNewBusinessModal({Key? key}) : super(key: key);
 
   @override
   _CreateNewBusinessModalState createState() => _CreateNewBusinessModalState();
@@ -60,7 +60,7 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
               padding: EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  AppLocalizations.text(LangKey.createNewBusiness),
+                  AppLocalizations.text(LangKey.createNewBusiness)!,
                   style: TextStyle(
                       fontSize: 18.0,
                       color: Colors.black,
@@ -95,7 +95,7 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),
-            AppLocalizations.text(LangKey.addNewBusiness),
+            AppLocalizations.text(LangKey.addNewBusiness)!,
             style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.white,
@@ -105,16 +105,16 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
         ));
   }
 
-  Widget _tftCreateNewBusiness(String title, String content, String icon,
+  Widget _tftCreateNewBusiness(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

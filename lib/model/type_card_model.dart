@@ -1,7 +1,7 @@
 class TypeCardModel {
-  String name;
-  int id;
-  bool selected;
+  String? name;
+  int? id;
+  bool? selected;
 
   TypeCardModel({this.name, this.id, this.selected});
 

@@ -4,16 +4,16 @@ import 'package:lead_plugin_epoint/widget/custom_icon_button.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class CustomAppBar extends StatelessWidget {
-  final String title;
-  final Widget customTitle;
-  final List<CustomOptionAppBar> options;
-  final IconData icon;
-  final Function onWillPop;
+  final String? title;
+  final Widget? customTitle;
+  final List<CustomOptionAppBar>? options;
+  final IconData? icon;
+  final Function? onWillPop;
 
   CustomAppBar({this.title, this.customTitle, this.options, this.icon, this.onWillPop});
 
   Widget _buildIcon(int index) {
-    CustomOptionAppBar model = options[index];
+    CustomOptionAppBar model = options![index];
     return CustomIconButton(
         onTap: model.onTap,
         icon: model.icon,
@@ -22,7 +22,7 @@ class CustomAppBar extends StatelessWidget {
         child: model.text == null
             ? null
             : Text(
-          options[index].text,
+          options![index].text!,
           style: AppTextStyles.style15PrimaryNormal,
         ));
   }
@@ -36,12 +36,12 @@ class CustomAppBar extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(
               horizontal:15.0 +
-                  ((options == null || options.length == 0)
+                  ((options == null || options!.length == 0)
                       ? (canPop ? 40.0 : 0.0)
-                      : (options.length * 40.0))),
+                      : (options!.length * 40.0))),
           child: customTitle ?? Center(
             child: Text(
-              title,
+              title!,
               style: AppTextStyles.style17WhiteNormal,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -53,7 +53,7 @@ class CustomAppBar extends StatelessWidget {
             Opacity(
               child: InkWell(
                 onTap: canPop
-                    ? (onWillPop ?? () => Navigator.pop(context))
+                    ? (onWillPop as void Function()? ?? () => Navigator.pop(context))
                     : null,
                 child: Container(
                   width: 40.0,
@@ -71,19 +71,19 @@ class CustomAppBar extends StatelessWidget {
             Expanded(
               child: Container(),
             ),
-            (options == null || options.length == 0)
+            (options == null || options!.length == 0)
                 ? Container()
                 : Container(
               height: 40.0,
               child: ListView.builder(
                   padding: EdgeInsets.symmetric(
                       horizontal: 15.0),
-                  itemCount: options.length,
+                  itemCount: options!.length,
                   physics: NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (_, index) =>
-                  options[index].child ?? _buildIcon(index)),
+                  options![index].child ?? _buildIcon(index)),
             )
           ],
         )
@@ -93,11 +93,11 @@ class CustomAppBar extends StatelessWidget {
 }
 
 class CustomOptionAppBar {
-  final String icon;
-  final Function onTap;
+  final String? icon;
+  final Function? onTap;
   final bool showIcon;
-  final Widget child;
-  final String text;
+  final Widget? child;
+  final String? text;
 
   CustomOptionAppBar(
       {this.icon, this.showIcon = true, this.onTap, this.child, this.text});

@@ -1,7 +1,7 @@
 class GetJourneyModelReponse {
-  int errorCode;
-  String errorDescription;
-  List<JourneyData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<JourneyData>? data;
 
   GetJourneyModelReponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class GetJourneyModelReponse {
     if (json['Data'] != null) {
       data = <JourneyData>[];
       json['Data'].forEach((v) {
-        data.add(JourneyData.fromJson(v));
+        data!.add(JourneyData.fromJson(v));
       });
     }
   }
@@ -21,19 +21,19 @@ class GetJourneyModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class JourneyData {
-  String journeyCode;
-  int journeyId;
-  String journeyName;
-  int pipelineId;
-  String pipelineCode;
-  bool selected;
+  String? journeyCode;
+  int? journeyId;
+  String? journeyName;
+  int? pipelineId;
+  String? pipelineCode;
+  bool? selected;
 
   JourneyData(
       {this.journeyCode,

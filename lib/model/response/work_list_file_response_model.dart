@@ -1,5 +1,5 @@
 class WorkListFileResponseModel {
-  List<WorkListFileModel> data;
+  List<WorkListFileModel>? data;
 
   WorkListFileResponseModel({this.data});
 
@@ -7,7 +7,7 @@ class WorkListFileResponseModel {
     if (json != null) {
       data = <WorkListFileModel>[];
       json.forEach((v) {
-        data.add(new WorkListFileModel.fromJson(v));
+        data!.add(new WorkListFileModel.fromJson(v));
       });
     }
   }
@@ -15,16 +15,16 @@ class WorkListFileResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class WorkListFileModel {
-  int manageDocumentFileId;
-  String fileName;
-  String path;
+  int? manageDocumentFileId;
+  String? fileName;
+  String? path;
 
   WorkListFileModel({this.manageDocumentFileId, this.fileName, this.path});
 

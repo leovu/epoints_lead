@@ -7,20 +7,20 @@ import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 
 class CustomChip extends StatelessWidget {
-  final Color backgroundColor;
-  final String text;
-  final TextStyle style;
-  final Function onTap;
-  final String icon;
+  final Color? backgroundColor;
+  final String? text;
+  final TextStyle? style;
+  final Function? onTap;
+  final String? icon;
   final bool iconAsset;
-  final double radius;
-  final Color borderColor;
-  final Function onClose;
-  final EdgeInsetsGeometry padding;
-  final IconData icons;
+  final double? radius;
+  final Color? borderColor;
+  final Function? onClose;
+  final EdgeInsetsGeometry? padding;
+  final IconData? icons;
   final bool isExpand;
-  final String topIcon;
-  final double iconRadius;
+  final String? topIcon;
+  final double? iconRadius;
   final double iconSize;
 
   CustomChip({
@@ -68,15 +68,15 @@ class CustomChip extends StatelessWidget {
                 : 100.0
                 : 5.0))),
             border: borderColor == null?null:Border.all(
-                color: borderColor,
+                color: borderColor!,
                 width: 1.0,
                 style: BorderStyle.solid
             )
         ),
         padding: padding??(onClose == null?EdgeInsets.symmetric(
             vertical: 5.0,
-            horizontal: isExpand?2.0:AppSizes.maxPadding
-        ):EdgeInsets.only(left: AppSizes.minPadding)),
+            horizontal: isExpand?2.0:AppSizes.maxPadding!
+        ):EdgeInsets.only(left: AppSizes.minPadding!)),
         child: icons != null
             ? Icon(
           icons,
@@ -90,7 +90,7 @@ class CustomChip extends StatelessWidget {
                 CustomImageIcon(
                   icon: topIcon,
                   size: 30.0,
-                  color: style == null ? AppColors.white : style.color,
+                  color: style == null ? AppColors.white : style!.color,
                 ),
                 SizedBox(height: AppSizes.minPadding,)
               ],
@@ -99,7 +99,7 @@ class CustomChip extends StatelessWidget {
               mainAxisSize: isExpand?MainAxisSize.max:MainAxisSize.min,
               children: [
                 icon == null?Container():iconAsset?ImageIcon(
-                  AssetImage(icon),
+                  AssetImage(icon!),
                   size: iconSize,
                   color: AppColors.white,
                 ):CustomNetworkImage(
@@ -115,34 +115,34 @@ class CustomChip extends StatelessWidget {
                 if(onClose != null)
                   InkWell(
                     child: Container(
-                      padding: EdgeInsets.all(AppSizes.minPadding),
+                      padding: EdgeInsets.all(AppSizes.minPadding!),
                       child: Icon(
                         Icons.close,
                         color: AppColors.white,
                         size: 12.0,
                       ),
                     ),
-                    onTap: onClose,
+                    onTap: onClose as void Function()?,
                   )
               ],
             )
           ],
         ),
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }
 
 class CustomChipSelected extends StatelessWidget {
 
-  final String text;
-  final String icon;
+  final String? text;
+  final String? icon;
   final dynamic type;
   final dynamic selected;
   final bool isExpanded;
-  final Function onTap;
-  final bool enable;
+  final Function? onTap;
+  final bool? enable;
 
   CustomChipSelected({
     this.text,
@@ -179,7 +179,7 @@ class CustomChipSelected extends StatelessWidget {
       backgroundColor = Colors.transparent;
     }
 
-    Function _onTap = _enable ? onTap : null;
+    Function? _onTap = _enable ? onTap : null;
 
     return isExpanded?CustomChip(
       text: text,
@@ -206,11 +206,11 @@ class CustomChipSelected extends StatelessWidget {
 
 class ContainerChipSelected extends StatelessWidget {
 
-  final String title;
-  final EdgeInsetsGeometry titlePadding;
-  final Widget titleWidget;
-  final List<CustomChipSelected> children;
-  final Widget child;
+  final String? title;
+  final EdgeInsetsGeometry? titlePadding;
+  final Widget? titleWidget;
+  final List<CustomChipSelected>? children;
+  final Widget? child;
 
   ContainerChipSelected({this.title, this.titlePadding, this.titleWidget, this.children, this.child});
 
@@ -220,8 +220,8 @@ class ContainerChipSelected extends StatelessWidget {
       children: [
         Container(
           padding: titlePadding ?? EdgeInsets.symmetric(
-            horizontal: AppSizes.maxPadding,
-            vertical: AppSizes.minPadding
+            horizontal: AppSizes.maxPadding!,
+            vertical: AppSizes.minPadding!
           ),
           child: Row(
             children: [
@@ -239,19 +239,19 @@ class ContainerChipSelected extends StatelessWidget {
           Container(
             color: AppColors.white,
             padding: EdgeInsets.symmetric(
-                horizontal: AppSizes.maxPadding,
-                vertical: AppSizes.minPadding
+                horizontal: AppSizes.maxPadding!,
+                vertical: AppSizes.minPadding!
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Wrap(
-                  spacing: AppSizes.minPadding,
-                  runSpacing: AppSizes.minPadding,
-                  children: children,
+                  spacing: AppSizes.minPadding!,
+                  runSpacing: AppSizes.minPadding!,
+                  children: children!,
                 ),
                 child == null?Container():Container(
-                  padding: EdgeInsets.only(top: AppSizes.maxPadding),
+                  padding: EdgeInsets.only(top: AppSizes.maxPadding!),
                   child: child,
                 )
               ],

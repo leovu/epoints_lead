@@ -1,7 +1,7 @@
 class GetWardModelReponse {
-  int errorCode;
-  String errorDescription;
-  List<WardData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<WardData>? data;
 
   GetWardModelReponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class GetWardModelReponse {
     if (json['Data'] != null) {
       data = <WardData>[];
       json['Data'].forEach((v) {
-        data.add( WardData.fromJson(v));
+        data!.add( WardData.fromJson(v));
       });
     }
   }
@@ -21,17 +21,17 @@ class GetWardModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class WardData {
-  int wardid;
-  String type;
-  String name;
-  bool selected;
+  int? wardid;
+  String? type;
+  String? name;
+  bool? selected;
 
   WardData({this.wardid, this.type, this.name,  this.selected});
 

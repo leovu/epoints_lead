@@ -11,7 +11,7 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class ListStaffModal extends StatefulWidget {
-  const ListStaffModal({ Key key }) : super(key: key);
+  const ListStaffModal({ Key? key }) : super(key: key);
   
   @override
   _ListStaffModalState createState() => _ListStaffModalState();
@@ -21,9 +21,9 @@ class _ListStaffModalState extends State<ListStaffModal> {
  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  GetAllocatorModelReponse _model;
-  List<AllocatorData> allocators = <AllocatorData>[];
-  GetAllocatorModelReponse dataAllocator;
+  GetAllocatorModelReponse? _model;
+  List<AllocatorData>? allocators = <AllocatorData>[];
+  late GetAllocatorModelReponse dataAllocator;
 
   @override
   void initState() {
@@ -62,7 +62,7 @@ class _ListStaffModalState extends State<ListStaffModal> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.listBusiness),
+            AppLocalizations.text(LangKey.listBusiness)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,
@@ -109,7 +109,7 @@ class _ListStaffModalState extends State<ListStaffModal> {
             controller: _controller,
             separatorPadding: 5.0,
             separator: Container(height: 8.0,),
-            children: (_model != null) ? (_model.data.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
+            children: (_model != null) ? (_model!.data!.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
             // children: _listWidget(),
           ))
           : Container(),
@@ -120,14 +120,14 @@ class _ListStaffModalState extends State<ListStaffModal> {
 
   List<Widget> _listWidget() {
     return List.generate(
-        _model.data.length,
-        (index) => _buildStaffItem(_model.data[index], () {
+        _model!.data!.length,
+        (index) => _buildStaffItem(_model!.data![index], () {
 
         } ));
   }
 
   selectedStaff(int index) async {
-    List<AllocatorData> models = dataAllocator.data;
+    List<AllocatorData> models = dataAllocator.data!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
@@ -139,7 +139,7 @@ class _ListStaffModalState extends State<ListStaffModal> {
 
   Widget _buildStaffItem(AllocatorData item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         padding: EdgeInsets.only(left: 8.0, right: 8.0),
         height: 80.0,
@@ -160,14 +160,14 @@ class _ListStaffModalState extends State<ListStaffModal> {
             Container(
               child: Row(
                 children: [
-                  _buildAvatar(item.fullName),
+                  _buildAvatar(item.fullName!),
                   Container(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Text(
-                      item.fullName,
+                      item.fullName!,
                       style: TextStyle(
                           fontSize: 16.0,
-                          color: item.selected ? Colors.orange : Colors.black,
+                          color: item.selected! ? Colors.orange : Colors.black,
                           // color: AppColors.primaryColor,
                           fontWeight: FontWeight.w500),
                       maxLines: 1,
@@ -242,9 +242,9 @@ class _ListStaffModalState extends State<ListStaffModal> {
     );
   }
 
-  searchModel(List<AllocatorData> model, String value) {
+  searchModel(List<AllocatorData>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = allocators;
+      _model!.data = allocators;
       setState(() {});
     } else {
       try {
@@ -259,7 +259,7 @@ class _ListStaffModalState extends State<ListStaffModal> {
           }
           return result;
         }).toList();
-        _model.data = models;
+        _model!.data = models;
         setState(() {});
       } catch (_) {
         setState(() {});

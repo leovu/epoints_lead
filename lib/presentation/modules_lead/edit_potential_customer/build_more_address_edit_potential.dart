@@ -28,16 +28,16 @@ import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class BuildMoreAddressEditPotential extends StatefulWidget {
-  AddLeadModelRequest detailPotential;
-  List<ProvinceData> provinces = <ProvinceData>[];
-  AddLeadModelRequest requestModel = AddLeadModelRequest();
-  List<WorkListStaffModel> modelStaff = <WorkListStaffModel>[];
-  List<ListBusinessAreasItem> listBusinessData = [];
-  List<PositionData> positionData;
-  bool selectedPersonal;
+  AddLeadModelRequest? detailPotential;
+  List<ProvinceData>? provinces = <ProvinceData>[];
+  AddLeadModelRequest? requestModel = AddLeadModelRequest();
+  List<WorkListStaffModel>? modelStaff = <WorkListStaffModel>[];
+  List<ListBusinessAreasItem>? listBusinessData = [];
+  List<PositionData>? positionData;
+  bool? selectedPersonal;
 
   BuildMoreAddressEditPotential(
-      {Key key,
+      {Key? key,
       this.provinces,
       // this.allocatorData,
       this.requestModel,
@@ -83,18 +83,18 @@ class _BuildMoreAddressEditPotentialState
   ProvinceData provinceSeleted = ProvinceData();
   AllocatorData allocatorSelected = AllocatorData();
 
-  List<DistrictData> districts = <DistrictData>[];
-  DistrictData distictSelected = DistrictData();
-  List<WardData> wards = <WardData>[];
+  List<DistrictData>? districts = <DistrictData>[];
+  DistrictData? distictSelected = DistrictData();
+  List<WardData>? wards = <WardData>[];
 
-  ListBusinessAreasItem businessSelected;
+  ListBusinessAreasItem? businessSelected;
 
-  WardData wardSelected = WardData();
+  WardData? wardSelected = WardData();
 
-  PositionData positionSelected;
+  PositionData? positionSelected;
 
-  DateTime selectedBirthDay;
-  DateTime selectedEstablishDate;
+  DateTime? selectedBirthDay;
+  DateTime? selectedEstablishDate;
 
   List<ListCustomLeadItems> businessFocalPointData = <ListCustomLeadItems>[];
   ListCustomLeadItems businessFocalPointSeleted = ListCustomLeadItems();
@@ -130,11 +130,11 @@ class _BuildMoreAddressEditPotentialState
       _zaloText.text = widget.detailPotential?.zalo ?? "";
       _fanpageFBText.text = widget.detailPotential?.fanpage ?? "";
       _emailContactPersonText.text = widget.detailPotential?.contactEmail ?? "";
-      _fullNameText.text = widget.detailPotential.contactFullName ?? "";
+      _fullNameText.text = widget.detailPotential!.contactFullName ?? "";
       _phoneNumberText.text = widget.detailPotential?.contactPhone ?? "";
-      _addressContactText.text = widget.detailPotential.contactAddress ?? "";
+      _addressContactText.text = widget.detailPotential!.contactAddress ?? "";
       _numberOfEmployeesText.text =
-          "${widget.detailPotential.employees ?? ""}";
+          "${widget.detailPotential!.employees ?? ""}";
 
       // businessFocalPointSeleted = ListCustomLeadItems(
       //     customerLeadCode: widget.detailPotential?.businessClue ?? "");
@@ -172,8 +172,8 @@ class _BuildMoreAddressEditPotentialState
       // }
 
       try {
-        var item = widget.listBusinessData.firstWhere((element) =>
-            element.createdBy == widget.detailPotential.bussinessId);
+        var item = widget.listBusinessData!.firstWhere((element) =>
+            element.createdBy == widget.detailPotential!.bussinessId);
         if (item != null) {
           item.selected = true;
           businessSelected = item;
@@ -189,8 +189,8 @@ class _BuildMoreAddressEditPotentialState
 
 
       try {
-        var item = widget.positionData.firstWhere((element) =>
-            element.staffTitleName.toLowerCase() == widget.detailPotential.position.toLowerCase());
+        var item = widget.positionData!.firstWhere((element) =>
+            element.staffTitleName!.toLowerCase() == widget.detailPotential!.position!.toLowerCase());
         if (item != null) {
           item.selected = true;
           positionSelected = item;
@@ -198,8 +198,8 @@ class _BuildMoreAddressEditPotentialState
       } catch (e) {}
 
       try {
-        var item = widget.provinces.firstWhere((element) =>
-            (widget.detailPotential.provinceId ?? 0) == element.provinceid);
+        var item = widget.provinces!.firstWhere((element) =>
+            (widget.detailPotential!.provinceId ?? 0) == element.provinceid);
         if (item != null) {
           item.selected = true;
           provinceSeleted = item;
@@ -212,8 +212,8 @@ class _BuildMoreAddressEditPotentialState
         districts = dataDistrict.data;
 
         try {
-          var item = districts.firstWhere((element) =>
-              (widget.detailPotential.districtId ?? 0) == element.districtid);
+          var item = districts!.firstWhere((element) =>
+              (widget.detailPotential!.districtId ?? 0) == element.districtid);
           if (item != null) {
             item.selected = true;
             distictSelected = item;
@@ -222,13 +222,13 @@ class _BuildMoreAddressEditPotentialState
       }
 
       var wardData =
-          await LeadConnection.getWard(context, distictSelected.districtid);
+          await LeadConnection.getWard(context, distictSelected!.districtid);
       if (wardData != null) {
         wards = wardData.data;
 
         try {
-          var item = wards.firstWhere((element) =>
-              (widget.detailPotential.wardId ?? 0) == element.wardid);
+          var item = wards!.firstWhere((element) =>
+              (widget.detailPotential!.wardId ?? 0) == element.wardid);
           if (item != null) {
             item.selected = true;
             wardSelected = item;
@@ -236,18 +236,18 @@ class _BuildMoreAddressEditPotentialState
         } catch (e) {}
       }
 
-      if (widget.detailPotential.birthday != "") {
-        if (widget.detailPotential.customerType == "personal") {
-          selectedBirthDay = DateTime.parse(widget.detailPotential.birthday);
+      if (widget.detailPotential!.birthday != "") {
+        if (widget.detailPotential!.customerType == "personal") {
+          selectedBirthDay = DateTime.parse(widget.detailPotential!.birthday!);
 
           _birthdayText.text =
-              DateFormat("dd/MM/yyyy").format(selectedBirthDay).toString();
+              DateFormat("dd/MM/yyyy").format(selectedBirthDay!).toString();
         } else {
           selectedEstablishDate =
-              DateTime.parse(widget.detailPotential.birthday);
+              DateTime.parse(widget.detailPotential!.birthday!);
 
           _establishDateText.text =
-              DateFormat("dd/MM/yyyy").format(selectedEstablishDate).toString();
+              DateFormat("dd/MM/yyyy").format(selectedEstablishDate!).toString();
         }
       }
 
@@ -260,7 +260,7 @@ class _BuildMoreAddressEditPotentialState
   @override
   Widget build(BuildContext context) {
     (selectedBirthDay != null || selectedEstablishDate != null)
-        ? widget.detailPotential.birthday = widget.selectedPersonal
+        ? widget.detailPotential!.birthday = widget.selectedPersonal!
             ? _birthdayText.text
             : _establishDateText.text
         : false;
@@ -274,7 +274,7 @@ class _BuildMoreAddressEditPotentialState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                AppLocalizations.text(LangKey.moreInformation),
+                AppLocalizations.text(LangKey.moreInformation)!,
                 style: TextStyle(
                     fontSize: 16.0,
                     color: const Color(0xFF0067AC),
@@ -283,7 +283,7 @@ class _BuildMoreAddressEditPotentialState
               showMoreAll
                   ? InkWell(
                       child: Text(
-                        AppLocalizations.text(LangKey.collapse),
+                        AppLocalizations.text(LangKey.collapse)!,
                         style: TextStyle(
                             fontSize: 16.0,
                             color: const Color(0xFF0067AC),
@@ -302,7 +302,7 @@ class _BuildMoreAddressEditPotentialState
           Container(
             height: 16.0,
           ),
-          widget.selectedPersonal
+          widget.selectedPersonal!
               ? sexInfo(genderSelected?.genderID ?? 0)
               : _buildTextField(
                   AppLocalizations.text(LangKey.businessAreas),
@@ -322,12 +322,12 @@ class _BuildMoreAddressEditPotentialState
                     widget.listBusinessData = listBusiness;
 
                     try {
-                      var result = widget.listBusinessData
-                          .firstWhere((element) => element.selected);
+                      var result = widget.listBusinessData!
+                          .firstWhere((element) => element.selected!);
                       if (result != null) {
                         businessSelected = result;
-                        widget.detailPotential.bussinessId =
-                            businessSelected.createdBy;
+                        widget.detailPotential!.bussinessId =
+                            businessSelected!.createdBy;
                       }
                     } catch (e) {}
 
@@ -336,7 +336,7 @@ class _BuildMoreAddressEditPotentialState
                   }
                 }),
 
-          widget.selectedPersonal
+          widget.selectedPersonal!
               ? _buildTextField(
                   AppLocalizations.text(LangKey.choose_birth_day),
                   _birthdayText.text ?? "",
@@ -359,7 +359,7 @@ class _BuildMoreAddressEditPotentialState
           // _buildTextField(AppLocalizations.text(LangKey.email), "",
           //     Assets.iconEmail, false, false, true,
           //     fillText: _emailText, focusNode: _emailFocusNode),
-          !widget.selectedPersonal
+          !widget.selectedPersonal!
               ? _buildTextField(AppLocalizations.text(LangKey.numberEmployees),
                   "", Assets.iconNumberEmployees, false, false, true,
                   fillText: _numberOfEmployeesText,
@@ -376,7 +376,7 @@ class _BuildMoreAddressEditPotentialState
               true,
               false, ontap: () async {
             FocusScope.of(context).unfocus();
-            ProvinceData province = await showModalBottomSheet(
+            ProvinceData? province = await showModalBottomSheet(
                 context: context,
                 useRootNavigator: true,
                 isScrollControlled: true,
@@ -399,7 +399,7 @@ class _BuildMoreAddressEditPotentialState
                 _addressText.text = "";
               }
               provinceSeleted = province;
-              widget.detailPotential.provinceId = provinceSeleted.provinceid;
+              widget.detailPotential!.provinceId = provinceSeleted.provinceid;
               LeadConnection.showLoading(context);
               var dataDistrict = await LeadConnection.getDistrict(
                   context, provinceSeleted.provinceid);
@@ -424,7 +424,7 @@ class _BuildMoreAddressEditPotentialState
                     false, ontap: () async {
                   print("quận/ huyện");
                   FocusScope.of(context).unfocus();
-                  DistrictData distict = await showModalBottomSheet(
+                  DistrictData? distict = await showModalBottomSheet(
                       context: context,
                       useRootNavigator: true,
                       isScrollControlled: true,
@@ -447,10 +447,10 @@ class _BuildMoreAddressEditPotentialState
                       _addressText.text = "";
                     }
                     distictSelected = distict;
-                    widget.detailPotential.districtId =
-                        distictSelected.districtid;
+                    widget.detailPotential!.districtId =
+                        distictSelected!.districtid;
                     var wardData = await LeadConnection.getWard(
-                        context, distictSelected.districtid);
+                        context, distictSelected!.districtid);
                     if (wardData != null) {
                       wards = wardData.data;
                     }
@@ -475,7 +475,7 @@ class _BuildMoreAddressEditPotentialState
                       false, ontap: () async {
                     print("phường xã");
 
-                    WardData ward = await showModalBottomSheet(
+                    WardData? ward = await showModalBottomSheet(
                         context: context,
                         useRootNavigator: true,
                         isScrollControlled: true,
@@ -494,14 +494,14 @@ class _BuildMoreAddressEditPotentialState
                         });
                     if (ward != null) {
                       wardSelected = ward;
-                      widget.detailPotential.wardId = wardSelected.wardid;
+                      widget.detailPotential!.wardId = wardSelected!.wardid;
 
-                      String wards = (wardSelected.name != null) ? "${wardSelected.name}, "  : "";
-                String district = (distictSelected.name != null) ? "${distictSelected.name}, "  : "";
+                      String wards = (wardSelected!.name != null) ? "${wardSelected!.name}, "  : "";
+                String district = (distictSelected!.name != null) ? "${distictSelected!.name}, "  : "";
                 String provine = (provinceSeleted.name != null) ? "${provinceSeleted.name}, "  : "";
                 _addressText.text = wards + district + provine;
 
-                widget.detailPotential.address = _addressText.text;
+                widget.detailPotential!.address = _addressText.text;
 
                       setState(() {});
                     }
@@ -527,7 +527,7 @@ class _BuildMoreAddressEditPotentialState
                       children: [
                         Divider(),
                         Text(
-                          AppLocalizations.text(LangKey.showMore),
+                          AppLocalizations.text(LangKey.showMore)!,
                           style: TextStyle(
                               fontSize: 16.0,
                               color: const Color(0xFF0067AC),
@@ -559,7 +559,7 @@ class _BuildMoreAddressEditPotentialState
     );
     if (position != null) {
       positionSelected = position;
-      widget.detailPotential.position = positionSelected.staffTitleName;
+      widget.detailPotential!.position = positionSelected!.staffTitleName;
       setState(() {});
     }
   }
@@ -590,7 +590,7 @@ class _BuildMoreAddressEditPotentialState
               onTapConfirm: () {
                 selectedBirthDay = selectedDate;
                 _birthdayText.text = DateFormat("dd/MM/yyyy")
-                    .format(selectedBirthDay)
+                    .format(selectedBirthDay!)
                     .toString();
                 // widget.filterScreenModel.fromDate_created_at = selectedDate;
 
@@ -629,7 +629,7 @@ class _BuildMoreAddressEditPotentialState
               onTapConfirm: () {
                 selectedEstablishDate = selectedDate;
                 _establishDateText.text = DateFormat("dd/MM/yyyy")
-                    .format(selectedEstablishDate)
+                    .format(selectedEstablishDate!)
                     .toString();
                 // widget.filterScreenModel.fromDate_created_at = selectedDate;
 
@@ -737,13 +737,13 @@ class _BuildMoreAddressEditPotentialState
             Assets.iconFanpage, false, false, true,
             fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode),
 
-        !widget.selectedPersonal
+        !widget.selectedPersonal!
             ? Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 10.0),
                   Text(
-                    AppLocalizations.text(LangKey.contactInformation),
+                    AppLocalizations.text(LangKey.contactInformation)!,
                     style: TextStyle(
                         fontSize: AppTextSizes.size16,
                         color: const Color(0xFF0067AC),
@@ -783,7 +783,7 @@ class _BuildMoreAddressEditPotentialState
                       false, ontap: () async {
                     FocusScope.of(context).unfocus();
 
-                    if (widget.positionData == null || widget.positionData.length == 0) {
+                    if (widget.positionData == null || widget.positionData!.length == 0) {
                       LeadConnection.showLoading(context);
                       var positions = await LeadConnection.getPosition(context);
                       Navigator.of(context).pop();
@@ -831,7 +831,7 @@ class _BuildMoreAddressEditPotentialState
                 Container(
                   margin: const EdgeInsets.only(right: 10.0),
                   child: Text(
-                    AppLocalizations.text(LangKey.sex),
+                    AppLocalizations.text(LangKey.sex)!,
                     style: AppTextStyles.style15BlackNormal,
                     maxLines: 1,
                   ),
@@ -863,7 +863,7 @@ class _BuildMoreAddressEditPotentialState
                         top: 5.0, bottom: 5.0, left: 8.0, right: 8.0),
                     child: Center(
                       child: Text(
-                        AppLocalizations.text(LangKey.male),
+                        AppLocalizations.text(LangKey.male)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
                             color: (genderSelected?.genderID == 0)
@@ -889,7 +889,7 @@ class _BuildMoreAddressEditPotentialState
                     padding: EdgeInsets.only(
                         top: 5.0, bottom: 5.0, left: 8.0, right: 8.0),
                     child: Text(
-                      AppLocalizations.text(LangKey.female),
+                      AppLocalizations.text(LangKey.female)!,
                       style: TextStyle(
                           fontSize: AppTextSizes.size15,
                           color: (genderSelected?.genderID == 1)
@@ -916,7 +916,7 @@ class _BuildMoreAddressEditPotentialState
                         top: 3.0, bottom: 3.0, left: 8.0, right: 8.0),
                     child: Center(
                       child: Text(
-                        AppLocalizations.text(LangKey.other),
+                        AppLocalizations.text(LangKey.other)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
                             color: (genderSelected?.genderID == 2)
@@ -942,21 +942,21 @@ class _BuildMoreAddressEditPotentialState
     }
     genderData[index].selected = true;
     genderSelected = genderData[index];
-    widget.detailPotential.gender = genderSelected.genderEnName;
+    widget.detailPotential!.gender = genderSelected.genderEnName;
 
     setState(() {});
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

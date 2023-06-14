@@ -1,6 +1,6 @@
 class WorkUploadFileDocumentRequestModel {
-  int manageWorkId;
-  String path;
+  int? manageWorkId;
+  String? path;
 
   WorkUploadFileDocumentRequestModel({this.manageWorkId, this.path});
 

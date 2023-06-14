@@ -16,13 +16,13 @@ class HTTPConnection {
   Future<ResponseData> upload(String path, MultipartFileModel model) async {
     final uri = Uri.parse('$domain$path');
     var request = http.MultipartRequest('POST', uri);
-    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'lang': LeadConnection.locale.languageCode, 'branch-id':'1'});
+    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'lang': LeadConnection.locale!.languageCode, 'branch-id':'1'});
     request.files.add(
       http.MultipartFile(
-        model.name,
-        model.file.readAsBytes().asStream(),
-        model.file.lengthSync(),
-        filename: model.file.path.split("/").last,
+        model.name!,
+        model.file!.readAsBytes().asStream(),
+        model.file!.lengthSync(),
+        filename: model.file!.path.split("/").last,
       ),
     );
     if (kDebugMode) {
@@ -91,7 +91,7 @@ class HTTPConnection {
   
   Future<ResponseData>post(String path, Map<String, dynamic> body) async {
     final uri = Uri.parse('$domain$path');
-    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': LeadConnection.locale.languageCode};
+    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': LeadConnection.locale!.languageCode};
     // if(LeadConnection.account != null) {
       // headers['Authorization'] = 'Bearer ${LeadConnection.account.accessToken}';
       headers['Authorization'] = 'Bearer ${asscessToken}';
@@ -145,14 +145,14 @@ class HTTPConnection {
 }
 
 class ResponseData {
-   bool isSuccess;
-   Map<String,dynamic> data;
-   List<dynamic> datas;
+   late bool isSuccess;
+   Map<String,dynamic>? data;
+   List<dynamic>? datas;
 }
 
 class MultipartFileModel {
-  File file;
-  String name;
+  File? file;
+  String? name;
 
   MultipartFileModel({this.file, this.name});
 

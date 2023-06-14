@@ -1,7 +1,7 @@
 class GetDealModelReponse {
-  int errorCode;
-  String errorDescription;
-  List<Data> data;
+  int? errorCode;
+  String? errorDescription;
+  List<Data>? data;
 
   GetDealModelReponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class GetDealModelReponse {
     if (json['Data'] != null) {
       data = <Data>[];
       json['Data'].forEach((v) {
-        data.add(new Data.fromJson(v));
+        data!.add(new Data.fromJson(v));
       });
     }
   }
@@ -21,17 +21,17 @@ class GetDealModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Data {
-  int dealId;
-  String dealCode;
-  String dealName;
-  String customerCode;
+  int? dealId;
+  String? dealCode;
+  String? dealName;
+  String? customerCode;
 
   Data({this.dealId, this.dealCode, this.dealName, this.customerCode});
 

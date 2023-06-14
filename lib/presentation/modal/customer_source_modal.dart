@@ -9,8 +9,8 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
 class CustomerSourceModal extends StatefulWidget {
-  List<CustomerOptionSource> sources = <CustomerOptionSource>[];
-   CustomerSourceModal({ Key key , this.sources}) : super(key: key);
+  List<CustomerOptionSource>? sources = <CustomerOptionSource>[];
+   CustomerSourceModal({ Key? key , this.sources}) : super(key: key);
 
   @override
   _CustomerSourceModalState createState() => _CustomerSourceModalState();
@@ -23,7 +23,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.customerSource),
-      widget: (widget.sources.length > 0) ? CustomListView(
+      widget: (widget.sources!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),
                     children: (widget.sources ?? [])
@@ -34,7 +34,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
                           element?.sourceName ?? "",
                               () => selectedItem( index),
                           isBorder:
-                          index < widget.sources.length - 1,
+                          index < widget.sources!.length - 1,
                           isSelected: element.selected,
                         )))
                         .values
@@ -47,7 +47,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
 
 
   selectedItem(int index) async {
-    List<CustomerOptionSource> models = widget.sources;
+    List<CustomerOptionSource> models = widget.sources!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

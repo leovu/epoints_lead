@@ -1,5 +1,5 @@
 class WorkListCommentRequestModel {
-  int customerLeadID;
+  int? customerLeadID;
 
   WorkListCommentRequestModel({this.customerLeadID});
 

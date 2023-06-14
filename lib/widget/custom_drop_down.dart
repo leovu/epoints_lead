@@ -6,23 +6,23 @@ import 'package:lead_plugin_epoint/widget/custom_inkwell.dart';
 
 class CustomDropDown extends StatelessWidget {
 
-  final String suffixIcon;
-  final Color suffixIconColor;
-  final double suffixSize;
-  final Color backgroundColor;
-  final Function onSuffixIconTap;
-  final String prefixIcon;
-  final Color prefixIconColor;
-  final Function onPrefixIconTap;
-  final Function onTap;
-  final Widget suffixChild;
-  final TextOverflow overflow;
-  final double suffixChildMargin;
+  final String? suffixIcon;
+  final Color? suffixIconColor;
+  final double? suffixSize;
+  final Color? backgroundColor;
+  final Function? onSuffixIconTap;
+  final String? prefixIcon;
+  final Color? prefixIconColor;
+  final Function? onPrefixIconTap;
+  final Function? onTap;
+  final Widget? suffixChild;
+  final TextOverflow? overflow;
+  final double? suffixChildMargin;
 
-  final TextStyle hintStyle;
+  final TextStyle? hintStyle;
 
-  final String hintText;
-  const CustomDropDown({Key key, this.suffixIcon, this.suffixIconColor, this.suffixSize, this.backgroundColor, this.onSuffixIconTap, this.prefixIcon, this.prefixIconColor, this.onPrefixIconTap, this.hintText, this.onTap, this.suffixChild, this.hintStyle, this.overflow, this.suffixChildMargin}) : super(key: key);
+  final String? hintText;
+  const CustomDropDown({Key? key, this.suffixIcon, this.suffixIconColor, this.suffixSize, this.backgroundColor, this.onSuffixIconTap, this.prefixIcon, this.prefixIconColor, this.onPrefixIconTap, this.hintText, this.onTap, this.suffixChild, this.hintStyle, this.overflow, this.suffixChildMargin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class CustomDropDown extends StatelessWidget {
                     color: prefixIconColor ?? AppColors.primaryColor,
                   ),
                 ),
-                onTap: onPrefixIconTap ?? onTap,
+                onTap: onPrefixIconTap as void Function()? ?? onTap as void Function()?,
               ),
             Expanded(
                 child: Container(

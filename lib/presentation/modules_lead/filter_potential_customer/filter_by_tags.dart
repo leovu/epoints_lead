@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 
 class FilterByTags extends StatefulWidget {
-  List<TagData> tagDatas = <TagData>[];
-  FilterByTags({Key key, this.tagDatas}) : super(key: key);
+  List<TagData>? tagDatas = <TagData>[];
+  FilterByTags({Key? key, this.tagDatas}) : super(key: key);
 
   @override
   _FilterByTagsState createState() => _FilterByTagsState();
@@ -17,9 +17,9 @@ class _FilterByTagsState extends State<FilterByTags> {
             margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
             child: Wrap(
               children: List.generate(
-                  widget.tagDatas.length,
-                  (index) => _optionItem(widget.tagDatas[index].name,
-                          widget.tagDatas[index].selected, () {
+                  widget.tagDatas!.length,
+                  (index) => _optionItem(widget.tagDatas![index].name,
+                          widget.tagDatas![index].selected!, () {
                         selectedTag(index);
                       })),
               spacing: 20,
@@ -29,9 +29,9 @@ class _FilterByTagsState extends State<FilterByTags> {
         : Container();
   }
 
-  Widget _optionItem(String name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -48,7 +48,7 @@ class _FilterByTagsState extends State<FilterByTags> {
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(
                           color: Color(0xFF0067AC),
                           fontWeight: FontWeight.w600),
@@ -64,7 +64,7 @@ class _FilterByTagsState extends State<FilterByTags> {
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(color: Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -75,7 +75,7 @@ class _FilterByTagsState extends State<FilterByTags> {
   }
 
   selectedTag(int index) async {
-    List<TagData> models = widget.tagDatas;
+    List<TagData> models = widget.tagDatas!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

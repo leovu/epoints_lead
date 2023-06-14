@@ -1,8 +1,8 @@
 class WorkCreateCommentRequestModel {
-  int customerLeadId;
-  int customerLeadParentCommentId;
-  String message;
-  String path;
+  int? customerLeadId;
+  int? customerLeadParentCommentId;
+  String? message;
+  String? path;
 
   WorkCreateCommentRequestModel(
       {this.customerLeadId, this.customerLeadParentCommentId, this.message, this.path});

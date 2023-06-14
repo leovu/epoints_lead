@@ -1,32 +1,32 @@
 class AddWorkRequestModel {
-  String manageWorkTitle;
-  String manageWorkCustomerType;
-  int manageTypeWorkId;
+  String? manageWorkTitle;
+  String? manageWorkCustomerType;
+  int? manageTypeWorkId;
   // String date_start;
   // String date_finish;
-  String from_date;
-  String to_date;
+  String? from_date;
+  String? to_date;
 
-  int time;
-  String timeType;
-  int processorId;
-  int approveId;
-  RemindWork remindWork;
-  int progress;
-  List<StaffSupport> staffSupport;
-  int parentId;
-  String description;
-  int manageProjectId;
-  int customerId;
-  List<ListTag> listTag;
-  String typeCardWork;
-  int priority;
-  int manageStatusId;
-  int isApproveId;
-  RepeatWork repeatWork;
-  String createObjectType;
-  int createObjectId;
-  List<String> listDocument;
+  int? time;
+  String? timeType;
+  int? processorId;
+  int? approveId;
+  RemindWork? remindWork;
+  int? progress;
+  List<StaffSupport>? staffSupport;
+  int? parentId;
+  String? description;
+  int? manageProjectId;
+  int? customerId;
+  List<ListTag>? listTag;
+  String? typeCardWork;
+  int? priority;
+  int? manageStatusId;
+  int? isApproveId;
+  RepeatWork? repeatWork;
+  String? createObjectType;
+  int? createObjectId;
+  List<String>? listDocument;
 
   AddWorkRequestModel(
       {this.manageWorkTitle,
@@ -78,7 +78,7 @@ class AddWorkRequestModel {
     if (json['staff_support'] != null) {
       staffSupport = <StaffSupport>[];
       json['staff_support'].forEach((v) {
-        staffSupport.add(new StaffSupport.fromJson(v));
+        staffSupport!.add(new StaffSupport.fromJson(v));
       });
     }
     parentId = json['parent_id'];
@@ -88,7 +88,7 @@ class AddWorkRequestModel {
     if (json['list_tag'] != null) {
       listTag = <ListTag>[];
       json['list_tag'].forEach((v) {
-        listTag.add(new ListTag.fromJson(v));
+        listTag!.add(new ListTag.fromJson(v));
       });
     }
     typeCardWork = json['type_card_work'];
@@ -120,26 +120,26 @@ class AddWorkRequestModel {
     data['processor_id'] = this.processorId;
     data['approve_id'] = this.approveId;
     if (this.remindWork != null) {
-      data['remind_work'] = this.remindWork.toJson();
+      data['remind_work'] = this.remindWork!.toJson();
     }
     data['progress'] = this.progress;
     if (this.staffSupport != null) {
       data['staff_support'] =
-          this.staffSupport.map((v) => v.toJson()).toList();
+          this.staffSupport!.map((v) => v.toJson()).toList();
     }
     data['parent_id'] = this.parentId;
     data['description'] = this.description;
     data['manage_project_id'] = this.manageProjectId;
     data['customer_id'] = this.customerId;
     if (this.listTag != null) {
-      data['list_tag'] = this.listTag.map((v) => v.toJson()).toList();
+      data['list_tag'] = this.listTag!.map((v) => v.toJson()).toList();
     }
     data['type_card_work'] = this.typeCardWork;
     data['priority'] = this.priority;
     data['manage_status_id'] = this.manageStatusId;
     data['is_approve_id'] = this.isApproveId;
     if (this.repeatWork != null) {
-      data['repeat_work'] = this.repeatWork.toJson();
+      data['repeat_work'] = this.repeatWork!.toJson();
     }
     data['create_object_type'] = this.createObjectType;
     data['create_object_id'] = this.createObjectId;
@@ -150,10 +150,10 @@ class AddWorkRequestModel {
 }
 
 class RemindWork {
-  String dateRemind;
-  int time;
-  String timeType;
-  String description;
+  String? dateRemind;
+  int? time;
+  String? timeType;
+  String? description;
 
   RemindWork({this.dateRemind, this.time, this.timeType, this.description});
 
@@ -175,7 +175,7 @@ class RemindWork {
 }
 
 class StaffSupport {
-  int staffId;
+  int? staffId;
 
   StaffSupport({this.staffId});
 
@@ -191,7 +191,7 @@ class StaffSupport {
 }
 
 class ListTag {
-  int manageTagId;
+  int? manageTagId;
 
   ListTag({this.manageTagId});
 
@@ -207,11 +207,11 @@ class ListTag {
 }
 
 class RepeatWork {
-  String repeatType;
-  String repeatEnd;
-  String repeatEndFullTime;
-  String repeatTime;
-  List<ListDate> listDate;
+  String? repeatType;
+  String? repeatEnd;
+  String? repeatEndFullTime;
+  String? repeatTime;
+  List<ListDate>? listDate;
 
   RepeatWork(
       {this.repeatType,
@@ -228,7 +228,7 @@ class RepeatWork {
     if (json['list_date'] != null) {
       listDate = <ListDate>[];
       json['list_date'].forEach((v) {
-        listDate.add(new ListDate.fromJson(v));
+        listDate!.add(new ListDate.fromJson(v));
       });
     }
   }
@@ -240,14 +240,14 @@ class RepeatWork {
     data['repeat_end_full_time'] = this.repeatEndFullTime;
     data['repeat_time'] = this.repeatTime;
     if (this.listDate != null) {
-      data['list_date'] = this.listDate.map((v) => v.toJson()).toList();
+      data['list_date'] = this.listDate!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ListDate {
-  int date;
+  int? date;
 
   ListDate({this.date});
 

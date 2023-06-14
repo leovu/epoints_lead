@@ -1,7 +1,7 @@
 class MessageLeadResponseModel {
-  int errorCode;
-  String errorDescription;
-  List<MessageLeadData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<MessageLeadData>? data;
 
   MessageLeadResponseModel({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class MessageLeadResponseModel {
     if (json['Data'] != null) {
       data = <MessageLeadData>[];
       json['Data'].forEach((v) {
-        data.add(new MessageLeadData.fromJson(v));
+        data!.add(new MessageLeadData.fromJson(v));
       });
     }
   }
@@ -21,22 +21,22 @@ class MessageLeadResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class MessageLeadData {
-  int customerLeadCommentId;
-  int customerLeadId;
-  int parentCustomerLeadCommentId;
-  String message;
-  int staffId;
-  String createdByName;
-  String createdAt;
-  int createdById;
-  String path;
+  int? customerLeadCommentId;
+  int? customerLeadId;
+  int? parentCustomerLeadCommentId;
+  String? message;
+  int? staffId;
+  String? createdByName;
+  String? createdAt;
+  int? createdById;
+  String? path;
 
   MessageLeadData(
       {this.customerLeadCommentId,

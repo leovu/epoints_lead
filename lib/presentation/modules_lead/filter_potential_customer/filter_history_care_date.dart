@@ -10,11 +10,11 @@ import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
 class FilterHistoryCareDate extends StatefulWidget {
-  FilterScreenModel filterScreenModel = FilterScreenModel();
-  List<HistoryCareDateModel> historyCareDateOptions = <HistoryCareDateModel>[];
-   String id_history_care_date;
+  FilterScreenModel? filterScreenModel = FilterScreenModel();
+  List<HistoryCareDateModel>? historyCareDateOptions = <HistoryCareDateModel>[];
+   String? id_history_care_date;
   FilterHistoryCareDate(
-      {Key key, this.filterScreenModel, this.historyCareDateOptions,this.id_history_care_date})
+      {Key? key, this.filterScreenModel, this.historyCareDateOptions,this.id_history_care_date})
       : super(key: key);
 
   @override
@@ -23,8 +23,8 @@ class FilterHistoryCareDate extends StatefulWidget {
 
 class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
 
-  DateTime _fromDate;
-  DateTime _toDate;
+  DateTime? _fromDate;
+  DateTime? _toDate;
   DateTime _now = DateTime.now();
   final TextEditingController _fromDateText = TextEditingController();
   final TextEditingController _toDateText = TextEditingController();
@@ -33,26 +33,26 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
   void initState() {
     super.initState();
 
-    if (widget.filterScreenModel.fromDate_history_care_date != null) {
+    if (widget.filterScreenModel!.fromDate_history_care_date != null) {
       _fromDateText.text = DateFormat("dd/MM/yyyy")
-          .format(widget.filterScreenModel.fromDate_history_care_date);
-      _fromDate = widget.filterScreenModel.fromDate_history_care_date;
+          .format(widget.filterScreenModel!.fromDate_history_care_date!);
+      _fromDate = widget.filterScreenModel!.fromDate_history_care_date;
     }
 
-    if (widget.filterScreenModel.toDate_history_care_date != null) {
+    if (widget.filterScreenModel!.toDate_history_care_date != null) {
       _toDateText.text = DateFormat("dd/MM/yyyy")
-          .format(widget.filterScreenModel.toDate_history_care_date);
-      _toDate = widget.filterScreenModel.toDate_history_care_date;
+          .format(widget.filterScreenModel!.toDate_history_care_date!);
+      _toDate = widget.filterScreenModel!.toDate_history_care_date;
     }
 
-    if (widget.filterScreenModel.id_history_care_date != "") {
-      for (int i = 0; i < widget.historyCareDateOptions.length; i++) {
-        if (widget.historyCareDateOptions[i].historyCareDateID ==
-            int.parse(widget.filterScreenModel.id_history_care_date)) {
-          widget.historyCareDateOptions[i].selected = true;
-          widget.id_history_care_date =  "${widget.historyCareDateOptions[i].historyCareDateID}";
+    if (widget.filterScreenModel!.id_history_care_date != "") {
+      for (int i = 0; i < widget.historyCareDateOptions!.length; i++) {
+        if (widget.historyCareDateOptions![i].historyCareDateID ==
+            int.parse(widget.filterScreenModel!.id_history_care_date!)) {
+          widget.historyCareDateOptions![i].selected = true;
+          widget.id_history_care_date =  "${widget.historyCareDateOptions![i].historyCareDateID}";
         } else {
-          widget.historyCareDateOptions[i].selected = false;
+          widget.historyCareDateOptions![i].selected = false;
         }
       }
     } else {
@@ -79,10 +79,10 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                 margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
                 child: Wrap(
                   children: List.generate(
-                      widget.historyCareDateOptions.length,
+                      widget.historyCareDateOptions!.length,
                       (index) => _optionItem(
-                              widget.historyCareDateOptions[index].historyCareDateName,
-                              widget.historyCareDateOptions[index].selected, () {
+                              widget.historyCareDateOptions![index].historyCareDateName,
+                              widget.historyCareDateOptions![index].selected!, () {
                             selectedSource(index);
                           })),
                   spacing: 20,
@@ -95,7 +95,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                       children: [
                         // khung thời gian tự chọn
                         Text(
-                          AppLocalizations.text(LangKey.byHistoryCustomerCare),
+                          AppLocalizations.text(LangKey.byHistoryCustomerCare)!,
                           style: TextStyle(
                               fontSize: 15.0,
                               color: const Color(0xFF8E8E8E),
@@ -114,7 +114,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                                         8,
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.fromDate),
-                                     widget.id_history_care_date != "" ? _fromDateText : "", () {
+                                     widget.id_history_care_date != "" ? _fromDateText : "" as TextEditingController, () {
                                   _showFromDatePickerCreateDate();
                                 })),
                             Container(
@@ -132,7 +132,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                                         4,
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.toDate),
-                                    widget.id_history_care_date != "" ?  _toDateText : "", () {
+                                    widget.id_history_care_date != "" ?  _toDateText : "" as TextEditingController, () {
                                   _showToDatePickerCreateDate();
                                 }))
                           ],
@@ -146,7 +146,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
   }
 
   _showFromDatePickerCreateDate() {
-    DateTime selectedDate = widget.filterScreenModel.fromDate_history_care_date ??
+    DateTime selectedDate = widget.filterScreenModel!.fromDate_history_care_date ??
         _fromDate ??
         _toDate ??
         _now;
@@ -179,13 +179,13 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                 }
                 
                 _fromDate = selectedDate;
-                widget.filterScreenModel.fromDate_history_care_date = selectedDate;
+                widget.filterScreenModel!.fromDate_history_care_date = selectedDate;
 
                 _fromDateText.text =
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
-                widget.filterScreenModel.filterModel.careHistory =
-                    "${DateFormat("dd/MM/yyyy").format(_fromDate)} - ${DateFormat("dd/MM/yyyy").format(_toDate ?? _now)}";
-                print(widget.filterScreenModel.filterModel.careHistory);
+                widget.filterScreenModel!.filterModel!.careHistory =
+                    "${DateFormat("dd/MM/yyyy").format(_fromDate!)} - ${DateFormat("dd/MM/yyyy").format(_toDate ?? _now)}";
+                print(widget.filterScreenModel!.filterModel!.careHistory);
                 Navigator.of(context).pop();
               },
               haveBnConfirm: true,
@@ -196,10 +196,10 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
 
 _showToDatePickerCreateDate() {
     DateTime selectedDate = _toDate ?? _now;
-    DateTime maximumTime = _now;
+    DateTime? maximumTime = _now;
     if (_toDate?.year == _now.year &&
         _toDate?.month == _now.month &&
-        _toDate?.day > _now.day) maximumTime = _toDate;
+        (_toDate?.day ?? 0) > _now.day) maximumTime = _toDate;
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -227,11 +227,11 @@ _showToDatePickerCreateDate() {
                   Global.validateHistoryCareDate = true;
                 }
                 _toDate = selectedDate;
-                widget.filterScreenModel.toDate_history_care_date = selectedDate;
+                widget.filterScreenModel!.toDate_history_care_date = selectedDate;
                 _toDateText.text =
                     DateFormat("dd/MM/yyyy").format(selectedDate).toString();
-                widget.filterScreenModel.filterModel.careHistory = "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate)}";
-                print(widget.filterScreenModel.filterModel.careHistory);
+                widget.filterScreenModel!.filterModel!.careHistory = "${DateFormat("dd/MM/yyyy").format(_fromDate ?? _toDate ?? _now)} - ${DateFormat("dd/MM/yyyy").format(_toDate!)}";
+                print(widget.filterScreenModel!.filterModel!.careHistory);
                 Navigator.of(context).pop();
               },
               haveBnConfirm: true,
@@ -241,9 +241,9 @@ _showToDatePickerCreateDate() {
   }
 
   Widget _buildDatePicker(
-      String hintText, TextEditingController fillText, Function ontap) {
+      String? hintText, TextEditingController fillText, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: TextField(
         enabled: false,
         controller: fillText,
@@ -266,9 +266,9 @@ _showToDatePickerCreateDate() {
     );
   }
 
-  Widget _optionItem(String name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -285,7 +285,7 @@ _showToDatePickerCreateDate() {
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(
                           color: Color(0xFF0067AC),
                           fontWeight: FontWeight.w600),
@@ -301,7 +301,7 @@ _showToDatePickerCreateDate() {
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(color: Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -317,57 +317,57 @@ _showToDatePickerCreateDate() {
       _fromDateText.text = "";
       _toDateText.text = "";
 
-      widget.filterScreenModel.fromDate_history_care_date = null;
-      widget.filterScreenModel.toDate_history_care_date = null;
+      widget.filterScreenModel!.fromDate_history_care_date = null;
+      widget.filterScreenModel!.toDate_history_care_date = null;
       _fromDate = null;
       _toDate = null;
     } else {
       Global.validateHistoryCareDate = false;
     }
 
-    List<HistoryCareDateModel> models = widget.historyCareDateOptions;
+    List<HistoryCareDateModel> models = widget.historyCareDateOptions!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }
     models[index].selected = true;
     widget.id_history_care_date = "${models[index].historyCareDateID}";
-    widget.filterScreenModel.id_history_care_date = "${index}";
+    widget.filterScreenModel!.id_history_care_date = "${index}";
 
     switch (index) {
       case 0:
-        widget.filterScreenModel.filterModel.careHistory =
+        widget.filterScreenModel!.filterModel!.careHistory =
             "${DateFormat("dd/MM/yyyy").format(_now)} - ${DateFormat("dd/MM/yyyy").format(_now)}";
-        print(widget.filterScreenModel.filterModel.careHistory);
+        print(widget.filterScreenModel!.filterModel!.careHistory);
         break;
       case 1:
-        widget.filterScreenModel.filterModel.careHistory =
+        widget.filterScreenModel!.filterModel!.careHistory =
             "${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
-        print(widget.filterScreenModel.filterModel.careHistory);
+        print(widget.filterScreenModel!.filterModel!.careHistory);
         break;
       case 2:
-        widget.filterScreenModel.filterModel.careHistory =
+        widget.filterScreenModel!.filterModel!.careHistory =
             "${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 7)))} - ${DateFormat("dd/MM/yyyy").format(_now)}";
-        print(widget.filterScreenModel.filterModel.careHistory);
+        print(widget.filterScreenModel!.filterModel!.careHistory);
         break;
       case 3:
-        widget.filterScreenModel.filterModel.careHistory =
+        widget.filterScreenModel!.filterModel!.careHistory =
             "${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 31)))} - ${DateFormat("dd/MM/yyyy").format(_now.subtract(Duration(days: 1)))}";
-        print(widget.filterScreenModel.filterModel.careHistory);
+        print(widget.filterScreenModel!.filterModel!.careHistory);
         break;
       case 4:
-        widget.filterScreenModel.filterModel.careHistory =
+        widget.filterScreenModel!.filterModel!.careHistory =
             "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month + 1, 0).toString()))}";
-        print(widget.filterScreenModel.filterModel.careHistory);
+        print(widget.filterScreenModel!.filterModel!.careHistory);
         break;
       case 5:
         var lastmonth = _now.month - 1;
-        widget.filterScreenModel.filterModel.careHistory =
+        widget.filterScreenModel!.filterModel!.careHistory =
             "${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, _now.month - 1, 1).toString()))} - ${DateFormat("dd/MM/yyyy").format(DateTime.parse(DateTime(_now.year, lastmonth + 1, 0).toString()))}";
-        print(widget.filterScreenModel.filterModel.careHistory);
+        print(widget.filterScreenModel!.filterModel!.careHistory);
         break;
       case 6:
-        widget.filterScreenModel.filterModel.careHistory = "";
-        print(widget.filterScreenModel.filterModel.careHistory);
+        widget.filterScreenModel!.filterModel!.careHistory = "";
+        print(widget.filterScreenModel!.filterModel!.careHistory);
         break;
       default:
     }

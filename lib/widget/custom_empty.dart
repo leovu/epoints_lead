@@ -4,11 +4,11 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
 
 class CustomEmpty extends StatelessWidget {
-  final String title;
-  final String text;
-  final String image;
-  final EdgeInsetsGeometry padding;
-  final Function onTap;
+  final String? title;
+  final String? text;
+  final String? image;
+  final EdgeInsetsGeometry? padding;
+  final Function? onTap;
 
   CustomEmpty({this.title, this.text, this.image, this.padding, this.onTap});
 

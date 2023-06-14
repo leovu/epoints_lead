@@ -1,5 +1,5 @@
 class WorkListBranchResponseModel {
-  List<WorkListBranchModel> data;
+  List<WorkListBranchModel>? data;
 
   WorkListBranchResponseModel({this.data});
 
@@ -7,7 +7,7 @@ class WorkListBranchResponseModel {
     if (json['Data'] != null) {
       data = <WorkListBranchModel>[];
       json['Data'] .forEach((v) {
-        data.add(new WorkListBranchModel.fromJson(v));
+        data!.add(new WorkListBranchModel.fromJson(v));
       });
     }
   }
@@ -15,15 +15,15 @@ class WorkListBranchResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class WorkListBranchModel {
-  int branchId;
-  String branchName;
+  int? branchId;
+  String? branchName;
 
   WorkListBranchModel({this.branchId, this.branchName});
 

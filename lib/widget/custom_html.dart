@@ -4,8 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 class CustomHtml extends StatelessWidget {
 
-  final String html;
-  final ScrollPhysics physics;
+  final String? html;
+  final ScrollPhysics? physics;
 
   CustomHtml(this.html, {this.physics});
 
@@ -14,7 +14,7 @@ class CustomHtml extends StatelessWidget {
     return html == null?Container():SingleChildScrollView(
         physics: physics??AlwaysScrollableScrollPhysics(),
         child: HtmlWidget(
-          html,
+          html!,
           onTapUrl: (url) => launch(url),
         )
     );

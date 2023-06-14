@@ -1,5 +1,5 @@
 class WorkListStaffRequestModel {
-  int manageProjectId;
+  int? manageProjectId;
 
   WorkListStaffRequestModel({this.manageProjectId});
 

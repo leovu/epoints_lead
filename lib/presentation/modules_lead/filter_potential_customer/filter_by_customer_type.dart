@@ -5,8 +5,8 @@ import 'package:lead_plugin_epoint/model/customer_type.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_option_model_response.dart';
 
 class FilterByCustomerType extends StatefulWidget {
-  List<CustomerTypeModel> customerTypeData = <CustomerTypeModel>[];
-  FilterByCustomerType({Key key, this.customerTypeData}) : super(key: key);
+  List<CustomerTypeModel>? customerTypeData = <CustomerTypeModel>[];
+  FilterByCustomerType({Key? key, this.customerTypeData}) : super(key: key);
 
   @override
   _FilterByCustomerTypeState createState() => _FilterByCustomerTypeState();
@@ -20,10 +20,10 @@ class _FilterByCustomerTypeState extends State<FilterByCustomerType> {
             margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
             child: Wrap(
               children: List.generate(
-                  widget.customerTypeData.length,
+                  widget.customerTypeData!.length,
                   (index) => _optionItem(
-                          widget.customerTypeData[index].customerTypeName,
-                          widget.customerTypeData[index].selected, () {
+                          widget.customerTypeData![index].customerTypeName,
+                          widget.customerTypeData![index].selected!, () {
                         selectedSource(index);
                       })),
               spacing: 20,
@@ -33,9 +33,9 @@ class _FilterByCustomerTypeState extends State<FilterByCustomerType> {
         : Container();
   }
 
-  Widget _optionItem(String name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -52,7 +52,7 @@ class _FilterByCustomerTypeState extends State<FilterByCustomerType> {
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(
                           color: Color(0xFF0067AC),
                           fontWeight: FontWeight.w600),
@@ -68,7 +68,7 @@ class _FilterByCustomerTypeState extends State<FilterByCustomerType> {
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(color: Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -79,7 +79,7 @@ class _FilterByCustomerTypeState extends State<FilterByCustomerType> {
   }
 
   selectedSource(int index) async {
-    List<CustomerTypeModel> models = widget.customerTypeData;
+    List<CustomerTypeModel> models = widget.customerTypeData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

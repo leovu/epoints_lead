@@ -5,14 +5,14 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
 
 class CustomMenuBottomSheet extends StatelessWidget {
-  final Widget widget;
-  final String title;
+  final Widget? widget;
+  final String? title;
   final bool allowBack;
   final bool haveBnConfirm;
   final bool enableButton;
-  final String textConfirm;
-  final Function onTapConfirm;
-  final Function funcPop;
+  final String? textConfirm;
+  final Function? onTapConfirm;
+  final Function? funcPop;
   CustomMenuBottomSheet(
       {this.widget,
       this.title,
@@ -56,7 +56,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                         if (allowBack)
                           Opacity(
                             child: InkWell(
-                              onTap: funcPop?? () => Navigator.of(context).pop(),
+                              onTap: funcPop == null ? () => Navigator.of(context).pop() : () => funcPop,
                               child: Container(
                                 width: 48.0,
                                 height: 48.0,
@@ -88,7 +88,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                         child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Flexible(child: widget),
+                        Flexible(child: widget!),
                         if (haveBnConfirm)
                           CustomButton(
                             text: textConfirm ??

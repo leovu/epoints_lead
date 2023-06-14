@@ -4,8 +4,8 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 class CustomLine extends StatelessWidget{
 
   final bool isVertical;
-  final double size;
-  final Color color;
+  final double? size;
+  final Color? color;
 
   CustomLine({
     this.isVertical = true,

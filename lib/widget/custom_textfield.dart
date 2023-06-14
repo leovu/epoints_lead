@@ -5,26 +5,26 @@ import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 
 class CustomTextField extends StatelessWidget {
 
-  final FocusNode focusNode;
-  final TextEditingController controller;
-  final String hintText;
-  final IconData suffixIconData;
-  final String suffixIcon;
-  final Color borderColor;
-  final Color backgroundColor;
-  final int maxLines;
-  final TextInputType keyboardType;
-  final List<TextInputFormatter> inputFormatters;
-  final bool readOnly;
-  final bool autofocus;
-  final TextAlign textAlign;
-  final TextInputAction textInputAction;
-  final int maxLength;
-  final Function(String) onSubmitted;
-  final Function(String) onChanged;
-  final Function onSuffixTap;
-  final Function onTap;
-  final bool obscureText;
+  final FocusNode? focusNode;
+  final TextEditingController? controller;
+  final String? hintText;
+  final IconData? suffixIconData;
+  final String? suffixIcon;
+  final Color? borderColor;
+  final Color? backgroundColor;
+  final int? maxLines;
+  final TextInputType? keyboardType;
+  final List<TextInputFormatter>? inputFormatters;
+  final bool? readOnly;
+  final bool? autofocus;
+  final TextAlign? textAlign;
+  final TextInputAction? textInputAction;
+  final int? maxLength;
+  final Function(String)? onSubmitted;
+  final Function(String)? onChanged;
+  final Function? onSuffixTap;
+  final Function? onTap;
+  final bool? obscureText;
 
   CustomTextField({
     this.focusNode,
@@ -56,7 +56,7 @@ class CustomTextField extends StatelessWidget {
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5.0),
             color: backgroundColor??Color(0xFFF6F6F6),
-            border: borderColor == null?null:Border.all(color: borderColor)
+            border: borderColor == null?null:Border.all(color: borderColor!)
         ),
         child: Row(
           children: [
@@ -105,12 +105,12 @@ class CustomTextField extends StatelessWidget {
                   color: Color(0xFF9E9E9E),
                 ),
               ),
-              onTap: onSuffixTap,
+              onTap: onSuffixTap as void Function()?,
             )
           ],
         ),
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }

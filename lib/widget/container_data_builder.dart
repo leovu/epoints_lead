@@ -6,24 +6,24 @@ import 'package:lead_plugin_epoint/widget/container_scrollable.dart';
 class ContainerDataBuilder extends StatelessWidget {
 
   final dynamic data;
-  final Widget emptyBuilder;
+  final Widget? emptyBuilder;
   final bool emptyShinkWrap;
-  final Widget skeletonBuilder;
+  final Widget? skeletonBuilder;
   final CustomBodyBuilder bodyBuilder;
-  final CustomRefreshCallback onRefresh;
-  final ScrollPhysics emptyPhysics;
+  final CustomRefreshCallback? onRefresh;
+  final ScrollPhysics? emptyPhysics;
 
   ContainerDataBuilder({
     this.data,
     this.emptyBuilder,
     this.emptyShinkWrap = false,
     this.skeletonBuilder,
-    this.bodyBuilder,
+    required this.bodyBuilder,
     this.onRefresh,
     this.emptyPhysics
   }):assert(bodyBuilder != null);
 
-  Widget _buildBody(){
+  Widget? _buildBody(){
     if(data == null) {
       return skeletonBuilder;
     }

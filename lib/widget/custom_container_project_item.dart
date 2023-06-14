@@ -5,19 +5,19 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_chip.dart';
 
 class CustomContentProjectItem extends StatelessWidget {
-  final String title;
-  final String content;
-  final Color color;
+  final String? title;
+  final String? content;
+  final Color? color;
   final bool isStatus;
-  final TextStyle styleTitle;
-  final TextStyle styleContent;
-  final Widget suffixChild;
-  final TextAlign textAlign;
+  final TextStyle? styleTitle;
+  final TextStyle? styleContent;
+  final Widget? suffixChild;
+  final TextAlign? textAlign;
   final double paddingBottom;
   final bool haveDetail;
   final int maxLines;
   final bool startCrossAxis;
-  final TextOverflow overflow;
+  final TextOverflow? overflow;
 
   CustomContentProjectItem({
     this.title,
@@ -60,7 +60,7 @@ class CustomContentProjectItem extends StatelessWidget {
           Container(
             width: 15.0/2,
           ),
-          if (suffixChild != null) suffixChild,
+          if (suffixChild != null) suffixChild!,
           if (isStatus)
             Flexible(
                 fit: FlexFit.loose,

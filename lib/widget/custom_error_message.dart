@@ -5,13 +5,13 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 
 class CustomErrorMessage extends StatelessWidget {
-  final String text;
-  final String icon;
-  final Color color;
-  final double padding;
+  final String? text;
+  final String? icon;
+  final Color? color;
+  final double? padding;
   final bool isCenter;
-  final TextStyle textStyle;
-  const CustomErrorMessage({Key key, this.text, this.icon, this.color, this.padding, this.isCenter=true, this.textStyle}) : super(key: key);
+  final TextStyle? textStyle;
+  const CustomErrorMessage({Key? key, this.text, this.icon, this.color, this.padding, this.isCenter=true, this.textStyle}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     AutoSizeGroup group = AutoSizeGroup();

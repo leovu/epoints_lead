@@ -12,8 +12,8 @@ import 'package:lead_plugin_epoint/widget/custom_dropdown.dart';
 import 'package:rxdart/rxdart.dart';
 
 class MultipleStaffCustomerCareBloc extends BaseBloc {
-  MultipleStaffCustomerCareBloc(BuildContext context, List<WorkListStaffModel> models,
-      List<WorkListStaffModel> staffs) {
+  MultipleStaffCustomerCareBloc(BuildContext context, List<WorkListStaffModel>? models,
+      List<WorkListStaffModel>? staffs) {
     setContext(context);
 
     if (staffs != null) {
@@ -36,60 +36,60 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
     super.dispose();
   }
 
-  List<WorkListStaffModel> _models;
+  List<WorkListStaffModel>? _models;
   List<CustomDropdownModel> _branchModels = [
     CustomDropdownModel(text: AppLocalizations.text(LangKey.all))
   ];
-  CustomDropdownModel branchModel;
+  CustomDropdownModel? branchModel;
   List<CustomDropdownModel> _departmentModels = [
     CustomDropdownModel(text: AppLocalizations.text(LangKey.all))
   ];
-  CustomDropdownModel departmentModel;
+  CustomDropdownModel? departmentModel;
 
-  final _streamModels = BehaviorSubject<List<WorkListStaffModel>>();
-  ValueStream<List<WorkListStaffModel>> get outputModels =>
+  final _streamModels = BehaviorSubject<List<WorkListStaffModel>?>();
+  ValueStream<List<WorkListStaffModel>?> get outputModels =>
       _streamModels.stream;
-  setModels(List<WorkListStaffModel> event) => set(_streamModels, event);
+  setModels(List<WorkListStaffModel>? event) => set(_streamModels, event);
 
-  final _streamBranchModels = BehaviorSubject<List<CustomDropdownModel>>();
-  ValueStream<List<CustomDropdownModel>> get outputBranchModels =>
+  final _streamBranchModels = BehaviorSubject<List<CustomDropdownModel>?>();
+  ValueStream<List<CustomDropdownModel>?> get outputBranchModels =>
       _streamBranchModels.stream;
   setBranchModels(List<CustomDropdownModel> event) =>
       set(_streamBranchModels, event);
 
-  final _streamBranchModel = BehaviorSubject<CustomDropdownModel>();
-  ValueStream<CustomDropdownModel> get outputBranchModel =>
+  final _streamBranchModel = BehaviorSubject<CustomDropdownModel?>();
+  ValueStream<CustomDropdownModel?> get outputBranchModel =>
       _streamBranchModel.stream;
-  setBranchModel(CustomDropdownModel event) => set(_streamBranchModel, event);
+  setBranchModel(CustomDropdownModel? event) => set(_streamBranchModel, event);
 
-  final _streamDepartmentModels = BehaviorSubject<List<CustomDropdownModel>>();
-  ValueStream<List<CustomDropdownModel>> get outputDepartmentModels =>
+  final _streamDepartmentModels = BehaviorSubject<List<CustomDropdownModel>?>();
+  ValueStream<List<CustomDropdownModel>?> get outputDepartmentModels =>
       _streamDepartmentModels.stream;
   setDepartmentModels(List<CustomDropdownModel> event) =>
       set(_streamDepartmentModels, event);
 
-  final _streamDepartmentModel = BehaviorSubject<CustomDropdownModel>();
-  ValueStream<CustomDropdownModel> get outputDepartmentModel =>
+  final _streamDepartmentModel = BehaviorSubject<CustomDropdownModel?>();
+  ValueStream<CustomDropdownModel?> get outputDepartmentModel =>
       _streamDepartmentModel.stream;
-  setDepartmentModel(CustomDropdownModel event) =>
+  setDepartmentModel(CustomDropdownModel? event) =>
       set(_streamDepartmentModel, event);
 
   search(String event) {
-    List<WorkListStaffModel> events;
+    List<WorkListStaffModel>? events;
     try {
       if (branchModel?.id == null) {
         events = _models;
       } else {
-        events = _models
-            .where((element) => element.branchId == branchModel.id)
+        events = _models!
+            .where((element) => element.branchId == branchModel!.id)
             .toList();
       }
     } catch (_) {}
 
     try {
       if (departmentModel?.id != null) {
-        events = _models
-            .where((element) => element.departmentId == departmentModel.id)
+        events = _models!
+            .where((element) => element.departmentId == departmentModel!.id)
             .toList();
       }
     } catch (_) {}
@@ -97,9 +97,9 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
     if (event.isEmpty || (events?.length ?? 0) == 0) {
       setModels(events);
     } else {
-      List<WorkListStaffModel> results;
+      List<WorkListStaffModel>? results;
       try {
-        results = events.where((model) {
+        results = events!.where((model) {
           List<String> searchs = event.toLowerCase().removeAccents().split(" ");
           bool result = true;
           for (String element in searchs) {
@@ -120,12 +120,12 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
     }
   }
 
- selected(List<WorkListStaffModel> models, WorkListStaffModel model){
-    model.isSelected = !model.isSelected;
+ selected(List<WorkListStaffModel>? models, WorkListStaffModel model){
+    model.isSelected = !model.isSelected!;
     setModels(models);
   }
 
-  selectAll(List<WorkListStaffModel> models) {
+  selectAll(List<WorkListStaffModel>? models) {
     for (var e in models ?? <WorkListStaffModel>[]) {
       e.isSelected = true;
     }
@@ -134,7 +134,7 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
 
   delete(String event) {
     try {
-      var results = _models.where((element) => element.isSelected).toList();
+      var results = _models!.where((element) => element.isSelected!).toList();
       if (results != null) {
         for (var e in results) {
           e.isSelected = false;
@@ -148,20 +148,20 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
   confirm(List<WorkListStaffModel> events) {
     List<WorkListStaffModel> models = [];
     try {
-      var results = events.where((element) => element.isSelected).toList();
+      var results = events.where((element) => element.isSelected!).toList();
       if (results != null) {
         models = results;
       }
     } catch (_) {}
 
-    Navigator.of(context).pop(models);
+    Navigator.of(context!).pop(models);
   }
 
-  workListStaff(List<WorkListStaffModel> models, String event, int id ,List<WorkListStaffModel> modelsSelectedCustomerCare) async {
+  workListStaff(List<WorkListStaffModel>? models, String event, int? id ,List<WorkListStaffModel>? modelsSelectedCustomerCare) async {
     if ((_models?.length ?? 0) != 0) {
       models = [];
       try {
-        var results = _models.where((element) => element.isSelected).toList();
+        var results = _models!.where((element) => element.isSelected!).toList();
         if ((results?.length ?? 0) != 0) {
           models = results;
         }
@@ -173,10 +173,10 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
       _models = response.data ?? [];
 
       try {
-        var item = _models.firstWhere((element) => element.staffId == modelsSelectedCustomerCare[0].staffId);
+        var item = _models!.firstWhere((element) => element.staffId == modelsSelectedCustomerCare![0].staffId);
 
         if (item != null) {
-          _models.remove(item);
+          _models!.remove(item);
         }
       } catch (e) {
       }
@@ -228,12 +228,12 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
   }
 
   _handleStaffs(
-      List<WorkListStaffModel> models, List<WorkListStaffModel> staffs) {
+      List<WorkListStaffModel>? models, List<WorkListStaffModel>? staffs) {
     if ((models?.length ?? 0) != 0) {
-      for (var e in models) {
+      for (var e in models!) {
         try {
           var result =
-              staffs.firstWhere((element) => element.staffId == e.staffId);
+              staffs!.firstWhere((element) => element.staffId == e.staffId);
           if (result != null) {
             result.isSelected = true;
           }

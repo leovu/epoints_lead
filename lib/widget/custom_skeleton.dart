@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class CustomSkeleton extends StatelessWidget {
 
-  final double width;
-  final double height;
-  final EdgeInsetsGeometry margin;
-  final double radius;
-  final BorderRadiusGeometry borderRadius;
+  final double? width;
+  final double? height;
+  final EdgeInsetsGeometry? margin;
+  final double? radius;
+  final BorderRadiusGeometry? borderRadius;
 
   CustomSkeleton({
     this.width,

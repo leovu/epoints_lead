@@ -4,11 +4,11 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 class CustomAvatar extends StatelessWidget {
 
   final String name;
-  final double textSize;
-  final Color color;
+  final double? textSize;
+  final Color? color;
 
   CustomAvatar({
-    @required this.name, this.textSize, this.color
+    required this.name, this.textSize, this.color
   }):assert(name != null);
 
   String getFirstChar(String event){

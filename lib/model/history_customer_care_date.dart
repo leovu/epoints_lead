@@ -1,7 +1,7 @@
 class HistoryCareDateModel {
-  String historyCareDateName;
-  int historyCareDateID;
-  bool selected;
+  String? historyCareDateName;
+  int? historyCareDateID;
+  bool? selected;
 
   HistoryCareDateModel({this.historyCareDateName, this.historyCareDateID, this.selected});
 

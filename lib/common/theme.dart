@@ -561,20 +561,20 @@ class AppAnimation {
 }
 
 class AppSizes {
-  static double maxWidth;
-  static double maxHeight;
-  static double ultraPadding;
-  static double maxPadding;
-  static double minPadding;
-  static double sizeOnTap;
-  static double sizeOnTapCheckIn;
-  static double statusBarHeight;
-  static double bottomHeight;
-  static double sizeAppBar;
-  static double screenHeight;
-  static double iconSize;
-  static double lineSize;
-  static double paddingSearch;
+  static double? maxWidth;
+  static late double maxHeight;
+  static double? ultraPadding;
+  static double? maxPadding;
+  static double? minPadding;
+  static double? sizeOnTap;
+  static double? sizeOnTapCheckIn;
+  static late double statusBarHeight;
+  static double? bottomHeight;
+  static double? sizeAppBar;
+  static double? screenHeight;
+  static double? iconSize;
+  static double? lineSize;
+  static double? paddingSearch;
   static const timelineHeight = 80.0;
   static const timeWidth = 30.0;
   static const totalTimeline = 48;
@@ -585,11 +585,11 @@ class AppSizes {
     maxHeight = MediaQuery.of(context).size.height;
     statusBarHeight = MediaQuery.of(context).padding.top;
     bottomHeight = MediaQuery.of(context).padding.bottom;
-    ultraPadding = maxWidth * 0.1;
+    ultraPadding = maxWidth! * 0.1;
     sizeOnTapCheckIn = 64;
     sizeOnTap = 40.0;
-    maxPadding = sizeOnTap / 2;
-    minPadding = maxPadding / 2;
+    maxPadding = sizeOnTap! / 2;
+    minPadding = maxPadding! / 2;
     sizeAppBar = statusBarHeight + kToolbarHeight;
     screenHeight = maxHeight - statusBarHeight;
     iconSize = 24;

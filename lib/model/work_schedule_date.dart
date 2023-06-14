@@ -1,7 +1,7 @@
 class WorkScheduleModel {
-  String workscheduleDateName;
-  int workscheduleDateID;
-  bool selected;
+  String? workscheduleDateName;
+  int? workscheduleDateID;
+  bool? selected;
 
   WorkScheduleModel({this.workscheduleDateName, this.workscheduleDateID, this.selected});
 

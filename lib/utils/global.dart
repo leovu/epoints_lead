@@ -9,13 +9,13 @@ class Global {
 
   static bool validateWorkScheduleDate = true;
 
-  static Function createJob;
+  static Function? createJob;
 
-  static Function editJob;
+  static late Function editJob;
 
-  static Function openDetailDeal;
+  static Function? openDetailDeal;
 
-  static Function createDeal;
+  static Function? createDeal;
 
 
 }

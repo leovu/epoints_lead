@@ -1,6 +1,6 @@
 class TypeOfWorkModel {
-  String typeName;
-  bool selected;
+  String? typeName;
+  bool? selected;
 
   TypeOfWorkModel({this.typeName, this.selected});
 

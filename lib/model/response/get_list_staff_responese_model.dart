@@ -1,5 +1,5 @@
 class WorkListStaffResponseModel {
-  List<WorkListStaffModel> data;
+  List<WorkListStaffModel>? data;
 
   WorkListStaffResponseModel({this.data});
 
@@ -7,7 +7,7 @@ class WorkListStaffResponseModel {
     if (json['Data'] != null) {
       data = <WorkListStaffModel>[];
       json['Data'].forEach((v) {
-        data.add(new WorkListStaffModel.fromJson(v));
+        data!.add(new WorkListStaffModel.fromJson(v));
       });
     }
 
@@ -26,21 +26,21 @@ class WorkListStaffResponseModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class WorkListStaffModel {
-  int staffId;
-  String staffName;
-  String staffAvatar;
-  int branchId;
-  int departmentId;
-  String branchName;
-  String departmentName;
-  bool isSelected;
+  int? staffId;
+  String? staffName;
+  String? staffAvatar;
+  int? branchId;
+  int? departmentId;
+  String? branchName;
+  String? departmentName;
+  bool? isSelected;
 
   WorkListStaffModel({
     this.staffId,

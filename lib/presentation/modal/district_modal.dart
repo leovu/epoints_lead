@@ -8,9 +8,9 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class DistrictModal extends StatefulWidget {
-   List<DistrictData> districts = <DistrictData>[];
-   DistrictData distictSelected = DistrictData();
-   DistrictModal({ Key key,this.districts,this.distictSelected }) : super(key: key);
+   List<DistrictData>? districts = <DistrictData>[];
+   DistrictData? distictSelected = DistrictData();
+   DistrictModal({ Key? key,this.districts,this.distictSelected }) : super(key: key);
 
   @override
   _DistrictModalState createState() => _DistrictModalState();
@@ -21,9 +21,9 @@ class _DistrictModalState extends State<DistrictModal> {
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
 
-  List<DistrictData> districts = <DistrictData>[];
-   DistrictData distictSelected = DistrictData();
-  GetDistrictModelReponse _model;
+  List<DistrictData>? districts = <DistrictData>[];
+   DistrictData? distictSelected = DistrictData();
+  GetDistrictModelReponse? _model;
 
     @override
   void initState() {
@@ -31,12 +31,12 @@ class _DistrictModalState extends State<DistrictModal> {
     districts = widget.districts;
     distictSelected = widget.distictSelected;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      for (int i = 0; i < districts.length; i++) {
+      for (int i = 0; i < districts!.length; i++) {
         if ((widget.distictSelected?.districtid ?? "") ==
-            districts[i].districtid) {
-          districts[i].selected = true;
+            districts![i].districtid) {
+          districts![i].selected = true;
         } else {
-          districts[i].selected = false;
+          districts![i].selected = false;
         }
       }
 
@@ -79,7 +79,7 @@ class _DistrictModalState extends State<DistrictModal> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.text(LangKey.district),
+                  AppLocalizations.text(LangKey.district)!,
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
@@ -143,9 +143,9 @@ class _DistrictModalState extends State<DistrictModal> {
     );
   }
 
-    searchModel(List<DistrictData> model, String value) {
+    searchModel(List<DistrictData>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = districts;
+      _model!.data = districts;
       setState(() {});
     } else {
       try {
@@ -160,7 +160,7 @@ class _DistrictModalState extends State<DistrictModal> {
           }
           return result;
         }).toList();
-        _model.data = models;
+        _model!.data = models;
         setState(() {});
       } catch (_) {
         setState(() {});
@@ -169,19 +169,19 @@ class _DistrictModalState extends State<DistrictModal> {
   }
 
    List<Widget> _listWidget() {
-    return (_model.data != null)
-        ? (_model.data.length > 0) ? List.generate(
-            _model.data.length,
+    return (_model!.data != null)
+        ? (_model!.data!.length > 0) ? List.generate(
+            _model!.data!.length,
             (index) => _buildItem(
-                    _model.data[index].name, _model.data[index].selected, () {
+                    _model!.data![index].name!, _model!.data![index].selected!, () {
                   selectedItem(index);
                 }))
-        : [CustomDataNotFound()] :Container();
+        : [CustomDataNotFound()] :Container() as List<Widget>;
   }
 
   Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
@@ -204,7 +204,7 @@ class _DistrictModalState extends State<DistrictModal> {
   }
 
   selectedItem(int index) async {
-    List<DistrictData> models = _model.data;
+    List<DistrictData> models = _model!.data!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

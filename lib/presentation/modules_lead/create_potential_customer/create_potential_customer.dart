@@ -36,9 +36,9 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class CreatePotentialCustomer extends StatefulWidget {
-  String fullname;
-  String phoneNumber;
-  CreatePotentialCustomer({Key key, this.fullname, this.phoneNumber})
+  String? fullname;
+  String? phoneNumber;
+  CreatePotentialCustomer({Key? key, this.fullname, this.phoneNumber})
       : super(key: key);
 
   @override
@@ -77,7 +77,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   String _imgAvatar = "";
 
   // File _image;
-  PickedFile _pickedFile;
+  PickedFile? _pickedFile;
   final _picker = ImagePicker();
 
   AddLeadModelRequest requestModel = AddLeadModelRequest();
@@ -85,25 +85,25 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   List<DistrictData> districts = <DistrictData>[];
   List<WardData> wards = <WardData>[];
 
-  CustomerOptionData customerOptonData = CustomerOptionData();
+  CustomerOptionData? customerOptonData = CustomerOptionData();
 
-  List<CustomerOptionSource> customerSourcesData = <CustomerOptionSource>[];
+  List<CustomerOptionSource>? customerSourcesData = <CustomerOptionSource>[];
   CustomerOptionSource sourceSelected = CustomerOptionSource();
 
-  List<PipelineData> pipeLineData = <PipelineData>[];
+  List<PipelineData>? pipeLineData = <PipelineData>[];
   PipelineData pipelineSelected = PipelineData();
 
-  List<JourneyData> journeysData = <JourneyData>[];
-  JourneyData journeySelected = JourneyData();
+  List<JourneyData>? journeysData = <JourneyData>[];
+  JourneyData? journeySelected = JourneyData();
 
   List<AllocatorData> allocatorData = <AllocatorData>[];
 
   List<GetStatusWorkData> statusWorkData = [];
   GetStatusWorkData statusWorkSelected = GetStatusWorkData();
 
-  List<WorkListStaffModel> _modelStaffSelected = [];
+  List<WorkListStaffModel>? _modelStaffSelected = [];
 
-  List<TagData> tagsData;
+  List<TagData>? tagsData;
 
   String tagsString = "";
 
@@ -160,11 +160,11 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       if (widget.fullname != null) {
-        _fullNameText.text = widget.fullname;
+        _fullNameText.text = widget.fullname!;
       }
 
       if (widget.phoneNumber != null) {
-        _phoneNumberText.text = widget.phoneNumber;
+        _phoneNumberText.text = widget.phoneNumber!;
       }
     });
   }
@@ -201,7 +201,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.addPotentialCustomer),
+              AppLocalizations.text(LangKey.addPotentialCustomer)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
             // leadingWidth: 20.0,
@@ -238,7 +238,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.text(LangKey.customerInformation),
+            AppLocalizations.text(LangKey.customerInformation)!,
             style: TextStyle(
                 fontSize: AppTextSizes.size16,
                 color: const Color(0xFF0067AC),
@@ -350,7 +350,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                       ]),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.personal),
+                      AppLocalizations.text(LangKey.personal)!,
                       style: TextStyle(
                           color: selectedPersonal
                               ? Colors.white
@@ -386,7 +386,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                       ]),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.business),
+                      AppLocalizations.text(LangKey.business)!,
                       style: TextStyle(
                           color: !selectedPersonal
                               ? Colors.white
@@ -417,14 +417,14 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             FocusScope.of(context).unfocus();
 
             if (customerSourcesData == null ||
-                customerSourcesData.length == 0) {
+                customerSourcesData!.length == 0) {
               LeadConnection.showLoading(context);
               var dataType_Source =
                   await LeadConnection.getCustomerOption(context);
               Navigator.of(context).pop();
               if (dataType_Source != null) {
                 customerOptonData = dataType_Source.data;
-                customerSourcesData = customerOptonData.source;
+                customerSourcesData = customerOptonData!.source;
 
                 CustomerOptionSource source =
                     await CustomNavigator.showCustomBottomDialog(
@@ -511,7 +511,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               false, ontap: () async {
             FocusScope.of(context).unfocus();
 
-            if (pipeLineData == null || pipeLineData.length == 0) {
+            if (pipeLineData == null || pipeLineData!.length == 0) {
               LeadConnection.showLoading(context);
               var pipelines = await LeadConnection.getPipeline(context);
               Navigator.of(context).pop();
@@ -589,7 +589,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
 
             if (journey != null) {
               journeySelected = journey;
-              detailPotential.journeyCode = journeySelected.journeyCode;
+              detailPotential.journeyCode = journeySelected!.journeyCode;
               setState(() {
                 // await LeadConnection.getDistrict(context, province.provinceid);
               });
@@ -639,8 +639,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           // Chọn người được phân bổ
           _buildTextField(
               AppLocalizations.text(LangKey.chooseAllottedPerson),
-              (_modelStaffSelected != null && _modelStaffSelected.length > 0)
-                  ? _modelStaffSelected[0]?.staffName ?? ""
+              (_modelStaffSelected != null && _modelStaffSelected!.length > 0)
+                  ? _modelStaffSelected![0]?.staffName ?? ""
                   : "",
               Assets.iconName,
               true,
@@ -655,9 +655,9 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                           models: _modelStaffSelected,
                         )));
 
-            if (_modelStaffSelected != null && _modelStaffSelected.length > 0) {
+            if (_modelStaffSelected != null && _modelStaffSelected!.length > 0) {
               print(_modelStaffSelected);
-              detailPotential.saleId = _modelStaffSelected[0].staffId;
+              detailPotential.saleId = _modelStaffSelected![0].staffId;
               setState(() {});
             }
           }),
@@ -666,9 +666,9 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               tagsString, Assets.iconTag, false, true, false, ontap: () async {
             print("Tag");
             FocusScope.of(context).unfocus();
-            List<int> tagsSeletecd = [];
+            List<int?> tagsSeletecd = [];
 
-            if (tagsData == null || tagsData.length == 0) {
+            if (tagsData == null || tagsData!.length == 0) {
               LeadConnection.showLoading(context);
               var tags = await LeadConnection.getTag(context);
               Navigator.of(context).pop();
@@ -684,13 +684,13 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                   tagsString = "";
                   tagsData = listTagsSelected;
 
-                  for (int i = 0; i < tagsData.length; i++) {
-                    if (tagsData[i].selected) {
-                      tagsSeletecd.add(tagsData[i].tagId);
+                  for (int i = 0; i < tagsData!.length; i++) {
+                    if (tagsData![i].selected!) {
+                      tagsSeletecd.add(tagsData![i].tagId);
                       if (tagsString == "") {
-                        tagsString = tagsData[i].name;
+                        tagsString = tagsData![i].name ?? "";
                       } else {
-                        tagsString += ", ${tagsData[i].name}";
+                        tagsString += ", ${tagsData![i].name}";
                       }
                     }
                   }
@@ -708,13 +708,13 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 tagsString = "";
                 tagsData = listTagsSelected;
 
-                for (int i = 0; i < tagsData.length; i++) {
-                  if (tagsData[i].selected) {
-                    tagsSeletecd.add(tagsData[i].tagId);
+                for (int i = 0; i < tagsData!.length; i++) {
+                  if (tagsData![i].selected!) {
+                    tagsSeletecd.add(tagsData![i].tagId);
                     if (tagsString == "") {
-                      tagsString = tagsData[i].name;
+                      tagsString = tagsData![i].name ?? "";
                     } else {
-                      tagsString += ", ${tagsData[i].name}";
+                      tagsString += ", ${tagsData![i].name}";
                     }
                   }
                 }
@@ -785,7 +785,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),
-            AppLocalizations.text(LangKey.addPotentialCustomer),
+            AppLocalizations.text(LangKey.addPotentialCustomer)!,
             style: TextStyle(
                 fontSize: 14.0,
                 color: Colors.white,
@@ -838,16 +838,16 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   //   );
   // }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap,
-      TextEditingController fillText,
-      FocusNode focusNode,
-      TextInputType inputType}) {
+      {Function? ontap,
+      TextEditingController? fillText,
+      FocusNode? focusNode,
+      TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: InkWell(
-        onTap: (ontap != null) ? ontap : null,
+        onTap: (ontap != null) ? ontap as void Function()? : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -880,7 +880,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                               text: "*", style: TextStyle(color: Colors.red))
                       ]))
                 : Text(
-                    content,
+                    content!,
                     style: TextStyle(
                         fontSize: 15.0,
                         color: Colors.black,
@@ -937,7 +937,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
     print(detailPotential);
     print("theemmm khtn");
 
-    if (detailPotential.phone.isNotEmpty) {
+    if (detailPotential.phone!.isNotEmpty) {
       if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
           (!Validators().isNumber(_phoneNumberText.text.trim()))) {
         print("so dien thoai sai oy");
@@ -957,7 +957,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           warning: true);
     } else {
       LeadConnection.showLoading(context);
-      AddLeadModelResponse result = await LeadConnection.addLead(
+      AddLeadModelResponse? result = await LeadConnection.addLead(
           context,
           AddLeadModelRequest(
               avatar: "",
@@ -997,7 +997,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           if (result.data != null) {
             modelResponse = ObjectPopDetailModel(
                 customer_lead_code: "",
-                customer_lead_id: result.data.customerLeadId,
+                customer_lead_id: result.data!.customerLeadId,
                 status: true);
           }
           Navigator.of(context).pop(modelResponse.toJson());
@@ -1023,9 +1023,9 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
       }
     }
 
-    if (detailPotential.contactPhone.isNotEmpty) {
-      if ((!Validators().isValidPhone(detailPotential.contactPhone.trim())) &&
-          (!Validators().isNumber(detailPotential.contactPhone.trim()))) {
+    if (detailPotential.contactPhone!.isNotEmpty) {
+      if ((!Validators().isValidPhone(detailPotential.contactPhone!.trim())) &&
+          (!Validators().isNumber(detailPotential.contactPhone!.trim()))) {
         print("so dien thoai sai oy");
         LeadConnection.showMyDialog(
             context, "Số điện thoại người liên hệ không đúng định dạng" ,
@@ -1043,7 +1043,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           warning: true);
     } else {
       LeadConnection.showLoading(context);
-      AddLeadModelResponse result = await LeadConnection.addLead(
+      AddLeadModelResponse? result = await LeadConnection.addLead(
           context,
           AddLeadModelRequest(
               avatar: "",
@@ -1083,7 +1083,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           if (result.data != null) {
             modelResponse = ObjectPopDetailModel(
                 customer_lead_code: "",
-                customer_lead_id: result.data.customerLeadId,
+                customer_lead_id: result.data!.customerLeadId,
                 status: true);
           }
           Navigator.of(context).pop(modelResponse.toJson());

@@ -10,8 +10,8 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class FilterByCustomerSource extends StatefulWidget {
-  List<CustomerOptionSource> customerSources = <CustomerOptionSource>[];
-  FilterByCustomerSource({Key key, this.customerSources}) : super(key: key);
+  List<CustomerOptionSource>? customerSources = <CustomerOptionSource>[];
+  FilterByCustomerSource({Key? key, this.customerSources}) : super(key: key);
 
   @override
   _FilterByCustomerSourceState createState() => _FilterByCustomerSourceState();
@@ -21,8 +21,8 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<CustomerOptionSource> customerSources;
-  List<CustomerOptionSource> customerSourcesDisplay;
+  List<CustomerOptionSource>? customerSources;
+  List<CustomerOptionSource>? customerSourcesDisplay;
 
   @override
   void initState() {
@@ -47,7 +47,7 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.byCustomerSource),
+            AppLocalizations.text(LangKey.byCustomerSource)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
@@ -63,7 +63,7 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
         children: [
           _buildSearch(),
           (customerSourcesDisplay != null)
-              ? (customerSourcesDisplay.length > 0)
+              ? (customerSourcesDisplay!.length > 0)
                   ? Expanded(
                       child: CustomListView(
                       shrinkWrap: true,
@@ -91,18 +91,18 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
   }
 
   List<Widget> _listWidget() {
-    return (customerSourcesDisplay != null && customerSourcesDisplay.length > 0)
+    return (customerSourcesDisplay != null && customerSourcesDisplay!.length > 0)
         ? List.generate(
-            customerSourcesDisplay.length,
-            (index) => _buildItem(customerSourcesDisplay[index], () {
-                  selectedItem(customerSourcesDisplay[index]);
+            customerSourcesDisplay!.length,
+            (index) => _buildItem(customerSourcesDisplay![index], () {
+                  selectedItem(customerSourcesDisplay![index]);
                 }))
         : [CustomDataNotFound()];
   }
 
   Widget _buildItem(CustomerOptionSource item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -111,18 +111,18 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
             child: Row(
               children: [
                 Text(
-                  item.sourceName,
+                  item.sourceName!,
                   style: TextStyle(
                       fontSize: 15.0,
                       color:
-                          item.selected ? AppColors.primaryColor : Colors.black,
+                          item.selected! ? AppColors.primaryColor : Colors.black,
                       fontWeight:
-                          item.selected ? FontWeight.bold : FontWeight.normal),
+                          item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
               ],
             ),
           ),
-          item.selected
+          item.selected!
               ? Icon(
                   Icons.check_box,
                   color: AppColors.primaryColor,
@@ -173,7 +173,7 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
       setState(() {});
     } else {
       try {
-        List<CustomerOptionSource> models = customerSources.where((model) {
+        List<CustomerOptionSource> models = customerSources!.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
@@ -193,7 +193,7 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
   }
 
   selectedItem(CustomerOptionSource item) async {
-    item.selected = !item.selected;
+    item.selected = !item.selected!;
 
     // var event = models.firstWhere((element) => element.name == item.name);
 

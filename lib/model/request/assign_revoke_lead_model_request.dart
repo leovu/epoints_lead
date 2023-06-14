@@ -1,8 +1,8 @@
 class AssignRevokeLeadRequestModel {
-  String type;
-  String customerLeadCode;
-  int saleId;
-  int timeRevokeLead;
+  String? type;
+  String? customerLeadCode;
+  int? saleId;
+  int? timeRevokeLead;
 
   AssignRevokeLeadRequestModel(
       {this.type, this.customerLeadCode, this.saleId, this.timeRevokeLead});

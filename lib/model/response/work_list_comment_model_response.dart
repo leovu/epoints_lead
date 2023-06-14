@@ -1,7 +1,7 @@
 class WorkListCommentResponseModel {
-  List<WorkListCommentModel> data;
-  int errorCode;
-  String errorDescription;
+  List<WorkListCommentModel>? data;
+  int? errorCode;
+  String? errorDescription;
   WorkListCommentResponseModel({this.data});
 
   WorkListCommentResponseModel.fromJson(Map<String, dynamic> json) {
@@ -11,7 +11,7 @@ class WorkListCommentResponseModel {
       data = <WorkListCommentModel>[];
 
       json['Data'].forEach((v) {
-        data.add(new WorkListCommentModel.fromJson(v));
+        data!.add(new WorkListCommentModel.fromJson(v));
       });
     }
   }
@@ -21,24 +21,24 @@ class WorkListCommentResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class WorkListCommentModel {
-  int customerLeadCommentId;
-  int customerLeadId;
-  int customerLeadParentCommentId;
-  int staffId;
-  String staffName;
-  String staffAvatar;
-  String message;
-  String timeText;
-  String path;
-  List<WorkListCommentModel> listObject;
-  bool isSubComment;
+  int? customerLeadCommentId;
+  int? customerLeadId;
+  int? customerLeadParentCommentId;
+  int? staffId;
+  String? staffName;
+  String? staffAvatar;
+  String? message;
+  String? timeText;
+  String? path;
+  List<WorkListCommentModel>? listObject;
+  late bool isSubComment;
 
   WorkListCommentModel(
       {this.customerLeadCommentId,
@@ -67,7 +67,7 @@ class WorkListCommentModel {
       json['list_object'].forEach((v) {
         var model = new WorkListCommentModel.fromJson(v);
         model.isSubComment = true;
-        listObject.add(model);
+        listObject!.add(model);
       });
     }
     isSubComment = false;
@@ -85,7 +85,7 @@ class WorkListCommentModel {
     data['time_text'] = this.timeText;
     data['path'] = this.path;
     if (this.listObject != null) {
-      data['list_object'] = this.listObject.map((v) => v.toJson()).toList();
+      data['list_object'] = this.listObject!.map((v) => v.toJson()).toList();
     }
     return data;
   }

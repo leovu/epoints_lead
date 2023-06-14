@@ -9,7 +9,7 @@ import 'package:mime/mime.dart';
 
 abstract class AWSConnection<T>{
 
-  AWSFileModel file;
+  late AWSFileModel file;
   String get secretKey;
   String get region;
   String get accessKey;
@@ -17,17 +17,17 @@ abstract class AWSConnection<T>{
   String get domain;
 
   Future<T> upload() async {
-    T data = await _checkConnectivity();
+    T? data = await _checkConnectivity();
     if (data != null) {
       return await handleError(data);
     }
 
-    final mimeType = lookupMimeType(file.file.path);
+    final mimeType = lookupMimeType(file.file!.path)!;
 
     final url = await AwsS3.uploadFile(
         accessKey: accessKey,
         secretKey: secretKey,
-        file: file.file,
+        file: file.file!,
         bucket: bucket,
         region: region,
         contentType: mimeType
@@ -39,17 +39,17 @@ abstract class AWSConnection<T>{
       ));
     }
 
-    return await handleResponse(http.Response(url, 200));
+    return await handleResponse(http.Response(url!, 200));
   }
 
-  Future<T> _checkConnectivity() async {
+  Future<T?> _checkConnectivity() async {
     if (!(await NetworkConnectivity.isConnected())) {
       return getError("Lỗi");
     }
     return null;
   }
 
-  T getError(String error, {int errorCode});
+  T getError(String? error, {int? errorCode});
 
   Future<T> handleError(T model);
 
@@ -57,8 +57,8 @@ abstract class AWSConnection<T>{
 }
 
 class AWSFileModel {
-  String fileName;
-  File file;
+  String? fileName;
+  File? file;
   AWSFileModel({
     this.fileName,
     this.file

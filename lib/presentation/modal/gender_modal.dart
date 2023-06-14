@@ -5,7 +5,7 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 
 class GenderModal extends StatefulWidget {
-  const GenderModal({ Key key }) : super(key: key);
+  const GenderModal({ Key? key }) : super(key: key);
 
   @override
   _GenderModalState createState() => _GenderModalState();
@@ -17,7 +17,7 @@ class _GenderModalState extends State<GenderModal> {
   
   @override
   Widget build(BuildContext context) {
-    Container(
+    return Container(
       decoration: BoxDecoration(
           border: Border.all(
               width: 1.0, color: Color(0xFFC3C8D3), style: BorderStyle.solid),
@@ -39,7 +39,7 @@ class _GenderModalState extends State<GenderModal> {
                 Container(
                   margin: const EdgeInsets.only(right: 10.0),
                   child: Text(
-                    AppLocalizations.text(LangKey.sex),
+                    AppLocalizations.text(LangKey.sex)!,
                     style: AppTextStyles.style15BlackNormal,
                     maxLines: 1,
                   ),
@@ -77,7 +77,7 @@ class _GenderModalState extends State<GenderModal> {
                           child: Image.asset(Assets.iconMale),
                         ),
                         Text(
-                          AppLocalizations.text(LangKey.male),
+                          AppLocalizations.text(LangKey.male)!,
                           style: TextStyle(
                               fontSize: AppTextSizes.size15,
                               color: index == 1 ? Colors.black : Color(0xFF9E9E9E),
@@ -105,7 +105,7 @@ class _GenderModalState extends State<GenderModal> {
                         child: Image.asset(Assets.iconFemale),
                       ),
                       Text(
-                        AppLocalizations.text(LangKey.female),
+                        AppLocalizations.text(LangKey.female)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
                             color: index == 2 ? Colors.black : Color(0xFF9E9E9E),
@@ -125,7 +125,7 @@ class _GenderModalState extends State<GenderModal> {
                       top: 3.0, bottom: 3.0, left: 8.0, right: 8.0),
                   child: Center(
                     child: Text(
-                      AppLocalizations.text(LangKey.other),
+                      AppLocalizations.text(LangKey.other)!,
                       style: TextStyle(
                           fontSize: AppTextSizes.size15,
                           color: index == 3 ? Colors.black : Color(0xFF9E9E9E),

@@ -36,10 +36,10 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/multi_staff_screen_
 import 'package:lead_plugin_epoint/utils/global.dart';
 
 class FilterPotentialCustomer extends StatefulWidget {
-  FilterScreenModel filterScreenModel = FilterScreenModel();
+  FilterScreenModel? filterScreenModel = FilterScreenModel();
 
   // ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest();
-  FilterPotentialCustomer({Key key, this.filterScreenModel}) : super(key: key);
+  FilterPotentialCustomer({Key? key, this.filterScreenModel}) : super(key: key);
 
   @override
   _FilterPotentialCustomerState createState() =>
@@ -52,17 +52,17 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
   List<AllocatorData> allocatorData = <AllocatorData>[];
   AllocatorData allocatorSelected = AllocatorData();
-  List<PipelineData> pipeLineData = <PipelineData>[];
-  List<PipelineData> pipelineSelected = <PipelineData>[];
+  List<PipelineData>? pipeLineData = <PipelineData>[];
+  List<PipelineData>? pipelineSelected = <PipelineData>[];
 
-  List<JourneyData> journeysData = <JourneyData>[];
-  List<JourneyData> journeySelected = <JourneyData>[];
-  List<WorkListStaffModel> _modelStaffSSupportSelected = [];
+  List<JourneyData>? journeysData = <JourneyData>[];
+  List<JourneyData>? journeySelected = <JourneyData>[];
+  List<WorkListStaffModel>? _modelStaffSSupportSelected = [];
   List<WorkListStaffModel> _modelStaff = [];
   List<TagData> tagsData = [];
   List<CustomerOptionSource> customerSources = [];
 
-  CustomerOptionData customerOptionData = CustomerOptionData();
+  CustomerOptionData? customerOptionData = CustomerOptionData();
 
   List<CreateDateModel> createDateOptions = [
     CreateDateModel(
@@ -225,7 +225,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         selected: false)
   ];
 
-  List<GetStatusWorkData> statusWorkData;
+  List<GetStatusWorkData>? statusWorkData;
   String statusWorkString = "";
   String tagsString = "";
   String staffs = "";
@@ -268,24 +268,24 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     super.initState();
     filterScreenModel = FilterScreenModel(
         filterModel: ListCustomLeadModelRequest.fromJson(
-            widget.filterScreenModel.filterModel.toJson()),
-        fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
-        toDate_created_at: widget.filterScreenModel.toDate_created_at,
+            widget.filterScreenModel!.filterModel!.toJson()),
+        fromDate_created_at: widget.filterScreenModel!.fromDate_created_at,
+        toDate_created_at: widget.filterScreenModel!.toDate_created_at,
         fromDate_allocation_date:
-            widget.filterScreenModel.fromDate_allocation_date,
-        toDate_allocation_date: widget.filterScreenModel.toDate_allocation_date,
+            widget.filterScreenModel!.fromDate_allocation_date,
+        toDate_allocation_date: widget.filterScreenModel!.toDate_allocation_date,
         fromDate_history_care_date:
-            widget.filterScreenModel.fromDate_history_care_date,
+            widget.filterScreenModel!.fromDate_history_care_date,
         toDate_history_care_date:
-            widget.filterScreenModel.toDate_history_care_date,
+            widget.filterScreenModel!.toDate_history_care_date,
         fromDate_work_schedule_date:
-            widget.filterScreenModel.fromDate_work_schedule_date,
+            widget.filterScreenModel!.fromDate_work_schedule_date,
         toDate_work_schedule_date:
-            widget.filterScreenModel.toDate_work_schedule_date,
-        id_history_care_date: widget.filterScreenModel.id_history_care_date,
-        id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date,
-        id_created_at: widget.filterScreenModel.id_created_at,
-        id_allocation_date: widget.filterScreenModel.id_allocation_date);
+            widget.filterScreenModel!.toDate_work_schedule_date,
+        id_history_care_date: widget.filterScreenModel!.id_history_care_date,
+        id_work_schedule_date: widget.filterScreenModel!.id_work_schedule_date,
+        id_created_at: widget.filterScreenModel!.id_created_at,
+        id_allocation_date: widget.filterScreenModel!.id_allocation_date);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       LeadConnection.showLoading(context);
@@ -306,21 +306,21 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     //   }
     // }
 
-     if (filterScreenModel.filterModel.tagId.length > 0) {
-        for (int i = 0; i < filterScreenModel.filterModel.tagId.length; i++) {
+     if (filterScreenModel.filterModel!.tagId!.length > 0) {
+        for (int i = 0; i < filterScreenModel.filterModel!.tagId!.length; i++) {
           try {
             tagsData
                 .firstWhere(
-                    (element) => element.tagId == filterScreenModel.filterModel.tagId[i])
+                    (element) => element.tagId == filterScreenModel.filterModel!.tagId![i])
                 .selected = true;
           } catch (e) {}
         }
 
         for (int i = 0; i < tagsData.length; i++) {
-          if (tagsData[i].selected) {
+          if (tagsData[i].selected!) {
             // widget.detailDeal.tag.add(tagsSelected[i].tagId);
             if (tagsString == "") {
-              tagsString = tagsData[i].name;
+              tagsString = tagsData[i].name ?? "";
             } else {
               tagsString += ", ${tagsData[i].name}";
             }
@@ -329,9 +329,9 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       }
 
     for (int i = 0; i < customerTypeData.length; i++) {
-      if (filterScreenModel.filterModel.customerType != "") {
-        if (widget.filterScreenModel.filterModel.customerType.toLowerCase() ==
-            customerTypeData[i].customerTypeName.toLowerCase()) {
+      if (filterScreenModel.filterModel!.customerType != "") {
+        if (widget.filterScreenModel!.filterModel!.customerType!.toLowerCase() ==
+            customerTypeData[i].customerTypeName!.toLowerCase()) {
           customerTypeData[i].selected = true;
         } else {
           customerTypeData[i].selected = false;
@@ -340,7 +340,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
 
     for (int i = 0; i < statusOptions.length; i++) {
-      if (widget.filterScreenModel.filterModel.statusAssign ==
+      if (widget.filterScreenModel!.filterModel!.statusAssign ==
           statusOptions[i].statusID) {
         statusOptions[i].selected = true;
       } else {
@@ -384,8 +384,8 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     // }
 
     for (int i = 0; i < convertStatusOptions.length; i++) {
-      if (filterScreenModel.filterModel.isConvert != "") {
-        if (widget.filterScreenModel.filterModel.isConvert ==
+      if (filterScreenModel.filterModel!.isConvert != "") {
+        if (widget.filterScreenModel!.filterModel!.isConvert ==
             "${convertStatusOptions[i].statusID}") {
           convertStatusOptions[i].selected = true;
         } else {
@@ -402,23 +402,23 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     //   allocatorSelected.selected = true;
     // }
 
-    if (filterScreenModel.filterModel.customerSourceId.length > 0) {
+    if (filterScreenModel.filterModel!.customerSourceId!.length > 0) {
       for (int i = 0;
-          i < filterScreenModel.filterModel.customerSourceId.length;
+          i < filterScreenModel.filterModel!.customerSourceId!.length;
           i++) {
         try {
           customerSources
               .firstWhere((element) =>
                   element.customerSourceId ==
-                  filterScreenModel.filterModel.customerSourceId[i])
+                  filterScreenModel.filterModel!.customerSourceId![i])
               .selected = true;
         } catch (e) {}
       }
 
       for (int i = 0; i < customerSources.length; i++) {
-        if (customerSources[i].selected) {
+        if (customerSources[i].selected!) {
           if (customerSourceString == "") {
-            customerSourceString = customerSources[i].sourceName;
+            customerSourceString = customerSources[i].sourceName ?? "";
           } else {
             customerSourceString += ", ${customerSources[i].sourceName}";
           }
@@ -426,25 +426,25 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       }
     }
 
-    if (filterScreenModel.filterModel.staffId.length > 0) {
+    if (filterScreenModel.filterModel!.staffId!.length > 0) {
       _modelStaffSSupportSelected = [];
       for (int i = 0;
-          i < filterScreenModel.filterModel.staffId.length;
+          i < filterScreenModel.filterModel!.staffId!.length;
           i++) {
         try {
           _modelStaff
               .firstWhere((element) =>
                   element.staffId ==
-                  filterScreenModel.filterModel.staffId[i])
+                  filterScreenModel.filterModel!.staffId![i])
               .isSelected = true;
         } catch (e) {}
       }
 
       for (int i = 0; i < _modelStaff.length; i++) {
-        if (_modelStaff[i].isSelected) {
-          _modelStaffSSupportSelected.add(_modelStaff[i]);
+        if (_modelStaff[i].isSelected!) {
+          _modelStaffSSupportSelected!.add(_modelStaff[i]);
           if (staffs == "") {
-            staffs = _modelStaff[i].staffName;
+            staffs = _modelStaff[i].staffName ?? "";
           } else {
             staffs += ", ${_modelStaff[i].staffName}";
           }
@@ -454,28 +454,28 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
     
 
-    if (filterScreenModel.filterModel.pipelineId.length > 0) {
+    if (filterScreenModel.filterModel!.pipelineId!.length > 0) {
       for (int i = 0;
-          i < filterScreenModel.filterModel.pipelineId.length;
+          i < filterScreenModel.filterModel!.pipelineId!.length;
           i++) {
         try {
-          pipeLineData
+          pipeLineData!
               .firstWhere((element) =>
                   element.pipelineId ==
-                  filterScreenModel.filterModel.pipelineId[i])
+                  filterScreenModel.filterModel!.pipelineId![i])
               .selected = true;
         } catch (e) {}
       }
 
-      List<String> listPipeline = [];
+      List<String?> listPipeline = [];
 
-      for (int i = 0; i < pipeLineData.length; i++) {
-        if (pipeLineData[i].selected) {
-          listPipeline.add(pipeLineData[i].pipelineCode);
+      for (int i = 0; i < pipeLineData!.length; i++) {
+        if (pipeLineData![i].selected!) {
+          listPipeline.add(pipeLineData![i].pipelineCode);
           if (pipelineString == "") {
-            pipelineString = pipeLineData[i].pipelineName;
+            pipelineString = pipeLineData![i].pipelineName ?? "";
           } else {
-            pipelineString += ", ${pipeLineData[i].pipelineName}";
+            pipelineString += ", ${pipeLineData![i].pipelineName}";
           }
         }
       }
@@ -485,25 +485,25 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     if (journeys != null) {
       journeysData = journeys.data;
 
-      if (filterScreenModel.filterModel.journeyId.length > 0) {
+      if (filterScreenModel.filterModel!.journeyId!.length > 0) {
         for (int i = 0;
-            i < filterScreenModel.filterModel.journeyId.length;
+            i < filterScreenModel.filterModel!.journeyId!.length;
             i++) {
           try {
-            journeysData
+            journeysData!
                 .firstWhere((element) =>
                     element.journeyId ==
-                    filterScreenModel.filterModel.journeyId[i])
+                    filterScreenModel.filterModel!.journeyId![i])
                 .selected = true;
           } catch (e) {}
         }
 
-        for (int i = 0; i < journeysData.length; i++) {
-          if (journeysData[i].selected) {
+        for (int i = 0; i < journeysData!.length; i++) {
+          if (journeysData![i].selected!) {
             if (journeyString == "") {
-              journeyString = journeysData[i].journeyName;
+              journeyString = journeysData![i].journeyName ?? "";
             } else {
-              journeyString += ", ${journeysData[i].journeyName}";
+              journeyString += ", ${journeysData![i].journeyName}";
             }
           }
         }
@@ -516,23 +516,23 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     setState(() {});
   }
 
-  void getData() async {
+   getData() async {
     var tags = await LeadConnection.getTag(context);
     if (tags != null) {
-      tagsData.addAll(tags.data);
+      tagsData.addAll(tags.data!);
     }
 
     var sources = await LeadConnection.getCustomerOption(context);
     if (sources != null) {
       customerOptionData = sources.data;
-      customerSources.addAll(customerOptionData.source);
+      customerSources.addAll(customerOptionData!.source!);
 
       customerTypeData.add(CustomerTypeModel(
-          customerTypeName: customerOptionData.customerType.personal,
+          customerTypeName: customerOptionData!.customerType!.personal,
           customerTypeID: 1,
           selected: false));
       customerTypeData.add(CustomerTypeModel(
-          customerTypeName: customerOptionData.customerType.business,
+          customerTypeName: customerOptionData!.customerType!.business,
           customerTypeID: 2,
           selected: false));
     }
@@ -540,10 +540,10 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     if (pipelines != null) {
       pipeLineData = pipelines.data;
 
-      List<String> listPipeline = [];
+      List<String?> listPipeline = [];
 
-      for (int i = 0; i < pipeLineData.length; i++) {
-        listPipeline.add(pipeLineData[i].pipelineCode);
+      for (int i = 0; i < pipeLineData!.length; i++) {
+        listPipeline.add(pipeLineData![i].pipelineCode);
       }
 
       var journeys = await LeadConnection.getJourney(
@@ -609,7 +609,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           Navigator.of(context).pop();
         }
         return;
-      },
+      } as Future<bool> Function()?,
       child: Scaffold(
           appBar: AppBar(
             iconTheme: const IconThemeData(
@@ -617,7 +617,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             ),
             backgroundColor: AppColors.primaryColor,
             title: Text(
-              AppLocalizations.text(LangKey.filter),
+              AppLocalizations.text(LangKey.filter)!,
               style: const TextStyle(color: Colors.white, fontSize: 20.0),
             ),
           ),
@@ -657,7 +657,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalizations.text(LangKey.byLabel),
+                  AppLocalizations.text(LangKey.byLabel)!,
                   style: TextStyle(
                       fontSize: 16.0,
                       color: const Color(0xFF0067AC),
@@ -673,7 +673,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             print("Tag");
             FocusScope.of(context).unfocus();
 
-             List<int> tagsSeletecd = [];
+             List<int?> tagsSeletecd = [];
 
             
               var listTagsSelected = await Navigator.of(context).push(
@@ -685,17 +685,17 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                 tagsData = listTagsSelected;
 
                 for (int i = 0; i < tagsData.length; i++) {
-                  if (tagsData[i].selected) {
+                  if (tagsData[i].selected!) {
                     tagsSeletecd.add(tagsData[i].tagId);
 
                     if (tagsString == "") {
-                      tagsString = tagsData[i].name;
+                      tagsString = tagsData[i].name ?? "";
                     } else {
                       tagsString += ", ${tagsData[i].name}";
                     }
                   }
                 }
-                filterScreenModel.filterModel.tagId = tagsSeletecd;
+                filterScreenModel.filterModel!.tagId = tagsSeletecd;
                 setState(() {});
               
             }
@@ -707,7 +707,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
       // theo loại khách hàng
       Text(
-        AppLocalizations.text(LangKey.byCustomerType),
+        AppLocalizations.text(LangKey.byCustomerType)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -717,7 +717,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
       // theo trạng thái
       Text(
-        AppLocalizations.text(LangKey.byStatus),
+        AppLocalizations.text(LangKey.byStatus)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -729,7 +729,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
       // theo nguồn khách hàng
       Text(
-        AppLocalizations.text(LangKey.byCustomerSource),
+        AppLocalizations.text(LangKey.byCustomerSource)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -749,7 +749,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           false,
           true,
           false, ontap: () async {
-        List<int> customerSourceSelected = [];
+        List<int?> customerSourceSelected = [];
         var customerSourceData = await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) =>
@@ -761,17 +761,17 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           customerSources = customerSourceData;
 
           for (int i = 0; i < customerSources.length; i++) {
-            if (customerSources[i].selected) {
+            if (customerSources[i].selected!) {
               customerSourceSelected.add(customerSources[i].customerSourceId);
               // widget.detailDeal.tag.add(tagsSelected[i].tagId);
               if (customerSourceString == "") {
-                customerSourceString = customerSources[i].sourceName;
+                customerSourceString = customerSources[i].sourceName ?? "";
               } else {
                 customerSourceString += ", ${customerSources[i].sourceName}";
               }
             }
           }
-          filterScreenModel.filterModel.customerSourceId =
+          filterScreenModel.filterModel!.customerSourceId =
               customerSourceSelected;
           setState(() {});
         }
@@ -782,7 +782,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
       // theo ngày tạo
       Text(
-        AppLocalizations.text(LangKey.byCreationDate),
+        AppLocalizations.text(LangKey.byCreationDate)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -798,7 +798,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.text(LangKey.byAllocateDate),
+            AppLocalizations.text(LangKey.byAllocateDate)!,
             style: TextStyle(
                 fontSize: 16.0,
                 color: const Color(0xFF0067AC),
@@ -815,7 +815,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       Container(height: 10.0),
 
       Text(
-        AppLocalizations.text(LangKey.byConvertStatus),
+        AppLocalizations.text(LangKey.byConvertStatus)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -825,7 +825,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         convertStatusOptions: convertStatusOptions,
       ),
       Text(
-        AppLocalizations.text(LangKey.byAllocator),
+        AppLocalizations.text(LangKey.byAllocator)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -839,7 +839,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       _buildTextField(AppLocalizations.text(LangKey.chooseAllottedPerson),
           staffs, Assets.iconName, false, true, false, ontap: () async {
         print("Chọn người được phân bổ");
-        List<int> listStaff = [];
+        List<int?> listStaff = [];
         _modelStaffSSupportSelected =
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => MultipleStaffScreenCustomerCare(
@@ -847,26 +847,26 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                     )));
 
         if (_modelStaffSSupportSelected != null &&
-            _modelStaffSSupportSelected.length > 0) {
+            _modelStaffSSupportSelected!.length > 0) {
           staffs = "";
-          for (int i = 0; i < _modelStaffSSupportSelected.length; i++) {
-            if (_modelStaffSSupportSelected[i].isSelected) {
-              listStaff.add(_modelStaffSSupportSelected[i].staffId);
+          for (int i = 0; i < _modelStaffSSupportSelected!.length; i++) {
+            if (_modelStaffSSupportSelected![i].isSelected!) {
+              listStaff.add(_modelStaffSSupportSelected![i].staffId);
               if (staffs == "") {
-                staffs = _modelStaffSSupportSelected[i].staffName;
+                staffs = _modelStaffSSupportSelected![i].staffName ?? "";
               } else {
-                staffs += ", ${_modelStaffSSupportSelected[i].staffName}";
+                staffs += ", ${_modelStaffSSupportSelected![i].staffName}";
               }
             }
           }
-          filterScreenModel.filterModel.staffId = listStaff;
+          filterScreenModel.filterModel!.staffId = listStaff;
           setState(() {});
         }
       }),
       Container(height: 10.0),
 
       Text(
-        AppLocalizations.text(LangKey.byPipeline),
+        AppLocalizations.text(LangKey.byPipeline)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -884,9 +884,9 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           false, ontap: () async {
         print("Pipeline");
 
-        List<int> pipelineSelected = [];
-        List<String> pipelineStringSelected = [];
-        List<PipelineData> pipeline = await Navigator.of(context).push(
+        List<int?> pipelineSelected = [];
+        List<String?> pipelineStringSelected = [];
+        List<PipelineData>? pipeline = await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => FilterByPipeline(pipeLineData)));
 
@@ -895,18 +895,18 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           pipelineString = "";
           pipeLineData = pipeline;
 
-          for (int i = 0; i < pipeLineData.length; i++) {
-            if (pipeLineData[i].selected) {
-              pipelineSelected.add(pipeLineData[i].pipelineId);
-              pipelineStringSelected.add(pipeLineData[i].pipelineCode);
+          for (int i = 0; i < pipeLineData!.length; i++) {
+            if (pipeLineData![i].selected!) {
+              pipelineSelected.add(pipeLineData![i].pipelineId);
+              pipelineStringSelected.add(pipeLineData![i].pipelineCode);
               if (pipelineString == "") {
-                pipelineString = pipeLineData[i].pipelineName;
+                pipelineString = pipeLineData![i].pipelineName ?? "";
               } else {
-                pipelineString += ", ${pipeLineData[i].pipelineName}";
+                pipelineString += ", ${pipeLineData![i].pipelineName}";
               }
             }
           }
-          filterScreenModel.filterModel.pipelineId = pipelineSelected;
+          filterScreenModel.filterModel!.pipelineId = pipelineSelected;
 
           var journeys = await LeadConnection.getJourney(context,
               GetJourneyModelRequest(pipelineCode: pipelineStringSelected));
@@ -921,7 +921,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       Container(height: 10.0),
 
       Text(
-        AppLocalizations.text(LangKey.byJourney),
+        AppLocalizations.text(LangKey.byJourney)!,
         style: TextStyle(
             fontSize: 16.0,
             color: const Color(0xFF0067AC),
@@ -938,8 +938,8 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           false, ontap: () async {
         print("Chọn hành trình");
 
-        List<int> journeySelected = [];
-        List<JourneyData> journeys =
+        List<int?> journeySelected = [];
+        List<JourneyData>? journeys =
             await Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => FilterByJourney(
                       journeys: journeysData,
@@ -949,17 +949,17 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           journeyString = "";
           journeysData = journeys;
 
-          for (int i = 0; i < journeysData.length; i++) {
-            if (journeysData[i].selected) {
-              journeySelected.add(journeysData[i].journeyId);
+          for (int i = 0; i < journeysData!.length; i++) {
+            if (journeysData![i].selected!) {
+              journeySelected.add(journeysData![i].journeyId);
               if (journeyString == "") {
-                journeyString = journeysData[i].journeyName;
+                journeyString = journeysData![i].journeyName ?? "";
               } else {
-                journeyString += ", ${journeysData[i].journeyName}";
+                journeyString += ", ${journeysData![i].journeyName}";
               }
             }
           }
-          filterScreenModel.filterModel.journeyId = journeySelected;
+          filterScreenModel.filterModel!.journeyId = journeySelected;
           setState(() {});
         }
       }),
@@ -969,7 +969,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            AppLocalizations.text(LangKey.byHistoryCustomerCare),
+            AppLocalizations.text(LangKey.byHistoryCustomerCare)!,
             style: TextStyle(
                 fontSize: 16.0,
                 color: const Color(0xFF0067AC),
@@ -985,13 +985,13 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     ];
   }
 
-  Widget _buildTextField(String title, String content, String icon,
+  Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function ontap, TextEditingController fillText}) {
+      {Function? ontap, TextEditingController? fillText}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: ontap,
+        onTap: ontap as void Function()?,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -1023,7 +1023,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                               text: "*", style: TextStyle(color: Colors.red))
                       ]))
                 : Text(
-                    content,
+                    content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
@@ -1088,23 +1088,23 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               }
 
               var cusType =
-                  customerTypeData.firstWhere((element) => element.selected);
+                  customerTypeData.firstWhere((element) => element.selected!);
 
               if (cusType.customerTypeName ==
                   AppLocalizations.text(LangKey.all)) {
-                filterScreenModel.filterModel.customerType = "";
+                filterScreenModel.filterModel!.customerType = "";
               } else {
-                filterScreenModel.filterModel.customerType =
-                    cusType.customerTypeName.toLowerCase();
+                filterScreenModel.filterModel!.customerType =
+                    cusType.customerTypeName!.toLowerCase();
               }
 
               var statusOption =
-                  statusOptions.firstWhere((element) => element.selected);
+                  statusOptions.firstWhere((element) => element.selected!);
               if (statusOption.statusName ==
                   AppLocalizations.text(LangKey.all)) {
-                filterScreenModel.filterModel.statusAssign = "";
+                filterScreenModel.filterModel!.statusAssign = "";
               } else {
-                filterScreenModel.filterModel.statusAssign =
+                filterScreenModel.filterModel!.statusAssign =
                     statusOption.statusID;
               }
 
@@ -1118,13 +1118,13 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               // }
 
               var convertStatusOption = convertStatusOptions
-                  .firstWhere((element) => element.selected);
+                  .firstWhere((element) => element.selected!);
 
               if (convertStatusOption.statusName ==
                   AppLocalizations.text(LangKey.all)) {
-                filterScreenModel.filterModel.isConvert = "";
+                filterScreenModel.filterModel!.isConvert = "";
               } else {
-                filterScreenModel.filterModel.isConvert =
+                filterScreenModel.filterModel!.isConvert =
                     "${convertStatusOption.statusID}";
               }
 
@@ -1135,7 +1135,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             child: Center(
               child: Text(
                 // AppLocalizations.text(LangKey.convertCustomers),
-                AppLocalizations.text(LangKey.apply),
+                AppLocalizations.text(LangKey.apply)!,
                 style: TextStyle(
                     fontSize: 14.0,
                     color: Colors.white,
@@ -1161,7 +1161,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             },
             child: Center(
               child: Text(
-                AppLocalizations.text(LangKey.delete),
+                AppLocalizations.text(LangKey.delete)!,
                 style: TextStyle(
                     fontSize: 14.0,
                     color: Color(0xFF1A76B4),
@@ -1175,7 +1175,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     );
   }
 
-  void clearData() async {
+ clearData() async {
     widget.filterScreenModel = FilterScreenModel(
         filterModel: ListCustomLeadModelRequest(
           search: "",
@@ -1207,24 +1207,24 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
     filterScreenModel = FilterScreenModel(
         filterModel: ListCustomLeadModelRequest.fromJson(
-            widget.filterScreenModel.filterModel.toJson()),
-        fromDate_created_at: widget.filterScreenModel.fromDate_created_at,
-        toDate_created_at: widget.filterScreenModel.toDate_created_at,
+            widget.filterScreenModel!.filterModel!.toJson()),
+        fromDate_created_at: widget.filterScreenModel!.fromDate_created_at,
+        toDate_created_at: widget.filterScreenModel!.toDate_created_at,
         fromDate_allocation_date:
-            widget.filterScreenModel.fromDate_allocation_date,
-        toDate_allocation_date: widget.filterScreenModel.toDate_allocation_date,
+            widget.filterScreenModel!.fromDate_allocation_date,
+        toDate_allocation_date: widget.filterScreenModel!.toDate_allocation_date,
         fromDate_history_care_date:
-            widget.filterScreenModel.fromDate_history_care_date,
+            widget.filterScreenModel!.fromDate_history_care_date,
         toDate_history_care_date:
-            widget.filterScreenModel.toDate_history_care_date,
+            widget.filterScreenModel!.toDate_history_care_date,
         fromDate_work_schedule_date:
-            widget.filterScreenModel.fromDate_work_schedule_date,
+            widget.filterScreenModel!.fromDate_work_schedule_date,
         toDate_work_schedule_date:
-            widget.filterScreenModel.toDate_work_schedule_date,
-        id_history_care_date: widget.filterScreenModel.id_history_care_date,
-        id_work_schedule_date: widget.filterScreenModel.id_work_schedule_date,
-        id_created_at: widget.filterScreenModel.id_created_at,
-        id_allocation_date: widget.filterScreenModel.id_allocation_date);
+            widget.filterScreenModel!.toDate_work_schedule_date,
+        id_history_care_date: widget.filterScreenModel!.id_history_care_date,
+        id_work_schedule_date: widget.filterScreenModel!.id_work_schedule_date,
+        id_created_at: widget.filterScreenModel!.id_created_at,
+        id_allocation_date: widget.filterScreenModel!.id_allocation_date);
 
     // allocatorSelected = null;
     // pipelineSelected = [];
@@ -1282,13 +1282,13 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       customerSources[i].selected = false;
     }
 
-    for (int i = 0; i < pipeLineData.length; i++) {
-      pipeLineData[i].selected = false;
+    for (int i = 0; i < pipeLineData!.length; i++) {
+      pipeLineData![i].selected = false;
     }
     pipelineSelected = null;
 
-     for (int i = 0; i < journeysData.length; i++) {
-      journeysData[i].selected = false;
+     for (int i = 0; i < journeysData!.length; i++) {
+      journeysData![i].selected = false;
     }
     journeySelected = null;
 

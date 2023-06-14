@@ -1,18 +1,18 @@
 class UpdateLeadRequestModel {
-  String customerLeadCode;
-  String customerType;
-  String fullName;
-  int phone;
-  int customerSource;
-  String pipelineCode;
-  String journeyCode;
-  String avatar;
-  String provinceId;
-  String districtId;
-  String address;
-  String saleId;
-  String businessClue;
-  String zalo;
+  String? customerLeadCode;
+  String? customerType;
+  String? fullName;
+  int? phone;
+  int? customerSource;
+  String? pipelineCode;
+  String? journeyCode;
+  String? avatar;
+  String? provinceId;
+  String? districtId;
+  String? address;
+  String? saleId;
+  String? businessClue;
+  String? zalo;
 
   UpdateLeadRequestModel(
       {this.customerLeadCode,

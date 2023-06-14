@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/model/convert_status.dart';
 
 class FilterByConvertStatus extends StatefulWidget {
-  List<ConvertStatusModel> convertStatusOptions = <ConvertStatusModel>[];
- FilterByConvertStatus({ Key key ,this.convertStatusOptions}) : super(key: key);
+  List<ConvertStatusModel>? convertStatusOptions = <ConvertStatusModel>[];
+ FilterByConvertStatus({ Key? key ,this.convertStatusOptions}) : super(key: key);
 
   @override
   _FilterByConvertStatusState createState() => _FilterByConvertStatusState();
@@ -17,10 +17,10 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
             margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
             child: Wrap(
               children: List.generate(
-                  widget.convertStatusOptions.length,
+                  widget.convertStatusOptions!.length,
                   (index) => _optionItem(
-                          widget.convertStatusOptions[index].statusName,
-                          widget.convertStatusOptions[index].selected, () {
+                          widget.convertStatusOptions![index].statusName,
+                          widget.convertStatusOptions![index].selected!, () {
                         selectedSource(index);
                       })),
               spacing: 10,
@@ -30,9 +30,9 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
         : Container();
   }
 
-  Widget _optionItem(String name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -49,7 +49,7 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(
                           color: Color(0xFF0067AC),
                           fontWeight: FontWeight.w600),
@@ -65,7 +65,7 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(color: Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -76,7 +76,7 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
   }
 
   selectedSource(int index) async {
-    List<ConvertStatusModel> models = widget.convertStatusOptions;
+    List<ConvertStatusModel> models = widget.convertStatusOptions!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

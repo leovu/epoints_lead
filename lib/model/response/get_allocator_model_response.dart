@@ -1,7 +1,7 @@
 class GetAllocatorModelReponse {
-  int errorCode;
-  String errorDescription;
-  List<AllocatorData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<AllocatorData>? data;
 
   GetAllocatorModelReponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class GetAllocatorModelReponse {
     if (json['Data'] != null) {
       data = <AllocatorData>[];
       json['Data'].forEach((v) {
-        data.add(new AllocatorData.fromJson(v));
+        data!.add(new AllocatorData.fromJson(v));
       });
     }
   }
@@ -21,16 +21,16 @@ class GetAllocatorModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class AllocatorData {
-  int staffId;
-  String fullName;
-  bool selected;
+  int? staffId;
+  String? fullName;
+  bool? selected;
 
   AllocatorData({this.staffId, this.fullName, this.selected});
 

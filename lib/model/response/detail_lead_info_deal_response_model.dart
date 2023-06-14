@@ -1,7 +1,7 @@
 class DetailLeadInfoDealResponseModel {
-  int errorCode;
-  String errorDescription;
-  List<DetailLeadInfoDealData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<DetailLeadInfoDealData>? data;
 
   DetailLeadInfoDealResponseModel(
       {this.errorCode, this.errorDescription, this.data});
@@ -12,7 +12,7 @@ class DetailLeadInfoDealResponseModel {
     if (json['Data'] != null) {
       data = <DetailLeadInfoDealData>[];
       json['Data'].forEach((v) {
-        data.add(new DetailLeadInfoDealData.fromJson(v));
+        data!.add(new DetailLeadInfoDealData.fromJson(v));
       });
     }
   }
@@ -22,31 +22,31 @@ class DetailLeadInfoDealResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class DetailLeadInfoDealData {
-  int dealId;
-  String dealCode;
-  String customerCode;
-  String typeCustomer;
-  int customerLeadId;
-  String pipelineCode;
-  String journeyCode;
-  String dealName;
-  int probability;
-  String createdAt;
-  int saleId;
-  String staffName;
-  int amount;
-  String dateLastCare;
-  int diffDay;
-  String journeyName;
-  int relatedWork;
-  int appointment;
+  int? dealId;
+  String? dealCode;
+  String? customerCode;
+  String? typeCustomer;
+  int? customerLeadId;
+  String? pipelineCode;
+  String? journeyCode;
+  String? dealName;
+  int? probability;
+  String? createdAt;
+  int? saleId;
+  String? staffName;
+  int? amount;
+  String? dateLastCare;
+  int? diffDay;
+  String? journeyName;
+  int? relatedWork;
+  int? appointment;
 
   DetailLeadInfoDealData(
       {this.dealId,

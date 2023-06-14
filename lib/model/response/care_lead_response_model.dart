@@ -1,7 +1,7 @@
 class CareLeadResponseModel {
-  int errorCode;
-  String errorDescription;
-  List<CareLeadData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<CareLeadData>? data;
 
   CareLeadResponseModel({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class CareLeadResponseModel {
     if (json['Data'] != null) {
       data = <CareLeadData>[];
       json['Data'].forEach((v) {
-        data.add(new CareLeadData.fromJson(v));
+        data!.add(new CareLeadData.fromJson(v));
       });
     }
   }
@@ -21,37 +21,37 @@ class CareLeadResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class CareLeadData {
-  int manageWorkId;
-  String manageWorkCode;
-  String manageWorkCustomerType;
-  int manageProjectId;
-  String manageProjectName;
-  int manageTypeWorkId;
-  String manageTypeWorkKey;
-  String manageTypeWorkName;
-  String manageTypeWorkIcon;
-  String createdAt;
-  String manageWorkTitle;
-  String dateStart;
-  String dateEnd;
-  String dateFinish;
-  int processorId;
-  String staffFullName;
-  String staffAvatar;
-  int manageStatusId;
-  String manageStatusName;
-  String manageStatusColor;
-  List<ListTagCareLead> listTag;
-  int countFile;
-  int countComment;
-  int daysLate;
+  int? manageWorkId;
+  String? manageWorkCode;
+  String? manageWorkCustomerType;
+  int? manageProjectId;
+  String? manageProjectName;
+  int? manageTypeWorkId;
+  String? manageTypeWorkKey;
+  String? manageTypeWorkName;
+  String? manageTypeWorkIcon;
+  String? createdAt;
+  String? manageWorkTitle;
+  String? dateStart;
+  String? dateEnd;
+  String? dateFinish;
+  int? processorId;
+  String? staffFullName;
+  String? staffAvatar;
+  int? manageStatusId;
+  String? manageStatusName;
+  String? manageStatusColor;
+  List<ListTagCareLead>? listTag;
+  int? countFile;
+  int? countComment;
+  int? daysLate;
 
   CareLeadData(
       {this.manageWorkId,
@@ -103,7 +103,7 @@ class CareLeadData {
     if (json['list_tag'] != null) {
       listTag = <ListTagCareLead>[];
       json['list_tag'].forEach((v) {
-        listTag.add(new ListTagCareLead.fromJson(v));
+        listTag!.add(new ListTagCareLead.fromJson(v));
       });
     }
     countFile = json['count_file'];
@@ -134,7 +134,7 @@ class CareLeadData {
     data['manage_status_name'] = this.manageStatusName;
     data['manage_status_color'] = this.manageStatusColor;
     if (this.listTag != null) {
-      data['list_tag'] = this.listTag.map((v) => v.toJson()).toList();
+      data['list_tag'] = this.listTag!.map((v) => v.toJson()).toList();
     }
     data['count_file'] = this.countFile;
     data['count_comment'] = this.countComment;
@@ -144,10 +144,10 @@ class CareLeadData {
 }
 
 class ListTagCareLead {
-  int manageWorkTagId;
-  int manageWorkId;
-  int manageTagId;
-  String tagName;
+  int? manageWorkTagId;
+  int? manageWorkId;
+  int? manageTagId;
+  String? tagName;
 
   ListTagCareLead(
       {this.manageWorkTagId,

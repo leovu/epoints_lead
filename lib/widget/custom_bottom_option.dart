@@ -9,7 +9,7 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class CustomBottomOption extends StatelessWidget {
 
-  final List<CustomBottomOptionModel> options;
+  final List<CustomBottomOptionModel>? options;
 
   CustomBottomOption({this.options});
 
@@ -21,7 +21,7 @@ class CustomBottomOption extends StatelessWidget {
       separator: CustomLine(),
       children: (options?.length ?? 0) == 0? [CustomEmpty(
         title: AppLocalizations.text(LangKey.data_empty),
-      )]: options.map((e) => InkWell(
+      )]: options!.map((e) => InkWell(
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 20.0),
           child: Row(
@@ -42,7 +42,7 @@ class CustomBottomOption extends StatelessWidget {
                   ),
                 ),
               ),
-              if(e.isSelected != null && e.isSelected)
+              if(e.isSelected != null && e.isSelected!)
                 Container(
                   padding: EdgeInsets.only(left: 10.0),
                   child: Icon(
@@ -54,18 +54,18 @@ class CustomBottomOption extends StatelessWidget {
             ],
           ),
         ),
-        onTap: e.onTap,
+        onTap: e.onTap as void Function()?,
       )).toList()
     );
   }
 }
 
 class CustomBottomOptionModel{
-  final String icon;
-  final String text;
-  final Color textColor;
-  final bool isSelected;
-  final Function onTap;
+  final String? icon;
+  final String? text;
+  final Color? textColor;
+  final bool? isSelected;
+  final Function? onTap;
 
   CustomBottomOptionModel({this.icon, this.text, this.textColor, this.isSelected, this.onTap});
 }

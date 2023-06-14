@@ -1,7 +1,7 @@
 class GetPipelineModelReponse {
-  int errorCode;
-  String errorDescription;
-  List<PipelineData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<PipelineData>? data;
 
   GetPipelineModelReponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class GetPipelineModelReponse {
     if (json['Data'] != null) {
       data = <PipelineData>[];
       json['Data'].forEach((v) {
-        data.add(PipelineData.fromJson(v));
+        data!.add(PipelineData.fromJson(v));
       });
     }
   }
@@ -21,19 +21,19 @@ class GetPipelineModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class PipelineData {
-  int pipelineId;
-  String pipelineCode;
-  String pipelineName;
-  String pipelineCategoryCode;
-  int ownerId;
-  bool selected;
+  int? pipelineId;
+  String? pipelineCode;
+  String? pipelineName;
+  String? pipelineCategoryCode;
+  int? ownerId;
+  bool? selected;
 
   PipelineData(
       {this.pipelineId,

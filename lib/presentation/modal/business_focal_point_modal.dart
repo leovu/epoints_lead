@@ -12,10 +12,10 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class BusinessFocalPointModal extends StatefulWidget {
-  ListCustomLeadItems businessFocalPointSeleted = ListCustomLeadItems();
-  List<ListCustomLeadItems> businessFocalPointData = <ListCustomLeadItems>[];
+  ListCustomLeadItems? businessFocalPointSeleted = ListCustomLeadItems();
+  List<ListCustomLeadItems>? businessFocalPointData = <ListCustomLeadItems>[];
   BusinessFocalPointModal(
-      {Key key, this.businessFocalPointData, this.businessFocalPointSeleted})
+      {Key? key, this.businessFocalPointData, this.businessFocalPointSeleted})
       : super(key: key);
 
   @override
@@ -140,7 +140,7 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.businessFocalPoint),
+            AppLocalizations.text(LangKey.businessFocalPoint)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,

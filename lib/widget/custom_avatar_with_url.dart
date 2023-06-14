@@ -6,11 +6,11 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 
 class CustomAvatarWithURL extends StatelessWidget {
 
-  final String url;
-  final String name;
-  final double size;
-  final Color borderColor;
-  final Function onTap;
+  final String? url;
+  final String? name;
+  final double? size;
+  final Color? borderColor;
+  final Function? onTap;
 
   CustomAvatarWithURL({this.url, this.name, this.size, this.borderColor, this.onTap});
 
@@ -18,7 +18,7 @@ class CustomAvatarWithURL extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> names = (name ?? "").split(" ");
     names.remove("");
-    String placeholder;
+    String? placeholder;
     if(names.length == 1 && names[0].isNotEmpty){
       placeholder = names[0][0];
     }
@@ -40,32 +40,32 @@ class CustomAvatarWithURL extends StatelessWidget {
             shape: BoxShape.circle,
             color: AppColors.primaryColor.withOpacity(0.5)
           ),
-          padding: EdgeInsets.all(size / 5),
+          padding: EdgeInsets.all(size! / 5),
           alignment: Alignment.center,
           child: AutoSizeText(
               (placeholder ?? "").trim().toUpperCase(),
             style: AppTextStyles.style15WhiteBold.copyWith(
-              fontSize: size / 5 * 4
+              fontSize: size! / 5 * 4
             ),
             minFontSize: 1.0,
           ),
         ),
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }
 
 class CustomNetworkImage extends StatelessWidget {
 
-  final double width;
-  final double height;
-  final String url;
-  final BoxFit fit;
-  final Color backgroundColor;
-  final double radius;
-  final Color borderColor;
-  final Widget placeholder;
+  final double? width;
+  final double? height;
+  final String? url;
+  final BoxFit? fit;
+  final Color? backgroundColor;
+  final double? radius;
+  final Color? borderColor;
+  final Widget? placeholder;
 
   CustomNetworkImage({
     this.width,
@@ -87,11 +87,11 @@ class CustomNetworkImage extends StatelessWidget {
         height: height,
         decoration: BoxDecoration(
           color: backgroundColor??AppColors.white,
-          border: borderColor == null?null:Border.all(color: borderColor),
+          border: borderColor == null?null:Border.all(color: borderColor!),
           borderRadius: BorderRadius.circular(radius??0.0),
         ),
         child: url == null?(placeholder??Placeholder()):CachedNetworkImage(
-            imageUrl: url,
+            imageUrl: url!,
             width: width,
             height: height,
             fit: fit ?? BoxFit.cover,
@@ -110,11 +110,11 @@ class CustomNetworkImage extends StatelessWidget {
 
 class CustomAvatar extends StatelessWidget {
 
-  final String url;
-  final String name;
-  final double size;
-  final Color borderColor;
-  final Function onTap;
+  final String? url;
+  final String? name;
+  final double? size;
+  final Color? borderColor;
+  final Function? onTap;
 
   CustomAvatar({this.url, this.name, this.size, this.borderColor, this.onTap});
 
@@ -122,7 +122,7 @@ class CustomAvatar extends StatelessWidget {
   Widget build(BuildContext context) {
     List<String> names = (name ?? "").split(" ");
     names.remove("");
-    String placeholder;
+    String? placeholder;
     if(names.length == 1 && names[0].isNotEmpty){
       placeholder = names[0][0];
     }
@@ -144,18 +144,18 @@ class CustomAvatar extends StatelessWidget {
             shape: BoxShape.circle,
             color: AppColors.primaryColor.withOpacity(0.5)
           ),
-          padding: EdgeInsets.all(size / 5),
+          padding: EdgeInsets.all(size! / 5),
           alignment: Alignment.center,
           child: AutoSizeText(
               (placeholder ?? "").trim().toUpperCase(),
             style: AppTextStyles.style15WhiteBold.copyWith(
-              fontSize: size / 5 * 4
+              fontSize: size! / 5 * 4
             ),
             minFontSize: 1.0,
           ),
         ),
       ),
-      onTap: onTap,
+      onTap: onTap as void Function()?,
     );
   }
 }
@@ -163,11 +163,11 @@ class CustomAvatar extends StatelessWidget {
 class CustomAvatarDetail extends StatelessWidget {
 
   final String name;
-  final double textSize;
-  final Color color;
+  final double? textSize;
+  final Color? color;
 
   CustomAvatarDetail({
-    @required this.name, this.textSize, this.color
+    required this.name, this.textSize, this.color
   }):assert(name != null);
 
   String getFirstChar(String event){

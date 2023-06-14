@@ -5,19 +5,19 @@ import 'package:flutter/services.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 
 class AppLocalizations {
-  final Locale locale;
+  final Locale? locale;
 
   AppLocalizations(this.locale);
 
   static const LocalizationsDelegate<AppLocalizations> delegate =
       AppLocalizationsDelegate();
 
-  static Map<String, String> _localizedStrings;
+  static late Map<String, String> _localizedStrings;
 
   Future<bool> load() async {
 
 
-    Map<String, dynamic> jsonMap = await configLanguage(locale.languageCode);
+    Map<String, dynamic>? jsonMap = await configLanguage(locale!.languageCode);
     if(jsonMap!=null){
       _localizedStrings = jsonMap.map((key, value) {
         return MapEntry(key, value.toString());
@@ -26,15 +26,15 @@ class AppLocalizations {
     return true;
   }
 
-  Future<Map<String, dynamic>> configLanguage(String lang) async {
+  Future<Map<String, dynamic>?> configLanguage(String lang) async {
   var jsonString = await rootBundle.loadString('packages/lead_plugin_epoint/assets/languages/lead_$lang.json', cache: false);
-  Map<String, dynamic> jsonMap = json.decode(jsonString);
+  Map<String, dynamic>? jsonMap = json.decode(jsonString);
   if (jsonMap != null) {
     return jsonMap;
   }
   return null;
 }
-  static String text(String key) {
+  static String? text(String key) {
     return _localizedStrings[key];
   }
 

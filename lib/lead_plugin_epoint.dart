@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
-import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/comment_screen/ui/comment_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
@@ -14,11 +12,11 @@ import 'common/localization/app_localizations.dart';
 import 'lead_plugin_epoint_platform_interface.dart';
 
 class LeadPluginEpoint {
-  Future<String> getPlatformVersion() {
+  Future<String?> getPlatformVersion() {
     return LeadPluginEpointPlatform.instance.getPlatformVersion();
   }
 
-  static Future<Future<Object>> openLead(
+  static Future<Future?> openLead(
       BuildContext context, Locale locale) async {
     // await AppSizes.init(context);
     await AppLocalizations(locale).load();
@@ -29,15 +27,15 @@ class LeadPluginEpoint {
 
   static Future<dynamic> open(
       BuildContext context, Locale locale, String token, int create,
-      {String domain,
-      String brandCode,
-      String fullname,
-      String phone,
-      String customerLeadCode,
-      Function createJob,
-      Function editJob,
-      Function openDetailDeal,
-      Function createDeal}) async {
+      {String? domain,
+      String? brandCode,
+      String? fullname,
+      String? phone,
+      String? customerLeadCode,
+      Function? createJob,
+      Function? editJob,
+      Function? openDetailDeal,
+      Function? createDeal}) async {
     if (domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -67,7 +65,7 @@ class LeadPluginEpoint {
     bool result = await LeadConnection.init(token, domain: domain);
     if (result) {
       if (create == 0) {
-        Map<String, dynamic> event = await Navigator.of(context).push(
+        Map<String, dynamic>? event = await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => CreatePotentialCustomer(
                     fullname: fullname, phoneNumber: phone)));

@@ -1,7 +1,7 @@
 class WorkUploadFileResponseModel {
-  int errorCode;
-  String errorDescription;
-  WorkUploadFileResponse data;
+  int? errorCode;
+  String? errorDescription;
+  WorkUploadFileResponse? data;
 
   WorkUploadFileResponseModel({this.errorCode, this.errorDescription, this.data});
 
@@ -16,7 +16,7 @@ class WorkUploadFileResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
@@ -26,7 +26,7 @@ class WorkUploadFileResponseModel {
 
 
 class WorkUploadFileResponse {
-  String path;
+  String? path;
 
   WorkUploadFileResponse({this.path});
 

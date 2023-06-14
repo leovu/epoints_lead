@@ -3,8 +3,8 @@ import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/status_assign_model.dart';
 
 class FilterBySatus extends StatefulWidget {
- List<StatusAssignModel> statusOptions = <StatusAssignModel>[];
-  FilterBySatus({Key key, this.statusOptions}) : super(key: key);
+ List<StatusAssignModel>? statusOptions = <StatusAssignModel>[];
+  FilterBySatus({Key? key, this.statusOptions}) : super(key: key);
 
   @override
   _FilterBySatusState createState() => _FilterBySatusState();
@@ -18,9 +18,9 @@ class _FilterBySatusState extends State<FilterBySatus> {
             margin: EdgeInsets.only(top: 16.0, bottom: 16.0),
             child: Wrap(
               children: List.generate(
-                  widget.statusOptions.length,
-                  (index) => _optionItem(widget.statusOptions[index].statusName,
-                          widget.statusOptions[index].selected, () {
+                  widget.statusOptions!.length,
+                  (index) => _optionItem(widget.statusOptions![index].statusName,
+                          widget.statusOptions![index].selected!, () {
                         selectedTag(index);
                       })),
               spacing: 20,
@@ -30,9 +30,9 @@ class _FilterBySatusState extends State<FilterBySatus> {
         : Container();
   }
 
-  Widget _optionItem(String name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -49,7 +49,7 @@ class _FilterBySatusState extends State<FilterBySatus> {
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(
                           color: Color(0xFF0067AC),
                           fontWeight: FontWeight.w600),
@@ -65,7 +65,7 @@ class _FilterBySatusState extends State<FilterBySatus> {
                       borderRadius: BorderRadius.circular(5.0)),
                   child: Center(
                     child: Text(
-                      name,
+                      name!,
                       style: TextStyle(color: Color(0xFF8E8E8E)),
                     ),
                   ),
@@ -76,7 +76,7 @@ class _FilterBySatusState extends State<FilterBySatus> {
   }
 
   selectedTag(int index) async {
-    List<StatusAssignModel> models = widget.statusOptions;
+    List<StatusAssignModel> models = widget.statusOptions!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

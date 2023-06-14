@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class CustomInkWell extends StatelessWidget {
 
-  final Widget child;
-  final Function onTap;
+  final Widget? child;
+  final Function? onTap;
 
   CustomInkWell({this.child, this.onTap});
 
@@ -15,7 +15,7 @@ class CustomInkWell extends StatelessWidget {
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
         child: child,
-        onTap: onTap
+        onTap: onTap as void Function()?
     );
   }
 }

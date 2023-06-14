@@ -1,7 +1,7 @@
 class GetProvinceModelReponse {
-  int errorCode;
-  String errorDescription;
-  List<ProvinceData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<ProvinceData>? data;
 
   GetProvinceModelReponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class GetProvinceModelReponse {
     if (json['Data'] != null) {
       data = <ProvinceData>[];
       json['Data'].forEach((v) {
-        data.add(new ProvinceData.fromJson(v));
+        data!.add(new ProvinceData.fromJson(v));
       });
     }
   }
@@ -21,17 +21,17 @@ class GetProvinceModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ProvinceData {
-  int provinceid;
-  String type;
-  String name;
-  bool selected;
+  int? provinceid;
+  String? type;
+  String? name;
+  bool? selected;
 
   ProvinceData({this.provinceid, this.type, this.name,  this.selected});
 

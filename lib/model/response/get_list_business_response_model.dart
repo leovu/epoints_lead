@@ -1,7 +1,7 @@
 class GetListBusinessResponseModel {
-  int errorCode;
-  String errorDescription;
-  List<GetListBusinessData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<GetListBusinessData>? data;
 
   GetListBusinessResponseModel(
       {this.errorCode, this.errorDescription, this.data});
@@ -12,7 +12,7 @@ class GetListBusinessResponseModel {
     if (json['Data'] != null) {
       data = <GetListBusinessData>[];
       json['Data'].forEach((v) {
-        data.add(new GetListBusinessData.fromJson(v));
+        data!.add(new GetListBusinessData.fromJson(v));
       });
     }
   }
@@ -22,23 +22,23 @@ class GetListBusinessResponseModel {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class GetListBusinessData {
-  String fullName;
-  String customerAvatar;
-  String customerCode;
-  String customerSourceName;
-  String email;
-  String gender;
-  String provinceName;
-  String districtName;
-  String address;
-  String customerType;
+  String? fullName;
+  String? customerAvatar;
+  String? customerCode;
+  String? customerSourceName;
+  String? email;
+  String? gender;
+  String? provinceName;
+  String? districtName;
+  String? address;
+  String? customerType;
 
   GetListBusinessData(
       {this.fullName,

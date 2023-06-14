@@ -1,10 +1,10 @@
 class ResponseModel {
-  int errorCode;
-  String errorDescription;
-  Map<String, dynamic> data;
-  List<dynamic> datas;
-  bool success;
-  String url;
+  int? errorCode;
+  String? errorDescription;
+  Map<String, dynamic>? data;
+  List<dynamic>? datas;
+  bool? success;
+  String? url;
 
   ResponseModel({this.errorCode, this.errorDescription, this.data, this.success = false, this.url = ""});
 

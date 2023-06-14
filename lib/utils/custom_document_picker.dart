@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/utils/custom_permission_request.dart';
 
 class CustomDocumentPicker {
-  static Future<File> openDocument(
+  static Future<File?> openDocument(
       BuildContext context, {
-        List<String> params,
+        List<String>? params,
       }) async {
     try {
       if (Platform.isAndroid) {
@@ -21,17 +21,17 @@ class CustomDocumentPicker {
       return null;
     }
 
-    FilePickerResult file = await FilePicker.platform.pickFiles(
+    FilePickerResult? file = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: params,
     );
 
-    return file == null ? null : File(file.files.single.path);
+    return file == null ? null : File(file.files.single.path!);
   }
 
-  static Future<List<File>> openMultiDocument(
+  static Future<List<File>?> openMultiDocument(
       BuildContext context, {
-        List<String> params,
+        List<String>? params,
       }) async {
     try {
       bool permission = false;
@@ -43,12 +43,12 @@ class CustomDocumentPicker {
       return null;
     }
 
-    FilePickerResult files = await FilePicker.platform.pickFiles(
+    FilePickerResult? files = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: params,
         allowMultiple: true
     );
 
-    return files == null ? null : files.files.map((e) => File(e.path)).toList();
+    return files == null ? null : files.files.map((e) => File(e.path!)).toList();
   }
 }

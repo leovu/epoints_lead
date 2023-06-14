@@ -9,7 +9,7 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class FilterByPipeline extends StatefulWidget {
-    List<PipelineData> pipeLineData = <PipelineData>[];
+    List<PipelineData>? pipeLineData = <PipelineData>[];
   FilterByPipeline(this.pipeLineData);
 
   @override
@@ -20,8 +20,8 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<PipelineData> pipeLineData;
-  List<PipelineData> pipeLineDataDisplay;
+  List<PipelineData>? pipeLineData;
+  List<PipelineData>? pipeLineDataDisplay;
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.choosePipeline),
+            AppLocalizations.text(LangKey.choosePipeline)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
@@ -62,7 +62,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
         children: [
           _buildSearch(),
           (pipeLineDataDisplay != null)
-              ? (pipeLineDataDisplay.length > 0)
+              ? (pipeLineDataDisplay!.length > 0)
                   ? Expanded(
                       child: CustomListView(
                       shrinkWrap: true,
@@ -90,18 +90,18 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
   }
 
   List<Widget> _listWidget() {
-    return (pipeLineDataDisplay != null && pipeLineDataDisplay.length > 0)
+    return (pipeLineDataDisplay != null && pipeLineDataDisplay!.length > 0)
         ? List.generate(
-            pipeLineDataDisplay.length,
-            (index) => _buildItem(pipeLineDataDisplay[index], () {
-                  selectedItem(pipeLineDataDisplay[index]);
+            pipeLineDataDisplay!.length,
+            (index) => _buildItem(pipeLineDataDisplay![index], () {
+                  selectedItem(pipeLineDataDisplay![index]);
                 }))
         : [CustomDataNotFound()];
   }
 
   Widget _buildItem(PipelineData item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -110,18 +110,18 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
             child: Row(
               children: [
                 Text(
-                  item.pipelineName,
+                  item.pipelineName!,
                   style: TextStyle(
                       fontSize: 15.0,
                       color:
-                          item.selected ? AppColors.primaryColor : Colors.black,
+                          item.selected! ? AppColors.primaryColor : Colors.black,
                       fontWeight:
-                          item.selected ? FontWeight.bold : FontWeight.normal),
+                          item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
               ],
             ),
           ),
-          item.selected
+          item.selected!
               ? Icon(
                   Icons.check_box,
                   color: AppColors.primaryColor,
@@ -172,7 +172,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
       setState(() {});
     } else {
       try {
-        List<PipelineData> models = pipeLineData.where((model) {
+        List<PipelineData> models = pipeLineData!.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
@@ -192,7 +192,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
   }
 
   selectedItem(PipelineData item) async {
-    item.selected = !item.selected;
+    item.selected = !item.selected!;
 
     // var event = models.firstWhere((element) => element.name == item.name);
 

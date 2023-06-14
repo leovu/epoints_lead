@@ -1,7 +1,7 @@
 class ObjectPopDetailModel {
-  int customer_lead_id;
-  String customer_lead_code;
-  bool status;
+  int? customer_lead_id;
+  String? customer_lead_code;
+  bool? status;
 
   ObjectPopDetailModel({this.customer_lead_id, this.customer_lead_code, this.status});
 

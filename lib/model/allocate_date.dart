@@ -1,7 +1,7 @@
 class AllocateDateModel {
-  String allocateDateName;
-  int allocateDateID;
-  bool selected;
+  String? allocateDateName;
+  int? allocateDateID;
+  bool? selected;
 
   AllocateDateModel({this.allocateDateName, this.allocateDateID, this.selected});
 

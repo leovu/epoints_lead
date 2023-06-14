@@ -9,9 +9,9 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class WardModal extends StatefulWidget {
-  List<WardData> ward = <WardData>[];
-  WardData wardSelected = WardData();
-   WardModal({ Key key, this.ward ,this.wardSelected}) : super(key: key);
+  List<WardData>? ward = <WardData>[];
+  WardData? wardSelected = WardData();
+   WardModal({ Key? key, this.ward ,this.wardSelected}) : super(key: key);
 
   @override
   _WardModalState createState() => _WardModalState();
@@ -21,9 +21,9 @@ class _WardModalState extends State<WardModal> {
  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  GetWardModelReponse _model;
-  List<WardData> ward = <WardData>[];
-  WardData wardSelected = WardData();
+  GetWardModelReponse? _model;
+  List<WardData>? ward = <WardData>[];
+  WardData? wardSelected = WardData();
 
 
   @override
@@ -32,12 +32,12 @@ class _WardModalState extends State<WardModal> {
     ward = widget.ward;
     wardSelected = widget.wardSelected;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      for (int i = 0; i < ward.length; i++) {
+      for (int i = 0; i < ward!.length; i++) {
         if ((wardSelected?.wardid ?? "") ==
-            ward[i].wardid) {
-          ward[i].selected = true;
+            ward![i].wardid) {
+          ward![i].selected = true;
         } else {
-          ward[i].selected = false;
+          ward![i].selected = false;
         }
       }
 
@@ -81,7 +81,7 @@ class _WardModalState extends State<WardModal> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.text(LangKey.wards),
+                  AppLocalizations.text(LangKey.wards)!,
                   style: TextStyle(
                       fontSize: 16.0,
                       color: Colors.black,
@@ -116,19 +116,19 @@ class _WardModalState extends State<WardModal> {
   }
 
  List<Widget> _listWidget() {
-    return (_model.data != null)
-        ? (_model.data.length > 0) ? List.generate(
-            _model.data.length,
+    return (_model!.data != null)
+        ? (_model!.data!.length > 0) ? List.generate(
+            _model!.data!.length,
             (index) => _buildItem(
-                    _model.data[index].name, _model.data[index].selected, () {
+                    _model!.data![index].name!, _model!.data![index].selected!, () {
                   selectedItem(index);
                 }))
-        : [CustomDataNotFound()]: Container();
+        : [CustomDataNotFound()]: Container() as List<Widget>;
   }
 
    Widget _buildItem(String title, bool selected, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
         height: 40,
         child: Row(
@@ -180,9 +180,9 @@ class _WardModalState extends State<WardModal> {
     );
   }
 
-    searchModel(List<WardData> model, String value) {
+    searchModel(List<WardData>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model.data = ward;
+      _model!.data = ward;
       setState(() {});
     } else {
       try {
@@ -197,7 +197,7 @@ class _WardModalState extends State<WardModal> {
           }
           return result;
         }).toList();
-        _model.data = models;
+        _model!.data = models;
         setState(() {});
       } catch (_) {
         setState(() {});
@@ -206,7 +206,7 @@ class _WardModalState extends State<WardModal> {
   }
 
   selectedItem(int index) async {
-    List<WardData> models = _model.data;
+    List<WardData> models = _model!.data!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

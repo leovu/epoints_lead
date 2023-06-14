@@ -1,7 +1,7 @@
 class ContactListModelResponse {
-  int errorCode;
-  String errorDescription;
-  List<ContactListData> data;
+  int? errorCode;
+  String? errorDescription;
+  List<ContactListData>? data;
 
   ContactListModelResponse({this.errorCode, this.errorDescription, this.data});
 
@@ -11,7 +11,7 @@ class ContactListModelResponse {
     if (json['Data'] != null) {
       data = <ContactListData>[];
       json['Data'].forEach((v) {
-        data.add(new ContactListData.fromJson(v));
+        data!.add(new ContactListData.fromJson(v));
       });
     }
   }
@@ -21,25 +21,25 @@ class ContactListModelResponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ContactListData {
-  int customerContactId;
-  String customerLeadCode;
-  String fullName;
-  String positon;
-  String phone;
-  String email;
-  String address;
+  int? customerContactId;
+  String? customerLeadCode;
+  String? fullName;
+  String? positon;
+  String? phone;
+  String? email;
+  String? address;
   Null customerContactTilteId;
-  String customerContactType;
+  String? customerContactType;
   Null customerContactTilteNameVi;
   Null customerContactTilteNameEn;
-  String customerContactTypeName;
+  String? customerContactTypeName;
 
   ContactListData(
       {this.customerContactId,

@@ -10,7 +10,7 @@ class MethodChannelLeadPluginEpoint extends LeadPluginEpointPlatform {
   final methodChannel = const MethodChannel('lead_plugin_epoint');
 
   @override
-  Future<String> getPlatformVersion() async {
+  Future<String?> getPlatformVersion() async {
     final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
     return version;
   }

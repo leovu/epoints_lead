@@ -10,13 +10,13 @@ import 'package:lead_plugin_epoint/model/response_model.dart';
 
 class AWSInteraction extends AWSConnection<ResponseModel> {
 
-  final BuildContext context;
+  final BuildContext? context;
   final AWSFileModel file;
   final bool showError;
 
   AWSInteraction({
     this.context,
-    @required this.file,
+    required this.file,
     this.showError = true,
   }):assert(file != null);
 
@@ -39,7 +39,7 @@ class AWSInteraction extends AWSConnection<ResponseModel> {
   @override
   Future<ResponseModel> handleError(ResponseModel model) async {
     if (showError)
-      await LeadConnection.showMyDialog(context, model.errorDescription ?? "");
+      await LeadConnection.showMyDialog(context!, model.errorDescription ?? "");
     return model;
   }
 
@@ -59,7 +59,7 @@ class AWSInteraction extends AWSConnection<ResponseModel> {
   }
 
   @override
-  ResponseModel getError(String error, {int errorCode}) {
+  ResponseModel getError(String? error, {int? errorCode}) {
     return ResponseModel(errorDescription: error, errorCode: errorCode);
   }
 }

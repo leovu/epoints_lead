@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/widget/container_scrollable.dart';
 
 class CustomListView extends StatefulWidget {
-  final ScrollController controller;
-  final List<Widget> children;
-  final EdgeInsetsGeometry padding;
-  final double separatorPadding;
-  final ScrollPhysics physics;
-  final bool shrinkWrap;
-  final Widget separator;
-  final Axis scrollDirection;
-  final bool showLoadmore;
-  final Function onLoadmore;
-  final Future<void> Function() onRefresh;
+  final ScrollController? controller;
+  final List<Widget>? children;
+  final EdgeInsetsGeometry? padding;
+  final double? separatorPadding;
+  final ScrollPhysics? physics;
+  final bool? shrinkWrap;
+  final Widget? separator;
+  final Axis? scrollDirection;
+  final bool? showLoadmore;
+  final Function? onLoadmore;
+  final Future<void> Function()? onRefresh;
 
   CustomListView({
     this.controller,
@@ -38,7 +38,7 @@ class _CustomListViewState extends State<CustomListView> {
   _loadmore() async {
     if (!_isLoadmore) {
       _isLoadmore = true;
-      await widget.onLoadmore();
+      await widget.onLoadmore!();
       _isLoadmore = false;
     }
   }

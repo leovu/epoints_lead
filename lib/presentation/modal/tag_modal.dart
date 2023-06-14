@@ -14,8 +14,8 @@ import 'package:lead_plugin_epoint/widget/custom_shimer.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 
 class TagsModal extends StatefulWidget {
-  List<TagData> tagsData;
-  TagsModal({Key key, this.tagsData});
+  List<TagData>? tagsData;
+  TagsModal({Key? key, this.tagsData});
 
   @override
   _TagsModalState createState() => _TagsModalState();
@@ -25,8 +25,8 @@ class _TagsModalState extends State<TagsModal> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  List<TagData> tagsData = [];
-  List<TagData> tagsDataDisplay = [];
+  List<TagData>? tagsData = [];
+  List<TagData>? tagsDataDisplay = [];
 
   @override
   void initState() {
@@ -53,7 +53,7 @@ class _TagsModalState extends State<TagsModal> {
     var tags = await LeadConnection.getTag(context);
     Navigator.of(context).pop();
     if (tags != null) {
-      tagsData.add(tags.data.elementAt(tags.data.length-1));
+      tagsData!.add(tags.data!.elementAt(tags.data!.length-1));
       // tagsData = tags.data;
       tagsDataDisplay = tagsData;
     }
@@ -71,7 +71,7 @@ class _TagsModalState extends State<TagsModal> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.chooseCards),
+            AppLocalizations.text(LangKey.chooseCards)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           actions: [
@@ -116,7 +116,7 @@ class _TagsModalState extends State<TagsModal> {
         children: [
           _buildSearch(),
           (tagsDataDisplay != null)
-              ? (tagsDataDisplay.length > 0)
+              ? (tagsDataDisplay!.length > 0)
                   ? Expanded(
                       child: CustomListView(
                       shrinkWrap: true,
@@ -144,18 +144,18 @@ class _TagsModalState extends State<TagsModal> {
   }
 
   List<Widget> _listWidget() {
-    return (tagsDataDisplay != null && tagsDataDisplay.length > 0)
+    return (tagsDataDisplay != null && tagsDataDisplay!.length > 0)
         ? List.generate(
-            tagsDataDisplay.length,
-            (index) => _buildItem(tagsDataDisplay[index], () {
-                  selectedItem(tagsDataDisplay[index]);
+            tagsDataDisplay!.length,
+            (index) => _buildItem(tagsDataDisplay![index], () {
+                  selectedItem(tagsDataDisplay![index]);
                 }))
         : [CustomDataNotFound()];
   }
 
   Widget _buildItem(TagData item, Function ontap) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -164,18 +164,18 @@ class _TagsModalState extends State<TagsModal> {
             child: Row(
               children: [
                 Text(
-                  item.name,
+                  item.name!,
                   style: TextStyle(
                       fontSize: 15.0,
                       color:
-                          item.selected ? AppColors.primaryColor : Colors.black,
+                          item.selected! ? AppColors.primaryColor : Colors.black,
                       fontWeight:
-                          item.selected ? FontWeight.bold : FontWeight.normal),
+                          item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
               ],
             ),
           ),
-          item.selected
+          item.selected!
               ? Icon(
                   Icons.check_box,
                   color: AppColors.primaryColor,
@@ -244,7 +244,7 @@ class _TagsModalState extends State<TagsModal> {
       setState(() {});
     } else {
       try {
-        List<TagData> models = tagsData.where((model) {
+        List<TagData> models = tagsData!.where((model) {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
@@ -264,7 +264,7 @@ class _TagsModalState extends State<TagsModal> {
   }
 
   selectedItem(TagData item) async {
-    item.selected = !item.selected;
+    item.selected = !item.selected!;
 
     setState(() {
       // widget.tagsData = models;

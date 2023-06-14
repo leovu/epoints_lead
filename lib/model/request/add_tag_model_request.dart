@@ -1,5 +1,5 @@
 class AddTagModelRequest {
-  String name;
+  String? name;
 
   AddTagModelRequest({this.name});
 

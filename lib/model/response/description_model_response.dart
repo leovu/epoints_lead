@@ -1,6 +1,6 @@
 class DescriptionModelResponse {
-  int errorCode;
-  String errorDescription;
+  int? errorCode;
+  String? errorDescription;
   
 
   DescriptionModelResponse({this.errorCode, this.errorDescription});

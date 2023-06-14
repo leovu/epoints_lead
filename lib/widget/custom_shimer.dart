@@ -3,7 +3,7 @@ import 'package:shimmer/shimmer.dart';
 
 class CustomShimmer extends StatelessWidget {
 
-  final Widget child;
+  final Widget? child;
 
   CustomShimmer({this.child});
 
@@ -12,7 +12,7 @@ class CustomShimmer extends StatelessWidget {
     return Shimmer.fromColors(
       baseColor: Color(0xFFD8D8D8),
       highlightColor: Colors.white,
-      child: child,
+      child: child!,
     );
   }
 }

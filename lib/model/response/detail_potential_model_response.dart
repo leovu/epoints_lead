@@ -1,7 +1,7 @@
 class DetailPotentialModelResponse {
-  int errorCode;
-  String errorDescription;
-  DetailPotentialData data;
+  int? errorCode;
+  String? errorDescription;
+  DetailPotentialData? data;
 
   DetailPotentialModelResponse(
       {this.errorCode, this.errorDescription, this.data});
@@ -19,66 +19,66 @@ class DetailPotentialModelResponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data.toJson();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
 
 class DetailPotentialData {
-  int customerLeadId;
-  String customerLeadCode;
-  String fullName;
-  String phone;
-  String hotline;
-  String taxCode;
-  int customerSource;
-  String customerSourceName;
-  String customerType;
-  String pipelineCode;
-  String pipelineName;
-  String journeyCode;
-  String journeyName;
-  String email;
-  String gender;
-  int provinceId;
-  String provinceType;
-  String provinceName;
-  int districtId;
-  String districtType;
-  String districtName;
-  int wardId;
-  String wardType;
-  String wardName;
-  String address;
-  String zalo;
-  String fanpage;
-  int saleId;
-  List<Tag> tag;
-  String saleName;
-  int isConvert;
-  String representative;
-  String businessClue;
-  String businessClueName;
-  int bussinessId;
-  String businessName;
-  int employees;
-  int timeRevokeLead;
-  String dateRevoke;
-  String allocationDate;
-  String avatar;
-  num amount;
-  String dateLastCare;
-  int diffDay;
-  int relatedWork;
-  int appointment;
-  String birthday;
-  String position;
-  List<JourneyTracking> journeyTracking;
-  List<InfoDeal> infoDeal;
-  List<CustomerCare> customerCare;
-  List<CareHistory> careHistory;
-  List<ContactList> contactList;
+  int? customerLeadId;
+  String? customerLeadCode;
+  String? fullName;
+  String? phone;
+  String? hotline;
+  String? taxCode;
+  int? customerSource;
+  String? customerSourceName;
+  String? customerType;
+  String? pipelineCode;
+  String? pipelineName;
+  String? journeyCode;
+  String? journeyName;
+  String? email;
+  String? gender;
+  int? provinceId;
+  String? provinceType;
+  String? provinceName;
+  int? districtId;
+  String? districtType;
+  String? districtName;
+  int? wardId;
+  String? wardType;
+  String? wardName;
+  String? address;
+  String? zalo;
+  String? fanpage;
+  int? saleId;
+  List<Tag>? tag;
+  String? saleName;
+  int? isConvert;
+  String? representative;
+  String? businessClue;
+  String? businessClueName;
+  int? bussinessId;
+  String? businessName;
+  int? employees;
+  int? timeRevokeLead;
+  String? dateRevoke;
+  String? allocationDate;
+  String? avatar;
+  num? amount;
+  String? dateLastCare;
+  int? diffDay;
+  int? relatedWork;
+  int? appointment;
+  String? birthday;
+  String? position;
+  List<JourneyTracking>? journeyTracking;
+  List<InfoDeal>? infoDeal;
+  List<CustomerCare>? customerCare;
+  List<CareHistory>? careHistory;
+  List<ContactList>? contactList;
 
   DetailPotentialData(
       {this.customerLeadId,
@@ -167,7 +167,7 @@ class DetailPotentialData {
     if (json['tag'] != null) {
       tag = <Tag>[];
       json['tag'].forEach((v) {
-        tag.add(new Tag.fromJson(v));
+        tag!.add(new Tag.fromJson(v));
       });
     }
     saleName = json['sale_name'];
@@ -193,31 +193,31 @@ class DetailPotentialData {
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];
       json['journey_tracking'].forEach((v) {
-        journeyTracking.add(new JourneyTracking.fromJson(v));
+        journeyTracking!.add(new JourneyTracking.fromJson(v));
       });
     }
     if (json['info_deal'] != null) {
       infoDeal = <InfoDeal>[];
       json['info_deal'].forEach((v) {
-        infoDeal.add(new InfoDeal.fromJson(v));
+        infoDeal!.add(new InfoDeal.fromJson(v));
       });
     }
     if (json['customer_care'] != null) {
       customerCare = <CustomerCare>[];
       json['customer_care'].forEach((v) {
-        customerCare.add(new CustomerCare.fromJson(v));
+        customerCare!.add(new CustomerCare.fromJson(v));
       });
     }
     if (json['care_history'] != null) {
       careHistory = <CareHistory>[];
       json['care_history'].forEach((v) {
-        careHistory.add(new CareHistory.fromJson(v));
+        careHistory!.add(new CareHistory.fromJson(v));
       });
     }
     if (json['contact_list'] != null) {
       contactList = <ContactList>[];
       json['contact_list'].forEach((v) {
-        contactList.add(new ContactList.fromJson(v));
+        contactList!.add(new ContactList.fromJson(v));
       });
     }
   }
@@ -253,7 +253,7 @@ class DetailPotentialData {
     data['fanpage'] = this.fanpage;
     data['sale_id'] = this.saleId;
     if (this.tag != null) {
-      data['tag'] = this.tag.map((v) => v.toJson()).toList();
+      data['tag'] = this.tag!.map((v) => v.toJson()).toList();
     }
     data['sale_name'] = this.saleName;
     data['is_convert'] = this.isConvert;
@@ -277,28 +277,28 @@ class DetailPotentialData {
     
     if (this.journeyTracking != null) {
       data['journey_tracking'] =
-          this.journeyTracking.map((v) => v.toJson()).toList();
+          this.journeyTracking!.map((v) => v.toJson()).toList();
     }
     if (this.infoDeal != null) {
-      data['info_deal'] = this.infoDeal.map((v) => v.toJson()).toList();
+      data['info_deal'] = this.infoDeal!.map((v) => v.toJson()).toList();
     }
     if (this.customerCare != null) {
-      data['customer_care'] = this.customerCare.map((v) => v.toJson()).toList();
+      data['customer_care'] = this.customerCare!.map((v) => v.toJson()).toList();
     }
     if (this.careHistory != null) {
-      data['care_history'] = this.careHistory.map((v) => v.toJson()).toList();
+      data['care_history'] = this.careHistory!.map((v) => v.toJson()).toList();
     }
     if (this.contactList != null) {
-      data['contact_list'] = this.contactList.map((v) => v.toJson()).toList();
+      data['contact_list'] = this.contactList!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class Tag {
-  int tagId;
-  String keyword;
-  String tagName;
+  int? tagId;
+  String? keyword;
+  String? tagName;
 
   Tag({this.tagId, this.keyword, this.tagName});
 
@@ -318,13 +318,13 @@ class Tag {
 }
 
 class JourneyTracking {
-  String journeyCode;
-  int journeyId;
-  String journeyName;
-  int pipelineId;
-  String pipelineCode;
-  String backgroundColorJourney;
-  bool check;
+  String? journeyCode;
+  int? journeyId;
+  String? journeyName;
+  int? pipelineId;
+  String? pipelineCode;
+  String? backgroundColorJourney;
+  bool? check;
 
   JourneyTracking(
       {this.journeyCode,
@@ -359,22 +359,22 @@ class JourneyTracking {
 }
 
 class InfoDeal {
-  int dealId;
-  String customerCode;
-  int customerLeadId;
-  String pipelineCode;
-  String journeyCode;
-  String dealName;
-  int probability;
-  String createdAt;
-  int saleId;
-  String staffName;
-  int amount;
-  String dateLastCare;
-  int diffDay;
-  String journeyName;
-  int relatedWork;
-  int appointment;
+  int? dealId;
+  String? customerCode;
+  int? customerLeadId;
+  String? pipelineCode;
+  String? journeyCode;
+  String? dealName;
+  int? probability;
+  String? createdAt;
+  int? saleId;
+  String? staffName;
+  int? amount;
+  String? dateLastCare;
+  int? diffDay;
+  String? journeyName;
+  int? relatedWork;
+  int? appointment;
 
   InfoDeal(
       {this.dealId,
@@ -436,30 +436,30 @@ class InfoDeal {
 }
 
 class CustomerCare {
-  int manageWorkId;
-  String manageWorkCode;
-  String manageWorkCustomerType;
-  int manageProjectId;
-  String manageProjectName;
-  int manageTypeWorkId;
-  String manageTypeWorkKey;
-  String manageTypeWorkName;
-  String manageTypeWorkIcon;
-  String createdAt;
-  String manageWorkTitle;
-  String dateStart;
-  String dateEnd;
-  String dateFinish;
-  int processorId;
-  String staffFullName;
-  String staffAvatar;
-  int manageStatusId;
-  String manageStatusName;
-  String manageStatusColor;
-  int countFile;
-  int countComment;
-  int daysLate;
-  List<ListTagDetail> listTag;
+  int? manageWorkId;
+  String? manageWorkCode;
+  String? manageWorkCustomerType;
+  int? manageProjectId;
+  String? manageProjectName;
+  int? manageTypeWorkId;
+  String? manageTypeWorkKey;
+  String? manageTypeWorkName;
+  String? manageTypeWorkIcon;
+  String? createdAt;
+  String? manageWorkTitle;
+  String? dateStart;
+  String? dateEnd;
+  String? dateFinish;
+  int? processorId;
+  String? staffFullName;
+  String? staffAvatar;
+  int? manageStatusId;
+  String? manageStatusName;
+  String? manageStatusColor;
+  int? countFile;
+  int? countComment;
+  int? daysLate;
+  List<ListTagDetail>? listTag;
 
   CustomerCare(
       {this.manageWorkId,
@@ -514,7 +514,7 @@ class CustomerCare {
     if (json['list_tag'] != null) {
       listTag = <ListTagDetail>[];
       json['list_tag'].forEach((v) {
-        listTag.add(new ListTagDetail.fromJson(v));
+        listTag!.add(new ListTagDetail.fromJson(v));
       });
     }
   }
@@ -545,17 +545,17 @@ class CustomerCare {
     data['count_comment'] = this.countComment;
     data['days_late'] = this.daysLate;
     if (this.listTag != null) {
-      data['list_tag'] = this.listTag.map((v) => v.toJson()).toList();
+      data['list_tag'] = this.listTag!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
 class ListTagDetail {
-  int manageWorkTagId;
-  int manageWorkId;
-  int manageTagId;
-  String tagName;
+  int? manageWorkTagId;
+  int? manageWorkId;
+  int? manageTagId;
+  String? tagName;
 
   ListTagDetail(
       {this.manageWorkTagId,
@@ -581,29 +581,29 @@ class ListTagDetail {
 }
 
 class CareHistory {
-  int manageWorkId;
-  String manageWorkCode;
-  String manageWorkCustomerType;
-  int manageProjectId;
-  String manageProjectName;
-  int manageTypeWorkId;
-  String manageTypeWorkKey;
-  String manageTypeWorkName;
-  String manageTypeWorkIcon;
-  String createdAt;
-  String manageWorkTitle;
-  String dateStart;
-  String dateEnd;
-  String dateFinish;
-  int processorId;
-  String staffFullName;
-  String staffAvatar;
-  int manageStatusId;
-  String manageStatusName;
-  String manageStatusColor;
-  int countFile;
-  int countComment;
-  int daysLate;
+  int? manageWorkId;
+  String? manageWorkCode;
+  String? manageWorkCustomerType;
+  int? manageProjectId;
+  String? manageProjectName;
+  int? manageTypeWorkId;
+  String? manageTypeWorkKey;
+  String? manageTypeWorkName;
+  String? manageTypeWorkIcon;
+  String? createdAt;
+  String? manageWorkTitle;
+  String? dateStart;
+  String? dateEnd;
+  String? dateFinish;
+  int? processorId;
+  String? staffFullName;
+  String? staffAvatar;
+  int? manageStatusId;
+  String? manageStatusName;
+  String? manageStatusColor;
+  int? countFile;
+  int? countComment;
+  int? daysLate;
 
   CareHistory(
       {this.manageWorkId,
@@ -686,17 +686,17 @@ class CareHistory {
 }
 
 class ContactList {
-  int customerContactId;
-  String customerLeadCode;
-  String fullName;
-  String address;
-  String phone;
-  String email;
-  int customerContactTilteId;
-  String customerContactType;
-  String customerContactTilteNameVi;
-  String customerContactTilteNameEn;
-  String customerContactTypeName;
+  int? customerContactId;
+  String? customerLeadCode;
+  String? fullName;
+  String? address;
+  String? phone;
+  String? email;
+  int? customerContactTilteId;
+  String? customerContactType;
+  String? customerContactTilteNameVi;
+  String? customerContactTilteNameEn;
+  String? customerContactTypeName;
 
   ContactList(
       {this.customerContactId,

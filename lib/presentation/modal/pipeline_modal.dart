@@ -9,8 +9,8 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
 class PipelineModal extends StatefulWidget {
-  List<PipelineData> pipeLineData = <PipelineData>[];
- PipelineModal({ Key key, this.pipeLineData }) : super(key: key);
+  List<PipelineData>? pipeLineData = <PipelineData>[];
+ PipelineModal({ Key? key, this.pipeLineData }) : super(key: key);
 
   @override
   _PipelineModalState createState() => _PipelineModalState();
@@ -23,7 +23,7 @@ class _PipelineModalState extends State<PipelineModal> {
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
       title: AppLocalizations.text(LangKey.choosePipeline),
-      widget: (widget.pipeLineData.length > 0) ? Expanded(
+      widget: (widget.pipeLineData!.length > 0) ? Expanded(
         child: CustomListView(
                       shrinkWrap: true,
                       padding: EdgeInsets.all(0.0),
@@ -35,7 +35,7 @@ class _PipelineModalState extends State<PipelineModal> {
                             element?.pipelineName ?? "",
                                 () => selectedItem( index),
                             isBorder:
-                            index < widget.pipeLineData.length - 1,
+                            index < widget.pipeLineData!.length - 1,
                             isSelected: element.selected,
                           )))
                           .values
@@ -77,7 +77,7 @@ class _PipelineModalState extends State<PipelineModal> {
   // }
 
   selectedItem(int index) async {
-    List<PipelineData> models = widget.pipeLineData;
+    List<PipelineData> models = widget.pipeLineData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

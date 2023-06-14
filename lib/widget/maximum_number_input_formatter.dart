@@ -12,7 +12,7 @@ class MaximumNumberInputFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
 
     if(newValue.text.isNotEmpty){
-      int number = int.tryParse(newValue.text);
+      int number = int.tryParse(newValue.text)!;
       if(number > maxNumber){
         return TextEditingValue(
             text: maxNumber.toString(),

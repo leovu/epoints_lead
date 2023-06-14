@@ -6,20 +6,20 @@ import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 
 class CustomColumnInformation extends StatelessWidget {
 
-  final String title;
-  final Widget titleSuffix;
+  final String? title;
+  final Widget? titleSuffix;
   final dynamic titleIcon;
-  final IconData titleSuffixIcon;
-  final String content;
-  final IconData suffixIconData;
-  final String suffixIcon;
-  final Widget child;
-  final Color backgroundColor;
-  final Color borderColor;
-  final TextStyle titleStyle;
+  final IconData? titleSuffixIcon;
+  final String? content;
+  final IconData? suffixIconData;
+  final String? suffixIcon;
+  final Widget? child;
+  final Color? backgroundColor;
+  final Color? borderColor;
+  final TextStyle? titleStyle;
   final bool isRequired;
-  final Function onTap;
-  final Function onTitleTap;
+  final Function? onTap;
+  final Function? onTitleTap;
   final bool enable;
 
   CustomColumnInformation({
@@ -47,10 +47,10 @@ class CustomColumnInformation extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomSkeleton(width: AppSizes.maxWidth / 4,),
+          CustomSkeleton(width: AppSizes.maxWidth! / 4,),
           Container(height: AppSizes.minPadding,),
           CustomSkeleton(
-            height: AppSizes.maxPadding * 2,
+            height: AppSizes.maxPadding! * 2,
             radius: 5.0,
           )
         ],
@@ -74,7 +74,7 @@ class CustomColumnInformation extends StatelessWidget {
                   children: [
                     if(titleIcon != null)
                       Padding(
-                        padding: EdgeInsets.only(right: AppSizes.minPadding / 2),
+                        padding: EdgeInsets.only(right: AppSizes.minPadding! / 2),
                         child: (titleIcon is IconData) ? Icon(
                           titleIcon,
                           size: _titleIconSize,
@@ -102,7 +102,7 @@ class CustomColumnInformation extends StatelessWidget {
                     ),
                     if(titleSuffixIcon != null)
                       Padding(
-                        padding: EdgeInsets.only(left: AppSizes.minPadding / 2),
+                        padding: EdgeInsets.only(left: AppSizes.minPadding! / 2),
                         child: Icon(
                           titleSuffixIcon,
                           size: 18.0,
@@ -113,10 +113,10 @@ class CustomColumnInformation extends StatelessWidget {
                 ),
               ),
               if(titleSuffix != null)
-                titleSuffix,
+                titleSuffix!,
             ],
           ),
-          onTap: onTitleTap,
+          onTap: onTitleTap as void Function()?,
         ),
         Container(height: AppSizes.minPadding,),
         InkWell(
@@ -125,10 +125,10 @@ class CustomColumnInformation extends StatelessWidget {
                 borderRadius: BorderRadius.circular(5.0),
                 color: backgroundColor ?? Color(0xFFF6F6F6),
                 border: borderColor == null?null:Border.all(
-                    color: borderColor
+                    color: borderColor!
                 )
             ),
-            padding: EdgeInsets.all(AppSizes.minPadding),
+            padding: EdgeInsets.all(AppSizes.minPadding!),
             child: Row(
               children: [
                 Expanded(
@@ -138,7 +138,7 @@ class CustomColumnInformation extends StatelessWidget {
                   ),
                 ),
                 (suffixIcon == null && suffixIconData == null)?Container():Container(
-                  padding: EdgeInsets.only(left: AppSizes.minPadding),
+                  padding: EdgeInsets.only(left: AppSizes.minPadding!),
                   child: suffixIcon != null? CustomImageIcon(
                     icon: suffixIcon,
                     size: 20.0,
@@ -152,7 +152,7 @@ class CustomColumnInformation extends StatelessWidget {
               ],
             ),
           ),
-          onTap: enable ? onTap : null,
+          onTap: enable ? onTap as void Function()? : null,
         )
       ],
     );

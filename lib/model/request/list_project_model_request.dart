@@ -1,6 +1,6 @@
 class ListProjectModelRequest {
-  int page;
-  String search;
+  int? page;
+  String? search;
 
   ListProjectModelRequest({this.page, this.search});
 

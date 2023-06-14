@@ -4,19 +4,19 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
 
 class CustomDatePicker extends StatelessWidget {
-  final DateTime initTime;
-  final String title;
+  final DateTime? initTime;
+  final String? title;
   final bool haveBnConfirm;
-  final bool enableButton;
+  final bool? enableButton;
   final Function(DateTime) onChange;
-  final DateTime maximumTime;
-  final DateTime minimumTime;
-  final Function onTap;
-  final DatePickerDateOrder dateOrder;
+  final DateTime? maximumTime;
+  final DateTime? minimumTime;
+  final Function? onTap;
+  final DatePickerDateOrder? dateOrder;
   const CustomDatePicker(
-      {Key key,
+      {Key? key,
       this.initTime,
-      @required this.onChange,
+      required this.onChange,
       this.title,
       this.maximumTime, this.onTap,
       this.minimumTime,

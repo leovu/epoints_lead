@@ -19,7 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
 class LeadScreen extends StatefulWidget {
-  const LeadScreen({Key key}) : super(key: key);
+  const LeadScreen({Key? key}) : super(key: key);
 
   @override
   State<LeadScreen> createState() => _LeadScreen();
@@ -32,7 +32,7 @@ class _LeadScreen extends State<LeadScreen> {
 
   List<WorkListStaffModel> models = [];
 
-  List<ListCustomLeadItems> items;
+  List<ListCustomLeadItems>? items;
   List<String> listFunction = [
     "CRM",
     "Dùng excel",
@@ -43,10 +43,10 @@ class _LeadScreen extends State<LeadScreen> {
     "QLCV"
   ];
 
-  int currentPage = 1;
-  int nextPage = 2;
+  int? currentPage = 1;
+  int? nextPage = 2;
 
-  ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest(
+  ListCustomLeadModelRequest? filterModel = ListCustomLeadModelRequest(
     search: "",
     page: 1,
     statusAssign: "",
@@ -88,23 +88,23 @@ class _LeadScreen extends State<LeadScreen> {
     });
   }
 
-  getData(bool loadMore, {int page}) async {
-    ListCustomLeadModelReponse model = await LeadConnection.getList(
+  getData(bool loadMore, {int? page}) async {
+    ListCustomLeadModelReponse? model = await LeadConnection.getList(
         context,
         ListCustomLeadModelRequest(
             search: _searchtext.text,
-            page: filterModel.page,
-            statusAssign: filterModel.statusAssign,
-            customerType: filterModel.customerType,
-            staffId: filterModel.staffId,
-            tagId: filterModel.tagId,
-            customerSourceId: filterModel.customerSourceId,
-            isConvert: filterModel.isConvert,
-            createdAt: filterModel.createdAt,
-            allocationDate: filterModel.allocationDate,
-            careHistory:filterModel.careHistory,
-            pipelineId: filterModel.pipelineId,
-            journeyId: filterModel.journeyId));
+            page: filterModel!.page,
+            statusAssign: filterModel!.statusAssign,
+            customerType: filterModel!.customerType,
+            staffId: filterModel!.staffId,
+            tagId: filterModel!.tagId,
+            customerSourceId: filterModel!.customerSourceId,
+            isConvert: filterModel!.isConvert,
+            createdAt: filterModel!.createdAt,
+            allocationDate: filterModel!.allocationDate,
+            careHistory:filterModel!.careHistory,
+            pipelineId: filterModel!.pipelineId,
+            journeyId: filterModel!.journeyId));
 
     if (model != null) {
       models = [];
@@ -117,7 +117,7 @@ class _LeadScreen extends State<LeadScreen> {
           curve: Curves.fastOutSlowIn,
         );
       } else {
-        items.addAll(model.data?.items);
+        items!.addAll(model.data?.items as Iterable<ListCustomLeadItems> );
       }
       currentPage = model.data?.pageInfo?.currentPage;
       nextPage = model.data?.pageInfo?.nextPage;
@@ -131,8 +131,8 @@ class _LeadScreen extends State<LeadScreen> {
   _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
-      if (this.currentPage < this.nextPage) {
-        filterModel.page = currentPage + 1;
+      if (this.currentPage! < this.nextPage!) {
+        filterModel!.page = currentPage! + 1;
         getData(true);
       }
     }
@@ -153,7 +153,7 @@ class _LeadScreen extends State<LeadScreen> {
         ),
         backgroundColor: AppColors.primaryColor,
         title: Text(
-          AppLocalizations.text(LangKey.listPotential),
+          AppLocalizations.text(LangKey.listPotential)!,
           style: TextStyle(color: Colors.white, fontSize: 16.0),
           textAlign: TextAlign.start,
         ),
@@ -161,7 +161,7 @@ class _LeadScreen extends State<LeadScreen> {
         actions: [
           InkWell(
             onTap: () async {
-              FilterScreenModel result =
+              FilterScreenModel? result =
                   await Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => FilterPotentialCustomer(
                             filterScreenModel: filterScreenModel,
@@ -170,7 +170,7 @@ class _LeadScreen extends State<LeadScreen> {
               if (result != null) {
                 filterScreenModel = result;
                 filterModel = result.filterModel;
-                filterModel.page = 1;
+                filterModel!.page = 1;
                 getData(false);
               }
             },
@@ -223,10 +223,10 @@ class _LeadScreen extends State<LeadScreen> {
               children: [
                 (items == null)
                     ? Container()
-                    : (items.length > 0)
+                    : (items!.length > 0)
                         ? Column(
                             children:
-                                items.map((e) => potentialItemV2(e)).toList())
+                                items!.map((e) => potentialItemV2(e)).toList())
                         : CustomDataNotFound(),
                 Container(height: 100)
               ],
@@ -261,7 +261,7 @@ class _LeadScreen extends State<LeadScreen> {
             suffixIcon: InkWell(
               splashColor: Colors.white,
               onTap: () async {
-                filterModel.page = 1;
+                filterModel!.page = 1;
                 getData(false);
               },
               child: Padding(
@@ -283,7 +283,7 @@ class _LeadScreen extends State<LeadScreen> {
             }
           },
           onSubmitted: (event) async {
-            filterModel.page = 1;
+            filterModel!.page = 1;
             getData(false);
           }
           // },
@@ -444,7 +444,7 @@ class _LeadScreen extends State<LeadScreen> {
           // padding: EdgeInsets.only(bot),
           child: InkWell(
             onTap: () async {
-              bool result = await Navigator.of(context).push(MaterialPageRoute(
+              bool? result = await Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => DetailPotentialCustomer(
                         customer_lead_code: item.customerLeadCode,
                         indexTab: 0,
@@ -482,8 +482,8 @@ class _LeadScreen extends State<LeadScreen> {
                               TextSpan(
                                   text: (item.customerSourceName != "" &&
                                           item.customerSourceName != null)
-                                      ? (" - " + item?.leadFullName ?? "")
-                                      : ("" + item?.leadFullName ?? ""),
+                                      ? (" - " + item.leadFullName!)
+                                      : ("" + item.leadFullName!),
                                   style: TextStyle(
                                       color: AppColors.primaryColor,
                                       fontSize: 16.0,
@@ -569,7 +569,7 @@ class _LeadScreen extends State<LeadScreen> {
                                         ? Expanded(
                                             child: RichText(
                                                 text: TextSpan(
-                                                    text: item.dateLastCare + " ",
+                                                    text: item.dateLastCare! + " ",
                                                     style: TextStyle(
                                                         fontSize: 14.0,
                                                         color: Colors.black,
@@ -633,7 +633,7 @@ class _LeadScreen extends State<LeadScreen> {
                                     Assets.iconCalendar, Color(0xFF26A7AD),
                                     number: item?.relatedWork ?? 0,
                                     ontap: () async {
-                                  bool result = await Navigator.of(context)
+                                  bool? result = await Navigator.of(context)
                                       .push(MaterialPageRoute(
                                           builder: (context) =>
                                               DetailPotentialCustomer(
@@ -653,7 +653,7 @@ class _LeadScreen extends State<LeadScreen> {
                                     Assets.iconOutdate, Color(0xFFDD2C00),
                                     number: item?.appointment ?? 0,
                                     ontap: () async {
-                                  bool result = await Navigator.of(context)
+                                  bool? result = await Navigator.of(context)
                                       .push(MaterialPageRoute(
                                           builder: (context) =>
                                               DetailPotentialCustomer(
@@ -677,13 +677,13 @@ class _LeadScreen extends State<LeadScreen> {
                     ),
                   ),
 
-                  item.tag.length > 0
+                  item.tag!.length > 0
                       ? Container(
                           // width: AppSizes.maxWidth * 0.55,
                           padding: EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0),
                           child: Wrap(
-                            children: List.generate(item.tag.length,
-                                (index) => _optionItem(item.tag[index])),
+                            children: List.generate(item.tag!.length,
+                                (index) => _optionItem(item.tag![index])),
                             spacing: 10,
                             runSpacing: 10,
                           ),
@@ -703,9 +703,9 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {num number, Function ontap}) {
+  Widget _actionItem(String icon, Color color, {required num number, Function? ontap}) {
     return InkWell(
-      onTap: ontap,
+      onTap: ontap as void Function()?,
       child: Container(
           margin: EdgeInsets.only(left: 14.0),
           child: Stack(
@@ -781,7 +781,7 @@ class _LeadScreen extends State<LeadScreen> {
               decoration: BoxDecoration(
                   color: Color(0x790067AC),
                   borderRadius: BorderRadius.circular(1000.0))),
-          Text(item.tagName,
+          Text(item.tagName!,
               style: TextStyle(
                   color: Color(0xFF0067AC),
                   fontSize: 14.0,

@@ -1,5 +1,5 @@
 class GetJourneyModelRequest {
-  List<String> pipelineCode;
+  List<String?>? pipelineCode;
 
   GetJourneyModelRequest({this.pipelineCode});
 

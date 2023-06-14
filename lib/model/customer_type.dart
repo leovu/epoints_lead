@@ -1,7 +1,7 @@
 class CustomerTypeModel {
-  String customerTypeName;
-  int customerTypeID;
-  bool selected;
+  String? customerTypeName;
+  int? customerTypeID;
+  bool? selected;
 
   CustomerTypeModel({this.customerTypeName, this.customerTypeID, this.selected});
 

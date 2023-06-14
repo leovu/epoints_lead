@@ -16,10 +16,10 @@ import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
 
 class MultipleStaffScreenLead extends StatefulWidget {
 
-  final List<WorkListStaffModel> models;
-  final List<WorkListStaffModel> modelsSelectedCustomerCare;
-  final List<WorkListStaffModel> staffs;
-  final int projectId;
+  final List<WorkListStaffModel>? models;
+  final List<WorkListStaffModel>? modelsSelectedCustomerCare;
+  final List<WorkListStaffModel>? staffs;
+  final int? projectId;
   MultipleStaffScreenLead({this.models,this.modelsSelectedCustomerCare, this.staffs,this.projectId});
 
   @override
@@ -31,7 +31,7 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
   FocusNode _focusSearch = FocusNode();
   TextEditingController _controllerSearch = TextEditingController();
 
-  MultipleStaffBloc _bloc;
+  late MultipleStaffBloc _bloc;
 
   @override
   void initState() {
@@ -66,7 +66,7 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
     _bloc.search(_controllerSearch.text);
   }
 
-  Widget _buildSearch(List<WorkListStaffModel> models){
+  Widget _buildSearch(List<WorkListStaffModel>? models){
     return Container(
       padding: EdgeInsets.only(
           top: 20.0,
@@ -98,7 +98,7 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppLocalizations.text(LangKey.agency),
+                  AppLocalizations.text(LangKey.agency)!,
                   style: AppTextStyles.style14BlackBold,
                 ),
                 SizedBox(height: 10.0,),
@@ -108,13 +108,13 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
                         stream: _bloc.outputBranchModels,
                         initialData: null,
                         builder: (_, snapshot){
-                          List<CustomDropdownModel> menus = snapshot.data;
+                          List<CustomDropdownModel>? menus = snapshot.data as List<CustomDropdownModel>?;
                           return StreamBuilder(
                               stream: _bloc.outputBranchModel,
                               initialData: null,
                               builder: (_, snapshot){
                                 return CustomDropdown(
-                                  value: snapshot.data,
+                                  value: snapshot.data as CustomDropdownModel,
                                   menus: menus,
                                   hint: AppLocalizations.text(LangKey.agency),
                                   onChanged: (event) {
@@ -132,13 +132,13 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
                         stream: _bloc.outputDepartmentModels,
                         initialData: null,
                         builder: (_, snapshot){
-                          List<CustomDropdownModel> menus = snapshot.data;
+                          List<CustomDropdownModel>? menus = snapshot.data as List<CustomDropdownModel>?;
                           return StreamBuilder(
                               stream: _bloc.outputDepartmentModel,
                               initialData: null,
                               builder: (_, snapshot){
                                 return CustomDropdown(
-                                  value: snapshot.data,
+                                  value: snapshot.data as CustomDropdownModel,
                                   menus: menus,
                                   hint: AppLocalizations.text(LangKey.department),
                                   onChanged: (event) {
@@ -161,7 +161,7 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
     );
   }
 
-  Widget _buildItem(List<WorkListStaffModel> models, WorkListStaffModel model){
+  Widget _buildItem(List<WorkListStaffModel>? models, WorkListStaffModel? model){
     return InkWell(
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -190,7 +190,7 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
       fontWeight: FontWeight.normal),
                 ),
                 Text(
-                  model.departmentName,
+                  model.departmentName!,
                   style: TextStyle(
       fontSize: 14.0,
       color: Color(0XFF8E8E8E),
@@ -219,7 +219,7 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
     );
   }
 
-  Widget _buildContent(List<WorkListStaffModel> models){
+  Widget _buildContent(List<WorkListStaffModel>? models){
     return CustomListView(
       padding: EdgeInsets.zero,
       physics: AlwaysScrollableScrollPhysics(),
@@ -236,10 +236,10 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
     );
   }
 
-  Widget _buildBottom(List<WorkListStaffModel> models){
+  Widget _buildBottom(List<WorkListStaffModel>? models){
     return CustomBottom(
       text: AppLocalizations.text(LangKey.apply),
-      onTap: () => _bloc.confirm(models),
+      onTap: () => _bloc.confirm(models!),
       subText: AppLocalizations.text(LangKey.delete),
       onSubTap: () => _bloc.delete(_controllerSearch.text),
     );
@@ -250,7 +250,7 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
       stream: _bloc.outputModels,
       initialData: null,
       builder: (_, snapshot){
-        List<WorkListStaffModel> models = snapshot.data;
+        List<WorkListStaffModel>? models = snapshot.data as List<WorkListStaffModel>?;
         return Column(
           children: [
             _buildSearch(models),
@@ -273,7 +273,7 @@ class MultipleStaffScreenLeadState extends State<MultipleStaffScreenLead> {
           ),
           backgroundColor: Color(0xFF0067AC),
           title: Text(
-            AppLocalizations.text(LangKey.staff),
+            AppLocalizations.text(LangKey.staff)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
           ),
           // leadingWidth: 20.0,

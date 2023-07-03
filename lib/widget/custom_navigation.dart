@@ -28,5 +28,12 @@ class CustomNavigator {
     return parentRoute?.canPop ?? false;
   }
 
+   static pop(BuildContext context, {dynamic object, bool root = true}) {
+    if (object == null)
+      Navigator.of(context, rootNavigator: root).pop();
+    else
+      Navigator.of(context, rootNavigator: root).pop(object);
+  }
+
   
 }

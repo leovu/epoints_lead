@@ -198,5 +198,6 @@
   "data_empty": "Data empty",
   "choose_birth_day": "Choose birth day",
   "server_error": "Server error!",
-  "createDeal": "Create Deal"
+  "createDeal": "Create Deal",
+  "enter_keyword": "Enter keyword"
 }

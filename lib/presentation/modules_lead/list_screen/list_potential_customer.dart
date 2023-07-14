@@ -11,6 +11,7 @@ import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_respo
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
+import 'package:lead_plugin_epoint/utils/global.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
@@ -186,7 +187,7 @@ class _LeadScreen extends State<LeadScreen> {
       ),
       backgroundColor: Colors.white,
       body: _buildBody(),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: (Global.permissionAddLead) ? FloatingActionButton(
         backgroundColor: AppColors.primaryColor,
         onPressed: () async {
           var result = await Navigator.of(context).push(MaterialPageRoute(
@@ -203,7 +204,7 @@ class _LeadScreen extends State<LeadScreen> {
           color: Colors.white,
           size: 50,
         ),
-      ),
+      ) : null,
     );
   }
 
@@ -291,150 +292,6 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  // Widget potentialItem(ListCustomLeadItems item) {
-  //   return Stack(
-  //     children: [
-  //       InkWell(
-  //         onTap: () async {
-  //           bool result = await Navigator.of(context).push(MaterialPageRoute(
-  //               builder: (context) => DetailPotentialCustomer(
-  //                     customer_lead_code: item.customerLeadCode,
-  //                   )));
-
-  //           if (result != null && result) {
-  //             getData(false);
-  //           }
-  //         },
-  //         child: Container(
-  //           margin: EdgeInsets.only(bottom: 10.0),
-  //           decoration: BoxDecoration(
-  //               color: Color(0xFFF6F6F7),
-  //               borderRadius: BorderRadius.circular(5),
-  //               border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-  //           child: Column(
-  //             crossAxisAlignment: CrossAxisAlignment.start,
-  //             children: [
-  //               Container(
-  //                 padding: const EdgeInsets.all(5.0),
-  //                 margin: EdgeInsets.only(bottom: 8.0),
-  //                 child: Row(
-  //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                   children: [
-  //                     Container(
-  //                       width: (item.isConvert == 0)
-  //                           ? MediaQuery.of(context).size.width / 2 - 20
-  //                           : MediaQuery.of(context).size.width / 2 + 20,
-  //                       child: Row(
-  //                         crossAxisAlignment: CrossAxisAlignment.start,
-  //                         children: [
-  //                           _buildAvatar(item?.leadFullName ?? ""),
-  //                           Expanded(
-  //                             child: Container(
-  //                               padding:
-  //                                   const EdgeInsets.only(left: 8.0, top: 6.0),
-  //                               child: Column(
-  //                                 crossAxisAlignment: CrossAxisAlignment.start,
-  //                                 mainAxisAlignment:
-  //                                     MainAxisAlignment.spaceBetween,
-  //                                 children: [
-  //                                   AutoSizeText(
-  //                                     item?.leadFullName ?? "",
-  //                                     style: TextStyle(
-  //                                         fontSize: AppTextSizes.size14,
-  //                                         color: AppColors.primaryColor,
-  //                                         fontWeight: FontWeight.w600),
-  //                                     // maxLines: ,
-  //                                   ),
-  //                                   Text(
-  //                                     item?.tagName ?? "",
-  //                                     style: TextStyle(
-  //                                       fontSize: 13.0,
-  //                                       color: Colors.black,
-  //                                       fontWeight: FontWeight.normal,
-  //                                     ),
-  //                                     // maxLines: 1,
-  //                                   )
-  //                                 ],
-  //                               ),
-  //                             ),
-  //                           ),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                     (item.isConvert == 0)
-  //                         ? Container(
-  //                             padding: EdgeInsets.all(15.0 / 1.5),
-  //                             height: 40,
-  //                             decoration: BoxDecoration(
-  //                                 color: Color(0xFF11B482),
-  //                                 borderRadius: BorderRadius.circular(50)),
-  //                             child: Center(
-  //                               child: Text(
-  //                                 AppLocalizations.text(
-  //                                     LangKey.convertCustomersSuccess),
-  //                                 style: AppTextStyles.style14WhiteWeight400,
-  //                               ),
-  //                             ),
-  //                           )
-  //                         : Expanded(
-  //                             child: Container(
-  //                               padding: EdgeInsets.all(15.0 / 1.5),
-  //                               height: 40,
-  //                               decoration: BoxDecoration(
-  //                                   color: Color(0xFF8E8E8E),
-  //                                   borderRadius: BorderRadius.circular(50)),
-  //                               child: Center(
-  //                                 child: Text(
-  //                                   AppLocalizations.text(
-  //                                       LangKey.convertCustomersNotSuccess),
-  //                                   style: AppTextStyles.style14WhiteWeight400,
-  //                                 ),
-  //                               ),
-  //                             ),
-  //                           )
-  //                   ],
-  //                 ),
-  //               ),
-  //               infoItem(Assets.iconCall, item?.phone ?? ""),
-  //               infoItem(
-  //                 Assets.iconChance,
-  //                 "${item?.pipelineName ?? ""} - ${item?.journeyName ?? ""}",
-  //               ),
-  //               infoItem(Assets.iconPerson, item?.customerSourceName ?? ""),
-  //               infoItem(Assets.iconName, item?.staffFullName ?? ""),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       Positioned(
-  //         right: 10,
-  //         bottom: 20,
-  //         child: InkWell(
-  //           onTap: () async {
-  //             print(item.phone);
-  //             await callPhone(item?.phone ?? "");
-  //           },
-  //           child: Container(
-  //             padding: EdgeInsets.all(20.0 / 2),
-  //             height: 50,
-  //             width: 50,
-  //             decoration: BoxDecoration(
-  //               color: Color(0xFF06A605),
-  //               borderRadius: BorderRadius.circular(50),
-  //               // border:  Border.all(color: AppColors.white,)
-  //             ),
-  //             child: Center(
-  //                 child: Image.asset(
-  //               Assets.iconCall,
-  //               color: AppColors.white,
-  //             )),
-  //           ),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget potentialItemV2(ListCustomLeadItems item) {
     return Stack(
       clipBehavior: Clip.none,
@@ -511,10 +368,6 @@ class _LeadScreen extends State<LeadScreen> {
                                     ),
                                   )),
                             ])),
-
-                        // SizedBox(height: 5.0),
-                        // statusPotential(item.journeyName ?? "N/A",
-                        //     Color(0xFF3AEDB6), Color(0xFF11B482)),
                         SizedBox(
                           height: 5.0,
                         ),
@@ -523,22 +376,10 @@ class _LeadScreen extends State<LeadScreen> {
                                 fontSize: 16.0,
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal)),
-                        SizedBox(height: 15.0),
-                        // Text(
-                        //   // "DN- CTY TNHH MỘT THÀNH VIÊN CÔNG NGHỆ XANH CỎ",
-                        //   "",
-                        //   maxLines: 4,
-                        //   style: TextStyle(
-                        //       overflow: TextOverflow.ellipsis,
-                        //       fontSize: 16.0,
-                        //       color: Color(0xFF8E8E8E),
-                        //       fontWeight: FontWeight.normal),
-                        // )
+
                       ],
                     ),
                   ),
-                  // infoItem(Assets.iconName, item?.staffFullName ?? "", true),
-                  // infoItem(Assets.iconInteraction, item?.journeyName ?? "", true),
 
                   Container(
                     padding: EdgeInsets.only(right: 8.0, bottom: 8.0),

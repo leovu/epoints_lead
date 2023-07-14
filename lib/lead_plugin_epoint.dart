@@ -7,6 +7,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/list_screen/list_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
+import 'package:lead_plugin_epoint/utils/ultility.dart';
 
 import 'common/localization/app_localizations.dart';
 import 'lead_plugin_epoint_platform_interface.dart';
@@ -16,8 +17,7 @@ class LeadPluginEpoint {
     return LeadPluginEpointPlatform.instance.getPlatformVersion();
   }
 
-  static Future<Future?> openLead(
-      BuildContext context, Locale locale) async {
+  static Future<Future?> openLead(BuildContext context, Locale locale) async {
     // await AppSizes.init(context);
     await AppLocalizations(locale).load();
 
@@ -35,7 +35,16 @@ class LeadPluginEpoint {
       Function? createJob,
       Function? editJob,
       Function? openDetailDeal,
-      Function? createDeal}) async {
+      Function? createDeal,
+      List<Map<String, dynamic>>? permission}) async {
+    if (permission != null) {
+       try {
+      dynamic result = permission.firstWhere((p0) => p0['widget_id'] == "LE000001"); // cho phép tạo khtn
+      if (result != null) {
+        Global.permissionAddLead = true;
+      }
+    } catch (_) {}
+    }
     if (domain != null) {
       HTTPConnection.domain = domain;
     }
@@ -57,7 +66,6 @@ class LeadPluginEpoint {
     if (createDeal != null) {
       Global.createDeal = createDeal;
     }
-
     LeadConnection.locale = locale;
     LeadConnection.buildContext = context;
     AppSizes.init(context);

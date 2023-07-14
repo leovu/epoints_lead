@@ -17,5 +17,8 @@ class Global {
 
   static Function? createDeal;
 
+  // static List<String>? permission;
+
+  static bool permissionAddLead = false;
 
 }

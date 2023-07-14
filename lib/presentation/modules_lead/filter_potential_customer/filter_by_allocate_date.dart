@@ -84,7 +84,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                       (index) => _optionItem(
                               widget.allocateDateOptions![index].allocateDateName,
                               widget.allocateDateOptions![index].selected!, () {
-                            selectedSource(index);
+                            selectedItem(index);
                           })),
                   spacing: 20,
                   runSpacing: 10,
@@ -116,7 +116,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.fromDate),
                                      widget.id_allocate_date != "" ? _fromDateText : "" as TextEditingController, () {
-                                  _showFromDatePickerCreateDate();
+                                  _showFromDatePickerAllocateDate();
                                 })),
                             Container(
                                 margin: EdgeInsets.only(left: 15, right: 5),
@@ -134,7 +134,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.toDate),
                                     widget.id_allocate_date != "" ?  _toDateText : "" as TextEditingController, () {
-                                  _showToDatePickerCreateDate();
+                                  _showToDatePickerAllocateDate();
                                 }))
                           ],
                         ),
@@ -146,7 +146,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
         : Container();
   }
 
-  _showFromDatePickerCreateDate() {
+  _showFromDatePickerAllocateDate() {
     DateTime selectedDate = widget.filterScreenModel!.fromDate_allocation_date ??
         _fromDate ??
         _toDate ??
@@ -195,7 +195,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
         });
   }
 
-_showToDatePickerCreateDate() {
+_showToDatePickerAllocateDate() {
     DateTime selectedDate = _toDate ?? _now;
     DateTime? maximumTime = _now;
     if (_toDate?.year == _now.year &&
@@ -312,7 +312,7 @@ _showToDatePickerCreateDate() {
     );
   }
 
-  selectedSource(int index) async {
+  selectedItem(int index) async {
     if (index != 6) {
       Global.validateAllocateDate = true;
       _fromDateText.text = "";

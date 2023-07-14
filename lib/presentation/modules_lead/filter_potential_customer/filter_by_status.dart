@@ -21,7 +21,7 @@ class _FilterBySatusState extends State<FilterBySatus> {
                   widget.statusOptions!.length,
                   (index) => _optionItem(widget.statusOptions![index].statusName,
                           widget.statusOptions![index].selected!, () {
-                        selectedTag(index);
+                        selectedItem(index);
                       })),
               spacing: 20,
               runSpacing: 20,
@@ -75,7 +75,7 @@ class _FilterBySatusState extends State<FilterBySatus> {
     );
   }
 
-  selectedTag(int index) async {
+  selectedItem(int index) async {
     List<StatusAssignModel> models = widget.statusOptions!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;

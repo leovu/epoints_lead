@@ -273,7 +273,8 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         toDate_created_at: widget.filterScreenModel!.toDate_created_at,
         fromDate_allocation_date:
             widget.filterScreenModel!.fromDate_allocation_date,
-        toDate_allocation_date: widget.filterScreenModel!.toDate_allocation_date,
+        toDate_allocation_date:
+            widget.filterScreenModel!.toDate_allocation_date,
         fromDate_history_care_date:
             widget.filterScreenModel!.fromDate_history_care_date,
         toDate_history_care_date:
@@ -295,42 +296,31 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
   }
 
   void bindingModel() async {
-    // for (int i = 0; i < tagsData.length; i++) {
-    //   if (filterScreenModel.filterModel.tagId != "") {
-    //     if (widget.filterScreenModel.filterModel.tagId ==
-    //         "${tagsData[i].tagId}") {
-    //       tagsData[i].selected = true;
-    //     } else {
-    //       tagsData[i].selected = false;
-    //     }
-    //   }
-    // }
+    if (filterScreenModel.filterModel!.tagId!.length > 0) {
+      for (int i = 0; i < filterScreenModel.filterModel!.tagId!.length; i++) {
+        try {
+          tagsData
+              .firstWhere((element) =>
+                  element.tagId == filterScreenModel.filterModel!.tagId![i])
+              .selected = true;
+        } catch (e) {}
+      }
 
-     if (filterScreenModel.filterModel!.tagId!.length > 0) {
-        for (int i = 0; i < filterScreenModel.filterModel!.tagId!.length; i++) {
-          try {
-            tagsData
-                .firstWhere(
-                    (element) => element.tagId == filterScreenModel.filterModel!.tagId![i])
-                .selected = true;
-          } catch (e) {}
-        }
-
-        for (int i = 0; i < tagsData.length; i++) {
-          if (tagsData[i].selected!) {
-            // widget.detailDeal.tag.add(tagsSelected[i].tagId);
-            if (tagsString == "") {
-              tagsString = tagsData[i].name ?? "";
-            } else {
-              tagsString += ", ${tagsData[i].name}";
-            }
+      for (int i = 0; i < tagsData.length; i++) {
+        if (tagsData[i].selected!) {
+          if (tagsString == "") {
+            tagsString = tagsData[i].name ?? "";
+          } else {
+            tagsString += ", ${tagsData[i].name}";
           }
         }
       }
+    }
 
     for (int i = 0; i < customerTypeData.length; i++) {
       if (filterScreenModel.filterModel!.customerType != "") {
-        if (widget.filterScreenModel!.filterModel!.customerType!.toLowerCase() ==
+        if (widget.filterScreenModel!.filterModel!.customerType!
+                .toLowerCase() ==
             customerTypeData[i].customerTypeName!.toLowerCase()) {
           customerTypeData[i].selected = true;
         } else {
@@ -347,42 +337,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         statusOptions[i].selected = false;
       }
     }
-
-    // for (int i = 0; i < customerSources.length; i++) {
-    //   if (filterScreenModel.filterModel.customerSourceId != "") {
-    //     if (widget.filterScreenModel.filterModel.customerSourceName ==
-    //         customerSources[i].sourceName) {
-    //       customerSources[i].selected = true;
-    //     } else {
-    //       customerSources[i].selected = false;
-    //     }
-    //   }
-    // }
-
-    // if (filterScreenModel.filterModel.customerSourceId.length > 0) {
-    //   for (int i = 0;
-    //       i < filterScreenModel.filterModel.customerSourceId.length;
-    //       i++) {
-    //     try {
-    //       customerSources
-    //           .firstWhere((element) =>
-    //               element.customerSourceId ==
-    //               filterScreenModel.filterModel.customerSourceId[i])
-    //           .selected = true;
-    //     } catch (e) {}
-    //   }
-
-    //   for (int i = 0; i < customerSources.length; i++) {
-    //     if (customerSources[i].selected) {
-    //       if (customerSourceString == "") {
-    //         customerSourceString = customerSources[i].sourceName;
-    //       } else {
-    //         customerSourceString += ", ${customerSources[i].sourceName}";
-    //       }
-    //     }
-    //   }
-    // }
-
     for (int i = 0; i < convertStatusOptions.length; i++) {
       if (filterScreenModel.filterModel!.isConvert != "") {
         if (widget.filterScreenModel!.filterModel!.isConvert ==
@@ -393,14 +347,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         }
       }
     }
-
-    // if (filterScreenModel.filterModel.staffFullName != "") {
-    //   AllocatorData data = allocatorData.firstWhere((element) =>
-    //       element.fullName ==
-    //       widget.filterScreenModel.filterModel.staffFullName);
-    //   allocatorSelected = data;
-    //   allocatorSelected.selected = true;
-    // }
 
     if (filterScreenModel.filterModel!.customerSourceId!.length > 0) {
       for (int i = 0;
@@ -428,14 +374,11 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
     if (filterScreenModel.filterModel!.staffId!.length > 0) {
       _modelStaffSSupportSelected = [];
-      for (int i = 0;
-          i < filterScreenModel.filterModel!.staffId!.length;
-          i++) {
+      for (int i = 0; i < filterScreenModel.filterModel!.staffId!.length; i++) {
         try {
           _modelStaff
               .firstWhere((element) =>
-                  element.staffId ==
-                  filterScreenModel.filterModel!.staffId![i])
+                  element.staffId == filterScreenModel.filterModel!.staffId![i])
               .isSelected = true;
         } catch (e) {}
       }
@@ -451,8 +394,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         }
       }
     }
-
-    
 
     if (filterScreenModel.filterModel!.pipelineId!.length > 0) {
       for (int i = 0;
@@ -481,42 +422,40 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       }
 
       var journeys = await LeadConnection.getJourney(
-        context, GetJourneyModelRequest(pipelineCode: listPipeline));
-    if (journeys != null) {
-      journeysData = journeys.data;
+          context, GetJourneyModelRequest(pipelineCode: listPipeline));
+      if (journeys != null) {
+        journeysData = journeys.data;
 
-      if (filterScreenModel.filterModel!.journeyId!.length > 0) {
-        for (int i = 0;
-            i < filterScreenModel.filterModel!.journeyId!.length;
-            i++) {
-          try {
-            journeysData!
-                .firstWhere((element) =>
-                    element.journeyId ==
-                    filterScreenModel.filterModel!.journeyId![i])
-                .selected = true;
-          } catch (e) {}
-        }
+        if (filterScreenModel.filterModel!.journeyId!.length > 0) {
+          for (int i = 0;
+              i < filterScreenModel.filterModel!.journeyId!.length;
+              i++) {
+            try {
+              journeysData!
+                  .firstWhere((element) =>
+                      element.journeyId ==
+                      filterScreenModel.filterModel!.journeyId![i])
+                  .selected = true;
+            } catch (e) {}
+          }
 
-        for (int i = 0; i < journeysData!.length; i++) {
-          if (journeysData![i].selected!) {
-            if (journeyString == "") {
-              journeyString = journeysData![i].journeyName ?? "";
-            } else {
-              journeyString += ", ${journeysData![i].journeyName}";
+          for (int i = 0; i < journeysData!.length; i++) {
+            if (journeysData![i].selected!) {
+              if (journeyString == "") {
+                journeyString = journeysData![i].journeyName ?? "";
+              } else {
+                journeyString += ", ${journeysData![i].journeyName}";
+              }
             }
           }
         }
       }
     }
 
-    }
-
-    
     setState(() {});
   }
 
-   getData() async {
+  getData() async {
     var tags = await LeadConnection.getTag(context);
     if (tags != null) {
       tagsData.addAll(tags.data!);
@@ -551,17 +490,13 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       if (journeys != null) {
         journeysData = journeys.data;
       }
-
     }
 
     var response = await LeadConnection.workListStaff(
         context, WorkListStaffRequestModel(manageProjectId: null));
     if (response != null) {
       _modelStaff = response.data ?? [];
-
     }
-    
-
 
     // var allocator = await LeadConnection.getAllocator(context);
     // if (allocator != null) {
@@ -667,40 +602,44 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                 //   tagsData: tagsData,
                 // ),
 
-                SizedBox(height: 10.0,),
-                 _buildTextField(AppLocalizations.text(LangKey.chooseCards),
-              tagsString, Assets.iconTag, false, true, false, ontap: () async {
-            print("Tag");
-            FocusScope.of(context).unfocus();
+                SizedBox(
+                  height: 10.0,
+                ),
+                _buildTextField(
+                    AppLocalizations.text(LangKey.chooseCards),
+                    tagsString,
+                    Assets.iconTag,
+                    false,
+                    true,
+                    false, ontap: () async {
+                  print("Tag");
+                  FocusScope.of(context).unfocus();
 
-             List<int?> tagsSeletecd = [];
+                  List<int?> tagsSeletecd = [];
 
-            
-              var listTagsSelected = await Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => TagsModal(tagsData: tagsData)));
-              if (listTagsSelected != null) {
-                // widget.detailDeal.tag = [];
-                tagsString = "";
-                tagsData = listTagsSelected;
+                  var listTagsSelected = await Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => TagsModal(tagsData: tagsData)));
+                  if (listTagsSelected != null) {
+                    // widget.detailDeal.tag = [];
+                    tagsString = "";
+                    tagsData = listTagsSelected;
 
-                for (int i = 0; i < tagsData.length; i++) {
-                  if (tagsData[i].selected!) {
-                    tagsSeletecd.add(tagsData[i].tagId);
+                    for (int i = 0; i < tagsData.length; i++) {
+                      if (tagsData[i].selected!) {
+                        tagsSeletecd.add(tagsData[i].tagId);
 
-                    if (tagsString == "") {
-                      tagsString = tagsData[i].name ?? "";
-                    } else {
-                      tagsString += ", ${tagsData[i].name}";
+                        if (tagsString == "") {
+                          tagsString = tagsData[i].name ?? "";
+                        } else {
+                          tagsString += ", ${tagsData[i].name}";
+                        }
+                      }
                     }
+                    filterScreenModel.filterModel!.tagId = tagsSeletecd;
+                    setState(() {});
                   }
-                }
-                filterScreenModel.filterModel!.tagId = tagsSeletecd;
-                setState(() {});
-              
-            }
-          }),
-
+                }),
               ],
             )
           : Container(),
@@ -1175,7 +1114,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     );
   }
 
- clearData() async {
+  clearData() async {
     widget.filterScreenModel = FilterScreenModel(
         filterModel: ListCustomLeadModelRequest(
           search: "",
@@ -1212,7 +1151,8 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         toDate_created_at: widget.filterScreenModel!.toDate_created_at,
         fromDate_allocation_date:
             widget.filterScreenModel!.fromDate_allocation_date,
-        toDate_allocation_date: widget.filterScreenModel!.toDate_allocation_date,
+        toDate_allocation_date:
+            widget.filterScreenModel!.toDate_allocation_date,
         fromDate_history_care_date:
             widget.filterScreenModel!.fromDate_history_care_date,
         toDate_history_care_date:
@@ -1237,7 +1177,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     tagsString = "";
 
     for (int i = 0; i < tagsData.length; i++) {
-        tagsData[i].selected = false;
+      tagsData[i].selected = false;
     }
 
     for (int i = 0; i < customerTypeData.length; i++) {
@@ -1287,12 +1227,10 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
     pipelineSelected = null;
 
-     for (int i = 0; i < journeysData!.length; i++) {
+    for (int i = 0; i < journeysData!.length; i++) {
       journeysData![i].selected = false;
     }
     journeySelected = null;
-
-    
 
     _modelStaffSSupportSelected = [];
 

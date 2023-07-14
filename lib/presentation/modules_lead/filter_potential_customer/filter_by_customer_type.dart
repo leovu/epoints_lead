@@ -24,7 +24,7 @@ class _FilterByCustomerTypeState extends State<FilterByCustomerType> {
                   (index) => _optionItem(
                           widget.customerTypeData![index].customerTypeName,
                           widget.customerTypeData![index].selected!, () {
-                        selectedSource(index);
+                        selectedItem(index);
                       })),
               spacing: 20,
               runSpacing: 20,
@@ -78,7 +78,7 @@ class _FilterByCustomerTypeState extends State<FilterByCustomerType> {
     );
   }
 
-  selectedSource(int index) async {
+  selectedItem(int index) async {
     List<CustomerTypeModel> models = widget.customerTypeData!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;

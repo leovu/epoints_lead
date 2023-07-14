@@ -20,7 +20,7 @@ class _FilterByTagsState extends State<FilterByTags> {
                   widget.tagDatas!.length,
                   (index) => _optionItem(widget.tagDatas![index].name,
                           widget.tagDatas![index].selected!, () {
-                        selectedTag(index);
+                        selectedItem(index);
                       })),
               spacing: 20,
               runSpacing: 20,
@@ -74,7 +74,7 @@ class _FilterByTagsState extends State<FilterByTags> {
     );
   }
 
-  selectedTag(int index) async {
+  selectedItem(int index) async {
     List<TagData> models = widget.tagDatas!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;

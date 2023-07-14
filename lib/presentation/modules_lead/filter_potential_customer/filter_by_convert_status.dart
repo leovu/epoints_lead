@@ -21,7 +21,7 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
                   (index) => _optionItem(
                           widget.convertStatusOptions![index].statusName,
                           widget.convertStatusOptions![index].selected!, () {
-                        selectedSource(index);
+                        selectedItem(index);
                       })),
               spacing: 10,
               runSpacing: 10,
@@ -75,7 +75,7 @@ class _FilterByConvertStatusState extends State<FilterByConvertStatus> {
     );
   }
 
-  selectedSource(int index) async {
+  selectedItem(int index) async {
     List<ConvertStatusModel> models = widget.convertStatusOptions!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;

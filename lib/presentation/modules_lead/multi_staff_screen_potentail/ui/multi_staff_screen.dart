@@ -384,7 +384,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
     );
   }
 
- Widget _buildBottom(List<WorkListStaffModel> models) {
+ Widget _buildBottom(List<WorkListStaffModel>? models) {
     return CustomBottom(
       text: AppLocalizations.text(LangKey.apply),
       onTap: () => _bloc.confirm(models),

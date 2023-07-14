@@ -84,7 +84,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
                       (index) => _optionItem(
                               widget.createDateOptions![index].createDateName,
                               widget.createDateOptions![index].selected!, () {
-                            selectedSource(index);
+                            selectedItem(index);
                           })),
                   spacing: 20,
                   runSpacing: 10,
@@ -309,7 +309,7 @@ class _FilterByCreateDateState extends State<FilterByCreateDate> {
     );
   }
 
-  selectedSource(int index) async {
+  selectedItem(int index) async {
     if (index != 6) {
       Global.validateCreateDate = true;
       _fromDateText.text = "";

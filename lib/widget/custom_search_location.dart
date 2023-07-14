@@ -9,21 +9,21 @@ import 'package:lead_plugin_epoint/widget/custom_textfield_lead.dart';
 class CustomSearchLocation extends StatelessWidget {
   final FocusNode focusNode;
   final TextEditingController controller;
-  final Function(String) onChanged;
-  final Function(String) onSubmitted;
-  final String hint;
-  final TextInputType inputType;
-  final String suffixIcon;
-  final Function onTapSuffix;
-  final TextSelectionControls selectionControls;
-  final List<TextInputFormatter> inputFormatters;
+  final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
+  final String? hint;
+  final TextInputType? inputType;
+  final String? suffixIcon;
+  final Function? onTapSuffix;
+  final TextSelectionControls? selectionControls;
+  final List<TextInputFormatter>? inputFormatters;
    CustomSearchLocation(this.focusNode, this.controller, this.onChanged,
       {this.hint, this.inputType, this.inputFormatters, this.onSubmitted, this.selectionControls, this.suffixIcon, this.onTapSuffix});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(AppSizes.minPadding),
+      margin: EdgeInsets.all(AppSizes.minPadding!),
       child: CustomTextField(
         keyboardType: inputType != null ? inputType : TextInputType.text,
         prefixIcon: Assets.iconSearch,

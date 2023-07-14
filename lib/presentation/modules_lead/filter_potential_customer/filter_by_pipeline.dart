@@ -193,15 +193,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
 
   selectedItem(PipelineData item) async {
     item.selected = !item.selected!;
-
-    // var event = models.firstWhere((element) => element.name == item.name);
-
-    // if (event != null) {
-    //   event.selected = !event.selected;
-    // }
-
     setState(() {
-      // widget.tagsData = models;
     });
   }
 }

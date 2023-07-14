@@ -245,82 +245,9 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 fontWeight: FontWeight.normal),
           ),
 
-          // Padding(
-          //   padding: const EdgeInsets.all(8),
-          //   child: Text(
-          //     AppLocalizations.text(LangKey.picture),
-          //     style: TextStyle(
-          //         fontSize: AppTextSizes.size15,
-          //         color: const Color(0xFF858080),
-          //         fontWeight: FontWeight.normal),
-          //   ),
-          // ),
-
-          // Center(
-          //     child: Stack(
-          //   clipBehavior: Clip.none,
-          //   children: [
-          //     InkWell(
-          //       onTap: () {
-          //         print("chon anh");
-          //         _pickImage();
-          //       },
-          //       child: (_imgAvatar != "")
-          //           ? _buildAvatarWithImage(_imgAvatar)
-          //           : _buildAvatarImg(_fullNameText.text),
-          //     ),
-          //     Positioned(
-          //         left: 60,
-          //         bottom: 55,
-          //         child: InkWell(
-          //           onTap: () {
-          //             _imgAvatar = "";
-          //             setState(() {});
-          //           },
-          //           child: (_imgAvatar != "")
-          //               ? Container(
-          //                   width: 20,
-          //                   height: 20,
-          //                   decoration: BoxDecoration(
-          //                       borderRadius: BorderRadius.circular(100),
-          //                       color: Colors.red),
-          //                   child: Center(
-          //                       child: Icon(
-          //                     Icons.clear,
-          //                     color: Colors.white,
-          //                     size: 15,
-          //                   )),
-          //                 )
-          //               : Container(),
-          //         ))
-          //   ],
-          // )),
-
           SizedBox(
             height: 15,
           ),
-          // Loại khách hàng
-          // _buildTextField(
-          //     AppLocalizations.text(LangKey.customerStyle),
-          //     customerTypeSelected?.customerTypeName ?? "",
-          //     Assets.iconStyleCustomer,
-          //     true,
-          //     true,
-          //     false, ontap: () async {
-          //   print("loại khách hàng");
-          //   FocusScope.of(context).unfocus();
-
-          //   CustomerTypeModel customerType =
-          //       await CustomNavigator.showCustomBottomDialog(
-          //     context,
-          //     CustomerTypeModal(customerTypeData: customerTypeData),
-          //   );
-          //   if (customerType != null) {
-          //     customerTypeSelected = customerType;
-          //     setState(() {});
-          //   }
-          //   // print("loại khách hàng");
-          // }),
 
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

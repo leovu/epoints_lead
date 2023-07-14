@@ -83,7 +83,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                       (index) => _optionItem(
                               widget.historyCareDateOptions![index].historyCareDateName,
                               widget.historyCareDateOptions![index].selected!, () {
-                            selectedSource(index);
+                            selectedItem(index);
                           })),
                   spacing: 20,
                   runSpacing: 10,
@@ -115,7 +115,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.fromDate),
                                      widget.id_history_care_date != "" ? _fromDateText : "" as TextEditingController, () {
-                                  _showFromDatePickerCreateDate();
+                                  _showFromDatePickerHistoryCareDateState();
                                 })),
                             Container(
                                 margin: EdgeInsets.only(left: 15, right: 5),
@@ -133,7 +133,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                                 child: _buildDatePicker(
                                     AppLocalizations.text(LangKey.toDate),
                                     widget.id_history_care_date != "" ?  _toDateText : "" as TextEditingController, () {
-                                  _showToDatePickerCreateDate();
+                                  _showToDatePickerHistoryCareDateState();
                                 }))
                           ],
                         ),
@@ -145,7 +145,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
         : Container();
   }
 
-  _showFromDatePickerCreateDate() {
+  _showFromDatePickerHistoryCareDateState() {
     DateTime selectedDate = widget.filterScreenModel!.fromDate_history_care_date ??
         _fromDate ??
         _toDate ??
@@ -194,7 +194,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
         });
   }
 
-_showToDatePickerCreateDate() {
+_showToDatePickerHistoryCareDateState() {
     DateTime selectedDate = _toDate ?? _now;
     DateTime? maximumTime = _now;
     if (_toDate?.year == _now.year &&
@@ -311,7 +311,7 @@ _showToDatePickerCreateDate() {
     );
   }
 
-  selectedSource(int index) async {
+  selectedItem(int index) async {
     if (index != 6) {
       Global.validateHistoryCareDate = true;
       _fromDateText.text = "";

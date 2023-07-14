@@ -145,10 +145,11 @@ class MultipleStaffBloc extends BaseBloc {
     search(event);
   }
 
-  confirm(List<WorkListStaffModel> events) {
+ confirm(List<WorkListStaffModel>? events) {
     List<WorkListStaffModel> models = [];
     try {
-      var results = events.where((element) => element.isSelected!).toList();
+      var results = _models!.where((element) => element.isSelected!).toList();
+      print(results.length);
       if (results != null) {
         models = results;
       }

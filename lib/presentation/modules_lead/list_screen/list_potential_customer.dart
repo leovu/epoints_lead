@@ -187,7 +187,7 @@ class _LeadScreen extends State<LeadScreen> {
       ),
       backgroundColor: Colors.white,
       body: _buildBody(),
-      floatingActionButton: (Global.permissionAddLead) ? FloatingActionButton(
+      floatingActionButton:FloatingActionButton(
         backgroundColor: AppColors.primaryColor,
         onPressed: () async {
           var result = await Navigator.of(context).push(MaterialPageRoute(
@@ -204,7 +204,7 @@ class _LeadScreen extends State<LeadScreen> {
           color: Colors.white,
           size: 50,
         ),
-      ) : null,
+      ),
     );
   }
 

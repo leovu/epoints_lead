@@ -19,6 +19,6 @@ class Global {
 
   // static List<String>? permission;
 
-  static bool permissionAddLead = false;
+  static List<Map<String, dynamic>>? permissionModels = [];
 
 }

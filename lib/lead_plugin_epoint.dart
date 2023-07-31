@@ -38,12 +38,7 @@ class LeadPluginEpoint {
       Function? createDeal,
       List<Map<String, dynamic>>? permission}) async {
     if (permission != null) {
-       try {
-      dynamic result = permission.firstWhere((p0) => p0['widget_id'] == "LE000001"); // cho phép tạo khtn
-      if (result != null) {
-        Global.permissionAddLead = true;
-      }
-    } catch (_) {}
+        Global.permissionModels = permission;
     }
     if (domain != null) {
       HTTPConnection.domain = domain;

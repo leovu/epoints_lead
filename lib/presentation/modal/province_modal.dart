@@ -22,7 +22,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
   final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
-  GetProvinceModelReponse? _model;
+  GetProvinceModel? _model;
   List<ProvinceData>? provinces = <ProvinceData>[];
   ProvinceData? provinceSeleted = ProvinceData();
 
@@ -41,8 +41,8 @@ class _ProvinceModalState extends State<ProvinceModal> {
         }
       }
 
-      _model = GetProvinceModelReponse(
-          data: (provinces ?? <ProvinceData>[])
+      _model = GetProvinceModel(
+          province: (provinces ?? <ProvinceData>[])
               .map((e) => ProvinceData.fromJson(e.toJson()))
               .toList());
 
@@ -145,7 +145,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
 
   searchModel(List<ProvinceData>? model, String value) {
     if (model == null || value.isEmpty) {
-      _model!.data = provinces;
+      _model!.province = provinces;
       setState(() {});
     } else {
       try {
@@ -160,7 +160,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
           }
           return result;
         }).toList();
-        _model!.data = models;
+        _model!.province = models;
         setState(() {});
       } catch (_) {
         setState(() {});
@@ -169,11 +169,11 @@ class _ProvinceModalState extends State<ProvinceModal> {
   }
 
   List<Widget> _listWidget() {
-    return (_model!.data != null)
-        ? (_model!.data!.length > 0) ? List.generate(
-            _model!.data!.length,
+    return (_model!.province != null)
+        ? (_model!.province!.length > 0) ? List.generate(
+            _model!.province!.length,
             (index) => _buildItem(
-                    _model!.data![index].name!, _model!.data![index].selected!, () {
+                    _model!.province![index].name!, _model!.province![index].selected!, () {
                   selectedItem(index);
                 }))
         : [CustomDataNotFound()]: Container() as List<Widget>;
@@ -204,7 +204,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
   }
 
   selectedItem(int index) async {
-    List<ProvinceData> models = _model!.data!;
+    List<ProvinceData> models = _model!.province!;
     for (int i = 0; i < models.length; i++) {
       models[i].selected = false;
     }

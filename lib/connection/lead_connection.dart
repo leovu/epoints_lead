@@ -157,16 +157,18 @@ class LeadConnection {
     return null;
   }
 
-  static Future<GetProvinceModelReponse?> getProvince(
+  static Future<List<ProvinceData>?> getProvince(
       BuildContext context) async {
     ResponseData responseData =
         await connection.post('/customer-lead/customer-lead/get-province', {});
     if (responseData.isSuccess) {
       GetProvinceModelReponse data =
           GetProvinceModelReponse.fromJson(responseData.data!);
-      return data;
+      GetProvinceModel? result = data.data;
+      List<ProvinceData> provines = result?.province ?? [];
+      return provines;
     }
-    return null;
+    return [];
   }
 
   static Future<GetDistrictModelReponse?> getDistrict(

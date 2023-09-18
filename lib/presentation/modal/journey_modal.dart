@@ -17,7 +17,7 @@ class JourneyModal extends StatefulWidget {
 }
 
 class _JourneyModalState extends State<JourneyModal> {
-  final ScrollController _controller = ScrollController();
+  // final ScrollController _controller = ScrollController();
 
   JourneyData? journeySelected;
 

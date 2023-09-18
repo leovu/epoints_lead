@@ -346,7 +346,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
     var dataProvinces = await LeadConnection.getProvince(context);
     if (dataProvinces != null) {
-      provinces = dataProvinces.data;
+      provinces = dataProvinces;
       print(provinces);
     }
 

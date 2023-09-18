@@ -13,7 +13,7 @@ void main() {
 }
 
 class MyApp extends StatefulWidget {
-  MyApp({Key key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key);
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -36,8 +36,8 @@ class _MyAppState extends State<MyApp> {
             onTap:  () async {
                     var result = await LeadPluginEpoint.open(
                         context,
-                        const Locale(LangKey.langVi, 'Vi'),
-                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTY4OTAwMjU1NCwiZXhwIjoxNjg5MDI0MTU0LCJuYmYiOjE2ODkwMDI1NTQsImp0aSI6IjJGSWF1a2JmYkVOUnp5ZjgiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.BPXigiae-Gtj8wG-tu4YAhSAsQDPLZRXWgSLjlon7JE',
+                        const Locale(LangKey.langVi, 'vi'),
+                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdjIvdXNlci9sb2dpbiIsImlhdCI6MTY5NTAwODk5OCwiZXhwIjoxNjk1MDMwNTk4LCJuYmYiOjE2OTUwMDg5OTgsImp0aSI6IjRnc2FqYndMUGE1Q1R1OGQiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.OAPgFt8XCpVDdDbUUmD443rmR9B0kT89Eujh3rOGYJM',
                         2,
                         domain: 'https://staff-api.stag.epoints.vn',
                         brandCode: 'qc'

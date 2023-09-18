@@ -514,7 +514,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         if (allowPop) {
           widget.filterScreenModel = FilterScreenModel(
               filterModel: ListCustomLeadModelRequest(
@@ -543,8 +543,8 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         } else {
           Navigator.of(context).pop();
         }
-        return;
-      } as Future<bool> Function()?,
+        return allowPop;
+      },
       child: Scaffold(
           appBar: AppBar(
             iconTheme: const IconThemeData(

@@ -195,7 +195,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () {
+      onWillPop: () async {
         if (widget.customerCare != null) {
           Navigator.of(context)
             // ..pop()
@@ -207,8 +207,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         } else {
           Navigator.of(context).pop();
         }
-        return;
-      } as Future<bool> Function()?,
+        return allowPop;
+        
+      },
       child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(

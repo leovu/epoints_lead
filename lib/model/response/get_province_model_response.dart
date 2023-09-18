@@ -1,19 +1,14 @@
 class GetProvinceModelReponse {
   int? errorCode;
   String? errorDescription;
-  List<ProvinceData>? data;
+  GetProvinceModel? data;
 
   GetProvinceModelReponse({this.errorCode, this.errorDescription, this.data});
 
   GetProvinceModelReponse.fromJson(Map<String, dynamic> json) {
     errorCode = json['ErrorCode'];
     errorDescription = json['ErrorDescription'];
-    if (json['Data'] != null) {
-      data = <ProvinceData>[];
-      json['Data'].forEach((v) {
-        data!.add(new ProvinceData.fromJson(v));
-      });
-    }
+    data = json['Data'] != null ? new GetProvinceModel.fromJson(json['Data']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -21,11 +16,35 @@ class GetProvinceModelReponse {
     data['ErrorCode'] = this.errorCode;
     data['ErrorDescription'] = this.errorDescription;
     if (this.data != null) {
-      data['Data'] = this.data!.map((v) => v.toJson()).toList();
+      data['Data'] = this.data!.toJson();
     }
     return data;
   }
 }
+
+class GetProvinceModel {
+  List<ProvinceData>? province;
+
+  GetProvinceModel({this.province});
+
+  GetProvinceModel.fromJson(Map<String, dynamic> json) {
+    if (json['province'] != null) {
+      province = <ProvinceData>[];
+      json['province'].forEach((v) {
+        province!.add(new ProvinceData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.province != null) {
+      data['province'] = this.province!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
 
 class ProvinceData {
   int? provinceid;

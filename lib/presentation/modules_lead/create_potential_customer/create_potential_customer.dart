@@ -445,7 +445,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               if (pipelines != null) {
                 pipeLineData = pipelines.data;
 
-                PipelineData pipeline =
+                PipelineData? pipeline =
                     await CustomNavigator.showCustomBottomDialog(
                   context,
                   PipelineModal(pipeLineData: pipeLineData),
@@ -481,7 +481,6 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
                   journeySelected = null;
                 }
-
                 pipelineSelected = pipeline;
                 detailPotential.pipelineCode = pipelineSelected.pipelineCode;
                 LeadConnection.showLoading(context);

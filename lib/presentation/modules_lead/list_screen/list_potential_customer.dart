@@ -382,7 +382,7 @@ class _LeadScreen extends State<LeadScreen> {
                   ),
 
                   Container(
-                    padding: EdgeInsets.only(right: 8.0, bottom: 8.0),
+                    padding: EdgeInsets.only(right: 8.0, bottom: 8.0, top: 8.0),
                   margin: EdgeInsets.only(right: 8.0),
                     child: Row(
                       children: [

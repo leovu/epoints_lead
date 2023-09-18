@@ -249,10 +249,10 @@ class _BuildMoreAddressCreatPotentialState
 
             if (widget.provinces == null || widget.provinces!.length == 0) {
               LeadConnection.showLoading(context);
-              var dataProvinces = await LeadConnection.getProvince(context);
+              List<ProvinceData>? dataProvinces = await LeadConnection.getProvince(context);
               Navigator.of(context).pop();
               if (dataProvinces != null) {
-                widget.provinces = dataProvinces.data;
+                widget.provinces = dataProvinces;
 
                 ProvinceData? province = await showModalBottomSheet(
                     context: context,

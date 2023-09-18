@@ -154,7 +154,7 @@ class LeadConnection {
           GetJourneyModelReponse.fromJson(responseData.data!);
       return data;
     }
-    return null;
+    return GetJourneyModelReponse(data: []);
   }
 
   static Future<GetProvinceModelReponse?> getProvince(

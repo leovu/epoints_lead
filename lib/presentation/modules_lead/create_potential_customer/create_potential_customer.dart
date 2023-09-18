@@ -431,7 +431,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           // chọn pipeline
           _buildTextField(
               AppLocalizations.text(LangKey.choosePipeline),
-              pipelineSelected?.pipelineName ?? "",
+              pipelineSelected.pipelineName ?? "",
               Assets.iconChance,
               true,
               true,
@@ -452,7 +452,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 );
 
                 if (pipeline != null) {
-                  if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
+                  if ((pipelineSelected.pipelineName ?? "") != pipeline.pipelineName) {
                     journeySelected = null;
                   }
 

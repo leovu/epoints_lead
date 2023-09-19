@@ -54,7 +54,7 @@ class _CustomerTypeModalState extends State<CustomerTypeModal> {
   //           }));
   // }
 
-  // Widget _buildItem(String title, bool selected, Function ontap) {
+  // Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
   //   return InkWell(
   //     onTap: ontap,
   //     child: Container(

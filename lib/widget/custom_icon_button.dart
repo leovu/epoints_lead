@@ -5,7 +5,7 @@ import 'package:lead_plugin_epoint/widget/custom_inkwell.dart';
 
 class CustomIconButton extends StatelessWidget {
 
-  final Function? onTap;
+  final GestureTapCallback? ontap;
   final String? icon;
   final Widget? child;
   final Color? color;
@@ -14,7 +14,7 @@ class CustomIconButton extends StatelessWidget {
   CustomIconButton({
     this.child,
     this.icon,
-    this.onTap,
+    this.ontap,
     this.color,
     this.isText = false
   });
@@ -22,7 +22,7 @@ class CustomIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomInkWell(
-      onTap: onTap,
+      ontap: ontap,
       child: Container(
         width: isText?null:48.0,
         height: 48.0,

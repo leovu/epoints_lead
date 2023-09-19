@@ -648,7 +648,7 @@ class LeadConnection {
   }
 
   static Future showMyDialogWithFunction(BuildContext context, String? title,
-      {Function? ontap, bool isCancle = true}) async {
+      {VoidCallback? ontap, bool isCancle = true}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -707,7 +707,7 @@ class LeadConnection {
                   TextButton(
                     child:
                         Center(child: Text(AppLocalizations.text(LangKey.yes)!)),
-                    onPressed: ontap as void Function()?,
+                    onPressed: ontap,
                   ),
                 ],
               ),

@@ -971,7 +971,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                   selectedDate = date;
                 },
               ),
-              onTapConfirm: () {
+              ontapConfirm: () {
                 _fromDate = selectedDate;
 
                 _fromDateText.text =
@@ -1012,7 +1012,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                   selectedDate = date;
                 },
               ),
-              onTapConfirm: () {
+              ontapConfirm: () {
                 _toDate = selectedDate;
                 _toDateText.text =
                     DateFormat("yyyy-MM-dd").format(selectedDate).toString();
@@ -1025,9 +1025,9 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
         });
   }
 
-  Widget typeOfWorkItem(String title, bool selected, Function ontap) {
+  Widget typeOfWorkItem(String title, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Container(
         // width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(bottom: 16.0),
@@ -1164,14 +1164,14 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
   Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function? ontap,
+      {GestureTapCallback? ontap,
       TextEditingController? fillText,
       FocusNode? focusNode,
       TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: InkWell(
-        onTap: (ontap != null) ? ontap as void Function()? : null,
+        onTap: (ontap != null) ? ontap  : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

@@ -78,7 +78,7 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
               : Expanded(child: Container()),
           CustomButton(
             text: AppLocalizations.text(LangKey.confirm),
-            onTap: () {
+            ontap: () {
               Navigator.of(context).pop(customerSources);
             },
           ),
@@ -100,9 +100,9 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
         : [CustomDataNotFound()];
   }
 
-  Widget _buildItem(CustomerOptionSource item, Function ontap) {
+  Widget _buildItem(CustomerOptionSource item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

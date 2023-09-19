@@ -8,9 +8,9 @@ class CustomEmpty extends StatelessWidget {
   final String? text;
   final String? image;
   final EdgeInsetsGeometry? padding;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
 
-  CustomEmpty({this.title, this.text, this.image, this.padding, this.onTap});
+  CustomEmpty({this.title, this.text, this.image, this.padding, this.ontap});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class CustomEmpty extends StatelessWidget {
                           color: AppColors.primaryColor,
                           fontWeight: FontWeight.bold),
                       isExpand: false,
-                      onTap: onTap,
+                      ontap: ontap,
                     )
                   ],
                 )

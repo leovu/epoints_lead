@@ -11,14 +11,14 @@ class CustomDatePicker extends StatelessWidget {
   final Function(DateTime) onChange;
   final DateTime? maximumTime;
   final DateTime? minimumTime;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
   final DatePickerDateOrder? dateOrder;
   const CustomDatePicker(
       {Key? key,
       this.initTime,
       required this.onChange,
       this.title,
-      this.maximumTime, this.onTap,
+      this.maximumTime, this.ontap,
       this.minimumTime,
       this.haveBnConfirm = false,
       this.enableButton, this.dateOrder})
@@ -47,7 +47,7 @@ class CustomDatePicker extends StatelessWidget {
         if (haveBnConfirm)
           CustomButton(
             text: AppLocalizations.text(LangKey.confirm),
-            onTap: onTap,enable: enableButton,
+            ontap: ontap,enable: enableButton,
           ),
         Container(
           height: 15.0,

@@ -77,7 +77,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
               : Expanded(child: Container()),
           CustomButton(
             text: AppLocalizations.text(LangKey.confirm),
-            onTap: () {
+            ontap: () {
               Navigator.of(context).pop(pipeLineData);
             },
           ),
@@ -99,9 +99,9 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
         : [CustomDataNotFound()];
   }
 
-  Widget _buildItem(PipelineData item, Function ontap) {
+  Widget _buildItem(PipelineData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

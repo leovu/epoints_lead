@@ -25,7 +25,7 @@ class CustomScaffold extends StatelessWidget {
   final IconData? icon;
   final List<CustomModelTabBar>? tabs;
   final TabController? tabController;
-  final Function? onWillPop;
+  final GestureTapCallback? onWillPop;
   final bool isBottomSheet;
   final bool isExpanded;
   final String? backgroundImage;

@@ -8,14 +8,14 @@ class CustomAppBar extends StatelessWidget {
   final Widget? customTitle;
   final List<CustomOptionAppBar>? options;
   final IconData? icon;
-  final Function? onWillPop;
+  final GestureTapCallback? onWillPop;
 
   CustomAppBar({this.title, this.customTitle, this.options, this.icon, this.onWillPop});
 
   Widget _buildIcon(int index) {
     CustomOptionAppBar model = options![index];
     return CustomIconButton(
-        onTap: model.onTap,
+        ontap: model.ontap,
         icon: model.icon,
         isText: model.text != null,
         color: Colors.white,
@@ -53,7 +53,7 @@ class CustomAppBar extends StatelessWidget {
             Opacity(
               child: InkWell(
                 onTap: canPop
-                    ? (onWillPop as void Function()? ?? () => Navigator.pop(context))
+                    ? (onWillPop  ?? () => Navigator.pop(context))
                     : null,
                 child: Container(
                   width: 40.0,
@@ -94,11 +94,11 @@ class CustomAppBar extends StatelessWidget {
 
 class CustomOptionAppBar {
   final String? icon;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
   final bool showIcon;
   final Widget? child;
   final String? text;
 
   CustomOptionAppBar(
-      {this.icon, this.showIcon = true, this.onTap, this.child, this.text});
+      {this.icon, this.showIcon = true, this.ontap, this.child, this.text});
 }

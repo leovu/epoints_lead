@@ -409,7 +409,7 @@ class _MultipleStaffScreenCustomerCareState
   Widget _buildBottom(List<WorkListStaffModel>? models) {
     return CustomBottom(
       text: AppLocalizations.text(LangKey.apply),
-      onTap: () => _bloc.confirm(models!),
+      ontap: () => _bloc.confirm(models!),
       subText: AppLocalizations.text(LangKey.delete),
       onSubTap: () => _bloc.delete(_controllerSearch.text),
     );

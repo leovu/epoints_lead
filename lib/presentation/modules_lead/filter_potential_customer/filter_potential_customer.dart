@@ -926,11 +926,11 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
   Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function? ontap, TextEditingController? fillText}) {
+      {GestureTapCallback? ontap, TextEditingController? fillText}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: ontap as void Function()?,
+        onTap: ontap ,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

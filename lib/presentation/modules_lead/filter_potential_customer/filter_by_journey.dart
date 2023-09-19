@@ -77,7 +77,7 @@ class _FilterByJourneyState extends State<FilterByJourney> {
               : Expanded(child: Container()),
           CustomButton(
             text: AppLocalizations.text(LangKey.confirm),
-            onTap: () {
+            ontap: () {
               Navigator.of(context).pop(journeysData);
             },
           ),
@@ -99,9 +99,9 @@ class _FilterByJourneyState extends State<FilterByJourney> {
         : [CustomDataNotFound()];
   }
 
-  Widget _buildItem(JourneyData item, Function ontap) {
+  Widget _buildItem(JourneyData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

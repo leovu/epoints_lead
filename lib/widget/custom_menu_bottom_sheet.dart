@@ -11,7 +11,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
   final bool haveBnConfirm;
   final bool enableButton;
   final String? textConfirm;
-  final Function? onTapConfirm;
+  final GestureTapCallback? ontapConfirm;
   final Function? funcPop;
   CustomMenuBottomSheet(
       {this.widget,
@@ -20,7 +20,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
       this.haveBnConfirm = false,
       this.enableButton = true,
       this.textConfirm,
-      this.onTapConfirm,
+      this.ontapConfirm,
       this.funcPop});
 
   @override
@@ -94,7 +94,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                             text: textConfirm ??
                                 AppLocalizations.text(LangKey.confirm),
                             enable: enableButton,
-                            onTap: onTapConfirm,
+                            ontap: ontapConfirm,
                           )
                       ],
                     )),

@@ -9,7 +9,7 @@ class CustomButton extends StatelessWidget {
   final String? icon;
   final String? text;
   final TextStyle? style;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
   final bool isExpand;
   final bool isIcon;
   final Color? iconColor;
@@ -28,7 +28,7 @@ class CustomButton extends StatelessWidget {
       this.icon,
       this.text,
       this.style,
-      this.onTap,
+      this.ontap,
       this.isExpand = true,
       this.isIcon = false,
       this.iconColor,
@@ -106,6 +106,6 @@ class CustomButton extends StatelessWidget {
             ],
           ),
         ),
-        onTap: enable! ? onTap as void Function()? : null);
+        onTap: enable! ? ontap  : null);
   }
 }

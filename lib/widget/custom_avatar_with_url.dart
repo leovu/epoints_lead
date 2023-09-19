@@ -10,9 +10,9 @@ class CustomAvatarWithURL extends StatelessWidget {
   final String? name;
   final double? size;
   final Color? borderColor;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
 
-  CustomAvatarWithURL({this.url, this.name, this.size, this.borderColor, this.onTap});
+  CustomAvatarWithURL({this.url, this.name, this.size, this.borderColor, this.ontap});
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +51,7 @@ class CustomAvatarWithURL extends StatelessWidget {
           ),
         ),
       ),
-      onTap: onTap as void Function()?,
+      onTap: ontap ,
     );
   }
 }
@@ -114,9 +114,9 @@ class CustomAvatar extends StatelessWidget {
   final String? name;
   final double? size;
   final Color? borderColor;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
 
-  CustomAvatar({this.url, this.name, this.size, this.borderColor, this.onTap});
+  CustomAvatar({this.url, this.name, this.size, this.borderColor, this.ontap});
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +155,7 @@ class CustomAvatar extends StatelessWidget {
           ),
         ),
       ),
-      onTap: onTap as void Function()?,
+      onTap: ontap ,
     );
   }
 }

@@ -171,7 +171,7 @@ class _FilterByAllocateDateState extends State<FilterByAllocateDate> {
                   selectedDate = date;
                 },
               ),
-              onTapConfirm: () {
+              ontapConfirm: () {
 
                 if (_toDate == null) {
                   Global.validateAllocateDate = false;
@@ -221,7 +221,7 @@ _showToDatePickerAllocateDate() {
                   selectedDate = date;
                 },
               ),
-              onTapConfirm: () {
+              ontapConfirm: () {
                 if (_fromDate == null) {
                   Global.validateAllocateDate = false;
                 } else {
@@ -242,9 +242,9 @@ _showToDatePickerAllocateDate() {
   }
 
   Widget _buildDatePicker(
-      String? hintText, TextEditingController fillText, Function ontap) {
+      String? hintText, TextEditingController fillText, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: TextField(
         enabled: false,
         controller: fillText,
@@ -267,9 +267,9 @@ _showToDatePickerAllocateDate() {
     );
   }
 
-  Widget _optionItem(String? name, bool selected, Function ontap) {
+  Widget _optionItem(String? name, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

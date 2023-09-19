@@ -6,9 +6,9 @@ class CustomBottom extends StatelessWidget {
   final String? text;
   final Color? color;
   final TextStyle? textStyle;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
   final String? subText;
-  final Function? onSubTap;
+  final GestureTapCallback? onSubTap;
   final Color? subColor;
   final Widget? child;
 
@@ -17,7 +17,7 @@ class CustomBottom extends StatelessWidget {
       this.text,
       this.color,
       this.textStyle,
-      this.onTap,
+      this.ontap,
       this.subText,
       this.onSubTap,
       this.subColor,
@@ -51,7 +51,7 @@ class CustomBottom extends StatelessWidget {
                         fontSize: AppTextSizes.size14,
                         color: AppColors.white,
                         fontWeight: FontWeight.bold),
-                    onTap: onSubTap,
+                    ontap: onSubTap,
                   )),
                 if (subText != null && text != null)
                   SizedBox(
@@ -67,7 +67,7 @@ class CustomBottom extends StatelessWidget {
                             fontSize: AppTextSizes.size14,
                             color: AppColors.white,
                             fontWeight: FontWeight.bold),
-                    onTap: onTap,
+                    ontap: ontap,
                   )),
               ],
             )

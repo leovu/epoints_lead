@@ -10,12 +10,12 @@ class CustomChip extends StatelessWidget {
   final Color? backgroundColor;
   final String? text;
   final TextStyle? style;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
   final String? icon;
   final bool iconAsset;
   final double? radius;
   final Color? borderColor;
-  final Function? onClose;
+  final GestureTapCallback? onClose;
   final EdgeInsetsGeometry? padding;
   final IconData? icons;
   final bool isExpand;
@@ -27,7 +27,7 @@ class CustomChip extends StatelessWidget {
     this.backgroundColor,
     this.text,
     this.style,
-    this.onTap,
+    this.ontap,
     this.icon,
     this.iconAsset = true,
     this.radius,
@@ -122,14 +122,14 @@ class CustomChip extends StatelessWidget {
                         size: 12.0,
                       ),
                     ),
-                    onTap: onClose as void Function()?,
+                    onTap: onClose ,
                   )
               ],
             )
           ],
         ),
       ),
-      onTap: onTap as void Function()?,
+      onTap: ontap ,
     );
   }
 }
@@ -141,7 +141,7 @@ class CustomChipSelected extends StatelessWidget {
   final dynamic type;
   final dynamic selected;
   final bool isExpanded;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
   final bool? enable;
 
   CustomChipSelected({
@@ -150,7 +150,7 @@ class CustomChipSelected extends StatelessWidget {
     this.type,
     this.selected,
     this.isExpanded = false,
-    this.onTap,
+    this.ontap,
     this.enable
   });
 
@@ -179,7 +179,7 @@ class CustomChipSelected extends StatelessWidget {
       backgroundColor = Colors.transparent;
     }
 
-    Function? _onTap = _enable ? onTap : null;
+    GestureTapCallback? _onTap = _enable ? ontap : null;
 
     return isExpanded?CustomChip(
       text: text,
@@ -187,7 +187,7 @@ class CustomChipSelected extends StatelessWidget {
       backgroundColor: backgroundColor,
       borderColor: borderColor,
       icon: icon,
-      onTap: _onTap,
+      ontap: _onTap,
     ):Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -197,7 +197,7 @@ class CustomChipSelected extends StatelessWidget {
           backgroundColor: backgroundColor,
           borderColor: borderColor,
           topIcon: icon,
-          onTap: _onTap,
+          ontap: _onTap,
         )
       ],
     );

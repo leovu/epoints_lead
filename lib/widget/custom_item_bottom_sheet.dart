@@ -7,11 +7,11 @@ import 'package:lead_plugin_epoint/widget/custom_inkwell.dart';
 class CustomItemBottomSheet extends StatelessWidget {
   final String text;
   final String? subText;
-  final Function function;
+  final GestureTapCallback function;
   final bool? isSelected;
   final String? icon;
   final bool isEdit;
-  final Function? funcEdit;
+  final GestureTapCallback? funcEdit;
   final Widget? iconChild;
   final Color? color;
   final Color? colorIcon;
@@ -44,7 +44,7 @@ class CustomItemBottomSheet extends StatelessWidget {
         children: [
           Expanded(
               child: CustomInkWell(
-            onTap: function,
+            ontap: function,
             child: Container(
               padding: EdgeInsets.symmetric(
                   horizontal: isPadding ? 24.0 : 0.0, vertical: 10.0),
@@ -117,7 +117,7 @@ class CustomItemBottomSheet extends StatelessWidget {
             ),
           if (isEdit)
             CustomInkWell(
-              onTap: funcEdit,
+              ontap: funcEdit,
               child: CustomImageIcon(
                 icon: Assets.iconEdit,
                 size: 10.0,

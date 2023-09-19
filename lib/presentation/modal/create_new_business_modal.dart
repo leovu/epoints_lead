@@ -107,14 +107,14 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
 
   Widget _tftCreateNewBusiness(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
-      {Function? ontap,
+      {GestureTapCallback? ontap,
       TextEditingController? fillText,
       FocusNode? focusNode,
       TextInputType? inputType}) {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap as void Function()? : null,
+        onTap: (ontap != null) ? ontap : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

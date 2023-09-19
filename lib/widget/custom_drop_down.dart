@@ -10,11 +10,11 @@ class CustomDropDown extends StatelessWidget {
   final Color? suffixIconColor;
   final double? suffixSize;
   final Color? backgroundColor;
-  final Function? onSuffixIconTap;
+  final GestureTapCallback? onSuffixIconTap;
   final String? prefixIcon;
   final Color? prefixIconColor;
-  final Function? onPrefixIconTap;
-  final Function? onTap;
+  final GestureTapCallback? onPrefixIconTap;
+  final GestureTapCallback? ontap;
   final Widget? suffixChild;
   final TextOverflow? overflow;
   final double? suffixChildMargin;
@@ -22,7 +22,7 @@ class CustomDropDown extends StatelessWidget {
   final TextStyle? hintStyle;
 
   final String? hintText;
-  const CustomDropDown({Key? key, this.suffixIcon, this.suffixIconColor, this.suffixSize, this.backgroundColor, this.onSuffixIconTap, this.prefixIcon, this.prefixIconColor, this.onPrefixIconTap, this.hintText, this.onTap, this.suffixChild, this.hintStyle, this.overflow, this.suffixChildMargin}) : super(key: key);
+  const CustomDropDown({Key? key, this.suffixIcon, this.suffixIconColor, this.suffixSize, this.backgroundColor, this.onSuffixIconTap, this.prefixIcon, this.prefixIconColor, this.onPrefixIconTap, this.hintText, this.ontap, this.suffixChild, this.hintStyle, this.overflow, this.suffixChildMargin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class CustomDropDown extends StatelessWidget {
               color:AppColors.lightGrey,
               style: BorderStyle.solid)),
       child: CustomInkWell(
-        onTap: onTap,
+        ontap: ontap,
         child: Row(
           children: [
             if (prefixIcon != null)
@@ -51,7 +51,7 @@ class CustomDropDown extends StatelessWidget {
                     color: prefixIconColor ?? AppColors.primaryColor,
                   ),
                 ),
-                onTap: onPrefixIconTap as void Function()? ?? onTap as void Function()?,
+                onTap: onPrefixIconTap  ?? ontap ,
               ),
             Expanded(
                 child: Container(
@@ -84,7 +84,7 @@ class CustomDropDown extends StatelessWidget {
                     color: suffixIconColor ?? AppColors.primaryColor,
                   ),
                 ),
-                onTap: onSuffixIconTap ?? onTap,
+                ontap: onSuffixIconTap ?? ontap,
               )
           ],
         ),

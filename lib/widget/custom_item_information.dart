@@ -34,7 +34,7 @@
 //   final String errorString;
 //   final String suffixIcon;
 //   final bool readOnly;
-//   final Function onTap;
+//   final GestureTapCallback ontap;
 //   final bool isDisable;
 //   final TextOverflow overflow;
 

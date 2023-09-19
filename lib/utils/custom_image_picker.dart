@@ -17,7 +17,7 @@ class CustomImagePicker {
           options: [
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.capture),
-                onTap: () async {
+                ontap: () async {
                   File? file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
                   if(file != null){
                     Navigator.of(context).pop();
@@ -27,7 +27,7 @@ class CustomImagePicker {
             ),
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.select_from_gallery),
-                onTap: () async {
+                ontap: () async {
                   File? file = await pickImage(context, ImageSource.gallery);
                   if(file != null){
                     Navigator.of(context).pop();
@@ -46,7 +46,7 @@ class CustomImagePicker {
           options: [
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.capture),
-                onTap: () async {
+                ontap: () async {
                   File? file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
                   if(file != null){
                     onConfirm([file]);
@@ -55,7 +55,7 @@ class CustomImagePicker {
             ),
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.select_from_gallery),
-                onTap: () async {
+                ontap: () async {
                   List<File>? files = await pickMultiImage(context);
                   if(files != null){
                     onConfirm(files);

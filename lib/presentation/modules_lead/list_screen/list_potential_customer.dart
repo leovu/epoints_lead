@@ -544,9 +544,9 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {required num number, Function? ontap}) {
+  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap}) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Container(
           margin: EdgeInsets.only(left: 14.0),
           child: Stack(

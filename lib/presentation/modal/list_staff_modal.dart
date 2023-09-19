@@ -137,9 +137,9 @@ class _ListStaffModalState extends State<ListStaffModal> {
     });
   }
 
-  Widget _buildStaffItem(AllocatorData item, Function ontap) {
+  Widget _buildStaffItem(AllocatorData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Container(
         padding: EdgeInsets.only(left: 8.0, right: 8.0),
         height: 80.0,

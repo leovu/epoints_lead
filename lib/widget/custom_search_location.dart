@@ -14,11 +14,11 @@ class CustomSearchLocation extends StatelessWidget {
   final String? hint;
   final TextInputType? inputType;
   final String? suffixIcon;
-  final Function? onTapSuffix;
+  final GestureTapCallback? ontapSuffix;
   final TextSelectionControls? selectionControls;
   final List<TextInputFormatter>? inputFormatters;
    CustomSearchLocation(this.focusNode, this.controller, this.onChanged,
-      {this.hint, this.inputType, this.inputFormatters, this.onSubmitted, this.selectionControls, this.suffixIcon, this.onTapSuffix});
+      {this.hint, this.inputType, this.inputFormatters, this.onSubmitted, this.selectionControls, this.suffixIcon, this.ontapSuffix});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +38,7 @@ class CustomSearchLocation extends StatelessWidget {
         onSubmitted: onSubmitted,
         suffixIcon: suffixIcon,
         suffixIconColor: Color(0xFF727682),
-        onSuffixIconTap: onTapSuffix,
+        onSuffixIconTap: ontapSuffix,
         textInputAction: TextInputAction.search,
       ),
     );

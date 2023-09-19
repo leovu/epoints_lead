@@ -131,7 +131,7 @@ class _TagsModalState extends State<TagsModal> {
               : Expanded(child: Container()),
           CustomButton(
             text: AppLocalizations.text(LangKey.confirm),
-            onTap: () {
+            ontap: () {
               Navigator.of(context).pop(tagsData);
             },
           ),
@@ -153,9 +153,9 @@ class _TagsModalState extends State<TagsModal> {
         : [CustomDataNotFound()];
   }
 
-  Widget _buildItem(TagData item, Function ontap) {
+  Widget _buildItem(TagData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

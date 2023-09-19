@@ -233,7 +233,7 @@
 //   }
 
 //   Widget _buildDatePicker(
-//       String hintText, TextEditingController fillText, Function ontap) {
+//       String hintText, TextEditingController fillText, GestureTapCallback ontap) {
 //     return InkWell(
 //       onTap: ontap,
 //       child: TextField(
@@ -258,7 +258,7 @@
 //     );
 //   }
 
-//   Widget _optionItem(String name, bool selected, Function ontap) {
+//   Widget _optionItem(String name, bool selected, GestureTapCallback ontap) {
 //     return InkWell(
 //       onTap: ontap,
 //       child: Row(

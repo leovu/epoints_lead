@@ -132,7 +132,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
               : Expanded(child: Container()),
           CustomButton(
             text: AppLocalizations.text(LangKey.confirm),
-            onTap: () {
+            ontap: () {
               Navigator.of(context).pop(listBusinessData);
             },
           ),
@@ -154,9 +154,9 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
         : [CustomDataNotFound()] : Expanded(child: Container()) as List<Widget>;
   }
 
-  Widget _buildItem(ListBusinessAreasItem item, Function ontap) {
+  Widget _buildItem(ListBusinessAreasItem item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

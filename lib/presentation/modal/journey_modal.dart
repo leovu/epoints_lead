@@ -57,7 +57,7 @@ class _JourneyModalState extends State<JourneyModal> {
   //           })) : [CustomDataNotFound()];
   // }
 
-  // Widget _buildItem(String title, bool selected, Function ontap) {
+  // Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
   //   return InkWell(
   //     onTap: ontap,
   //     child: Container(

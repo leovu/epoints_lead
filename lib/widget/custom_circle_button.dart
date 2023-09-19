@@ -5,7 +5,7 @@ class CircularButton extends StatelessWidget {
   final double? height;
   final Color? color;
   final String? icon;
-  final Function? onClick;
+  final GestureTapCallback? onClick;
 
   CircularButton(
       {this.color, this.width, this.height, this.icon, this.onClick});
@@ -19,7 +19,7 @@ class CircularButton extends StatelessWidget {
       child: InkWell(child: Image.asset(
               icon!,
               scale: 2.5,
-            ), enableFeedback: true, onTap: onClick as void Function()?),
+            ), enableFeedback: true, onTap: onClick ),
     );
   }
 }

@@ -22,8 +22,8 @@ class CustomTextField extends StatelessWidget {
   final int? maxLength;
   final Function(String)? onSubmitted;
   final Function(String)? onChanged;
-  final Function? onSuffixTap;
-  final Function? onTap;
+  final GestureTapCallback? onSuffixTap;
+  final GestureTapCallback? ontap;
   final bool? obscureText;
 
   CustomTextField({
@@ -45,7 +45,7 @@ class CustomTextField extends StatelessWidget {
     this.onSubmitted,
     this.onChanged,
     this.onSuffixTap,
-    this.onTap,
+    this.ontap,
     this.obscureText
   });
 
@@ -105,12 +105,12 @@ class CustomTextField extends StatelessWidget {
                   color: Color(0xFF9E9E9E),
                 ),
               ),
-              onTap: onSuffixTap as void Function()?,
+              onTap: onSuffixTap ,
             )
           ],
         ),
       ),
-      onTap: onTap as void Function()?,
+      onTap: ontap ,
     );
   }
 }

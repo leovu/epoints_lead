@@ -654,14 +654,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     }
   }
 
-  Widget option(String title, bool show, double width, Function ontap) {
+  Widget option(String title, bool show, double width, GestureTapCallback ontap) {
     return Column(
       children: [
         Container(
           padding: EdgeInsets.all(15.0 / 1.5),
           height: 40,
           child: InkWell(
-            onTap: ontap as void Function()?,
+            onTap: ontap ,
             child: Center(
               child: Text(
                 title,
@@ -924,7 +924,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         borderColor: AppColors.primaryColor,
                         style: AppTextStyles.style14PrimaryBold,
                         isExpand: false,
-                        onTap: () => _bloc.setFile(null),
+                        ontap: () => _bloc.setFile(null),
                       )
                     ],
                   ),
@@ -1749,9 +1749,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {required num number, Function? ontap}) {
+  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap}) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Container(
           margin: EdgeInsets.only(left: 17, bottom: 10.0),
           child: Stack(
@@ -2349,7 +2349,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget buildButtonConvert(String title, Function ontap) {
+  Widget buildButtonConvert(String title, GestureTapCallback ontap) {
     return Container(
       margin: EdgeInsets.only(bottom: 10.0),
       height: 41,
@@ -2358,7 +2358,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(5)),
       child: InkWell(
-        onTap: ontap as void Function()?,
+        onTap: ontap ,
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),

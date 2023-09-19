@@ -204,7 +204,7 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
 //     });
 //   }
 
-//   Widget _buildItemStaff(ListCustomLeadItems item, Function ontap) {
+//   Widget _buildItemStaff(ListCustomLeadItems item, GestureTapCallback ontap) {
 //      return InkWell(
 //       onTap: ontap,
 //       child: Container(

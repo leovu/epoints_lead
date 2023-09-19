@@ -15,10 +15,10 @@ class CustomTextField extends StatelessWidget {
   final Color? suffixIconColor;
   final double? suffixSize;
   final Color? backgroundColor;
-  final Function? onSuffixIconTap;
+  final GestureTapCallback? onSuffixIconTap;
   final String? prefixIcon;
   final Color? prefixIconColor;
-  final Function? onPrefixIconTap;
+  final GestureTapCallback? onPrefixIconTap;
   final bool obscureText;
   final TextInputType? keyboardType;
   final TextInputAction? textInputAction;
@@ -27,7 +27,7 @@ class CustomTextField extends StatelessWidget {
   final Function(String)? onChanged;
   final bool? autofocus;
   final bool readOnly;
-  final Function? onTap;
+  final GestureTapCallback? ontap;
   final bool enableBorder;
   final int? maxLines;
   final int? maxLength;
@@ -59,7 +59,7 @@ class CustomTextField extends StatelessWidget {
       this.onChanged,
       this.autofocus,
       this.readOnly = false,
-      this.onTap,
+      this.ontap,
       this.enableBorder = false,
       this.maxLines,
       this.maxLength,
@@ -110,7 +110,7 @@ class CustomTextField extends StatelessWidget {
             children: [
               if (prefixIcon != null)
                 CustomInkWell(
-                  onTap: onPrefixIconTap ?? onTap,
+                  ontap: onPrefixIconTap ?? ontap,
                   child: Container(
                     padding: EdgeInsets.symmetric(
                       horizontal: horizontalPadding ?? 15,
@@ -163,7 +163,7 @@ class CustomTextField extends StatelessWidget {
                   maxLines: maxLines ?? 1,
                   maxLength: maxLength,
                   readOnly: readOnly,
-                  onTap: onTap as void Function()?,
+                  onTap: ontap ,
                   textCapitalization:
                       textCapitalization ?? TextCapitalization.none,
                 ),
@@ -171,7 +171,7 @@ class CustomTextField extends StatelessWidget {
               if (suffixIcon != null || suffixChild != null)
                 suffixChild ??
                     CustomInkWell(
-                      onTap: onSuffixIconTap ?? onTap,
+                      ontap: onSuffixIconTap ?? ontap,
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           horizontal: horizontalPadding ?? 20,

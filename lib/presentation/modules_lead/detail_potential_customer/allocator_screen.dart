@@ -115,9 +115,9 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
     });
   }
 
-  Widget _buildItemStaff(AllocatorData item, Function ontap) {
+  Widget _buildItemStaff(AllocatorData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap as void Function()?,
+      onTap: ontap ,
       child: Container(
         decoration: BoxDecoration(color: Colors.white),
         child: Row(

@@ -1,5 +1,6 @@
 import 'package:draggable_expandable_fab/draggable_expandable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
@@ -20,6 +21,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/customer_care_poten
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/custom_image_picker.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
+import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
@@ -1000,11 +1002,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             : (detail!.gender == "other")
                                 ? AppLocalizations.text(LangKey.other)!
                                 : "N/A"),
-                _infoItemV2(Assets.iconEmail, detail!.email ?? "N/A"),
+                _infoItemV2(Assets.iconEmail, hideEmail(detail?.email ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideEmail(detail?.email ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
                 _infoItemV2(Assets.iconAddress, detail!.address ?? "N/A"),
                 _infoItemV2(Assets.iconBirthday, detail!.birthday ?? "N/A"),
-                _infoItemV2(Assets.iconSource, detail!.zalo ?? "N/A"),
-                _infoItemV2(Assets.iconFanpage, detail!.fanpage ?? "N/A"),
+                _infoItemV2(Assets.iconSource, hideSocial(detail?.zalo ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideSocial(detail?.zalo ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
+                _infoItemV2(Assets.iconFanpage, hideSocial(detail?.fanpage ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideSocial(detail?.fanpage ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
               ],
             ),
           ),
@@ -1013,7 +1015,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               (detail!.fanpage != null && detail!.fanpage != "")
                   ? InkWell(
                       onTap: () async {
-                        _openLink(detail!.zalo!);
+                        _openLink(detail!.fanpage!);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -1026,7 +1028,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               (detail!.zalo != null && detail!.zalo != "")
                   ? InkWell(
                       onTap: () {
-                        _openLink(detail!.fanpage!);
+                        _openLink(detail!.zalo!);
                       },
                       child: Container(
                         margin: const EdgeInsets.only(left: 8.0, right: 8.0),
@@ -1214,7 +1216,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                           )),
                                     ])),
                             SizedBox(height: 5),
-                            Text(detail?.phone ?? "",
+                            Text(hidePhone(detail?.phone ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 16.0,
@@ -1275,10 +1277,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              InkWell(
+                              (checkVisibilityKey(VisibilityWidgetName.LE000002)) ? Container(
+                              margin: EdgeInsets.only(bottom: 12.0),
+                              child: InkWell(
                                 onTap: () async {
                                   print(detail!.phone);
-                                  await callPhone(detail?.phone ?? "");
+                                  await _callPhone(detail!.phone ?? "");
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(20.0 / 2),
@@ -1296,6 +1300,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                                   )),
                                 ),
                               ),
+                            ) : Container(
+                              margin: EdgeInsets.only(bottom: 12.0),
+                              height: 45,
+                            ),
                               SizedBox(height: 10.0),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -1373,238 +1381,238 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget potentialInformationV3() {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          // margin: EdgeInsets.only(bottom: 32.0),
-          // padding: EdgeInsets.only(bot),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    padding: EdgeInsets.only(right: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(top: 25.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 4.0,
-                        ),
-                        Column(
-                          children: [
-                            RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                    text: detail!.customerSourceName ?? "",
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.normal),
-                                    children: [
-                                      TextSpan(
-                                          text: (detail!.customerSourceName !=
-                                                      "" &&
-                                                  detail!.customerSourceName !=
-                                                      null)
-                                              ? (" - " + detail!.fullName!)
-                                              : ("" + detail!.fullName!),
-                                          style: TextStyle(
-                                              height: 1.5,
-                                              color: AppColors.primaryColor,
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold)),
-                                      WidgetSpan(
-                                          child: SizedBox(
-                                        width: 5.0,
-                                      )),
-                                      WidgetSpan(
-                                          alignment:
-                                              ui.PlaceholderAlignment.top,
-                                          child: Container(
-                                            margin: EdgeInsets.only(right: 8.0),
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFF3AEDB6),
-                                                borderRadius:
-                                                    BorderRadius.circular(4.0)),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(3.0),
-                                              child: Text(
-                                                  detail?.journeyName ?? "N/A",
-                                                  style: TextStyle(
-                                                      color: Color.fromARGB(
-                                                          255, 15, 115, 85),
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.normal)),
-                                            ),
-                                          )),
-                                    ])),
-                            SizedBox(height: 5),
-                            Text(detail?.phone ?? "",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal)),
-                            SizedBox(height: 5),
-                            (detail!.customerType == "business")
-                                ? Text(
-                                    AppLocalizations.text(LangKey.business)!,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        overflow: TextOverflow.visible,
-                                        fontSize: 16.0,
-                                        color: Color(0xFF8E8E8E),
-                                        fontWeight: FontWeight.normal),
-                                  )
-                                : Text(
-                                    AppLocalizations.text(LangKey.personal)!,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        overflow: TextOverflow.visible,
-                                        fontSize: 16.0,
-                                        color: Color(0xFF8E8E8E),
-                                        fontWeight: FontWeight.normal),
-                                  )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      // padding: EdgeInsets.only(right: 8.0),
-                      margin: EdgeInsets.only(right: 10.0, top: 16.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              // width: MediaQuery.of(context).size.width / 2 - 50,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  infoItem(
-                                      Assets.iconName, detail!.saleName ?? ""),
-                                  infoItem(Assets.iconInteraction,
-                                      "${detail!.dateLastCare ?? ""} (${detail!.diffDay ?? 0} ngày)"),
-                                  infoItem(Assets.iconChance,
-                                      detail?.pipelineName ?? ""),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  print(detail!.phone);
-                                  await callPhone(detail?.phone ?? "");
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(20.0 / 2),
-                                  height: 45,
-                                  width: 45,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF06A605),
-                                    borderRadius: BorderRadius.circular(50),
-                                    // border:  Border.all(color: AppColors.white,)
-                                  ),
-                                  child: Center(
-                                      child: Image.asset(
-                                    Assets.iconCall,
-                                    color: AppColors.white,
-                                  )),
-                                ),
-                              ),
-                              SizedBox(height: 10.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  _actionItem(
-                                      Assets.iconCalendar, Color(0xFF26A7AD),
-                                      number: detail!.relatedWork ?? 0,
-                                      ontap: () {
-                                    print("1");
-                                  }),
-                                  _actionItem(
-                                      Assets.iconOutdate, Color(0xFFDD2C00),
-                                      number: detail!.appointment ?? 0,
-                                      ontap: () {
-                                    print("2");
-                                  }),
-                                ],
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    // SizedBox(height: 14.0),
+  // Widget potentialInformationV3() {
+  //   return Stack(
+  //     clipBehavior: Clip.none,
+  //     children: [
+  //       Container(
+  //         // margin: EdgeInsets.only(bottom: 32.0),
+  //         // padding: EdgeInsets.only(bot),
+  //         child: Container(
+  //           decoration: BoxDecoration(
+  //               color: Colors.white,
+  //               borderRadius: BorderRadius.circular(5),
+  //               border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Center(
+  //                 child: Container(
+  //                   padding: EdgeInsets.only(right: 8.0, top: 8.0),
+  //                   margin: EdgeInsets.only(top: 25.0),
+  //                   child: Column(
+  //                     children: [
+  //                       SizedBox(
+  //                         height: 4.0,
+  //                       ),
+  //                       Column(
+  //                         children: [
+  //                           RichText(
+  //                               textAlign: TextAlign.center,
+  //                               text: TextSpan(
+  //                                   text: detail!.customerSourceName ?? "",
+  //                                   style: TextStyle(
+  //                                       fontSize: 16.0,
+  //                                       color: Colors.black,
+  //                                       fontWeight: FontWeight.normal),
+  //                                   children: [
+  //                                     TextSpan(
+  //                                         text: (detail!.customerSourceName !=
+  //                                                     "" &&
+  //                                                 detail!.customerSourceName !=
+  //                                                     null)
+  //                                             ? (" - " + detail!.fullName!)
+  //                                             : ("" + detail!.fullName!),
+  //                                         style: TextStyle(
+  //                                             height: 1.5,
+  //                                             color: AppColors.primaryColor,
+  //                                             fontSize: 16.0,
+  //                                             fontWeight: FontWeight.bold)),
+  //                                     WidgetSpan(
+  //                                         child: SizedBox(
+  //                                       width: 5.0,
+  //                                     )),
+  //                                     WidgetSpan(
+  //                                         alignment:
+  //                                             ui.PlaceholderAlignment.top,
+  //                                         child: Container(
+  //                                           margin: EdgeInsets.only(right: 8.0),
+  //                                           decoration: BoxDecoration(
+  //                                               color: Color(0xFF3AEDB6),
+  //                                               borderRadius:
+  //                                                   BorderRadius.circular(4.0)),
+  //                                           child: Padding(
+  //                                             padding: EdgeInsets.all(3.0),
+  //                                             child: Text(
+  //                                                 detail?.journeyName ?? "N/A",
+  //                                                 style: TextStyle(
+  //                                                     color: Color.fromARGB(
+  //                                                         255, 15, 115, 85),
+  //                                                     fontSize: 13,
+  //                                                     fontWeight:
+  //                                                         FontWeight.normal)),
+  //                                           ),
+  //                                         )),
+  //                                   ])),
+  //                           SizedBox(height: 5),
+  //                           Text(hidePhone(detail?.phone ?? "",!checkVisibilityKey(VisibilityWidgetName.LE000002)),
+  //                               textAlign: TextAlign.center,
+  //                               style: TextStyle(
+  //                                   fontSize: 16.0,
+  //                                   color: Colors.black,
+  //                                   fontWeight: FontWeight.normal)),
+  //                           SizedBox(height: 5),
+  //                           (detail!.customerType == "business")
+  //                               ? Text(
+  //                                   AppLocalizations.text(LangKey.business)!,
+  //                                   textAlign: TextAlign.center,
+  //                                   style: TextStyle(
+  //                                       overflow: TextOverflow.visible,
+  //                                       fontSize: 16.0,
+  //                                       color: Color(0xFF8E8E8E),
+  //                                       fontWeight: FontWeight.normal),
+  //                                 )
+  //                               : Text(
+  //                                   AppLocalizations.text(LangKey.personal)!,
+  //                                   textAlign: TextAlign.center,
+  //                                   style: TextStyle(
+  //                                       overflow: TextOverflow.visible,
+  //                                       fontSize: 16.0,
+  //                                       color: Color(0xFF8E8E8E),
+  //                                       fontWeight: FontWeight.normal),
+  //                                 )
+  //                         ],
+  //                       )
+  //                     ],
+  //                   ),
+  //                 ),
+  //               ),
+  //               Column(
+  //                 crossAxisAlignment: CrossAxisAlignment.start,
+  //                 children: [
+  //                   Container(
+  //                     // padding: EdgeInsets.only(right: 8.0),
+  //                     margin: EdgeInsets.only(right: 10.0, top: 16.0),
+  //                     child: Row(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         Expanded(
+  //                           child: Container(
+  //                             // width: MediaQuery.of(context).size.width / 2 - 50,
+  //                             child: Column(
+  //                               crossAxisAlignment: CrossAxisAlignment.start,
+  //                               children: [
+  //                                 infoItem(
+  //                                     Assets.iconName, detail!.saleName ?? ""),
+  //                                 infoItem(Assets.iconInteraction,
+  //                                     "${detail!.dateLastCare ?? ""} (${detail!.diffDay ?? 0} ngày)"),
+  //                                 infoItem(Assets.iconChance,
+  //                                     detail?.pipelineName ?? ""),
+  //                               ],
+  //                             ),
+  //                           ),
+  //                         ),
+  //                         Column(
+  //                           mainAxisAlignment: MainAxisAlignment.start,
+  //                           crossAxisAlignment: CrossAxisAlignment.end,
+  //                           children: [
+  //                             InkWell(
+  //                               onTap: () async {
+  //                                 print(detail!.phone);
+  //                                 await callPhone(detail?.phone ?? "");
+  //                               },
+  //                               child: Container(
+  //                                 padding: EdgeInsets.all(20.0 / 2),
+  //                                 height: 45,
+  //                                 width: 45,
+  //                                 decoration: BoxDecoration(
+  //                                   color: Color(0xFF06A605),
+  //                                   borderRadius: BorderRadius.circular(50),
+  //                                   // border:  Border.all(color: AppColors.white,)
+  //                                 ),
+  //                                 child: Center(
+  //                                     child: Image.asset(
+  //                                   Assets.iconCall,
+  //                                   color: AppColors.white,
+  //                                 )),
+  //                               ),
+  //                             ),
+  //                             SizedBox(height: 10.0),
+  //                             Row(
+  //                               mainAxisAlignment: MainAxisAlignment.end,
+  //                               children: [
+  //                                 _actionItem(
+  //                                     Assets.iconCalendar, Color(0xFF26A7AD),
+  //                                     number: detail!.relatedWork ?? 0,
+  //                                     ontap: () {
+  //                                   print("1");
+  //                                 }),
+  //                                 _actionItem(
+  //                                     Assets.iconOutdate, Color(0xFFDD2C00),
+  //                                     number: detail!.appointment ?? 0,
+  //                                     ontap: () {
+  //                                   print("2");
+  //                                 }),
+  //                               ],
+  //                             )
+  //                           ],
+  //                         )
+  //                       ],
+  //                     ),
+  //                   ),
+  //                   // SizedBox(height: 14.0),
 
-                    (detail!.tag != null && detail!.tag!.length > 0)
-                        ? Container(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: (detail!.tag != null && detail!.tag!.length > 0)
-                                ? Container(
-                                    padding: EdgeInsets.only(bottom: 8.0),
-                                    margin: EdgeInsets.only(left: 8.0),
-                                    // width: (AppSizes.maxWidth - 20) * 0.55,
-                                    child: Wrap(
-                                      children: List.generate(
-                                          detail!.tag!.length,
-                                          (index) =>
-                                              _optionItem(detail!.tag![index])),
-                                      spacing: 10,
-                                      runSpacing: 10,
-                                    ),
-                                  )
-                                : Container(),
-                          )
-                        : Container(),
-                    // (detail.tag != null && detail.tag.length > 0)
-                    //     ? Container(
-                    //         padding: EdgeInsets.only(bottom: 8.0),
-                    //         margin: EdgeInsets.only(left: 8.0),
-                    //         child: Wrap(
-                    //           children: List.generate(
-                    //               detail.tag.length,
-                    //               (index) =>
-                    //                   _optionItem(detail.tag[index])),
-                    //           spacing: 10,
-                    //           runSpacing: 10,
-                    //         ),
-                    //       )
-                    //     : Container(),
+  //                   (detail!.tag != null && detail!.tag!.length > 0)
+  //                       ? Container(
+  //                           padding: EdgeInsets.only(right: 10.0),
+  //                           child: (detail!.tag != null && detail!.tag!.length > 0)
+  //                               ? Container(
+  //                                   padding: EdgeInsets.only(bottom: 8.0),
+  //                                   margin: EdgeInsets.only(left: 8.0),
+  //                                   // width: (AppSizes.maxWidth - 20) * 0.55,
+  //                                   child: Wrap(
+  //                                     children: List.generate(
+  //                                         detail!.tag!.length,
+  //                                         (index) =>
+  //                                             _optionItem(detail!.tag![index])),
+  //                                     spacing: 10,
+  //                                     runSpacing: 10,
+  //                                   ),
+  //                                 )
+  //                               : Container(),
+  //                         )
+  //                       : Container(),
+  //                   // (detail.tag != null && detail.tag.length > 0)
+  //                   //     ? Container(
+  //                   //         padding: EdgeInsets.only(bottom: 8.0),
+  //                   //         margin: EdgeInsets.only(left: 8.0),
+  //                   //         child: Wrap(
+  //                   //           children: List.generate(
+  //                   //               detail.tag.length,
+  //                   //               (index) =>
+  //                   //                   _optionItem(detail.tag[index])),
+  //                   //           spacing: 10,
+  //                   //           runSpacing: 10,
+  //                   //         ),
+  //                   //       )
+  //                   //     : Container(),
 
-                    // SizedBox(height: 8.0),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          left: 0,
-          right: 0,
-          top: -60,
-          child: Center(child: _buildAvatar(detail?.fullName ?? "")),
-        ),
-      ],
-    );
-  }
+  //                   // SizedBox(height: 8.0),
+  //                 ],
+  //               )
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //       Positioned(
+  //         left: 0,
+  //         right: 0,
+  //         top: -60,
+  //         child: Center(child: _buildAvatar(detail?.fullName ?? "")),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget dealInfomationV2() {
     return Container(
@@ -2191,7 +2199,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                         ? InkWell(
                             onTap: () async {
                               print(item.phone ?? "");
-                              await callPhone(item?.phone ?? "");
+                              await _callPhone(item?.phone ?? "");
                             },
                             child: Container(
                               padding: EdgeInsets.all(20.0 / 2),
@@ -2321,11 +2329,16 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Future<bool> callPhone(String phone) async {
-    final regSpace = RegExp(r"\s+");
-    // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
-    return await launch("tel:" + phone.replaceAll(regSpace, ""));
-  }
+  // Future<bool> callPhone(String phone) async {
+  //   final regSpace = RegExp(r"\s+");
+  //   // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
+  //   return await launch("tel:" + phone.replaceAll(regSpace, ""));
+  // }
+
+
+   _callPhone(String phone) async {
+  await FlutterPhoneDirectCaller.callNumber(phone);
+}
 
   Widget _buildAvatar(String name) {
     return Container(

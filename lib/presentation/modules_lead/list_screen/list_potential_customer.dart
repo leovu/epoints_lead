@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -12,6 +13,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
+import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
@@ -371,7 +373,7 @@ class _LeadScreen extends State<LeadScreen> {
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(item?.phone ?? "",
+                        Text(hidePhone(item.phone ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)),
                             style: TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.black,
@@ -440,7 +442,7 @@ class _LeadScreen extends State<LeadScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Container(
+                            (checkVisibilityKey(VisibilityWidgetName.LE000002)) ? Container(
                               margin: EdgeInsets.only(bottom: 12.0),
                               child: InkWell(
                                 onTap: () async {
@@ -463,6 +465,9 @@ class _LeadScreen extends State<LeadScreen> {
                                   )),
                                 ),
                               ),
+                            ) : Container(
+                              margin: EdgeInsets.only(bottom: 12.0),
+                              height: 45,
                             ),
 
                             // SizedBox(height: ,)
@@ -659,10 +664,11 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  Future<bool> callPhone(String phone) async {
-    final regSpace = RegExp(r"\s+");
-    // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
-    return await launch("tel:" + phone.replaceAll(regSpace, ""));
+  callPhone(String phone) async {
+    await FlutterPhoneDirectCaller.callNumber(phone);
+    // final regSpace = RegExp(r"\s+");
+    // // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
+    // return await launch("tel:" + phone.replaceAll(regSpace, ""));
   }
 
   Widget _buildAvatar(String name) {

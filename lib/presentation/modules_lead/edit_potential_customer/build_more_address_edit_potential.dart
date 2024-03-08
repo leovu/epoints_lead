@@ -23,6 +23,7 @@ import 'package:lead_plugin_epoint/presentation/modal/province_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/ward_modal.dart';
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
+import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
@@ -729,13 +730,13 @@ class _BuildMoreAddressEditPotentialState
         //   }
         // }),
         // Zalo
-        _buildTextField(AppLocalizations.text(LangKey.zalo), "",
+        checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.zalo), "",
             Assets.iconSource, false, false, true,
-            fillText: _zaloText, focusNode: _zaloFocusNode),
+            fillText: _zaloText, focusNode: _zaloFocusNode) : Container(),
         // Nhập Fanpage
-        _buildTextField(AppLocalizations.text(LangKey.inputFanpage), "",
+        checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.inputFanpage), "",
             Assets.iconFanpage, false, false, true,
-            fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode),
+            fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode) : Container(),
 
         !widget.selectedPersonal!
             ? Column(

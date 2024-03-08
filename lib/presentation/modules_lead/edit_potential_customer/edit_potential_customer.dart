@@ -36,6 +36,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_cust
 import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
+import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
@@ -763,16 +764,16 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   fillText: _taxText, focusNode: _taxFocusNode)
               : Container(),
 
-          _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
+          checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
               Assets.iconCall, true, false, true,
               fillText: _phoneNumberText,
               focusNode: _phoneNumberFocusNode,
-              inputType: TextInputType.phone),
+              inputType: TextInputType.phone) : Container(),
 
           // email
-          _buildTextField(AppLocalizations.text(LangKey.email), "",
+          checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.email), "",
               Assets.iconEmail, false, false, true,
-              fillText: _emailText, focusNode: _emailFocusNode),
+              fillText: _emailText, focusNode: _emailFocusNode) : Container(),
 
           // người đại diện
           !selectedPersonal
@@ -1088,11 +1089,11 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           focusNode: focusNode,
           keyboardType: (inputType != null) ? inputType : TextInputType.text,
           decoration: InputDecoration(
-            isCollapsed: true,
+            isCollapsed: false,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(
               borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
+                  width: 1, color: Color.fromARGB(255, 230, 21, 84)),
               borderRadius: BorderRadius.circular(10.0),
             ),
             focusedBorder: OutlineInputBorder(

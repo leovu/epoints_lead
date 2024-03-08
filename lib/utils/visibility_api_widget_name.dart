@@ -17,7 +17,7 @@ class VisibilityWidgetName {
   // static const String LE000012 = "LE000012"; //Tạo CSKH
   // static const String LE000013 = "LE000013"; //Xóa KHTN
   // static const String LE000014 = "LE000014"; //Chỉnh sửa KHTN
-
+static const String LE000001 = "LE000001"; //Tạo KHTN
 static const String LE000002 = "LE000002"; //Xem liên hệ khách hàng tiềm năng
 static const String LE000003 = "LE000002"; //Chỉnh sửa liên hệ khách hàng khách hàng tiềm năng
 static const String LE000004 = "LE000004"; //Cập nhật người giới thiệu khách hàng tiềm năng
@@ -81,9 +81,11 @@ String hideEmail(String? event, bool show){
     for(var i = 1; i < events.length; i++){
       email += "@${events[i]}";
     }
-
+  print(event);
     return email;
   }
+
+  print(event);
 
   return event ?? "";
 }

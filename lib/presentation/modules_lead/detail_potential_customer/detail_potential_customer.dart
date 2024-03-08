@@ -1060,7 +1060,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               children: [
                 _infoItemV2(
                     Assets.iconTax, "MST: " + (detail!.taxCode ?? "N/A")),
-                _infoItemV2(Assets.iconEmail, detail!.email ?? "N/A"),
+                _infoItemV2(Assets.iconEmail, hideEmail(detail?.email ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideEmail(detail?.email ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
                 _infoItemV2(Assets.iconAddress, detail!.address ?? "N/A"),
                 _infoItemV2(
                     Assets.iconRepresentative, detail!.representative ?? "N/A"),
@@ -1071,8 +1071,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     (detail!.employees != null)
                         ? "${detail!.employees ?? 0} nhân viên"
                         : "N/A"),
-                _infoItemV2(Assets.iconSource, detail!.zalo ?? "N/A"),
-                _infoItemV2(Assets.iconFanpage, detail!.fanpage ?? "N/A"),
+                _infoItemV2(Assets.iconSource, hideSocial(detail?.zalo ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideSocial(detail?.zalo ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
+                _infoItemV2(Assets.iconFanpage, hideSocial(detail?.fanpage ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideSocial(detail?.fanpage ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A")
               ],
             ),
           ),

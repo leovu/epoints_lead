@@ -105,7 +105,7 @@ class _LeadScreen extends State<LeadScreen> {
             isConvert: filterModel!.isConvert,
             createdAt: filterModel!.createdAt,
             allocationDate: filterModel!.allocationDate,
-            careHistory:filterModel!.careHistory,
+            careHistory: filterModel!.careHistory,
             pipelineId: filterModel!.pipelineId,
             journeyId: filterModel!.journeyId));
 
@@ -120,7 +120,7 @@ class _LeadScreen extends State<LeadScreen> {
           curve: Curves.fastOutSlowIn,
         );
       } else {
-        items!.addAll(model.data?.items as Iterable<ListCustomLeadItems> );
+        items!.addAll(model.data?.items as Iterable<ListCustomLeadItems>);
       }
       currentPage = model.data?.pageInfo?.currentPage;
       nextPage = model.data?.pageInfo?.nextPage;
@@ -189,24 +189,26 @@ class _LeadScreen extends State<LeadScreen> {
       ),
       backgroundColor: Colors.white,
       body: _buildBody(),
-      floatingActionButton:checkVisibilityKey(VisibilityWidgetName.LE000001) ? FloatingActionButton(
-        backgroundColor: AppColors.primaryColor,
-        onPressed: () async {
-          var result = await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CreatePotentialCustomer()));
-          if (result != null) {
-            var status = result["status"];
-            if (status) {
-              getData(false);
-            }
-          }
-        },
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 50,
-        ),
-      ) : Container(),
+      floatingActionButton: checkVisibilityKey(VisibilityWidgetName.LE000001)
+          ? FloatingActionButton(
+              backgroundColor: AppColors.primaryColor,
+              onPressed: () async {
+                var result = await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CreatePotentialCustomer()));
+                if (result != null) {
+                  var status = result["status"];
+                  if (status) {
+                    getData(false);
+                  }
+                }
+              },
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 50,
+              ),
+            )
+          : Container(),
     );
   }
 
@@ -282,7 +284,6 @@ class _LeadScreen extends State<LeadScreen> {
             // print(event.toLowerCase());
             if (_searchtext != null) {
               // print(_searchext.text);
-
             }
           },
           onSubmitted: (event) async {
@@ -373,27 +374,30 @@ class _LeadScreen extends State<LeadScreen> {
                         SizedBox(
                           height: 5.0,
                         ),
-                        Text(hidePhone(item.phone ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)),
+                        Text(
+                            hidePhone(
+                                item.phone ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.LE000002)),
                             style: TextStyle(
                                 fontSize: 16.0,
                                 color: Colors.black,
                                 fontWeight: FontWeight.normal)),
-
                       ],
                     ),
                   ),
-
                   Container(
                     padding: EdgeInsets.only(right: 8.0, bottom: 8.0, top: 8.0),
-                  margin: EdgeInsets.only(right: 8.0),
+                    margin: EdgeInsets.only(right: 8.0),
                     child: Row(
                       children: [
                         Expanded(
                             child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                              infoItem(Assets.iconName, item?.staffFullName ?? ""),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              infoItem(
+                                  Assets.iconName, item?.staffFullName ?? ""),
                               // infoItem(Assets.iconInteraction, "12/12/2022"),
 
                               Container(
@@ -403,16 +407,19 @@ class _LeadScreen extends State<LeadScreen> {
                                 child: Row(
                                   children: [
                                     Container(
-                                      margin: const EdgeInsets.only(right: 10.0),
+                                      margin:
+                                          const EdgeInsets.only(right: 10.0),
                                       height: 15.0,
                                       width: 15.0,
-                                      child: Image.asset(Assets.iconInteraction),
+                                      child:
+                                          Image.asset(Assets.iconInteraction),
                                     ),
                                     (item.dateLastCare != null)
                                         ? Expanded(
                                             child: RichText(
                                                 text: TextSpan(
-                                                    text: item.dateLastCare! + " ",
+                                                    text: item.dateLastCare! +
+                                                        " ",
                                                     style: TextStyle(
                                                         fontSize: 14.0,
                                                         color: Colors.black,
@@ -426,28 +433,37 @@ class _LeadScreen extends State<LeadScreen> {
                                                           color: AppColors
                                                               .primaryColor,
                                                           fontSize: 14.0,
-                                                          fontWeight:
-                                                              FontWeight.normal))
+                                                          fontWeight: FontWeight
+                                                              .normal))
                                                 ])),
                                           )
                                         : Container(),
                                   ],
                                 ),
                               ),
-                              infoItem(Assets.iconChance, item?.pipelineName ?? ""),
-                          ],
-                        ),
-                            )),
+                              infoItem(
+                                  Assets.iconChance, item?.pipelineName ?? ""),
+                            ],
+                          ),
+                        )),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            (checkVisibilityKey(VisibilityWidgetName.LE000002)) ? Container(
-                              margin: EdgeInsets.only(bottom: 12.0),
-                              child: InkWell(
+
+                            if (item.phone != "")
+                              InkWell(
                                 onTap: () async {
-                                  print(item.phone);
-                                  await callPhone(item?.phone ?? "");
+                                  if (Global.callHotline != null) {
+                                    Global.callHotline!({
+                                      "id": item.customerLeadId,
+                                      "code": item.customerLeadCode,
+                                      "avatar": item.avatar,
+                                      "name": item.leadFullName,
+                                      "phone": item.phone,
+                                      "type": item.customerType,
+                                    });
+                                  }
                                 },
                                 child: Container(
                                   padding: EdgeInsets.all(20.0 / 2),
@@ -465,30 +481,9 @@ class _LeadScreen extends State<LeadScreen> {
                                   )),
                                 ),
                               ),
-                            ) : Container(
-                              margin: EdgeInsets.only(bottom: 12.0),
-                              height: 45,
+                            SizedBox(
+                              height: AppSizes.minPadding,
                             ),
-
-                            if (item.phone != "") _actionItem(
-                                    Assets.iconCall, Colors.green,
-                                    colorIcon: Colors.white,
-                                    number: 0,
-                                    ontap: () async {
-                                     if (Global.callHotline != null) {
-                                      Global.callHotline!({
-                                        "id": item.customerLeadId,
-                                        "code": item.customerLeadCode,
-                                        "avatar": item.avatar,
-                                        "name": item.leadFullName,
-                                        "phone": item.phone,
-                                        "type": item.customerType,
-                                      });
-                                     }
-                                  
-                                }),
-
-                            SizedBox(height: AppSizes.minPadding,),
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -504,8 +499,7 @@ class _LeadScreen extends State<LeadScreen> {
                                                 customer_lead_code:
                                                     item.customerLeadCode,
                                                 indexTab: 2,
-                                                typeCustomer:
-                                                    item.customerType,
+                                                typeCustomer: item.customerType,
                                               )));
 
                                   if (result != null && result) {
@@ -523,8 +517,7 @@ class _LeadScreen extends State<LeadScreen> {
                                               DetailPotentialCustomer(
                                                 customer_lead_code:
                                                     item.customerLeadCode,
-                                                typeCustomer:
-                                                    item.customerType,
+                                                typeCustomer: item.customerType,
                                                 indexTab: 2,
                                               )));
 
@@ -540,11 +533,11 @@ class _LeadScreen extends State<LeadScreen> {
                       ],
                     ),
                   ),
-
                   item.tag!.length > 0
                       ? Container(
                           // width: AppSizes.maxWidth * 0.55,
-                          padding: EdgeInsets.only(left: 8.0,right: 8.0,bottom: 8.0),
+                          padding: EdgeInsets.only(
+                              left: 8.0, right: 8.0, bottom: 8.0),
                           child: Wrap(
                             children: List.generate(item.tag!.length,
                                 (index) => _optionItem(item.tag![index])),
@@ -567,9 +560,10 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap, Color? colorIcon}) {
+  Widget _actionItem(String icon, Color color,
+      {required num number, GestureTapCallback? ontap, Color? colorIcon}) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
           margin: EdgeInsets.only(left: 14.0),
           child: Stack(
@@ -582,7 +576,6 @@ class _LeadScreen extends State<LeadScreen> {
                     color: color, borderRadius: BorderRadius.circular(1000.0)),
                 child: Center(
                   child: Image.asset(
-
                     icon,
                     scale: 2.5,
                     color: colorIcon,

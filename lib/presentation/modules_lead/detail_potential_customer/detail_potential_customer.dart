@@ -175,7 +175,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         MaterialPageRoute(builder: (context) => CustomFileView(path, name)));
   }
 
- getData() async {
+  getData() async {
     var dataDetail = await LeadConnection.getdetailPotential(
         context, widget.customer_lead_code);
     if (dataDetail != null) {
@@ -210,7 +210,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           Navigator.of(context).pop();
         }
         return allowPop;
-        
       },
       child: Scaffold(
         appBar: AppBar(
@@ -440,7 +439,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   Expanded(
                       child: ListView(
                     padding: EdgeInsets.zero,
-                    physics: (index == 3) ? NeverScrollableScrollPhysics() :AlwaysScrollableScrollPhysics(),
+                    physics: (index == 3)
+                        ? NeverScrollableScrollPhysics()
+                        : AlwaysScrollableScrollPhysics(),
                     controller: _controller,
                     children: buildInfomation(),
                   )),
@@ -454,7 +455,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                           child: _buildChatBox())
                       : Container(),
 
-                   Container(
+                  Container(
                     height: 20.0,
                   ),
                 ],
@@ -531,7 +532,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           selectedTab(3);
         }),
         (widget.typeCustomer == "business")
-            ? option(tabPotentials[4].typeName!, tabPotentials[4].selected!, 100,
+            ? option(
+                tabPotentials[4].typeName!, tabPotentials[4].selected!, 100,
                 () async {
                 index = 4;
                 selectedTab(4);
@@ -622,8 +624,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               curve: Curves.easeInOut);
         }
 
-        _bloc.workListComment(
-            WorkListCommentRequestModel(customerLeadID: detail!.customerLeadId));
+        _bloc.workListComment(WorkListCommentRequestModel(
+            customerLeadID: detail!.customerLeadId));
         setState(() {});
         break;
 
@@ -656,14 +658,15 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     }
   }
 
-  Widget option(String title, bool show, double width, GestureTapCallback ontap) {
+  Widget option(
+      String title, bool show, double width, GestureTapCallback ontap) {
     return Column(
       children: [
         Container(
           padding: EdgeInsets.all(15.0 / 1.5),
           height: 40,
           child: InkWell(
-            onTap: ontap ,
+            onTap: ontap,
             child: Center(
               child: Text(
                 title,
@@ -837,7 +840,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
         stream: _bloc.outputModels,
         initialData: null,
         builder: (_, snapshot) {
-          List<WorkListCommentModel>? models = snapshot.data as List<WorkListCommentModel>?;
+          List<WorkListCommentModel>? models =
+              snapshot.data as List<WorkListCommentModel>?;
           return ContainerDataBuilder(
             data: models,
             emptyBuilder: _buildEmpty(),
@@ -1002,11 +1006,38 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                             : (detail!.gender == "other")
                                 ? AppLocalizations.text(LangKey.other)!
                                 : "N/A"),
-                _infoItemV2(Assets.iconEmail, hideEmail(detail?.email ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideEmail(detail?.email ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
+                _infoItemV2(
+                    Assets.iconEmail,
+                    hideEmail(
+                                detail?.email ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.LE000002)) !=
+                            ""
+                        ? hideEmail(detail?.email ?? "",
+                            checkVisibilityKey(VisibilityWidgetName.LE000002))
+                        : "N/A"),
                 _infoItemV2(Assets.iconAddress, detail!.address ?? "N/A"),
                 _infoItemV2(Assets.iconBirthday, detail!.birthday ?? "N/A"),
-                _infoItemV2(Assets.iconSource, hideSocial(detail?.zalo ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideSocial(detail?.zalo ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
-                _infoItemV2(Assets.iconFanpage, hideSocial(detail?.fanpage ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideSocial(detail?.fanpage ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
+                _infoItemV2(
+                    Assets.iconSource,
+                    hideSocial(
+                                detail?.zalo ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.LE000002)) !=
+                            ""
+                        ? hideSocial(detail?.zalo ?? "",
+                            checkVisibilityKey(VisibilityWidgetName.LE000002))
+                        : "N/A"),
+                _infoItemV2(
+                    Assets.iconFanpage,
+                    hideSocial(
+                                detail?.fanpage ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.LE000002)) !=
+                            ""
+                        ? hideSocial(detail?.fanpage ?? "",
+                            checkVisibilityKey(VisibilityWidgetName.LE000002))
+                        : "N/A"),
               ],
             ),
           ),
@@ -1060,7 +1091,16 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
               children: [
                 _infoItemV2(
                     Assets.iconTax, "MST: " + (detail!.taxCode ?? "N/A")),
-                _infoItemV2(Assets.iconEmail, hideEmail(detail?.email ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideEmail(detail?.email ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
+                _infoItemV2(
+                    Assets.iconEmail,
+                    hideEmail(
+                                detail?.email ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.LE000002)) !=
+                            ""
+                        ? hideEmail(detail?.email ?? "",
+                            checkVisibilityKey(VisibilityWidgetName.LE000002))
+                        : "N/A"),
                 _infoItemV2(Assets.iconAddress, detail!.address ?? "N/A"),
                 _infoItemV2(
                     Assets.iconRepresentative, detail!.representative ?? "N/A"),
@@ -1071,8 +1111,26 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                     (detail!.employees != null)
                         ? "${detail!.employees ?? 0} nhân viên"
                         : "N/A"),
-                _infoItemV2(Assets.iconSource, hideSocial(detail?.zalo ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideSocial(detail?.zalo ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A"),
-                _infoItemV2(Assets.iconFanpage, hideSocial(detail?.fanpage ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) != "" ? hideSocial(detail?.fanpage ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)) : "N/A")
+                _infoItemV2(
+                    Assets.iconSource,
+                    hideSocial(
+                                detail?.zalo ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.LE000002)) !=
+                            ""
+                        ? hideSocial(detail?.zalo ?? "",
+                            checkVisibilityKey(VisibilityWidgetName.LE000002))
+                        : "N/A"),
+                _infoItemV2(
+                    Assets.iconFanpage,
+                    hideSocial(
+                                detail?.fanpage ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.LE000002)) !=
+                            ""
+                        ? hideSocial(detail?.fanpage ?? "",
+                            checkVisibilityKey(VisibilityWidgetName.LE000002))
+                        : "N/A")
               ],
             ),
           ),
@@ -1146,248 +1204,287 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-       (index != 3)? Container(
-          // margin: EdgeInsets.only(bottom: 32.0),
-          // padding: EdgeInsets.only(bot),
-          child: Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Container(
-                    padding: EdgeInsets.only(right: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(top: 25.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 4.0,
-                        ),
-                        Column(
-                          children: [
-                            RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                    text: detail!.customerSourceName ?? "",
-                                    style: TextStyle(
-                                        fontSize: 16.0,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.normal),
-                                    children: [
-                                      TextSpan(
-                                          text: (detail!.customerSourceName !=
-                                                      "" &&
-                                                  detail!.customerSourceName !=
-                                                      null)
-                                              ? (" - " + detail!.fullName!)
-                                              : ("" + detail!.fullName!),
-                                          style: TextStyle(
-                                              height: 1.5,
-                                              color: AppColors.primaryColor,
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.bold)),
-                                      WidgetSpan(
-                                          child: SizedBox(
-                                        width: 5.0,
-                                      )),
-                                      WidgetSpan(
-                                          alignment:
-                                              ui.PlaceholderAlignment.top,
-                                          child: Container(
-                                            margin: EdgeInsets.only(right: 8.0),
-                                            decoration: BoxDecoration(
-                                                color: Color(0xFF3AEDB6),
-                                                borderRadius:
-                                                    BorderRadius.circular(4.0)),
-                                            child: Padding(
-                                              padding: EdgeInsets.all(3.0),
-                                              child: Text(
-                                                  detail?.journeyName ?? "N/A",
-                                                  style: TextStyle(
-                                                      color: Color.fromARGB(
-                                                          255, 15, 115, 85),
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.normal)),
-                                            ),
-                                          )),
-                                    ])),
-                            SizedBox(height: 5),
-                            Text(hidePhone(detail?.phone ?? "",checkVisibilityKey(VisibilityWidgetName.LE000002)),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal)),
-                            SizedBox(height: 5),
-                            (detail!.customerType == "business")
-                                ? Text(
-                                    AppLocalizations.text(LangKey.business)!,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        overflow: TextOverflow.visible,
-                                        fontSize: 16.0,
-                                        color: Color(0xFF8E8E8E),
-                                        fontWeight: FontWeight.normal),
-                                  )
-                                : Text(
-                                    AppLocalizations.text(LangKey.personal)!,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        overflow: TextOverflow.visible,
-                                        fontSize: 16.0,
-                                        color: Color(0xFF8E8E8E),
-                                        fontWeight: FontWeight.normal),
-                                  )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      // padding: EdgeInsets.only(right: 8.0),
-                      margin: EdgeInsets.only(right: 10.0, top: 16.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              // width: MediaQuery.of(context).size.width / 2 - 50,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  infoItem(
-                                      Assets.iconName, detail!.saleName ?? ""),
-                                  infoItem(Assets.iconInteraction,
-                                      "${detail!.dateLastCare ?? ""} (${detail!.diffDay ?? 0} ngày)"),
-                                  infoItem(Assets.iconChance,
-                                      detail?.pipelineName ?? ""),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.end,
+        (index != 3)
+            ? Container(
+                // margin: EdgeInsets.only(bottom: 32.0),
+                // padding: EdgeInsets.only(bot),
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          padding: EdgeInsets.only(right: 8.0, top: 8.0),
+                          margin: EdgeInsets.only(top: 25.0),
+                          child: Column(
                             children: [
-                              (checkVisibilityKey(VisibilityWidgetName.LE000002)) ? Container(
-                              margin: EdgeInsets.only(bottom: 12.0),
-                              child: InkWell(
-                                onTap: () async {
-                                  print(detail!.phone);
-                                  await _callPhone(detail!.phone ?? "");
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(20.0 / 2),
-                                  height: 45,
-                                  width: 45,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF06A605),
-                                    borderRadius: BorderRadius.circular(50),
-                                    // border:  Border.all(color: AppColors.white,)
-                                  ),
-                                  child: Center(
-                                      child: Image.asset(
-                                    Assets.iconCall,
-                                    color: AppColors.white,
-                                  )),
-                                ),
+                              SizedBox(
+                                height: 4.0,
                               ),
-                            ) : Container(
-                              margin: EdgeInsets.only(bottom: 12.0),
-                              height: 45,
-                            ),
-                            if (detail!.phone != "") _actionItem(
-                                    Assets.iconCall, Colors.green,
-                                    colorIcon: Colors.white,
-                                    number: 0,
-                                    ontap: () async {
-                                     if (Global.callHotline != null) {
-                                      Global.callHotline!({
-                                        "id": detail!.customerLeadId,
-                                        "code": detail!.customerLeadCode,
-                                        "avatar": detail!.avatar,
-                                        "name": detail!.fullName,
-                                        "phone": detail!.phone,
-                                        "type": detail!.customerType,
-                                      });
-                                     }
-                                  
-                                }),
-                              SizedBox(height: 10.0),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                              Column(
                                 children: [
-                                  _actionItem(
-                                      Assets.iconCalendar, Color(0xFF26A7AD),
-                                      number: detail!.relatedWork ?? 0,
-                                      ontap: () {
-                                    print("1");
-                                  }),
-                                  _actionItem(
-                                      Assets.iconOutdate, Color(0xFFDD2C00),
-                                      number: detail!.appointment ?? 0,
-                                      ontap: () {
-                                    print("2");
-                                  }),
+                                  RichText(
+                                      textAlign: TextAlign.center,
+                                      text: TextSpan(
+                                          text:
+                                              detail!.customerSourceName ?? "",
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.normal),
+                                          children: [
+                                            TextSpan(
+                                                text: (detail!.customerSourceName !=
+                                                            "" &&
+                                                        detail!.customerSourceName !=
+                                                            null)
+                                                    ? (" - " +
+                                                        detail!.fullName!)
+                                                    : ("" + detail!.fullName!),
+                                                style: TextStyle(
+                                                    height: 1.5,
+                                                    color:
+                                                        AppColors.primaryColor,
+                                                    fontSize: 16.0,
+                                                    fontWeight:
+                                                        FontWeight.bold)),
+                                            WidgetSpan(
+                                                child: SizedBox(
+                                              width: 5.0,
+                                            )),
+                                            WidgetSpan(
+                                                alignment:
+                                                    ui.PlaceholderAlignment.top,
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 8.0),
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xFF3AEDB6),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4.0)),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.all(3.0),
+                                                    child: Text(
+                                                        detail?.journeyName ??
+                                                            "N/A",
+                                                        style: TextStyle(
+                                                            color:
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    15,
+                                                                    115,
+                                                                    85),
+                                                            fontSize: 13,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .normal)),
+                                                  ),
+                                                )),
+                                          ])),
+                                  SizedBox(height: 5),
+                                  Text(
+                                      hidePhone(
+                                          detail?.phone ?? "",
+                                          checkVisibilityKey(
+                                              VisibilityWidgetName.LE000002)),
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: 16.0,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.normal)),
+                                  SizedBox(height: 5),
+                                  (detail!.customerType == "business")
+                                      ? Text(
+                                          AppLocalizations.text(
+                                              LangKey.business)!,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.visible,
+                                              fontSize: 16.0,
+                                              color: Color(0xFF8E8E8E),
+                                              fontWeight: FontWeight.normal),
+                                        )
+                                      : Text(
+                                          AppLocalizations.text(
+                                              LangKey.personal)!,
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              overflow: TextOverflow.visible,
+                                              fontSize: 16.0,
+                                              color: Color(0xFF8E8E8E),
+                                              fontWeight: FontWeight.normal),
+                                        )
                                 ],
                               )
                             ],
-                          )
-                        ],
+                          ),
+                        ),
                       ),
-                    ),
-                    // SizedBox(height: 14.0),
-
-                    (detail!.tag != null && detail!.tag!.length > 0)
-                        ? Container(
-                            padding: EdgeInsets.only(right: 10.0),
-                            child: (detail!.tag != null && detail!.tag!.length > 0)
-                                ? Container(
-                                    padding: EdgeInsets.only(bottom: 8.0),
-                                    margin: EdgeInsets.only(left: 8.0),
-                                    // width: (AppSizes.maxWidth - 20) * 0.55,
-                                    child: Wrap(
-                                      children: List.generate(
-                                          detail!.tag!.length,
-                                          (index) =>
-                                              _optionItem(detail!.tag![index])),
-                                      spacing: 10,
-                                      runSpacing: 10,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            // padding: EdgeInsets.only(right: 8.0),
+                            margin: EdgeInsets.only(right: 10.0, top: 16.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Expanded(
+                                  child: Container(
+                                    // width: MediaQuery.of(context).size.width / 2 - 50,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        infoItem(Assets.iconName,
+                                            detail!.saleName ?? ""),
+                                        infoItem(Assets.iconInteraction,
+                                            "${detail!.dateLastCare ?? ""} (${detail!.diffDay ?? 0} ngày)"),
+                                        infoItem(Assets.iconChance,
+                                            detail?.pipelineName ?? ""),
+                                      ],
                                     ),
-                                  )
-                                : Container(),
-                          )
-                        : Container(),
-                    // (detail.tag != null && detail.tag.length > 0)
-                    //     ? Container(
-                    //         padding: EdgeInsets.only(bottom: 8.0),
-                    //         margin: EdgeInsets.only(left: 8.0),
-                    //         child: Wrap(
-                    //           children: List.generate(
-                    //               detail.tag.length,
-                    //               (index) =>
-                    //                   _optionItem(detail.tag[index])),
-                    //           spacing: 10,
-                    //           runSpacing: 10,
-                    //         ),
-                    //       )
-                    //     : Container(),
+                                  ),
+                                ),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    //   (checkVisibilityKey(VisibilityWidgetName.LE000002)) ? Container(
+                                    //   margin: EdgeInsets.only(bottom: 12.0),
+                                    //   child: InkWell(
+                                    //     onTap: () async {
+                                    //       print(detail!.phone);
+                                    //       await _callPhone(detail!.phone ?? "");
+                                    //     },
+                                    //     child: Container(
+                                    //       padding: EdgeInsets.all(20.0 / 2),
+                                    //       height: 45,
+                                    //       width: 45,
+                                    //       decoration: BoxDecoration(
+                                    //         color: Color(0xFF06A605),
+                                    //         borderRadius: BorderRadius.circular(50),
+                                    //         // border:  Border.all(color: AppColors.white,)
+                                    //       ),
+                                    //       child: Center(
+                                    //           child: Image.asset(
+                                    //         Assets.iconCall,
+                                    //         color: AppColors.white,
+                                    //       )),
+                                    //     ),
+                                    //   ),
+                                    // ) : Container(
+                                    //   margin: EdgeInsets.only(bottom: 12.0),
+                                    //   height: 45,
+                                    // ),
+                                    if (detail?.phone != "")
+                                      InkWell(
+                                        onTap: () async {
+                                          if (Global.callHotline != null) {
+                                            Global.callHotline!({
+                                              "id": detail?.customerLeadId,
+                                              "code": detail?.customerLeadCode,
+                                              "avatar": detail?.avatar,
+                                              "name": detail?.fullName,
+                                              "phone": detail?.phone,
+                                              "type": detail?.customerType,
+                                            });
+                                          }
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.all(20.0 / 2),
+                                          height: 45,
+                                          width: 45,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xFF06A605),
+                                            borderRadius:
+                                                BorderRadius.circular(50),
+                                            // border:  Border.all(color: AppColors.white,)
+                                          ),
+                                          child: Center(
+                                              child: Image.asset(
+                                            Assets.iconCall,
+                                            color: AppColors.white,
+                                          )),
+                                        ),
+                                      ),
+                                    SizedBox(
+                                      height: AppSizes.minPadding,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        _actionItem(Assets.iconCalendar,
+                                            Color(0xFF26A7AD),
+                                            number: detail!.relatedWork ?? 0,
+                                            ontap: () {
+                                          print("1");
+                                        }),
+                                        _actionItem(Assets.iconOutdate,
+                                            Color(0xFFDD2C00),
+                                            number: detail!.appointment ?? 0,
+                                            ontap: () {
+                                          print("2");
+                                        }),
+                                      ],
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ),
+                          // SizedBox(height: 14.0),
 
-                    // SizedBox(height: 8.0),
-                  ],
-                )
-              ],
-            ),
-          ),
-        ) : Container(),
+                          (detail!.tag != null && detail!.tag!.length > 0)
+                              ? Container(
+                                  padding: EdgeInsets.only(right: 10.0),
+                                  child: (detail!.tag != null &&
+                                          detail!.tag!.length > 0)
+                                      ? Container(
+                                          padding: EdgeInsets.only(bottom: 8.0),
+                                          margin: EdgeInsets.only(left: 8.0),
+                                          // width: (AppSizes.maxWidth - 20) * 0.55,
+                                          child: Wrap(
+                                            children: List.generate(
+                                                detail!.tag!.length,
+                                                (index) => _optionItem(
+                                                    detail!.tag![index])),
+                                            spacing: 10,
+                                            runSpacing: 10,
+                                          ),
+                                        )
+                                      : Container(),
+                                )
+                              : Container(),
+                          // (detail.tag != null && detail.tag.length > 0)
+                          //     ? Container(
+                          //         padding: EdgeInsets.only(bottom: 8.0),
+                          //         margin: EdgeInsets.only(left: 8.0),
+                          //         child: Wrap(
+                          //           children: List.generate(
+                          //               detail.tag.length,
+                          //               (index) =>
+                          //                   _optionItem(detail.tag[index])),
+                          //           spacing: 10,
+                          //           runSpacing: 10,
+                          //         ),
+                          //       )
+                          //     : Container(),
+
+                          // SizedBox(height: 8.0),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              )
+            : Container(),
         Positioned(
           left: 0,
           right: 0,
@@ -1774,9 +1871,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap,  Color? colorIcon}) {
+  Widget _actionItem(String icon, Color color,
+      {required num number, GestureTapCallback? ontap, Color? colorIcon}) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
           margin: EdgeInsets.only(left: 17, bottom: 10.0),
           child: Stack(
@@ -2353,10 +2451,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
   //   return await launch("tel:" + phone.replaceAll(regSpace, ""));
   // }
 
-
-   _callPhone(String phone) async {
-  await FlutterPhoneDirectCaller.callNumber(phone);
-}
+  _callPhone(String phone) async {
+    await FlutterPhoneDirectCaller.callNumber(phone);
+  }
 
   Widget _buildAvatar(String name) {
     return Container(
@@ -2389,7 +2486,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
           color: AppColors.primaryColor,
           borderRadius: BorderRadius.circular(5)),
       child: InkWell(
-        onTap: ontap ,
+        onTap: ontap,
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),

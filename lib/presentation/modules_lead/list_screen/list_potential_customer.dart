@@ -470,7 +470,25 @@ class _LeadScreen extends State<LeadScreen> {
                               height: 45,
                             ),
 
-                            // SizedBox(height: ,)
+                            _actionItem(
+                                    Assets.iconCall, Colors.green,
+                                    colorIcon: Colors.white,
+                                    number: 0,
+                                    ontap: () async {
+                                     if (Global.callHotline != null) {
+                                      Global.callHotline!({
+                                        "id": item.customerLeadId,
+                                        "code": item.customerLeadCode,
+                                        "avatar": item.avatar,
+                                        "name": item.leadFullName,
+                                        "phone": item.phone,
+                                        "type": item.customerType,
+                                      });
+                                     }
+                                  
+                                }),
+
+                            SizedBox(height: AppSizes.minPadding,),
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -549,7 +567,7 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap}) {
+  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap, Color? colorIcon}) {
     return InkWell(
       onTap: ontap ,
       child: Container(
@@ -564,8 +582,10 @@ class _LeadScreen extends State<LeadScreen> {
                     color: color, borderRadius: BorderRadius.circular(1000.0)),
                 child: Center(
                   child: Image.asset(
+
                     icon,
                     scale: 2.5,
+                    color: colorIcon,
                   ),
                 ),
               ),

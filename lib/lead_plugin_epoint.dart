@@ -36,9 +36,14 @@ class LeadPluginEpoint {
       Function? editJob,
       Function? openDetailDeal,
       Function? createDeal,
+      Function(Map<String,dynamic>)? callHotline,
       List<Map<String, dynamic>>? permission}) async {
     if (permission != null) {
         Global.permissionModels = permission;
+    }
+
+    if (callHotline != null) {
+      Global.callHotline = callHotline;
     }
     if (domain != null) {
       HTTPConnection.domain = domain;

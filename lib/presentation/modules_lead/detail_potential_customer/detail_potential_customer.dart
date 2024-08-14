@@ -1304,6 +1304,23 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               margin: EdgeInsets.only(bottom: 12.0),
                               height: 45,
                             ),
+                            _actionItem(
+                                    Assets.iconCall, Colors.green,
+                                    colorIcon: Colors.white,
+                                    number: 0,
+                                    ontap: () async {
+                                     if (Global.callHotline != null) {
+                                      Global.callHotline!({
+                                        "id": detail!.customerLeadId,
+                                        "code": detail!.customerLeadCode,
+                                        "avatar": detail!.avatar,
+                                        "name": detail!.fullName,
+                                        "phone": detail!.phone,
+                                        "type": detail!.customerType,
+                                      });
+                                     }
+                                  
+                                }),
                               SizedBox(height: 10.0),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -1757,7 +1774,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
     );
   }
 
-  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap}) {
+  Widget _actionItem(String icon, Color color, {required num number, GestureTapCallback? ontap,  Color? colorIcon}) {
     return InkWell(
       onTap: ontap ,
       child: Container(
@@ -1774,6 +1791,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                   child: Image.asset(
                     icon,
                     scale: 2.5,
+                    color: colorIcon,
                   ),
                 ),
               ),

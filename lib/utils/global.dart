@@ -21,4 +21,6 @@ class Global {
 
   static List<Map<String, dynamic>>? permissionModels = [];
 
+  static Function(Map<String,dynamic>)? callHotline;
+
 }

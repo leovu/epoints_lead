@@ -1304,7 +1304,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer> {
                               margin: EdgeInsets.only(bottom: 12.0),
                               height: 45,
                             ),
-                            _actionItem(
+                            if (detail!.phone != "") _actionItem(
                                     Assets.iconCall, Colors.green,
                                     colorIcon: Colors.white,
                                     number: 0,

@@ -470,7 +470,7 @@ class _LeadScreen extends State<LeadScreen> {
                               height: 45,
                             ),
 
-                            _actionItem(
+                            if (item.phone != "") _actionItem(
                                     Assets.iconCall, Colors.green,
                                     colorIcon: Colors.white,
                                     number: 0,

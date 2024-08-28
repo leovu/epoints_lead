@@ -1,67 +1,84 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/theme.dart';
-
+part of widget;
 class CustomTabBar extends StatelessWidget {
   final bool isExpanded;
   final List<CustomModelTabBar>? tabs;
   final AutoSizeGroup? group;
   final TabController? controller;
+  final TextStyle? unSelectedLabel;
+  final TextStyle? labelStyle;
+  final Color? labelColor;
+  final Color? unSelectedLabelColor;
+  final ValueChanged<int>? onTap;
 
   CustomTabBar(
-      {this.tabs, this.group, this.controller, this.isExpanded = true});
+      {this.tabs,
+      this.group,
+      this.controller,
+      this.isExpanded = true,
+      this.unSelectedLabel,
+      this.labelStyle,
+      this.labelColor,
+      this.unSelectedLabelColor,
+      this.onTap});
 
-  Widget _buildTitle(CustomModelTabBar model){
-    return AutoSizeText(
+  Widget _buildTitle(CustomModelTabBar model) {
+    Widget child = AutoSizeText(
       model.name!,
       maxLines: 1,
       group: group ?? AutoSizeGroup(),
       minFontSize: 6.0,
       textAlign: TextAlign.center,
     );
+    return child;
+  }
+
+  Widget _buildTab(CustomModelTabBar model){
+    return Container(
+        width: isExpanded
+            ? (AppSizes.maxWidth! - AppSizes.maxPadding * 2) /
+            tabs!.length
+            : null,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            model.icon == null
+                ? Container()
+                : Container(
+                padding: EdgeInsets.only(right: 5.0),
+                child: ImageIcon(
+                  AssetImage(model.icon!),
+                  size: 20,
+                )),
+            isExpanded
+                ? Flexible(
+                fit: FlexFit.loose, child: _buildTitle(model))
+                : _buildTitle(model)
+          ],
+        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return tabs == null?Container():TabBar(
-      labelColor: AppColors.primaryColor,
-      indicatorWeight: 2.0,
-      indicatorSize: TabBarIndicatorSize.tab,
-      indicatorColor: AppColors.primaryColor,
-      unselectedLabelStyle: TextStyle(
-      fontSize: AppTextSizes.size16,
-      color: AppColors.primaryColor,
-      fontWeight: FontWeight.bold),
-      labelStyle: AppTextStyles.style16PrimaryBold,
-      labelPadding: EdgeInsets.symmetric(horizontal: isExpanded?0.0:20.0),
-      isScrollable: true,
-      tabs: tabs!.map((model){
-        return Tab(
-            child: Container(
-              width: isExpanded
-                  ? (MediaQuery.of(context).size.width - 20.0 * 2) / tabs!.length
-                  : null,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  model.icon == null?Container():Container(
-                      padding: EdgeInsets.only(right: 5.0),
-                      child: ImageIcon(
-                        AssetImage(model.icon!),
-                        size: 20,
-                      )
-                  ),
-                  isExpanded?Flexible(
-                      fit: FlexFit.loose,
-                      child: _buildTitle(model)
-                  ):_buildTitle(model)
-                ],
-              )
-            )
-        );
-      }).toList(),
-      controller: controller,
-    );
+    return tabs == null
+        ? Container()
+        : TabBar(
+            labelColor: labelColor ?? AppColors.primaryColor,
+            indicatorWeight: 2.0,
+            indicatorSize: TabBarIndicatorSize.tab,
+            indicatorColor: labelColor ?? AppColors.primaryColor,
+            unselectedLabelStyle:
+                unSelectedLabel ?? AppTextStyles.style16PrimaryBold,
+            unselectedLabelColor: unSelectedLabelColor ?? null,
+            labelStyle: labelStyle ?? AppTextStyles.style16PrimaryBold,
+            labelPadding: EdgeInsets.symmetric(
+                horizontal: isExpanded ? 0.0 : AppSizes.maxPadding),
+            isScrollable: true,
+            onTap: onTap,
+            tabs: tabs!.map((model) {
+              return Tab(child: _buildTab(model));
+            }).toList(),
+            controller: controller,
+          );
   }
 }
 
@@ -75,8 +92,8 @@ class CustomTabBarView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TabBarView(
-        controller: controller,
-        children: tabs!.map((model) => model.child ?? Container()).toList(),
+      controller: controller,
+      children: tabs!.map((model) => model.child ?? Container()).toList(),
       physics: physics,
     );
   }
@@ -85,7 +102,8 @@ class CustomTabBarView extends StatelessWidget {
 class CustomModelTabBar {
   final String? name;
   final String? icon;
+  final ValueStream<int?>? stream;
   final Widget? child;
 
-  CustomModelTabBar({this.name, this.icon, this.child});
+  CustomModelTabBar({this.name, this.icon, this.child, this.stream});
 }

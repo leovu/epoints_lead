@@ -201,10 +201,6 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
             isDense: true,
           ),
           onChanged: (event) {
-            print(event.toLowerCase());
-            if (fillText != null) {
-              print(fillText.text);
-            }
           },
         ),
       ),

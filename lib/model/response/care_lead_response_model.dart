@@ -16,6 +16,15 @@ class CareLeadResponseModel {
     }
   }
 
+  CareLeadResponseModel.fromList(List<dynamic>? json) {
+    if (json != null) {
+      data = <CareLeadData>[];
+      json.forEach((v) {
+        data!.add(new CareLeadData.fromJson(v));
+      });
+    }
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['ErrorCode'] = this.errorCode;

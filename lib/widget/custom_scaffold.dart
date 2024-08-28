@@ -9,7 +9,7 @@ import 'package:lead_plugin_epoint/common/constant.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/container_scrollable.dart';
 import 'package:lead_plugin_epoint/widget/custom_appbar.dart';
-import 'package:lead_plugin_epoint/widget/custom_tab_bar.dart';
+import 'package:lead_plugin_epoint/widget/widget.dart';
 
 class CustomScaffold extends StatelessWidget {
 
@@ -53,10 +53,10 @@ class CustomScaffold extends StatelessWidget {
     return Column(
       children: [
         (title == null && customTitle == null)?Container():Container(
-          height: 66,
+          height: 90,
           width: double.infinity,
           color: AppColors.primaryColor,
-          padding: EdgeInsets.only(top: 10.0),
+          padding: EdgeInsets.only(top: 36.0),
           child: CustomAppBar(
             title: title,
             customTitle: customTitle,

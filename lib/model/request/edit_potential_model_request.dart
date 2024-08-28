@@ -6,6 +6,7 @@ class EditPotentialRequestModel {
   String? fullName;
   String? taxCode;
   String? phone;
+  List<String>? arrPhoneAttack;
   String? email;
   String? representative;
   String? pipelineCode;
@@ -28,6 +29,11 @@ class EditPotentialRequestModel {
   String? contactEmail;
   String? position;
   String? contactAddress;
+  int? customerGroupId;
+  int? branchId;
+  String? note;
+  int? customerLeadReferId;
+  String? website;
 
   EditPotentialRequestModel(
       {this.customerLeadCode,
@@ -37,6 +43,7 @@ class EditPotentialRequestModel {
       this.fullName,
       this.taxCode,
       this.phone,
+      this.arrPhoneAttack,
       this.email,
       this.representative,
       this.pipelineCode,
@@ -58,7 +65,12 @@ class EditPotentialRequestModel {
       this.contactPhone,
       this.contactEmail,
       this.position,
-      this.contactAddress});
+      this.contactAddress,
+      this.customerGroupId,
+      this.branchId,
+      this.note,
+      this.customerLeadReferId,
+      this.website});
 
   EditPotentialRequestModel.fromJson(Map<String, dynamic> json) {
     customerLeadCode = json['customer_lead_code'];
@@ -68,6 +80,7 @@ class EditPotentialRequestModel {
     fullName = json['full_name'];
     taxCode = json['tax_code'];
     phone = json['phone'];
+    arrPhoneAttack = json['arrPhoneAttack'].cast<String>();
     email = json['email'];
     representative = json['representative'];
     pipelineCode = json['pipeline_code'];
@@ -90,6 +103,11 @@ class EditPotentialRequestModel {
     contactEmail = json['contact_email'];
     position = json['position'];
     contactAddress = json['contact_address'];
+    customerGroupId = json['customer_group_id'];
+    branchId = json['branch_id'];
+    note = json['note'];
+    customerLeadReferId = json['customer_lead_refer_id'];
+    website = json['website'];
   }
 
   Map<String, dynamic> toJson() {
@@ -101,6 +119,7 @@ class EditPotentialRequestModel {
     data['full_name'] = this.fullName;
     data['tax_code'] = this.taxCode;
     data['phone'] = this.phone;
+    data['arrPhoneAttack'] = this.arrPhoneAttack;
     data['email'] = this.email;
     data['representative'] = this.representative;
     data['pipeline_code'] = this.pipelineCode;
@@ -123,6 +142,11 @@ class EditPotentialRequestModel {
     data['contact_email'] = this.contactEmail;
     data['position'] = this.position;
     data['contact_address'] = this.contactAddress;
+    data['customer_group_id'] = this.customerGroupId;
+    data['branch_id'] = this.branchId;
+    data['note'] = this.note;
+    data['customer_lead_refer_id'] = this.customerLeadReferId;
+    data['website'] = this.website;
     return data;
   }
 }

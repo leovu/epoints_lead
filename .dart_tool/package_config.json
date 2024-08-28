@@ -51,21 +51,21 @@
     },
     {
       "name": "cached_network_image",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/cached_network_image-3.2.3",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/cached_network_image-3.3.1",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "cached_network_image_platform_interface",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/cached_network_image_platform_interface-2.0.0",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/cached_network_image_platform_interface-4.0.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "cached_network_image_web",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/cached_network_image_web-1.0.2",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/cached_network_image_web-1.2.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.0"
     },
     {
       "name": "characters",
@@ -206,16 +206,10 @@
       "languageVersion": "3.3"
     },
     {
-      "name": "flutter_blurhash",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/flutter_blurhash-0.7.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.15"
-    },
-    {
       "name": "flutter_cache_manager",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/flutter_cache_manager-3.3.0",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/flutter_cache_manager-3.3.1",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "2.17"
     },
     {
       "name": "flutter_localizations",
@@ -291,7 +285,7 @@
     },
     {
       "name": "fwfh_text_style",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/fwfh_text_style-2.22.8+3",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/fwfh_text_style-2.23.8",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -434,12 +428,6 @@
       "languageVersion": "3.2"
     },
     {
-      "name": "logging",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/logging-1.2.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
       "name": "matcher",
       "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/matcher-0.12.16+1",
       "packageUri": "lib/",
@@ -471,9 +459,9 @@
     },
     {
       "name": "octo_image",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/octo_image-1.0.2",
+      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/octo_image-2.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.0"
     },
     {
       "name": "path",
@@ -528,12 +516,6 @@
       "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/path_provider_windows-2.1.7",
       "packageUri": "lib/",
       "languageVersion": "2.18"
-    },
-    {
-      "name": "pedantic",
-      "rootUri": "file:///Users/trantanduc/.pub-cache/hosted/pub.dev/pedantic-1.11.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
     },
     {
       "name": "petitparser",
@@ -836,7 +818,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2024-08-14T11:42:03.393115Z",
+  "generated": "2024-08-19T03:37:09.725807Z",
   "generator": "pub",
   "generatorVersion": "3.4.3",
   "flutterRoot": "file:///Users/trantanduc/Desktop/flutter3.22/flutter",

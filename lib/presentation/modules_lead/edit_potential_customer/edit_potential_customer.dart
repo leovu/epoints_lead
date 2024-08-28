@@ -7,6 +7,7 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
+import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
 import 'package:lead_plugin_epoint/model/customer_type.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/edit_potential_model_request.dart';
@@ -17,6 +18,8 @@ import 'package:lead_plugin_epoint/model/response/contact_list_model_response.da
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_branch_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_customer_group_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_option_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_district_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_journey_model_response.dart';
@@ -28,10 +31,14 @@ import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_business_areas_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
+import 'package:lead_plugin_epoint/presentation/modal/branch_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modal/create_new_phone_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modal/group_customer_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/build_more_address_edit_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 
@@ -55,6 +62,8 @@ class EditPotentialCustomer extends StatefulWidget {
 class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     with WidgetsBindingObserver {
   var _isKeyboardVisible = false;
+
+  late CreatePotentialCustomerBloc _bloc;
 
   final ScrollController _controller = ScrollController();
   final TextEditingController _fullNameText = TextEditingController();
@@ -121,6 +130,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
   List<PositionData>? positionData;
 
+  DetailPotentialData? detailNew;
+
   AddLeadModelRequest detailPotential = AddLeadModelRequest(
       avatar: "",
       customerType: "",
@@ -155,10 +166,12 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+     _bloc = CreatePotentialCustomerBloc(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       LeadConnection.showLoading(context);
 
       if (widget.detailPotential != null) {
+        detailNew = widget.detailPotential;
         bool business = false;
         if (widget.detailPotential!.customerType == "business") {
           business = true;
@@ -181,7 +194,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         detailPotential = AddLeadModelRequest(
             avatar: "",
             customerType: widget.detailPotential!.customerType ?? "",
-            customerSource: widget.detailPotential!.customerSource ?? "" as int?,
+            customerSource:
+                widget.detailPotential!.customerSource ?? "" as int?,
             fullName: widget.detailPotential!.fullName ?? "",
             taxCode: widget.detailPotential!.taxCode,
             phone: widget.detailPotential!.phone ?? "",
@@ -241,6 +255,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
         if (dataDetail != null) {
           if (dataDetail.errorCode == 0) {
+            detailNew = dataDetail.data!;
             bool business = false;
             if (dataDetail.data!.customerType == "business") {
               business = true;
@@ -329,7 +344,63 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     });
   }
 
-   callApi() async {
+  callApi() async {
+
+     _bloc.getBranch(context, showLoading: false).then((val) async {
+      if (val != null) {
+        try {
+          var result = _bloc.listBranch.firstWhereOrNull(
+              (element) => (element.branchCode == detailNew?.branchCode));
+          if (result != null) {
+            result.selected = true;
+            _bloc.branchSelected = result;
+            setState(() {
+              
+            });
+          }
+        } catch (e) {}
+      }
+    });
+
+     _bloc.getCustomerGroup(context, showLoading: false).then((val) async {
+      if (val != null) {
+        try {
+          var result = _bloc.listCustomerGroupData.firstWhereOrNull(
+              (element) => (element.customerGroupId == detailNew?.customerGroupId));
+          if (result != null) {
+            result.selected = true;
+            _bloc.customerGroupSelected = result;
+            setState(() {
+              
+            });
+          }
+        } catch (e) {}
+      }
+    });
+
+    _bloc.websiteController.text = detailNew?.zalo ?? "";
+
+    if (detailNew?.provinceId != null || detailNew?.address != null) {
+        _bloc.addressModel = CustomerCreateAddressModel(
+            provinceModel: detailPotential.provinceId == null
+                ? null
+                : ProvinceModel(
+                    provinceid: detailNew!.provinceId,
+                    name: detailNew!.provinceName),
+            districtModel: detailNew?.districtId == null
+                ? null
+                : DistrictModel(
+                    districtid: detailNew!.districtId,
+                    name: detailNew!.districtName),
+            wardModel: detailNew?.wardId == null
+                ? null
+                : WardModel(
+                    wardId: detailNew!.wardId,
+                    name: detailNew!.wardName),
+            street: detailNew!.address);
+        _bloc.setAddressModel(_bloc.addressModel);
+      }
+
     var dataType_Source = await LeadConnection.getCustomerOption(context);
     if (dataType_Source != null) {
       customerOptonData = dataType_Source.data;
@@ -377,7 +448,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       listBusinessData = model.data;
     }
 
-    PositionResponseModel? positions = await LeadConnection.getPosition(context);
+    PositionResponseModel? positions =
+        await LeadConnection.getPosition(context);
     if (positions != null) {
       positionData = positions.data;
     }
@@ -415,8 +487,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       _modelStaff = listStaff.data ?? [];
 
       try {
-        var item = _modelStaff
-            .firstWhereOrNull((element) => element.staffId == detailPotential.saleId);
+        var item = _modelStaff.firstWhereOrNull(
+            (element) => element.staffId == detailPotential.saleId);
         if (item != null) {
           _modelStaffSelected.add(item);
         } else {
@@ -435,20 +507,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     _representativeText.text = detailPotential.representative ?? "";
     _taxText.text = detailPotential.taxCode ?? "";
 
-    // for (int i = 0; i < customerTypeData.length; i++) {
-    //   if ((widget.detailPotential?.customerType ?? "").toLowerCase() ==
-    //       customerTypeData[i].customerTypeName.toLowerCase()) {
-    //     customerTypeData[i].selected = true;
-    //     customerTypeSelected = customerTypeData[i];
-    //   } else {
-    //     customerTypeData[i].selected = false;
-    //   }
-    // }
-
-    // try {
-    //   customerTypeData.firstWhere((element) => element.selected).selected = false;
-    // } catch (_) {}
-
     try {
       var itemCustomerType = customerTypeData.firstWhereOrNull((element) =>
           element.customerTypeName!.toLowerCase() ==
@@ -459,12 +517,13 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         selectedPersonal =
             itemCustomerType.customerTypeName == "Personal" ? true : false;
       }
-
     } catch (_) {}
 
     try {
-      var itemCustomerSource = customerSourcesData!.firstWhereOrNull((element) =>
-          element.customerSourceId == (detailPotential.customerSource ?? 0));
+      var itemCustomerSource = customerSourcesData!.firstWhereOrNull(
+          (element) =>
+              element.customerSourceId ==
+              (detailPotential.customerSource ?? 0));
       if (itemCustomerSource != null) {
         itemCustomerSource.selected = true;
         customerSourceSelected = itemCustomerSource;
@@ -478,26 +537,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         pipelineSelected = itemPipeline;
       }
     } catch (e) {}
-
-    // for (int i = 0; i < customerSourcesData.length; i++) {
-    //   if ((widget.detailPotential?.customerSourceName ?? "").toLowerCase() ==
-    //       customerSourcesData[i].sourceName.toLowerCase()) {
-    //     customerSourcesData[i].selected = true;
-    //     customerSourceSelected = customerSourcesData[i];
-    //   } else {
-    //     customerSourcesData[i].selected = false;
-    //   }
-    // }
-
-    // for (int i = 0; i < pipeLineData.length; i++) {
-    //   if ((widget.detailPotential?.pipelineName ?? "").toLowerCase() ==
-    //       pipeLineData[i].pipelineName.toLowerCase()) {
-    //     pipeLineData[i].selected = true;
-    //     pipelineSelected = pipeLineData[i];
-    //   } else {
-    //     pipeLineData[i].selected = false;
-    //   }
-    // }
 
     var journeys = await LeadConnection.getJourney(context,
         GetJourneyModelRequest(pipelineCode: [detailPotential.pipelineCode]));
@@ -513,42 +552,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         }
       } catch (e) {}
     }
-
-    // for (int i = 0; i < journeysData.length; i++) {
-    //   if ((widget.detailPotential.journeyName ?? "").toLowerCase() ==
-    //       journeysData[i].journeyName.toLowerCase()) {
-    //     journeysData[i].selected = true;
-    //     journeySelected = journeysData[i];
-    //   } else {
-    //     journeysData[i].selected = false;
-    //   }
-    // }
-
     Navigator.of(context).pop();
 
     setState(() {});
   }
-
-  // Future<void> _pickImage() async {
-  //   _pickedFile = await _picker.getImage(source: ImageSource.gallery);
-
-  //   if (_pickedFile != null) {
-  //     _image = File(_pickedFile.path);
-
-  //     UploadImageModelResponse result =
-  //         await LeadConnection.upload(context, _image);
-
-  //     if (result != null) {
-  //       _imgAvatar = result.data.link;
-  //       setState(() {
-  //         print(_image);
-  //       });
-  //     } else {
-  //       LeadConnection.showMyDialog(
-  //           context, AppLocalizations.text(LangKey.uploadImageFail));
-  //     }
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -709,18 +716,28 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           SizedBox(
             height: 15.0,
           ),
+
+          // nhap ten doanh nghiep/ ca nhan
+          _buildTextField(
+              selectedPersonal
+                  ? AppLocalizations.text(LangKey.inputFullname)
+                  : AppLocalizations.text(LangKey.enterBusiness),
+              "",
+              selectedPersonal ? Assets.iconPerson : Assets.iconProvince,
+              true,
+              false,
+              true,
+              fillText: _fullNameText,
+              focusNode: _fullnameFocusNode),
           // nguồn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.customerSource),
-              customerSourceSelected?.sourceName ?? "",
+              customerSourceSelected.sourceName ?? "",
               Assets.iconSourceCustomer,
               false,
               true,
               false, ontap: () async {
-            print("nguồn khách hàng");
-
             FocusScope.of(context).unfocus();
-
             CustomerOptionSource? source = await showModalBottomSheet(
                 context: context,
                 useRootNavigator: true,
@@ -744,19 +761,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               setState(() {});
             }
           }),
-          // nhap ten doanh nghiep/ ca nhan
-          _buildTextField(
-              selectedPersonal
-                  ? AppLocalizations.text(LangKey.inputFullname)
-                  : AppLocalizations.text(LangKey.enterBusiness),
-              "",
-              selectedPersonal ? Assets.iconPerson : Assets.iconProvince,
-              true,
-              false,
-              true,
-              fillText: _fullNameText,
-              focusNode: _fullnameFocusNode),
-
           // Nhập ma so thue
           !selectedPersonal
               ? _buildTextField(AppLocalizations.text(LangKey.tax), "",
@@ -764,29 +768,27 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   fillText: _taxText, focusNode: _taxFocusNode)
               : Container(),
 
-          checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
-              Assets.iconCall, true, false, true,
-              fillText: _phoneNumberText,
-              focusNode: _phoneNumberFocusNode,
-              inputType: TextInputType.phone) : Container(),
-
-          // email
-          checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.email), "",
-              Assets.iconEmail, false, false, true,
-              fillText: _emailText, focusNode: _emailFocusNode) : Container(),
-
-          // người đại diện
-          !selectedPersonal
-              ? _buildTextField(AppLocalizations.text(LangKey.representative),
-                  "", Assets.iconRepresentative, false, false, true,
-                  fillText: _representativeText,
-                  focusNode: _representativeFocusNode)
+          checkVisibilityKey(VisibilityWidgetName.LE000003)
+              ? _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber),
+                  "", Assets.iconCall, true, false, true,
+                  fillText: _phoneNumberText,
+                  focusNode: _phoneNumberFocusNode,
+                  inputType: TextInputType.phone)
               : Container(),
 
+         checkVisibilityKey(VisibilityWidgetName.LE000003)
+              ? _buildAddPhone() : Container(),
+
+          // email
+          checkVisibilityKey(VisibilityWidgetName.LE000003)
+              ? _buildTextField(AppLocalizations.text(LangKey.email), "",
+                  Assets.iconEmail, false, false, true,
+                  fillText: _emailText, focusNode: _emailFocusNode)
+              : Container(),
           // chọn pipeline
           _buildTextField(
               AppLocalizations.text(LangKey.choosePipeline),
-              pipelineSelected?.pipelineName ?? "",
+              pipelineSelected.pipelineName ?? "",
               Assets.iconChance,
               true,
               true,
@@ -810,7 +812,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   );
                 });
             if (pipeline != null) {
-              if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
+              if (pipelineSelected.pipelineName != pipeline.pipelineName) {
                 journeySelected = null;
               }
 
@@ -831,17 +833,12 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           }),
 
           // chọn hành trình
-          _buildTextField(
-              AppLocalizations.text(LangKey.chooseStatus),
-              journeySelected?.journeyName ?? "",
-              Assets.iconItinerary,
-              true,
-              true,
-              false, ontap: () async {
+          _buildTextField("Chọn hành trình", journeySelected?.journeyName ?? "",
+              Assets.iconItinerary, true, true, false, ontap: () async {
             print("Chọn hành trình");
 
             FocusScope.of(context).unfocus();
-            JourneyData journey = await CustomNavigator.showCustomBottomDialog(
+            JourneyData? journey = await CustomNavigator.showCustomBottomDialog(
               context,
               JourneyModal(journeys: journeysData),
             );
@@ -850,56 +847,16 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               journeySelected = journey;
               detailPotential.journeyCode = journeySelected!.journeyCode;
               setState(() {
-                // await LeadConnection.getDistrict(context, province.provinceid);
+                
               });
             }
           }),
 
-          // _buildTextField(
-          //     AppLocalizations.text(LangKey.chooseStatus),
-          //     statusWorkSelected?.manageStatusName ?? "",
-          //     Assets.iconItinerary,
-          //     false,
-          //     true,
-          //     false, ontap: () async {
-          //   FocusScope.of(context).unfocus();
-
-          //   if (statusWorkData.length == 0) {
-          //     LeadConnection.showLoading(context);
-          //     var statusWorkModel = await LeadConnection.getStatusWork(context);
-
-          //     Navigator.of(context).pop();
-          //     if (statusWorkModel != null) {
-          //       statusWorkData = statusWorkModel.data;
-
-          //       GetStatusWorkData status =
-          //           await CustomNavigator.showCustomBottomDialog(
-          //         context,
-          //         StatusWorkModal(statusWorkData: statusWorkData),
-          //       );
-          //       if (status != null) {
-          //         statusWorkSelected = status;
-          //         setState(() {});
-          //       }
-          //     }
-          //   } else {
-          //     GetStatusWorkData status =
-          //         await CustomNavigator.showCustomBottomDialog(
-          //       context,
-          //       StatusWorkModal(statusWorkData: statusWorkData),
-          //     );
-          //     if (status != null) {
-          //       statusWorkSelected = status;
-          //       setState(() {});
-          //     }
-          //   }
-          // }),
-
           // Chọn người được phân bổ
           _buildTextField(
               AppLocalizations.text(LangKey.chooseAllottedPerson),
-              (_modelStaffSelected != null && _modelStaffSelected.length > 0)
-                  ? _modelStaffSelected[0]?.staffName ?? ""
+              (_modelStaffSelected.length > 0)
+                  ? _modelStaffSelected[0].staffName ?? ""
                   : "",
               Assets.iconName,
               false,
@@ -922,6 +879,57 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               setState(() {});
             }
           }),
+
+          // Chọn chi nhánh
+          _buildTextField(
+              "Chọn chi nhánh",
+              _bloc.branchSelected?.branchName ?? "",
+              Assets.iconName,
+              true,
+              true,
+              false, ontap: () async {
+            FocusScope.of(context).unfocus();
+            _bloc.getBranch(context).then((val) async {
+              if (val != null) {
+                BranchData? data = await CustomNavigator.showCustomBottomDialog(
+                  context,
+                  BranchModal(datas: _bloc.listBranch),
+                );
+                if (data != null) {
+                  _bloc.branchSelected = data;
+                  setState(() {});
+                }
+              }
+            });
+          }),
+
+          _buildAddress(),
+
+          // nhóm khách hàng
+          _buildTextField(
+              "Chọn nhóm khách hàng", _bloc.customerGroupSelected?.groupName ?? "", Assets.iconName, false, true, false,
+              ontap: () async {
+            FocusScope.of(context).unfocus();
+            _bloc.getCustomerGroup(context).then((val) async {
+              if (val != null) {
+                CustomerGroupData? data =
+                    await CustomNavigator.showCustomBottomDialog(
+                  context,
+                  GroupCustomerModal(datas: _bloc.listCustomerGroupData),
+                );
+                if (data != null) {
+                  _bloc.customerGroupSelected = data;
+                  setState(() {});
+                }
+                return;
+              }
+            });
+          }),
+
+          // Nhập người giới thiệu
+          _buildTextField("Nhập người giới thiệu", "", Assets.iconSearch, false,
+              false, true,
+              fillText: _bloc.referrerController, focusNode:  _bloc.referrerFocusNode),
 
           _buildTextField(AppLocalizations.text(LangKey.chooseCards),
               tagsString, Assets.iconTag, false, true, false, ontap: () async {
@@ -991,11 +999,29 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   modelStaff: _modelStaff,
                   selectedPersonal: selectedPersonal,
                   listBusinessData: listBusinessData,
-                  positionData: positionData,)
+                  positionData: positionData,
+                  bloc: _bloc,
+                )
               : Container()
         ],
       ),
     ];
+  }
+
+   Widget _buildAddress() {
+    return StreamBuilder(
+        stream: _bloc.outputAddressModel,
+        initialData: _bloc.addressModel,
+        builder: (_, snapshot) {
+          _bloc.addressModel = snapshot.data as CustomerCreateAddressModel?;
+          return _buildTextField(
+              AppLocalizations.text(LangKey.inputAddress),
+              parseAddress(_bloc.addressModel),
+              Assets.iconAddress,
+              false,
+              true,
+              false, ontap: _bloc.onPushAddress);
+        });
   }
 
   Widget _buildButton() {
@@ -1031,46 +1057,105 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     );
   }
 
-  Widget _buildAvatarImg(String name) {
-    return Container(
-      width: 80.0,
-      height: 80.0,
-      padding: const EdgeInsets.all(2.0),
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColors.lightGrey,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10000.0),
-        child: CustomAvatar(
-          name: name,
-          textSize: AppTextSizes.size22,
-        ),
-      ),
+    Widget _buildAddPhone() {
+    return Column(
+      children: [
+        _buildListPhone(),
+        GestureDetector(
+          onTap: () async {
+            var result = await showModalBottomSheet(
+                isDismissible: false,
+                context: context,
+                useRootNavigator: true,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) {
+                  return GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: CreateNewPhoneModal(
+                        bloc: _bloc,
+                      ));
+                });
+            if (result != null && result) {
+              setState(() {});
+            }
+          },
+          child: Center(
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 16.0),
+              child: Text("+ Thêm số điện thoại",
+                  style: AppTextStyles.style14BlueWeight500),
+            ),
+          ),
+        )
+      ],
     );
   }
 
-  Widget _buildAvatarWithImage(String image) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(10000.0),
-      child: FittedBox(
-        child: Container(
-          width: 80.0,
-          height: 80.0,
-          padding: const EdgeInsets.all(2.0),
+  _buildListPhone() {
+    return (_bloc.listPhone.isNotEmpty)
+        ? Container(
+            child: Column(
+              children: [
+                ..._bloc.listPhone.map((item) => _phoneItem(item)).toList()
+              ],
+            ),
+          )
+        : SizedBox();
+  }
+
+  _phoneItem(String phone) {
+    return Column(
+      children: [
+        Container(
+          height: 56,
           decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.blueGrey,
-              image: DecorationImage(
-                  fit: BoxFit.cover,
-                  colorFilter: ColorFilter.mode(
-                      Colors.black.withOpacity(1), BlendMode.dstATop),
-                  image: NetworkImage(image))),
+              border: Border.all(color: AppColors.grey200, width: 1),
+              borderRadius: BorderRadius.circular(10)),
+          child: Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Image.asset(
+                  Assets.iconCall,
+                  width: 16,
+                ),
+              ),
+              Text(
+                phone,
+                style: AppTextStyles.style14BlackWeight500,
+              ),
+              Spacer(),
+              Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(10),
+                        bottomRight: Radius.circular(10))),
+                padding: EdgeInsets.all(8.0),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    _bloc.listPhone.remove(phone);
+                    setState(() {});
+                  },
+                ),
+              )
+            ],
+          ),
         ),
-        fit: BoxFit.fill,
-      ),
+        SizedBox(
+          height: 8.0,
+        )
+      ],
     );
   }
+
 
   Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
@@ -1081,7 +1166,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap  : null,
+        onTap: (ontap != null) ? ontap : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -1092,8 +1177,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             isCollapsed: false,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 230, 21, 84)),
+              borderSide:
+                  BorderSide(width: 1, color: Color.fromARGB(255, 230, 21, 84)),
               borderRadius: BorderRadius.circular(10.0),
             ),
             focusedBorder: OutlineInputBorder(
@@ -1114,6 +1199,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                       ]))
                 : Text(
                     content!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 15.0,
                         color: Colors.black,
@@ -1214,7 +1301,17 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               contactEmail: "",
               contactFullName: "",
               contactPhone: "",
-              position: detailPotential.position));
+              position: detailPotential.position,
+              customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
+              branchId: _bloc.branchSelected?.branchId ?? 0,
+              note: _bloc.noteController.text,
+              customerLeadReferId: 0,
+              arrPhoneAttack: _bloc.listPhone,
+              website: _bloc.websiteController.text,
+              
+              
+              
+              ));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
@@ -1297,7 +1394,13 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               contactEmail: detailPotential.contactEmail,
               contactFullName: detailPotential.contactFullName,
               contactPhone: detailPotential.contactPhone,
-              position: detailPotential.position));
+              position: detailPotential.position,
+              customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
+              branchId: _bloc.branchSelected?.branchId ?? 0,
+              note: _bloc.noteController.text,
+              customerLeadReferId: 0,
+              arrPhoneAttack: _bloc.listPhone,
+              website: _bloc.websiteController.text,));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {

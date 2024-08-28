@@ -41,8 +41,8 @@ import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
-import 'package:lead_plugin_epoint/widget/custom_size_transaction.dart';
 import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
+import 'package:lead_plugin_epoint/widget/widget.dart';
 
 class CustomerCarePotential extends StatefulWidget {
   DetailPotentialData? detail;

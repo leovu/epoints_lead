@@ -74,6 +74,25 @@ class DetailPotentialData {
   int? appointment;
   String? birthday;
   String? position;
+  String? customerTypeName;
+  int? customerGroupId;
+  String? customerGroupName;
+  int? customerLeadReferId;
+  String? customerLeadReferName;
+  String? genderVi;
+  int? branchCode;
+  String? branchName;
+  int? employQty;
+  String? createdAt;
+  String? createdByName;
+  String? updatedAt;
+  String? updatedByName;
+  String? assignBy;
+  String? assignByName;
+  String? fullAddress;
+  int? customerContactId;
+  String? customerContactName;
+  List<CustomerDetailConfigModel>? tabConfigs;
   List<JourneyTracking>? journeyTracking;
   List<InfoDeal>? infoDeal;
   List<CustomerCare>? customerCare;
@@ -133,7 +152,26 @@ class DetailPotentialData {
       this.infoDeal,
       this.customerCare,
       this.careHistory,
-      this.contactList});
+      this.contactList,
+      this.customerTypeName,
+      this.customerGroupId,
+      this.customerGroupName,
+      this.customerLeadReferId,
+      this.customerLeadReferName,
+      this.genderVi,
+      this.branchCode,
+      this.branchName,
+      this.employQty,
+      this.createdAt,
+      this.createdByName,
+      this.updatedAt,
+      this.updatedByName,
+      this.assignBy,
+      this.assignByName,
+      this.fullAddress,
+      this.customerContactId,
+      this.customerContactName,
+      this.tabConfigs});
 
   DetailPotentialData.fromJson(Map<String, dynamic> json) {
     customerLeadId = json['customer_lead_id'];
@@ -189,6 +227,30 @@ class DetailPotentialData {
     appointment = json['appointment'];
     birthday = json['birthday'];
     position = json['position'];
+    customerTypeName = json['customer_type_name'];
+    customerGroupId = json['customer_group_id'];
+    customerGroupName = json['customer_group_name'];
+    customerLeadReferId = json['customer_lead_refer_id'];
+    customerLeadReferName = json['customer_lead_refer_name'];
+    genderVi = json['gender_vi'];
+    branchCode = json['branch_code'];
+    branchName = json['branch_name'];
+    employQty = json['employ_qty'];
+    createdAt = json['created_at'];
+    createdByName = json['created_by_name'];
+    updatedAt = json['updated_at'];
+    updatedByName = json['updated_by_name'];
+    assignBy = json['assign_by'];
+    assignByName = json['assign_by_name'];
+    fullAddress = json['full_address'];
+    customerContactId = json['customer_contact_id'];
+    customerContactName = json['customer_contact_name'];
+    if (json['tab_configs'] != null) {
+      tabConfigs = <CustomerDetailConfigModel>[];
+      json['tab_configs'].forEach((v) {
+        tabConfigs!.add(new CustomerDetailConfigModel.fromJson(v));
+      });
+    }
 
     if (json['journey_tracking'] != null) {
       journeyTracking = <JourneyTracking>[];
@@ -291,6 +353,43 @@ class DetailPotentialData {
     if (this.contactList != null) {
       data['contact_list'] = this.contactList!.map((v) => v.toJson()).toList();
     }
+    return data;
+  }
+}
+
+class CustomerDetailConfigModel {
+  int? customerConfigTabDetailId;
+  String? code;
+  String? tabNameVi;
+  String? tabNameEn;
+  int? sortOrder;
+  int? total;
+
+  CustomerDetailConfigModel(
+      {this.customerConfigTabDetailId,
+      this.code,
+      this.tabNameVi,
+      this.tabNameEn,
+      this.sortOrder,
+      this.total});
+
+  CustomerDetailConfigModel.fromJson(Map<String, dynamic> json) {
+    customerConfigTabDetailId = json['customer_config_tab_detail_id'];
+    code = json['code'];
+    tabNameVi = json['tab_name_vi'];
+    tabNameEn = json['tab_name_en'];
+    sortOrder = json['sort_order'];
+    total = json['total'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['customer_config_tab_detail_id'] = this.customerConfigTabDetailId;
+    data['code'] = this.code;
+    data['tab_name_vi'] = this.tabNameVi;
+    data['tab_name_en'] = this.tabNameEn;
+    data['sort_order'] = this.sortOrder;
+    data['total'] = this.total;
     return data;
   }
 }

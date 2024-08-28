@@ -47,12 +47,15 @@ class LeadPluginEpoint {
     }
     if (domain != null) {
       HTTPConnection.domain = domain;
+      Global.domain = domain;
     }
     if (brandCode != null) {
       HTTPConnection.brandCode = brandCode;
+      Global.brandCode = brandCode;
     }
     if (token != null) {
       HTTPConnection.asscessToken = token;
+      Global.asscessToken = token;
     }
     if (createJob != null) {
       Global.createJob = createJob;
@@ -67,6 +70,8 @@ class LeadPluginEpoint {
       Global.createDeal = createDeal;
     }
     LeadConnection.locale = locale;
+    Global.locale = locale;
+
     LeadConnection.buildContext = context;
     AppSizes.init(context);
     await AppLocalizations(LeadConnection.locale).load();

@@ -16,6 +16,14 @@ class DetailLeadInfoDealResponseModel {
       });
     }
   }
+  DetailLeadInfoDealResponseModel.fromList(List<dynamic>? json) {
+    if (json != null) {
+      data = <DetailLeadInfoDealData>[];
+      json.forEach((v) {
+        data!.add(new DetailLeadInfoDealData.fromJson(v));
+      });
+    }
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

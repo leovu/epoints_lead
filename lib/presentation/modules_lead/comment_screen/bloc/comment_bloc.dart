@@ -8,7 +8,6 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/work_create_comment_request_model.dart';
 import 'package:lead_plugin_epoint/model/request/work_list_comment_request_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_comment_model_response.dart';
-import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -54,20 +53,6 @@ class CommentBloc extends BaseBloc {
     setModels(_models);
   }
 
-  // workUploadFile(MultipartFileModel model) async {
-  //   LeadConnection.showLoading(context);
-  //   ResponseData response =
-  //       await connection.upload('/manage-work/upload-file', model);
-  //   Navigator.of(context).pop();
-  //   if (response.isSuccess) {
-  //     WorkUploadFileResponseModel responseModel =
-  //         WorkUploadFileResponseModel.fromJson(response.data);
-  //       setFile(responseModel.data.path);
-  //   } else {
-  //     LeadConnection.showMyDialog(context, "Lỗi máy chủ");dfds
-  //   }
-  // }
-
    workUploadFile(File model) async {
     LeadConnection.showLoading(context!);
 
@@ -77,8 +62,6 @@ class CommentBloc extends BaseBloc {
 
     Navigator.of(context!).pop();
     if(result != null){
-      // WorkUploadFileResponse response = result.url;
-
       setFile(result);
     } else {
       LeadConnection.handleError(context!, AppLocalizations.text(LangKey.server_error));

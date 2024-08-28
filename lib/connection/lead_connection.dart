@@ -475,6 +475,18 @@ class LeadConnection {
     return null;
   }
 
+   static Future<DescriptionModelResponse?> addPhone(
+      BuildContext context, AddPhoneModelRequest model) async {
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/add-phone', model.toJson());
+    if (responseData.isSuccess) {
+      DescriptionModelResponse data =
+          DescriptionModelResponse.fromJson(responseData.data!);
+      return data;
+    }
+    return null;
+  }
+
   static Future<WorkUploadFileResponseModel?> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
     ResponseData response =  await connection.upload('/manage-work/upload-file', model);

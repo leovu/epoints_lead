@@ -189,7 +189,7 @@ class _LeadScreen extends State<LeadScreen> {
       ),
       backgroundColor: Colors.white,
       body: _buildBody(),
-      floatingActionButton: checkVisibilityKey(VisibilityWidgetName.LE000001)
+      floatingActionButton: !checkVisibilityKey(VisibilityWidgetName.LE000001)
           ? FloatingActionButton(
               backgroundColor: AppColors.primaryColor,
               onPressed: () async {
@@ -442,7 +442,7 @@ class _LeadScreen extends State<LeadScreen> {
                                 ),
                               ),
                               infoItem(
-                                  Assets.iconChance, item?.pipelineName ?? ""),
+                                  Assets.iconChance, item.pipelineName ?? ""),
                             ],
                           ),
                         )),

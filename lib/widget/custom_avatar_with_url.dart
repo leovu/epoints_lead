@@ -165,10 +165,11 @@ class CustomAvatarDetail extends StatelessWidget {
   final String name;
   final double? textSize;
   final Color? color;
+  final double? padding;
 
   CustomAvatarDetail({
-    required this.name, this.textSize, this.color
-  }):assert(name != null);
+    required this.name, this.textSize, this.color, this.padding
+  });
 
   String getFirstChar(String event){
     if(event.length == 0)
@@ -182,7 +183,7 @@ class CustomAvatarDetail extends StatelessWidget {
     String newName;
     List<String> models = name.split(" ");
 
-    if(models != null && models.length > 1)
+    if(models.length > 1)
       newName = getFirstChar(models[0]) + getFirstChar(models[models.length - 1]);
     else
       newName = getFirstChar(name);
@@ -192,12 +193,15 @@ class CustomAvatarDetail extends StatelessWidget {
         shape: BoxShape.circle,
         color: color == null ?  AppColors.primaryColor : color),
       child: Center(
-        child: Text(
-          newName,
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: textSize??20.0
+        child: Padding(
+          padding:  EdgeInsets.all(padding ?? 0.0),
+          child: Text(
+            newName,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: textSize??20.0
+            ),
           ),
         ),
       ),

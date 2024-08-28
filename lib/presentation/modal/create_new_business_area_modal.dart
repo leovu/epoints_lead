@@ -7,7 +7,6 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/add_business_areas_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
-import 'package:lead_plugin_epoint/widget/custom_size_transaction.dart';
 
 class CreateNewBusinessAreaModal extends StatefulWidget {
   CreateNewBusinessAreaModal({Key? key}) : super(key: key);

@@ -1,11 +1,9 @@
-
-import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/theme.dart';
+part of widget;
 
 class CustomSizeTransaction extends StatefulWidget {
 
   final Widget? child;
-  final bool open;
+  final bool? open;
 
   CustomSizeTransaction({this.child, this.open = false});
 
@@ -20,6 +18,7 @@ class CustomSizeTransactionState extends State<CustomSizeTransaction> with Ticke
 
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     _controller = AnimationController(
       duration: AppAnimation.duration,
@@ -31,7 +30,7 @@ class CustomSizeTransactionState extends State<CustomSizeTransaction> with Ticke
     );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if(widget.open) {
+      if(widget.open!) {
         _controller.forward();
       }
     });
@@ -39,8 +38,9 @@ class CustomSizeTransactionState extends State<CustomSizeTransaction> with Ticke
 
   @override
   void didUpdateWidget(covariant CustomSizeTransaction oldWidget) {
+    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    if(widget.open) {
+    if(widget.open!) {
       _controller.forward();
     } else {
       _controller.reverse();
@@ -49,6 +49,7 @@ class CustomSizeTransactionState extends State<CustomSizeTransaction> with Ticke
 
   @override
   void dispose() {
+    // TODO: implement dispose
     _controller.dispose();
     super.dispose();
   }

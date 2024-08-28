@@ -17,28 +17,33 @@ import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_business_areas_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
+import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modal/business_areas_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/district_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/position_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/province_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/ward_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
+import 'package:lead_plugin_epoint/widget/widget.dart';
 
 class BuildMoreAddressCreatPotential extends StatefulWidget {
   AddLeadModelRequest? detailPotential;
   List<ProvinceData>? provinces = <ProvinceData>[];
   bool? selectedPersonal;
   AddLeadModelRequest? requestModel = AddLeadModelRequest();
+  final CreatePotentialCustomerBloc bloc;
   BuildMoreAddressCreatPotential(
       {Key? key,
       this.provinces,
       // this.allocatorData,
       this.requestModel,
       this.detailPotential,
-      this.selectedPersonal})
+      this.selectedPersonal,
+      required this.bloc})
       : super(key: key);
   @override
   _BuildMoreAddressCreatPotentialState createState() =>
@@ -70,6 +75,7 @@ class _BuildMoreAddressCreatPotentialState
 
   TextEditingController _fullNameText = TextEditingController();
   FocusNode _fullnameFocusNode = FocusNode();
+
   TextEditingController _phoneNumberText = TextEditingController();
   FocusNode _phoneNumberFocusNode = FocusNode();
 
@@ -209,24 +215,6 @@ class _BuildMoreAddressCreatPotentialState
                   FocusScope.of(context).unfocus();
                   _showEstablishDate();
                 }),
-          //    _buildTextField(
-          //   AppLocalizations.text(LangKey.businessAreas),
-          //   "",
-          //   Assets.iconMenu,
-          //   false,
-          //   true,
-          //   false, ontap: () async {
-          // FocusScope.of(context).unfocus(); }),
-
-          //  _buildTextField(
-          // AppLocalizations.text(LangKey.chooseDateOfEstablishment),
-          // _establishDateText.text ?? "",
-          // Assets.iconEstablish,
-          // false,
-          // true,
-          // false, ontap: () async {
-          //   _showEstablishDate();
-          // }),
 
           // so luong nhan vien
           !widget.selectedPersonal!
@@ -238,181 +226,13 @@ class _BuildMoreAddressCreatPotentialState
                       signed: false, decimal: false))
               : Container(),
 
-          _buildTextField(
-              AppLocalizations.text(LangKey.provinceCity),
-              provinceSeleted?.name ?? "",
-              Assets.iconProvince,
-              false,
-              true,
-              false, ontap: () async {
-            FocusScope.of(context).unfocus();
-
-            if (widget.provinces == null || widget.provinces!.length == 0) {
-              LeadConnection.showLoading(context);
-              List<ProvinceData>? dataProvinces = await LeadConnection.getProvince(context);
-              Navigator.of(context).pop();
-              if (dataProvinces != null) {
-                widget.provinces = dataProvinces;
-
-                ProvinceData? province = await showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) {
-                      return ProvinceModal(
-                          provinces: widget.provinces,
-                          provinceSeleted: provinceSeleted);
-                    });
-                if (province != null) {
-                  if (provinceSeleted?.provinceid != province.provinceid) {
-                    distictSelected = null;
-                    wardSelected = null;
-                    _addressText.text = "";
-                  }
-                  provinceSeleted = province;
-                  widget.detailPotential!.provinceId =
-                      provinceSeleted.provinceid;
-                  var dataDistrict = await LeadConnection.getDistrict(
-                      context, provinceSeleted.provinceid);
-                  if (dataDistrict != null) {
-                    districts = dataDistrict.data;
-                  }
-                  setState(() {});
-                }
-              }
-            } else {
-              ProvinceData? province = await showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) {
-                    return ProvinceModal(
-                        provinces: widget.provinces,
-                        provinceSeleted: provinceSeleted);
-                  });
-              if (province != null) {
-                if (provinceSeleted?.provinceid != province.provinceid) {
-                  distictSelected = null;
-                  wardSelected = null;
-                  _addressText.text = "";
-                }
-                provinceSeleted = province;
-                widget.detailPotential!.provinceId = provinceSeleted.provinceid;
-                var dataDistrict = await LeadConnection.getDistrict(
-                    context, provinceSeleted.provinceid);
-                if (dataDistrict != null) {
-                  districts = dataDistrict.data;
-                }
-                setState(() {});
-              }
-            }
-          }),
-          Row(
-            children: [
-              Container(
-                // margin: const EdgeInsets.only(bottom: 10.0),
-                width: (MediaQuery.of(context).size.width - 16) / 2 - 8,
-                child: _buildTextField(
-                    AppLocalizations.text(LangKey.district),
-                    distictSelected?.name ?? "",
-                    Assets.iconDistrict,
-                    false,
-                    true,
-                    false, ontap: () async {
-                  FocusScope.of(context).unfocus();
-                  print("quận/ huyện");
-                  DistrictData? distict = await showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return GestureDetector(
-                          child: DistrictModal(
-                            districts: districts,
-                            distictSelected: distictSelected,
-                          ),
-                          onTap: () {
-                            Navigator.of(context).pop();
-                          },
-                          behavior: HitTestBehavior.opaque,
-                        );
-                      });
-                  if (distict != null) {
-                    if (distictSelected?.districtid != distict.districtid) {
-                      wardSelected = null;
-                       _addressText.text = "";
-                    }
-                    distictSelected = distict;
-                    widget.detailPotential!.districtId =
-                        distictSelected!.districtid;
-                    var wardData = await LeadConnection.getWard(
-                        context, distictSelected!.districtid);
-                    if (wardData != null) {
-                      wards = wardData.data;
-                    }
-                    setState(() {
-                      // await LeadConnection.getDistrict(context, province.provinceid);
-                    });
-                  }
-                }),
-              ),
-
-              // phường / xã
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(left: 10.0),
-                  child: _buildTextField(
-                      AppLocalizations.text(LangKey.wards),
-                      wardSelected?.name ?? "",
-                      Assets.iconWards,
-                      false,
-                      true,
-                      false, ontap: () async {
-                    print("phường xã");
-
-                    WardData? ward = await showModalBottomSheet(
-                        context: context,
-                        useRootNavigator: true,
-                        isScrollControlled: true,
-                        backgroundColor: Colors.transparent,
-                        builder: (context) {
-                          return GestureDetector(
-                            child: WardModal(
-                              ward: wards,
-                              wardSelected: wardSelected,
-                            ),
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            behavior: HitTestBehavior.opaque,
-                          );
-                        });
-                    if (ward != null) {
-                      wardSelected = ward;
-                      widget.detailPotential!.wardId = wardSelected!.wardid;
-
-                      String wards = (wardSelected!.name != null) ? "${wardSelected!.name}, "  : "";
-                String district = (distictSelected!.name != null) ? "${distictSelected!.name}, "  : "";
-                String provine = (provinceSeleted.name != null) ? "${provinceSeleted.name}, "  : "";
-                _addressText.text = wards + district + provine;
-
-                widget.detailPotential!.address = _addressText.text;
-
-                      setState(() {});
-                    }
-                  }),
-                ),
-              ),
-            ],
-          ),
-
-          // điền địa chỉ
-          _buildTextField(AppLocalizations.text(LangKey.inputAddress), "",
-              Assets.iconAddress, false, false, true,
-              fillText: _addressText, focusNode: _addressFocusNode),
+          // người đại diện
+          !widget.selectedPersonal!
+              ? _buildTextField(AppLocalizations.text(LangKey.representative),
+                  "", Assets.iconRepresentative, false, false, true,
+                  fillText: widget.bloc.representativeController,
+                  focusNode: widget.bloc.representativeFocusNode)
+              : Container(),
 
           (showMoreAll == false)
               ? InkWell(
@@ -450,32 +270,6 @@ class _BuildMoreAddressCreatPotentialState
     );
   }
 
-  void loadProvince() async {
-    ProvinceData? province = await showModalBottomSheet(
-                  context: context,
-                  useRootNavigator: true,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (context) {
-                    return ProvinceModal(
-                        provinces: widget.provinces,
-                        provinceSeleted: provinceSeleted);
-                  });
-              if (province != null) {
-                if (provinceSeleted?.provinceid != province.provinceid) {
-                  distictSelected = null;
-                  wardSelected = null;
-                }
-                provinceSeleted = province;
-                widget.detailPotential!.provinceId = provinceSeleted.provinceid;
-                var dataDistrict = await LeadConnection.getDistrict(
-                    context, provinceSeleted.provinceid);
-                if (dataDistrict != null) {
-                  districts = dataDistrict.data;
-                }
-                setState(() {});
-              }
-  }
 
   _showBirthDay() {
     DateTime selectedDate = selectedBirthDay ?? DateTime.now();
@@ -559,32 +353,11 @@ class _BuildMoreAddressCreatPotentialState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-      
-        // Đầu mối doanh nghiệp
-        // _buildTextField(
-        //     AppLocalizations.text(LangKey.businessFocalPoint),
-        //     businessFocalPointSeleted?.customerLeadCode ?? "",
-        //     Assets.iconPoint,
-        //     false,
-        //     true,
-        //     false, ontap: () async {
-        //   FocusScope.of(context).unfocus();
-        //   ListCustomLeadItems businessFocalPoint =
-        //       await Navigator.of(context).push(MaterialPageRoute(
-        //           builder: (context) => BusinessFocalPointModal(
-        //                 businessFocalPointData: businessFocalPointData,
-        //                 businessFocalPointSeleted: businessFocalPointSeleted,
-        //               )));
-
-        //   if (businessFocalPoint != null) {
-        //     businessFocalPointSeleted = businessFocalPoint;
-        //     widget.detailPotential.businessClue =
-        //         businessFocalPointSeleted.customerLeadCode;
-        //     // widget.detailPotential.
-        //     setState(() {});
-        //   }
-        // }),
-
+        // Website
+        _buildTextField("Website", "",
+            Assets.iconFanpage, false, false, true,
+            fillText: widget.bloc.websiteController, focusNode: widget.bloc.websiteFocusNode),
+   
         // Zalo
         _buildTextField(AppLocalizations.text(LangKey.zalo), "",
             Assets.iconSource, false, false, true,
@@ -655,13 +428,50 @@ class _BuildMoreAddressCreatPotentialState
                     }
                   }),
 
-                  _buildTextField(AppLocalizations.text(LangKey.inputAddress),
-                      "", Assets.iconAddress, false, false, true,
-                      fillText: _addressContactText,
-                      focusNode: _addressContactFocusNode),
+                  // _buildTextField(AppLocalizations.text(LangKey.inputAddress),
+                  //     "", Assets.iconAddress, false, false, true,
+                  //     fillText: _addressContactText,
+                  //     focusNode: _addressContactFocusNode),
                 ],
               )
-            : Container()
+            : Container(),
+
+        Text(
+          "Ghi chú",
+          style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color:  AppColors.primaryColor),
+        ),
+
+        SizedBox(height: 8.0),
+
+        TextField(
+          controller: widget.bloc.noteController,
+          focusNode: widget.bloc.noteFocusNode,
+          textInputAction: TextInputAction.done,
+          maxLength: 500,
+          decoration: InputDecoration(
+            counterText: "",
+            hintText: "Đây là một nội dung ghi chú",
+            hintStyle: AppTextStyles.style13GrayWeight400,
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+            ),
+          ),
+          maxLines: 4,
+          minLines: 4,
+          onSubmitted: (value) {
+            widget.bloc.noteFocusNode.unfocus();
+          },
+        ),
+
+        _buildImage()
+
       ],
     );
   }
@@ -676,6 +486,21 @@ class _BuildMoreAddressCreatPotentialState
       widget.detailPotential!.position = positionSelected!.staffTitleName;
       setState(() {});
     }
+  }
+
+   Widget _buildImage() {
+    return StreamBuilder(
+        stream: widget.bloc.streamImages.output,
+        initialData: widget.bloc.images,
+        builder: (_, snapshot) {
+          return CustomImageList(
+            models: widget.bloc.images
+                .map((e) => CustomImageListModel(file: e))
+                .toList(),
+            onAdd: widget.bloc.onImageAdd,
+            onRemove: widget.bloc.onImageRemove,
+          );
+        });
   }
 
   Widget sexInfo(int index) {
@@ -826,7 +651,7 @@ class _BuildMoreAddressCreatPotentialState
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap  : null,
+        onTap: (ontap != null) ? ontap : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -859,6 +684,8 @@ class _BuildMoreAddressCreatPotentialState
                       ]))
                 : Text(
                     content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.black,

@@ -17,7 +17,7 @@ class CustomImagePicker {
           options: [
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.capture),
-                ontap: () async {
+                onTap: () async {
                   File? file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
                   if(file != null){
                     Navigator.of(context).pop();
@@ -27,7 +27,7 @@ class CustomImagePicker {
             ),
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.select_from_gallery),
-                ontap: () async {
+                onTap: () async {
                   File? file = await pickImage(context, ImageSource.gallery);
                   if(file != null){
                     Navigator.of(context).pop();
@@ -46,7 +46,7 @@ class CustomImagePicker {
           options: [
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.capture),
-                ontap: () async {
+                onTap: () async {
                   File? file = await pickImage(context, ImageSource.camera, isSelfie: isSelfie);
                   if(file != null){
                     onConfirm([file]);
@@ -55,7 +55,7 @@ class CustomImagePicker {
             ),
             CustomBottomOptionModel(
                 text: AppLocalizations.text(LangKey.select_from_gallery),
-                ontap: () async {
+                onTap: () async {
                   List<File>? files = await pickMultiImage(context);
                   if(files != null){
                     onConfirm(files);
@@ -67,17 +67,17 @@ class CustomImagePicker {
     ));
   }
 
-  static Future<File?> pickImage(BuildContext context, ImageSource source, {bool isSelfie = false}) async {
-    if (source == null)
-      return null;
+  static Future<File?> pickImage(BuildContext? context, ImageSource? source,
+      {bool isSelfie = false}) async {
+    if (source == null) return null;
     try {
       bool permission = false;
       if (source == ImageSource.camera) {
         permission = await CustomPermissionRequest.request(
-            context, PermissionRequestType.CAMERA);
+            context!, PermissionRequestType.CAMERA);
       } else {
         permission = await CustomPermissionRequest.request(
-            context, PermissionRequestType.STORAGE);
+            context!, PermissionRequestType.STORAGE);
       }
       if (!permission) return null;
     } catch (_) {
@@ -86,22 +86,15 @@ class CustomImagePicker {
 
     final pickedFile = await ImagePicker().pickImage(
         source: source,
-        preferredCameraDevice: isSelfie?CameraDevice.front:CameraDevice.rear
-    );
+        preferredCameraDevice:
+            isSelfie ? CameraDevice.front : CameraDevice.rear,
+        maxWidth: 1536);
 
-    if (pickedFile == null)
-      return null;
-
-    if(source == ImageSource.camera){
-      // CustomNavigator.showProgressDialog(context);
-      File file = await _orientationImage(context, pickedFile);
-      // CustomNavigator.hideProgressDialog();
-      return file;
-    }
+    if (pickedFile == null) return null;
 
     return File(pickedFile.path);
   }
-
+  
   static Future<File> _orientationImage(BuildContext context, XFile file) async {
 
     return File(file.path);

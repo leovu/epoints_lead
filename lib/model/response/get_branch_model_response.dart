@@ -1,7 +1,7 @@
 class GetBranchModelReponse {
   int? errorCode;
   String? errorDescription;
-  List<Data>? data;
+  List<BranchData>? data;
 
   GetBranchModelReponse({this.errorCode, this.errorDescription, this.data});
 
@@ -9,9 +9,18 @@ class GetBranchModelReponse {
     errorCode = json['ErrorCode'];
     errorDescription = json['ErrorDescription'];
     if (json['Data'] != null) {
-      data = <Data>[];
+      data = <BranchData>[];
       json['Data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(new BranchData.fromJson(v));
+      });
+    }
+  }
+
+  GetBranchModelReponse.fromList(List<dynamic>? json) {
+    if (json != null) {
+      data = <BranchData>[];
+      json.forEach((v) {
+        data!.add(new BranchData.fromJson(v));
       });
     }
   }
@@ -27,19 +36,24 @@ class GetBranchModelReponse {
   }
 }
 
-class Data {
+
+
+
+class BranchData {
   int? branchId;
   String? branchName;
   String? address;
   String? branchCode;
+  bool? selected;
 
-  Data({this.branchId, this.branchName, this.address, this.branchCode});
+  BranchData({this.branchId, this.branchName, this.address, this.branchCode, this.selected});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  BranchData.fromJson(Map<String, dynamic> json) {
     branchId = json['branch_id'];
     branchName = json['branch_name'];
     address = json['address'];
     branchCode = json['branch_code'];
+    selected = json['selected'] ?? false;
   }
 
   Map<String, dynamic> toJson() {

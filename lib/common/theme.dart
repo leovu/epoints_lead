@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AppColors {
+  static const subColor = Color(0xFF2F2E41);
   static const primaryColor = Color(0xFF0067AC);
   static const primary50Color = Color(0xFFF9DECF);
   static const white = Color(0xFFFFFFFF);
@@ -196,6 +197,10 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
+   static TextStyle style20BlackBold = TextStyle(
+      fontSize: AppTextSizes.size20,
+      color: Colors.black,
+      fontWeight: FontWeight.bold);
     static TextStyle style14BlackNormal = TextStyle(
       fontSize: AppTextSizes.size14,
       color: AppColors.black,
@@ -564,8 +569,8 @@ class AppSizes {
   static double? maxWidth;
   static late double maxHeight;
   static double? ultraPadding;
-  static double? maxPadding;
-  static double? minPadding;
+  static double maxPadding = 0.0;
+  static double minPadding = 0.0;
   static double? sizeOnTap;
   static double? sizeOnTapCheckIn;
   static late double statusBarHeight;

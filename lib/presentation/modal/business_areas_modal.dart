@@ -160,20 +160,20 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            height: 40,
-            child: Row(
-              children: [
-                Text(
-                  item.businessName!,
-                  style: TextStyle(
-                      fontSize: 15.0,
-                      color:
-                          item.selected! ? AppColors.primaryColor : Colors.black,
-                      fontWeight:
-                          item.selected! ? FontWeight.bold : FontWeight.normal),
-                )
-              ],
+          Expanded(
+            child: Container(
+              // height: 40,
+              child: Text(
+                item.businessName!,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                    fontSize: 15.0,
+                    color:
+                        item.selected! ? AppColors.primaryColor : Colors.black,
+                    fontWeight:
+                        item.selected! ? FontWeight.bold : FontWeight.normal),
+              ),
             ),
           ),
           item.selected!

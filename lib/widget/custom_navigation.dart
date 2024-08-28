@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lead_plugin_epoint/widget/custom_alert_dialog.dart';
+import 'package:lead_plugin_epoint/widget/custom_dialog.dart';
+import 'package:lead_plugin_epoint/widget/custom_route.dart';
 
 class CustomNavigator {
    static showCustomBottomDialog(BuildContext context, Widget screen,
@@ -33,6 +36,51 @@ class CustomNavigator {
       Navigator.of(context, rootNavigator: root).pop();
     else
       Navigator.of(context, rootNavigator: root).pop(object);
+  }
+
+   static push(BuildContext context, Widget screen,
+      {bool root = true, bool opaque = true}) {
+    return Navigator.of(context, rootNavigator: root).push(opaque?CustomRoute(
+      page: screen,
+    ):CustomRouteDialog(
+        page: screen
+    ));
+  }
+
+    static showCustomAlertDialog(BuildContext context, String? title, String? content,
+      {
+        bool root = true,
+        GestureTapCallback? onSubmitted,
+        String? textSubmitted,
+        Color? colorSubmitted,
+        String? textSubSubmitted,
+        GestureTapCallback? onSubSubmitted,
+        bool enableCancel = false,
+        bool cancelable = true,
+        bool isTicket = false,
+        bool showSubmitted = true,
+        Widget? child
+}) {
+    return push(
+        context,
+        CustomDialog(
+          screen: CustomAlertDialog(
+              title: title,
+              content: content,
+              textSubmitted: textSubmitted,
+              colorSubmitted: colorSubmitted,
+              onSubmitted: onSubmitted,
+              textSubSubmitted: textSubSubmitted,
+              onSubSubmitted: onSubSubmitted,
+              enableCancel: enableCancel,
+              isTicket: isTicket,
+              showSubmitted: showSubmitted,
+              child: child
+          ),
+          cancelable: cancelable,
+        ),
+        opaque: false,
+        root: root);
   }
 
   

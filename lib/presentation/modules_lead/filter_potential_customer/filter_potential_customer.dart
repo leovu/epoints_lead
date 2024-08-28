@@ -214,7 +214,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     ConvertStatusModel(
         statusName: AppLocalizations.text(LangKey.all),
         statusID: 2,
-        selected: true),
+        selected: false),
     ConvertStatusModel(
         statusName: AppLocalizations.text(LangKey.convertCustomersSuccess),
         statusID: 1,
@@ -222,7 +222,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     ConvertStatusModel(
         statusName: AppLocalizations.text(LangKey.convertCustomersNotSuccess),
         statusID: 0,
-        selected: false)
+        selected: true)
   ];
 
   List<GetStatusWorkData>? statusWorkData;

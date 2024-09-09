@@ -214,7 +214,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     ConvertStatusModel(
         statusName: AppLocalizations.text(LangKey.all),
         statusID: 2,
-        selected: true),
+        selected: false),
     ConvertStatusModel(
         statusName: AppLocalizations.text(LangKey.convertCustomersSuccess),
         statusID: 1,
@@ -222,7 +222,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     ConvertStatusModel(
         statusName: AppLocalizations.text(LangKey.convertCustomersNotSuccess),
         statusID: 0,
-        selected: false)
+        selected: true)
   ];
 
   List<GetStatusWorkData>? statusWorkData;
@@ -245,7 +245,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         pipelineId: [],
         journeyId: [],
         careHistory: "",
-        isConvert: "",
+        isConvert: "0",
         createdAt: "",
         allocationDate: "",
       ),
@@ -338,14 +338,12 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
       }
     }
     for (int i = 0; i < convertStatusOptions.length; i++) {
-      if (filterScreenModel.filterModel!.isConvert != "") {
-        if (widget.filterScreenModel!.filterModel!.isConvert ==
+      if (widget.filterScreenModel!.filterModel!.isConvert ==
             "${convertStatusOptions[i].statusID}") {
           convertStatusOptions[i].selected = true;
         } else {
           convertStatusOptions[i].selected = false;
         }
-      }
     }
 
     if (filterScreenModel.filterModel!.customerSourceId!.length > 0) {
@@ -1235,7 +1233,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     _modelStaffSSupportSelected = [];
 
     for (int i = 0; i < convertStatusOptions.length; i++) {
-      if (i == 0) {
+      if (i == 2) {
         convertStatusOptions[i].selected = true;
       } else {
         convertStatusOptions[i].selected = false;

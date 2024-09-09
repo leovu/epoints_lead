@@ -60,7 +60,7 @@ class _LeadScreen extends State<LeadScreen> {
     pipelineId: [],
     journeyId: [],
     careHistory: "",
-    isConvert: "",
+    isConvert: "0",
     createdAt: "",
     allocationDate: "",
   );

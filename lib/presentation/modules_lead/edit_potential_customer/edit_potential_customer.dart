@@ -362,7 +362,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
     _bloc.websiteController.text = detailNew?.zalo ?? "";
 
-    if (detailNew?.provinceId != null || detailNew?.address != null) {
+    if (detailNew?.provinceId != null && detailNew?.fullAddress != null) {
       _bloc.addressModel = CustomerCreateAddressModel(
           provinceModel: detailPotential.provinceId == null
               ? null

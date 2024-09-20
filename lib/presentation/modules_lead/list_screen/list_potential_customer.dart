@@ -497,14 +497,13 @@ class _LeadScreen extends State<LeadScreen> {
                                               DetailPotentialCustomer(
                                                 customer_lead_code:
                                                     item.customerLeadCode,
-                                                indexTab: 2,
+                                                indexTab: 0,
                                                 typeCustomer: item.customerType,
                                               )));
 
                                   if (result != null && result) {
                                     getData(false);
                                   }
-                                  print("1");
                                 }),
                                 _actionItem(
                                     Assets.iconOutdate, Color(0xFFDD2C00),
@@ -517,13 +516,12 @@ class _LeadScreen extends State<LeadScreen> {
                                                 customer_lead_code:
                                                     item.customerLeadCode,
                                                 typeCustomer: item.customerType,
-                                                indexTab: 2,
+                                                indexTab: 0,
                                               )));
 
                                   if (result != null && result) {
                                     getData(false);
                                   }
-                                  print("2");
                                 }),
                               ],
                             ),

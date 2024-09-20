@@ -152,7 +152,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   Padding(
                     padding: EdgeInsets.only(
                         bottom: AppSizes.maxHeight * 0.1 +
-                            (index == 0 ? 0 : AppSizes.bottomHeight!)),
+                            (index == 0 ? 0 : AppSizes.bottomHeight! + 16)),
                     child: Column(
                       children: [
                         buildListOption(),
@@ -170,7 +170,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                     alignment: Alignment.bottomCenter,
                     child: Container(
                         height: AppSizes.maxHeight * 0.1 +
-                            (index == 0 ? 0 : AppSizes.bottomHeight!),
+                            (index == 0 ? 0 : AppSizes.bottomHeight! + 16),
                         child: (index == 0)
                             ? _listButtonRelevant()
                             : _listButtonInfo()),
@@ -350,7 +350,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconCall,
-            title: detail?.phone,
+            title: hidePhone(
+                                detail?.phone ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.CM000004)),
           ),
           SizedBox(
             height: AppSizes.minPadding! / 2,
@@ -520,7 +523,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconCall,
-            title: detail?.phone,
+            title:  hidePhone(
+                                detail?.phone ?? "",
+                                checkVisibilityKey(
+                                    VisibilityWidgetName.CM000004)),
           ),
           SizedBox(
             height: AppSizes.minPadding / 2,
@@ -812,7 +818,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: const EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0),
+              padding: EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0),
               margin: EdgeInsets.only(left: 8.0),
               child: Row(
                 children: [
@@ -1250,7 +1256,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           Row(
             children: [
               CustomAvatarWithURL(
-                name: item!.fullName ?? "",
+                name: item.fullName ?? "",
                 size: 50.0,
               ),
               Container(

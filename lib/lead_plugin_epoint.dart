@@ -33,7 +33,8 @@ class LeadPluginEpoint {
       String? phone,
       String? customerLeadCode,
       Function(Map<String,dynamic>)? createJob,
-      Function(Map<String,dynamic>)?  editJob,
+      Function(Map<String,dynamic>)?  createCare,
+      Function(int)?  editJob,
       Function(String)? openDetailDeal,
       Function(Map<String,dynamic>)? createDeal,
       Function(Map<String,dynamic>)? callHotline,
@@ -61,6 +62,11 @@ class LeadPluginEpoint {
     if (editJob != null) {
       Global.editJob = editJob;
     }
+
+    if (createCare != null) {
+      Global.createCare = createCare;
+    }
+    
     if (openDetailDeal != null) {
       Global.openDetailDeal = openDetailDeal;
     }

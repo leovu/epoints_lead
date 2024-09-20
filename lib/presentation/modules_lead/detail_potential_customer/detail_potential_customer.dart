@@ -923,7 +923,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     return InkWell(
       onTap: () async {
         if (Global.editJob != null) {
-          var result = await Global.editJob!(_bloc.detail!.toJson());
+          var result = await Global.editJob!(item.manageWorkId ?? 0);
           if (result != null && result) {
             allowPop = true;
           await _bloc.getData(widget.customer_lead_code!);
@@ -1521,8 +1521,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandCare = event),
                   onTapPlus: () async {
-                    if (Global.createJob != null) {
-                      var result = await Global.createJob!(_bloc.detail!.toJson());
+                    if (Global.createCare != null) {
+                      var result = await Global.createCare!(_bloc.detail!.toJson());
                       if (result != null && result) {
                         _bloc.getData(widget.customer_lead_code!);
                       }

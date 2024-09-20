@@ -14,7 +14,9 @@ class Global {
 
   static Function(Map<String,dynamic>)?  createJob;
 
-  static Function(Map<String,dynamic>)? editJob;
+  static Function(Map<String,dynamic>)?  createCare;
+
+  static Function(int)? editJob;
 
   static Function(String)? openDetailDeal;
 

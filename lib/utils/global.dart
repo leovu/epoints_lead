@@ -12,13 +12,15 @@ class Global {
 
   static bool validateWorkScheduleDate = true;
 
-  static Function? createJob;
+  static Function(Map<String,dynamic>)?  createJob;
 
-  static late Function editJob;
+  static Function(int?)? editJob;
 
   static Function? openDetailDeal;
 
-  static Function? createDeal;
+  static Function(Map<String,dynamic>)? createDeal;
+
+  static Function(Map<String,dynamic>)? showDetailDeal;
 
   static String domain = '';
   static String brandCode = '';

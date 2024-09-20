@@ -14,12 +14,11 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
-
-import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
+
+import '../../../widget/custom_avatar_with_url.dart';
 
 class LeadScreen extends StatefulWidget {
   const LeadScreen({Key? key}) : super(key: key);
@@ -554,7 +553,12 @@ class _LeadScreen extends State<LeadScreen> {
         Positioned(
           left: 10,
           top: -22,
-          child: _buildAvatar(item?.leadFullName ?? ""),
+          child: CustomAvatarWithURL(
+                    backgroundColor: Color(0xFFEEB132),
+                    url: item.avatar ?? "",
+                    name: item.leadFullName,
+                    size: 80.0,
+                  ),
         ),
       ],
     );
@@ -682,27 +686,5 @@ class _LeadScreen extends State<LeadScreen> {
     // final regSpace = RegExp(r"\s+");
     // // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
     // return await launch("tel:" + phone.replaceAll(regSpace, ""));
-  }
-
-  Widget _buildAvatar(String name) {
-    return Container(
-      width: 87.0,
-      height: 87.0,
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 2.0,
-          color: AppColors.primaryColor,
-        ),
-        shape: BoxShape.circle,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10000.0),
-        child: CustomAvatar(
-          color: Color(0xFFEEB132),
-          name: name,
-          textSize: 36.0,
-        ),
-      ),
-    );
   }
 }

@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
 
@@ -21,6 +23,36 @@ customPrint(dynamic event) {
   log(event.toString());
   
 }
+
+String parseAndFormatDate(String? event,
+    {DateFormat? format, DateFormat? parse}) {
+  if ((event ?? "").isEmpty) {
+    return "";
+  }
+
+  return (format ?? AppFormat.formatDate)
+      .format((parse ?? AppFormat.formatDateResponse).parse(event!));
+}
+
+String? pathToImage(String paths) {
+  String path = paths.split(".").last;
+
+  print(path);
+
+
+  if (path == "doc" || path == "docx") {
+    return Assets.imageMSWord;
+  } else if (path == "xls" || path == "xlsx" || path == "xlsm") {
+    return Assets.imageMSExcel;
+  } else if (path == "pdf") {
+    return Assets.imagePDF;
+  } else if (path == "ppt" || path == "pptx") {
+    return Assets.imagePPT;
+  }
+
+  return Assets.imageMSWord;
+}
+
  double getWidthOfItemPerRow(BuildContext context, int itemPerRow,
       {double? padding, double? separate}) {
     return (AppSizes.maxWidth! -

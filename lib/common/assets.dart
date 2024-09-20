@@ -242,5 +242,11 @@ class Assets {
   static String iconMoneyOwed = "packages/lead_plugin_epoint/assets/icons/ico_money_owed.png";
   static String iconWalletOutline = "packages/lead_plugin_epoint/assets/icons/ico_wallet_outline.png";
 
+  static final String imageFile = "packages/lead_plugin_epoint/assets/images/img_file.png";
+  static final String imageMSExcel = "packages/lead_plugin_epoint/assets/images/img_msexcel.png";
+  static final String imageMSWord = "packages/lead_plugin_epoint/assets/images/img_msword.png";
+  static final String imagePDF = "packages/lead_plugin_epoint/assets/images/img_pdf.png";
+  static final String imagePPT = "packages/lead_plugin_epoint/assets/images/img_ppt.png";
+
   
 }

@@ -295,6 +295,20 @@ class LeadConnection {
     return null;
   }
 
+  static Future<DescriptionModelResponse?> convertLead(
+      BuildContext context, int customer_lead_id) async {
+    showLoading(context);
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/convert-lead', {"customer_lead_id" : customer_lead_id});
+    Navigator.of(context).pop();
+    if (responseData.isSuccess) {
+      DescriptionModelResponse data =
+          DescriptionModelResponse.fromJson(responseData.data!);
+      return data;
+    }
+    return null;
+  }
+
   static Future<ContactListModelResponse?> getContactList(
       BuildContext context, String? customer_lead_code) async {
     ResponseData responseData = await connection.post(

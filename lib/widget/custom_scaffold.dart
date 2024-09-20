@@ -56,7 +56,7 @@ class CustomScaffold extends StatelessWidget {
           height: 90,
           width: double.infinity,
           color: AppColors.primaryColor,
-          padding: EdgeInsets.only(top: 36.0),
+          padding: EdgeInsets.only(top: 30.0),
           child: CustomAppBar(
             title: title,
             customTitle: customTitle,

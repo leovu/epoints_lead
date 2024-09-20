@@ -2,7 +2,6 @@
 // import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -14,6 +13,7 @@ import 'package:lead_plugin_epoint/model/object_pop_detail_model.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/get_journey_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/add_lead_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/customer_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_branch_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_group_model_response.dart';
@@ -31,7 +31,6 @@ import 'package:lead_plugin_epoint/presentation/modal/create_new_phone_modal.dar
 import 'package:lead_plugin_epoint/presentation/modal/group_customer_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
-import 'package:lead_plugin_epoint/presentation/module_address/src/ui/create_address_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/build_more_address_create_potential.dart';
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
@@ -39,14 +38,12 @@ import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
-import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
-import 'package:lead_plugin_epoint/widget/custom_column_infomation.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class CreatePotentialCustomer extends StatefulWidget {
-  String? fullname;
-  String? phoneNumber;
+  final String? fullname;
+  final String? phoneNumber;
   CreatePotentialCustomer({Key? key, this.fullname, this.phoneNumber})
       : super(key: key);
 
@@ -69,9 +66,6 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   TextEditingController _phoneNumberText = TextEditingController();
   FocusNode _phoneNumberFocusNode = FocusNode();
 
-  TextEditingController _businessText = TextEditingController();
-  FocusNode _businessFocusNode = FocusNode();
-
   TextEditingController _emailText = TextEditingController();
   FocusNode _emailFocusNode = FocusNode();
 
@@ -79,18 +73,11 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   FocusNode _taxFocusNode = FocusNode();
 
   TextEditingController _representativeText = TextEditingController();
-  FocusNode _representativeFocusNode = FocusNode();
-
   bool showMoreAddress = false;
   bool showMoreAll = false;
   bool selectedPersonal = true;
 
-  String _imgAvatar = "";
-
   // File _image;
-  PickedFile? _pickedFile;
-  final _picker = ImagePicker();
-
   AddLeadModelRequest requestModel = AddLeadModelRequest();
   List<ProvinceData> provinces = <ProvinceData>[];
   List<DistrictData> districts = <DistrictData>[];
@@ -360,7 +347,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           // nguồn khách hàng
           _buildTextField(
               AppLocalizations.text(LangKey.customerSource),
-              sourceSelected?.sourceName ?? "",
+              sourceSelected.sourceName ?? "",
               Assets.iconSourceCustomer,
               true,
               true,
@@ -376,7 +363,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 customerOptonData = dataType_Source.data;
                 customerSourcesData = customerOptonData!.source;
 
-                CustomerOptionSource source =
+                CustomerOptionSource? source =
                     await CustomNavigator.showCustomBottomDialog(
                   context,
                   CustomerSourceModal(sources: customerSourcesData),
@@ -389,7 +376,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 }
               }
             } else {
-              CustomerOptionSource source =
+              CustomerOptionSource? source =
                   await CustomNavigator.showCustomBottomDialog(
                 context,
                 CustomerSourceModal(sources: customerSourcesData),
@@ -406,7 +393,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           // chọn pipeline
           _buildTextField(
               AppLocalizations.text(LangKey.choosePipeline),
-              pipelineSelected?.pipelineName ?? "",
+              pipelineSelected.pipelineName ?? "",
               Assets.iconChance,
               true,
               true,
@@ -427,7 +414,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 );
 
                 if (pipeline != null) {
-                  if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
+                  if (pipelineSelected.pipelineName != pipeline.pipelineName) {
                     journeySelected = null;
                   }
 
@@ -446,13 +433,13 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 }
               }
             } else {
-              PipelineData pipeline =
+              PipelineData? pipeline =
                   await CustomNavigator.showCustomBottomDialog(
                 context,
                 PipelineModal(pipeLineData: pipeLineData),
               );
               if (pipeline != null) {
-                if (pipelineSelected?.pipelineName != pipeline.pipelineName) {
+                if (pipelineSelected.pipelineName != pipeline.pipelineName) {
                   journeySelected = null;
                 }
                 pipelineSelected = pipeline;
@@ -472,17 +459,12 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           }),
 
           //  chọn hành trình
-          _buildTextField(
-              "Chọn hành trình",
-              journeySelected?.journeyName ?? "",
-              Assets.iconItinerary,
-              true,
-              true,
-              false, ontap: () async {
+          _buildTextField("Chọn hành trình", journeySelected?.journeyName ?? "",
+              Assets.iconItinerary, true, true, false, ontap: () async {
             print("Chọn hành trình");
 
             FocusScope.of(context).unfocus();
-            JourneyData journey = await CustomNavigator.showCustomBottomDialog(
+            JourneyData? journey = await CustomNavigator.showCustomBottomDialog(
               context,
               JourneyModal(journeys: journeysData),
             );
@@ -500,7 +482,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           _buildTextField(
               AppLocalizations.text(LangKey.chooseAllottedPerson),
               (_modelStaffSelected != null && _modelStaffSelected!.length > 0)
-                  ? _modelStaffSelected![0]?.staffName ?? ""
+                  ? _modelStaffSelected![0].staffName ?? ""
                   : "",
               Assets.iconName,
               true,
@@ -525,13 +507,16 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
 
           // Chọn chi nhánh
           _buildTextField(
-              "Chọn chi nhánh", _bloc.branchSelected?.branchName ?? "", Assets.iconName, true, true, false,
-              ontap: () async {
+              "Chọn chi nhánh",
+              _bloc.branchSelected?.branchName ?? "",
+              Assets.iconName,
+              true,
+              true,
+              false, ontap: () async {
             FocusScope.of(context).unfocus();
             _bloc.getBranch(context).then((val) async {
               if (val != null) {
-                BranchData? data =
-                    await CustomNavigator.showCustomBottomDialog(
+                BranchData? data = await CustomNavigator.showCustomBottomDialog(
                   context,
                   BranchModal(datas: _bloc.listBranch),
                 );
@@ -567,12 +552,16 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               Assets.iconEmail, false, false, true,
               fillText: _emailText, focusNode: _emailFocusNode),
 
-           _buildAddress(),
+          _buildAddress(),
 
           // nhóm khách hàng
           _buildTextField(
-              "Chọn nhóm khách hàng", _bloc.customerGroupSelected?.groupName ?? "", Assets.iconName, false, true, false,
-              ontap: () async {
+              "Chọn nhóm khách hàng",
+              _bloc.customerGroupSelected?.groupName ?? "",
+              Assets.iconName,
+              false,
+              true,
+              false, ontap: () async {
             FocusScope.of(context).unfocus();
             _bloc.getCustomerGroup(context).then((val) async {
               if (val != null) {
@@ -590,10 +579,11 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
             });
           }),
 
-          // Nhập người giới thiệu
-          _buildTextField("Nhập người giới thiệu", "", Assets.iconSearch, false,
-              false, true,
-              fillText: _bloc.referrerController, focusNode:  _bloc.referrerFocusNode),
+          // // Nhập người giới thiệu
+          // _buildTextField("Nhập người giới thiệu", "", Assets.iconSearch, false,
+          //     false, true,
+          //     fillText: _bloc.referrerController,
+          //     focusNode: _bloc.referrerFocusNode),
 
           _buildTextField(
               AppLocalizations.text(LangKey.chooseCards) ?? "Chọn nhãn",
@@ -660,6 +650,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               }
             }
           }),
+
+          _buildPresenter(),
 
           !showMoreAddress
               ? InkWell(
@@ -813,10 +805,46 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-          if (customerTypeSelected.customerTypeID == 1) {
-            await addPotentialPersonal();
+          if (_phoneNumberText.text.isNotEmpty) {
+            if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
+                (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+              LeadConnection.showMyDialog(context,
+                  AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
+                  warning: true);
+              return;
+            }
+          }
+          if (detailPotential.contactPhone!.isNotEmpty &&
+              customerTypeSelected.customerTypeID != 1) {
+            if ((!Validators()
+                    .isValidPhone(detailPotential.contactPhone!.trim())) &&
+                (!Validators()
+                    .isNumber(detailPotential.contactPhone!.trim()))) {
+              LeadConnection.showMyDialog(
+                  context, "Số điện thoại người liên hệ không đúng định dạng",
+                  warning: true);
+              return;
+            }
+          }
+          if (_fullNameText.text == "" ||
+              detailPotential.pipelineCode == "" ||
+              detailPotential.journeyCode == "" ||
+              detailPotential.saleId == 0 ||
+              _bloc.branchSelected == null) {
+            LeadConnection.showMyDialog(context,
+                AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
+                warning: true);
+            return;
+          }
+          if (_bloc.images.length > 0) {
+            await _bloc.uploadFileAWS(_bloc.images[0]).then((value) {
+              if (value != "") {
+                _bloc.imgAvatar = value;
+              }
+              addPotential(customerTypeSelected.customerTypeID ?? 0);
+            });
           } else {
-            await addPotentialBusiness();
+            await addPotential(customerTypeSelected.customerTypeID ?? 0);
           }
         },
         child: Center(
@@ -833,6 +861,23 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
     );
   }
 
+  Widget _buildPresenter() {
+    return StreamBuilder(
+        stream: _bloc.outputPresenterModel,
+        initialData: _bloc.presenterModel,
+        builder: (_, snapshot) {
+          _bloc.presenterModel = snapshot.data as CustomerModel?;
+           return _buildTextField(
+              AppLocalizations.text(LangKey.presenter),
+              _bloc.presenterModel?.fullName ?? "",
+              Assets.iconSearch,
+              false,
+              true,
+              false,
+              ontap: _bloc.onPushPresenter);
+
+        });
+  }
 
   Widget _buildAddress() {
     return StreamBuilder(
@@ -846,7 +891,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               Assets.iconAddress,
               false,
               true,
-              false, ontap: _bloc.onPushAddress);
+              false,
+              ontap: _bloc.onPushAddress);
         });
   }
 
@@ -926,174 +972,63 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
     );
   }
 
-  Future<void> addPotentialPersonal() async {
-    if (_phoneNumberText.text.isNotEmpty) {
-      if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
-          (!Validators().isNumber(_phoneNumberText.text.trim()))) {
-        LeadConnection.showMyDialog(
-            context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
-            warning: true);
-        return;
-      }
-    }
-    if (_fullNameText.text == "" ||
-        detailPotential.pipelineCode == "" ||
-        detailPotential.journeyCode == "" ||
-        detailPotential.saleId == 0) {
-      LeadConnection.showMyDialog(
-          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
-          warning: true);
-    } else {
-      LeadConnection.showLoading(context);
-      AddLeadModelResponse? result = await LeadConnection.addLead(
-          context,
-          AddLeadModelRequest(
-              avatar: "",
-              customerType: "personal",
-              customerSource: detailPotential.customerSource,
-              fullName: _fullNameText.text,
-              taxCode: "",
-              phone: _phoneNumberText.text,
-              email: _emailText.text,
-              representative: "",
-              pipelineCode: detailPotential.pipelineCode,
-              journeyCode: detailPotential.journeyCode,
-              saleId: detailPotential.saleId,
-              tagId: detailPotential.tagId,
-              gender: detailPotential.gender,
-              birthday: detailPotential.birthday,
-              bussinessId: 0,
-              employees: 0,
-              address: detailPotential.address,
-              provinceId: _bloc.addressModel?.provinceModel?.provinceid ?? 0,
-              districtId: detailPotential.districtId,
-              wardId: detailPotential.wardId,
-              businessClue: detailPotential.businessClue,
-              zalo: detailPotential.zalo ?? "",
-              fanpage: detailPotential.fanpage ?? "",
-              contactAddress: "",
-              contactEmail: "",
-              contactFullName: "",
-              contactPhone: "",
-              // position: detailPotential.position,
-              position: "",
-              customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
-              branchId: _bloc.branchSelected?.branchId ?? 0,
-              note: _bloc.noteController.text,
-              customerLeadReferId: 0,
-              arrPhoneAttack: _bloc.listPhone,
-              website: _bloc.websiteController.text,
+  Future<void> addPotential(int customerTypeID) async {
+    bool typePersonnal = customerTypeID == 1;
+    LeadConnection.showLoading(context);
+    AddLeadModelResponse? result = await LeadConnection.addLead(
+        context,
+        AddLeadModelRequest(
+          avatar: _bloc.imgAvatar ?? "",
+          customerType:typePersonnal ? "personal" : "business",
+          customerSource: detailPotential.customerSource,
+          fullName: _fullNameText.text,
+          taxCode:typePersonnal ? "" : _taxText.text,
+          phone: _phoneNumberText.text,
+          email: _emailText.text,
+          representative:typePersonnal ? "" : _representativeText.text,
+          pipelineCode: detailPotential.pipelineCode,
+          journeyCode: detailPotential.journeyCode,
+          saleId: detailPotential.saleId,
+          tagId: detailPotential.tagId,
+          gender: detailPotential.gender,
+          birthday: detailPotential.birthday,
+          bussinessId:typePersonnal ? 0 : detailPotential.bussinessId,
+          employees: typePersonnal ? 0:detailPotential.employees,
+          address: "${_bloc.addressModel?.street ?? ""} ",
+          provinceId: _bloc.addressModel?.provinceModel?.provinceid ?? 0,
+          districtId: _bloc.addressModel?.districtModel?.districtid ?? 0,
+          wardId: _bloc.addressModel?.wardModel?.wardId ?? 0,
+          businessClue: detailPotential.businessClue,
+          zalo: detailPotential.zalo ?? "",
+          fanpage: detailPotential.fanpage ?? "",
+          contactAddress:typePersonnal ? "" : detailPotential.contactAddress,
+          contactEmail:typePersonnal ? "" : detailPotential.contactEmail,
+          contactFullName:typePersonnal ? "" : detailPotential.contactFullName,
+          contactPhone:typePersonnal ? "" : detailPotential.contactPhone,
+          position:typePersonnal ? "" : detailPotential.position, 
+          customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
+          branchId: _bloc.branchSelected?.branchId ?? 0,
+          note: _bloc.noteController.text,
+          customerLeadReferId: _bloc.presenterModel?.customerId ?? 0,
+          arrPhoneAttack: _bloc.listPhone,
+          website: _bloc.websiteController.text,
 
-
-              ));
-      Navigator.of(context).pop();
-      if (result != null) {
-        if (result.errorCode == 0) {
-          print(result.errorDescription);
-          await LeadConnection.showMyDialog(context, result.errorDescription);
-          if (result.data != null) {
-            modelResponse = ObjectPopDetailModel(
-                customer_lead_code: "",
-                customer_lead_id: result.data!.customerLeadId,
-                status: true);
-          }
-          Navigator.of(context).pop(modelResponse.toJson());
-        } else {
-          LeadConnection.showMyDialog(context, result.errorDescription);
+          
+        ));
+    Navigator.of(context).pop();
+    if (result != null) {
+      if (result.errorCode == 0) {
+        print(result.errorDescription);
+        await LeadConnection.showMyDialog(context, result.errorDescription);
+        if (result.data != null) {
+          modelResponse = ObjectPopDetailModel(
+              customer_lead_code: "",
+              customer_lead_id: result.data!.customerLeadId,
+              status: true);
         }
-      }
-    }
-  }
-
-  Future<void> addPotentialBusiness() async {
-    print(detailPotential);
-    print("Business");
-
-    if (_phoneNumberText.text.isNotEmpty) {
-      if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
-          (!Validators().isNumber(_phoneNumberText.text.trim()))) {
-        print("so dien thoai sai oy");
-        LeadConnection.showMyDialog(
-            context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
-            warning: true);
-        return;
-      }
-    }
-
-    if (detailPotential.contactPhone!.isNotEmpty) {
-      if ((!Validators().isValidPhone(detailPotential.contactPhone!.trim())) &&
-          (!Validators().isNumber(detailPotential.contactPhone!.trim()))) {
-        print("so dien thoai sai oy");
-        LeadConnection.showMyDialog(
-            context, "Số điện thoại người liên hệ không đúng định dạng",
-            warning: true);
-        return;
-      }
-    }
-
-    if (_fullNameText.text == "" ||
-        _phoneNumberText.text == "" ||
-        detailPotential.pipelineCode == "" ||
-        detailPotential.journeyCode == "" ||
-        detailPotential.saleId == 0) {
-      LeadConnection.showMyDialog(
-          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
-          warning: true);
-    } else {
-      LeadConnection.showLoading(context);
-      AddLeadModelResponse? result = await LeadConnection.addLead(
-          context,
-          AddLeadModelRequest(
-              avatar: "",
-              customerType: "business",
-              customerSource: detailPotential.customerSource,
-              fullName: _fullNameText.text,
-              taxCode: _taxText.text,
-              phone: _phoneNumberText.text,
-              email: _emailText.text,
-              representative: _representativeText.text,
-              pipelineCode: detailPotential.pipelineCode,
-              journeyCode: detailPotential.journeyCode,
-              saleId: detailPotential.saleId,
-              tagId: detailPotential.tagId,
-              gender: "",
-              birthday: detailPotential.birthday,
-              bussinessId: detailPotential.bussinessId,
-              employees: detailPotential.employees,
-              address: detailPotential.address,
-              provinceId: detailPotential.provinceId,
-              districtId: detailPotential.districtId,
-              wardId: detailPotential.wardId,
-              businessClue: detailPotential.businessClue,
-              zalo: detailPotential.zalo ?? "",
-              fanpage: detailPotential.fanpage,
-              contactAddress: detailPotential.contactAddress,
-              contactEmail: detailPotential.contactEmail,
-              contactFullName: detailPotential.contactFullName,
-              contactPhone: detailPotential.contactPhone,
-              position: detailPotential.position,
-              customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
-              branchId: _bloc.branchSelected?.branchId ?? 0,
-              note: _bloc.noteController.text,
-              customerLeadReferId: 0,
-              arrPhoneAttack: _bloc.listPhone,
-              website: _bloc.websiteController.text,
-              ));
-      Navigator.of(context).pop();
-      if (result != null) {
-        if (result.errorCode == 0) {
-          print(result.errorDescription);
-          await LeadConnection.showMyDialog(context, result.errorDescription);
-          if (result.data != null) {
-            modelResponse = ObjectPopDetailModel(
-                customer_lead_code: "",
-                customer_lead_id: result.data!.customerLeadId,
-                status: true);
-          }
-          Navigator.of(context).pop(modelResponse.toJson());
-        } else {
-          LeadConnection.showMyDialog(context, result.errorDescription);
-        }
+        Navigator.of(context).pop(modelResponse.toJson());
+      } else {
+        LeadConnection.showMyDialog(context, result.errorDescription);
       }
     }
   }

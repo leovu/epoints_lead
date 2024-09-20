@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/widget/custom_alert_dialog.dart';
 import 'package:lead_plugin_epoint/widget/custom_dialog.dart';
 import 'package:lead_plugin_epoint/widget/custom_route.dart';
+import 'package:lead_plugin_epoint/widget/progress_dialog.dart';
 
 class CustomNavigator {
    static showCustomBottomDialog(BuildContext context, Widget screen,
@@ -81,6 +82,21 @@ class CustomNavigator {
         ),
         opaque: false,
         root: root);
+  }
+
+    static ProgressDialog? _pr;
+  static showProgressDialog(BuildContext? context) {
+    if (_pr == null) {
+      _pr = ProgressDialog(context);
+      _pr!.show();
+    }
+  }
+
+   static hideProgressDialog() {
+    if (_pr != null && _pr!.isShowing()) {
+      _pr!.hide();
+      _pr = null;
+    }
   }
 
   

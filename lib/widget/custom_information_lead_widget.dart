@@ -3,9 +3,10 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 
 class CustomInfomationLeadWidget extends StatelessWidget {
-  const CustomInfomationLeadWidget({super.key, this.name, this.type});
+  const CustomInfomationLeadWidget({super.key, this.name, this.type, this.avatarUrl});
   final String? name;
   final String? type;
+  final String? avatarUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +21,12 @@ class CustomInfomationLeadWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          CustomAvatarDetail(
-            color: Color(0xFFEEB132),
-            name: name ?? "",
-            padding: 4.0,
-            textSize: 12,
-          ),
+          CustomAvatarWithURL(
+                    backgroundColor: Color(0xFFEEB132),
+                    url: avatarUrl ?? "",
+                    name: name,
+                    size: 30.0,
+                  ),
           SizedBox(width: 4.0,),
           Expanded(
             child: Text(

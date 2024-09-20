@@ -16,5 +16,12 @@ class API {
   static getCareLead() => "/customer-lead/customer-lead/care-lead";
   static getContactList() => "/customer-lead/customer-lead/contact-list";
   static getDetailLeadInfoDeal() => "/customer-lead/customer-lead/detail-lead-info-deal";
+  static addContact() => "/customer-lead/customer-lead/add-contact";
+
+   static getListNote() => "/customer-lead/customer-lead/list-note";
+  static addNote() => "/customer-lead/customer-lead/add-note";
+  static getListFile() => "/customer-lead/customer-lead/list-file";
+  static addFile() => "/customer-lead/customer-lead/add-file";
+  static getCustomer() => "/customer/get-customer";
 
 }

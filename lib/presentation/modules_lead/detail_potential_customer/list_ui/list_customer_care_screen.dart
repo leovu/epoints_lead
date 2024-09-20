@@ -5,10 +5,10 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/model/response/care_lead_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/bloc/detail_potential_customer_bloc.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/bloc/list_customer_care_bloc.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_empty.dart';
-import 'package:lead_plugin_epoint/widget/custom_line.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:lead_plugin_epoint/widget/custom_scaffold.dart';
@@ -26,14 +26,19 @@ class ListCustomerCareScreen extends StatefulWidget {
 
 class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
 
+late ListCustomerCareBloc _bloc;
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-
+    _bloc = ListCustomerCareBloc(context);
     WidgetsBinding.instance
-        .addPostFrameCallback((_) => widget.bloc.getCareLead(context));
+        .addPostFrameCallback((_) {
+          _bloc.listCareDeal = widget.bloc.listCareLead;
+           _bloc.setCareDeal(widget.bloc.listCareLead);
+           _bloc.getStatusWork();
+        });
   }
 
   @override
@@ -64,6 +69,43 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
         ));
   }
 
+  Widget _buildBody() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Gaps.vGap10,
+          _buildCustomerType(),
+          Gaps.vGap10,
+          _buildListOption(),
+          Gaps.vGap10,
+          Expanded(child: _buildContent())
+        ],
+      ),
+    );
+  }
+
+   _buildCustomerType() {
+    return RichText(
+              text: TextSpan(
+                  text: widget.bloc.detail?.customerType == "personal"
+                      ? "${AppLocalizations.text(LangKey.personal)} - "
+                      : "${AppLocalizations.text(LangKey.business)} - ",
+                  style: TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.grey,
+                      fontWeight: FontWeight.normal),
+                  children: [
+                TextSpan(
+                    text: widget.bloc.detail?.fullName,
+                    style: TextStyle(
+                        color: AppColors.primaryColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold))
+              ]));
+  }
+
   Widget _buildContent() {
     return StreamBuilder(
       stream: widget.bloc.outputCareLead,
@@ -84,6 +126,28 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                     .toList()));
       }
     );
+  }
+
+  Widget _buildListOption() {
+    return CustomRowInformation(
+        title: AppLocalizations.text(LangKey.list),
+        titleStyle: AppTextStyles.style14PrimaryBold,
+        child: StreamBuilder(
+            stream: _bloc.outputStatusWorkData,
+            initialData: null,
+            builder: (context, snapshot) {
+              return CustomDropdown(
+                value: _bloc.statusWorkDataSelected,
+                menus: _bloc.statusWorkData,
+                hint: "Chọn trạng thái",
+                onChanged: (p0) {
+                  _bloc.onChange(p0!);
+                },
+                onRemove: () {
+                  _bloc.onRemove();
+                },
+              );
+            }));
   }
 
    Widget customerCareItem(CareLeadData item) {
@@ -190,7 +254,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
                               CustomNetworkImage(
                                 width: 15,
                                 height: 15,
-                                url: item?.manageTypeWorkIcon ??
+                                url: item.manageTypeWorkIcon ??
                                     "https://epoint-bucket.s3.ap-southeast-1.amazonaws.com/0f73a056d6c12b508a05eea29735e8a52022/07/14/3Ujo25165778317714072022.png",
                                 fit: BoxFit.fill,
                                 backgroundColor: Colors.transparent,
@@ -377,7 +441,7 @@ class ListCustomerCareScreenState extends State<ListCustomerCareScreen> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       title: AppLocalizations.text(LangKey.care_list),
-      body: _buildContent(),
+      body:  _buildBody(),
       onWillPop: () => CustomNavigator.pop(context, object: false),
     );
   }

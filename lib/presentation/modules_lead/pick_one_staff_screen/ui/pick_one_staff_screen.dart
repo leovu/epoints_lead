@@ -7,7 +7,6 @@ import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model
 import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/bloc/pick_one_staff_lead_bloc.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_bottom.dart';
-import 'package:lead_plugin_epoint/widget/custom_dropdown.dart';
 import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 import 'package:lead_plugin_epoint/widget/custom_item_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_line.dart';
@@ -18,6 +17,8 @@ import 'package:lead_plugin_epoint/widget/custom_search_location.dart';
 import 'package:lead_plugin_epoint/widget/custom_shimer.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 import 'package:lead_plugin_epoint/widget/custom_textfield.dart';
+
+import '../../../../widget/widget.dart';
 
 class PickOneStaffScreen extends StatefulWidget {
   final List<WorkListStaffModel>? models;

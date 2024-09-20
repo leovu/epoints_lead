@@ -1,5 +1,5 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
@@ -8,15 +8,21 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
+import 'package:lead_plugin_epoint/model/note_file_req_res_model.dart';
+import 'package:lead_plugin_epoint/model/request/assign_revoke_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/care_lead_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/contact_list_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_lead_info_deal_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/bloc/detail_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/chat_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/note_module/ui/list_note_screen.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
+import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
@@ -24,14 +30,12 @@ import 'package:lead_plugin_epoint/widget/custom_button.dart';
 import 'package:lead_plugin_epoint/widget/custom_combobox.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_file_view.dart';
-import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 import 'package:lead_plugin_epoint/widget/custom_information_lead_widget.dart';
-import 'package:lead_plugin_epoint/widget/custom_line.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
+import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:lead_plugin_epoint/widget/custom_row_image_content_widget.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 import 'package:lead_plugin_epoint/widget/widget.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 
 class DetailPotentialCustomer extends StatefulWidget {
@@ -108,7 +112,19 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     }
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      getData();
+      // getData();
+
+      _bloc.getData(widget.customer_lead_code!).then(
+        (value) {
+          if (value) {
+            detail = _bloc.detail;
+            setState(() {
+              
+            });
+          }
+        },
+      );
+
     });
   }
 
@@ -122,58 +138,47 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         MaterialPageRoute(builder: (context) => CustomFileView(path, name)));
   }
 
-  getData() async {
-    var dataDetail = await LeadConnection.getdetailPotential(
-        context, widget.customer_lead_code);
-    if (dataDetail != null) {
-      if (dataDetail.errorCode == 0) {
-        detail = dataDetail.data;
-        _bloc.detail = detail;
-        _bloc.setModel(detail);
-        _bloc.getCareLead(context);
-        _bloc.getContactList(context);
-        // selectedTab(index!);
-        setState(() {});
-      } else {
-        await LeadConnection.showMyDialog(context, dataDetail.errorDescription);
-        Navigator.of(context).pop();
-      }
-    }
-  }
-
   Widget buildBody() {
     return (detail == null)
         ? Container()
-        : Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    bottom: AppSizes.maxHeight * 0.1 +
-                        (index == 0 ? 0 : AppSizes.bottomHeight!)),
-                child: Column(
-                  children: [
-                    buildListOption(),
-                    Expanded(
-                        child: ListView(
-                      padding: EdgeInsets.zero,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      controller: _controller,
-                      children: buildInfomation(),
-                    )),
-                  ],
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                    height: AppSizes.maxHeight * 0.11 +
-                        (index == 0 ? 0 : AppSizes.bottomHeight!),
-                    child: (index == 0)
-                        ? _listButtonRelevant()
-                        : _listButtonInfo()),
-              )
-            ],
-          );
+        : StreamBuilder(
+          stream: _bloc.outputModel,
+          initialData: _bloc.detail,
+          builder: (context, snapshot) {
+            _bloc.detail = snapshot.data as DetailPotentialData?;
+            detail = _bloc.detail;
+            return Stack(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom: AppSizes.maxHeight * 0.1 +
+                            (index == 0 ? 0 : AppSizes.bottomHeight!)),
+                    child: Column(
+                      children: [
+                        buildListOption(),
+                        Expanded(
+                            child: ListView(
+                          padding: EdgeInsets.zero,
+                          physics: AlwaysScrollableScrollPhysics(),
+                          controller: _controller,
+                          children: buildInfomation(),
+                        )),
+                      ],
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                        height: AppSizes.maxHeight * 0.1 +
+                            (index == 0 ? 0 : AppSizes.bottomHeight!),
+                        child: (index == 0)
+                            ? _listButtonRelevant()
+                            : _listButtonInfo()),
+                  )
+                ],
+              );
+          }
+        );
   }
 
   List<Widget> buildInfomation() {
@@ -251,7 +256,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         children: [
           RichText(
               text: TextSpan(
-                  text: detail!.customerType == "personal"
+                  text: _bloc.detail!.customerType == "personal"
                       ? "${AppLocalizations.text(LangKey.personal)} - "
                       : "${AppLocalizations.text(LangKey.business)} - ",
                   style: TextStyle(
@@ -267,14 +272,21 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         fontWeight: FontWeight.bold))
               ])),
           SizedBox(
-            height: AppSizes.minPadding,
+            height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconPerson,
-            title: detail!.address ?? NULL_VALUE,
+            title: detail!.customerLeadCode ?? NULL_VALUE,
           ),
           SizedBox(
-            height: AppSizes.minPadding,
+            height: AppSizes.minPadding / 2,
+          ),
+          CustomRowImageContentWidget(
+            icon: Assets.iconUserGroup,
+            title: detail!.customerGroupName ?? NULL_VALUE,
+          ),
+          SizedBox(
+            height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
               icon: Assets.iconCall, title: detail?.phone ?? NULL_VALUE),
@@ -306,9 +318,18 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   }
 
   Widget generalInfomationV2() {
-    return detail!.customerType == "personal"
-        ? generalInfomationPersonal()
-        : generalInfomationBusiness();
+    return StreamBuilder(
+        stream: _bloc.outputModel,
+        initialData: _bloc.detail,
+        builder: (context, snapshot) {
+          _bloc.detail = snapshot.data as DetailPotentialData?;
+          detail = _bloc.detail;
+          return (_bloc.detail != null)
+              ? _bloc.detail!.customerType == "personal"
+                  ? generalInfomationPersonal()
+                  : generalInfomationBusiness()
+              : SizedBox();
+        });
   }
 
   Widget generalInfomationPersonal() {
@@ -318,6 +339,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomInfomationLeadWidget(
+            avatarUrl: detail?.avatar,
             name: detail?.fullName ?? "",
             type: detail!.customerType == "personal"
                 ? AppLocalizations.text(LangKey.personal)
@@ -346,14 +368,21 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconAddress,
-            title: detail!.address ?? NULL_VALUE,
+            title: "Địa chỉ: ${detail!.fullAddress ?? NULL_VALUE}",
+          ),
+          SizedBox(
+            height: AppSizes.minPadding / 2,
+          ),
+          CustomRowImageContentWidget(
+            icon: Assets.iconUserGroup,
+            title: "Nhóm khách hàng: ${detail!.customerGroupName ?? NULL_VALUE}",
           ),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconSourceCustomer,
-            title: detail!.customerSourceName ?? NULL_VALUE,
+            title: "Nguồn khách hàng: ${detail!.customerSourceName ?? NULL_VALUE}",
           ),
           SizedBox(
             height: AppSizes.minPadding / 2,
@@ -361,9 +390,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           CustomRowImageContentWidget(
             icon: Assets.iconSearch,
             iconColor: AppColors.primaryColor,
-            child: Row(
+            child:Row(
               children: [
-                _buildSaleNameText(detail?.saleName),
+                _buildSaleNameText(detail?.customerLeadReferName ?? NULL_VALUE),
                 _buildIntroductionText(),
               ],
             ),
@@ -372,26 +401,21 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconSex, title: getGenderText(detail!.gender ?? "")),
+              icon: Assets.iconSex, title: "Giới tính: ${getGenderText(detail!.gender ?? "")}"),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconBirthday, title: detail!.birthday ?? NULL_VALUE),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconAddress,
+              icon: Assets.iconPin,
               title:
-                  "${AppLocalizations.text(LangKey.pipeline)}: ${detail?.pipelineName} "),
+                  "${AppLocalizations.text(LangKey.pipeline)}: ${detail?.pipelineName ?? NULL_VALUE} "),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconAddress,
+              icon: Assets.iconItinerary,
               title:
-                  "${AppLocalizations.text(LangKey.journey)}: ${detail?.journeyName} "),
+                  "${AppLocalizations.text(LangKey.journey)}: ${detail?.journeyName ?? NULL_VALUE} "),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
@@ -402,13 +426,19 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconSource,
-              child: _buildLink(hideSocial(detail?.zalo ?? "",
+              icon: Assets.iconWebsite,
+              child: _buildLink(hideSocial(detail?.website ?? "",
                           checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
                       ""
-                  ? hideSocial(detail?.zalo ?? "",
+                  ? hideSocial(detail?.fanpage ?? "",
                       checkVisibilityKey(VisibilityWidgetName.LE000002))
                   : NULL_VALUE)),
+          SizedBox(
+            height: AppSizes.minPadding / 2,
+          ),
+          CustomRowImageContentWidget(
+              icon: Assets.iconSource,
+              child: _buildLink(hideSocial(detail?.zalo ?? "",false))),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
@@ -424,12 +454,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconBirthday, title: "Chi nhánh: {branhCode} "),
+              icon: Assets.iconBranch, title: "Chi nhánh: ${detail?.branchName ?? NULL_VALUE} "),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconBirthday,
+              icon: Assets.iconPersonTag,
               title:
                   "${AppLocalizations.text(LangKey.allottedPerson)}: ${detail?.saleName ?? NULL_VALUE}"),
           if (detail?.tag != null && (detail?.tag!.length ?? 0) > 0)
@@ -463,7 +493,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Text(
-              "Đây là một ghi chú",
+              detail?.note ?? NULL_VALUE,
               style: AppTextStyles.style14BlackNormal,
             ),
           )
@@ -479,6 +509,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomInfomationLeadWidget(
+            avatarUrl: detail?.avatar,
             name: detail?.fullName ?? "",
             type: detail!.customerType == "personal"
                 ? AppLocalizations.text(LangKey.personal)
@@ -507,7 +538,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           ),
           CustomRowImageContentWidget(
             icon: Assets.iconAddress,
-            title: detail!.address ?? NULL_VALUE,
+            title: detail!.fullAddress ?? NULL_VALUE,
           ),
           SizedBox(
             height: AppSizes.minPadding / 2,
@@ -522,9 +553,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           CustomRowImageContentWidget(
             icon: Assets.iconSearch,
             iconColor: AppColors.primaryColor,
-            child: Row(
+            child:Row(
               children: [
-                _buildSaleNameText(detail?.saleName),
+                _buildSaleNameText(detail?.customerLeadReferName ?? NULL_VALUE),
                 _buildIntroductionText(),
               ],
             ),
@@ -533,26 +564,26 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconAddress,
+              icon: Assets.iconPin,
               title:
                   "${AppLocalizations.text(LangKey.pipeline)}: ${detail?.pipelineName} "),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconAddress,
+              icon: Assets.iconItinerary,
               title:
                   "${AppLocalizations.text(LangKey.journey)}: ${detail?.journeyName} "),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconBirthday, title: "Chi nhánh: {branhCode} "),
+              icon: Assets.iconBranch, title: "Chi nhánh: ${detail?.branchName ?? NULL_VALUE}  "),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconBirthday,
+              icon: Assets.iconPersonTag,
               title:
                   "${AppLocalizations.text(LangKey.allottedPerson)}: ${detail?.saleName ?? NULL_VALUE}"),
           SizedBox(
@@ -566,8 +597,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconDeal,
-              title: "Website: ${detail?.businessName ?? NULL_VALUE}"),
+              icon: Assets.iconWebsite,
+              title: "Website: ${detail?.website ?? NULL_VALUE}"),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
@@ -594,8 +625,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconAddress,
-              title: "Ngày thành lập: {detai.establish}"),
+              icon: Assets.iconBirthday,
+              title: "Ngày thành lập: ${detail?.birthday ?? NULL_VALUE}"),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
@@ -607,23 +638,23 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconTax,
+              icon: Assets.iconNumberEmployees,
               title:
                   "${AppLocalizations.text(LangKey.numberEmployees)}: ${detail?.employees ?? NULL_VALUE}"),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconTax,
+              icon: Assets.iconRepresentative,
               title:
-                  "${AppLocalizations.text(LangKey.representative)} - ${detail?.employees ?? NULL_VALUE}"),
+                  "${AppLocalizations.text(LangKey.representative)} - ${detail?.representative ?? NULL_VALUE}"),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconPerson,
+              icon: Assets.iconContact,
               title:
-                  "${AppLocalizations.text(LangKey.contactPerson)} - {detail?.customer_contact_name ?? NULL_VALUE}"),
+                  "${AppLocalizations.text(LangKey.contactPerson)} - ${detail?.customerContactName ?? NULL_VALUE}"),
           if (detail?.tag != null && (detail?.tag!.length ?? 0) > 0)
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -655,7 +686,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Text(
-              "Đây là một ghi chú",
+              _bloc.detail?.note ?? NULL_VALUE,
               style: AppTextStyles.style14BlackNormal,
             ),
           )
@@ -704,7 +735,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
       case "other":
         return AppLocalizations.text(LangKey.other)!;
       default:
-        return "N/A";
+        return NULL_VALUE;
     }
   }
 
@@ -766,7 +797,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           var result = await Global.openDetailDeal!(item.dealCode);
           if (result != null && result) {
             reloadInfoDeal = true;
-            await getData();
+            await _bloc.getData(widget.customer_lead_code!);
             index = 1;
             selectedTab(1);
           }
@@ -810,7 +841,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         color: AppColors.primaryColor,
                         borderRadius: BorderRadius.circular(5.0)),
                     child: Center(
-                      child: Text(item.journeyName ?? "N/A",
+                      child: Text(item.journeyName ?? NULL_VALUE,
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 14.0,
@@ -893,12 +924,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
 
     return InkWell(
       onTap: () async {
-        var result = await Global.editJob(item.manageWorkId);
-        if (result != null && result) {
-          allowPop = true;
-          reloadCSKH = true;
-          await getData();
-          // selectedTab(2);
+        if (Global.editJob != null) {
+          var result = await Global.editJob!(item.manageWorkId);
+          if (result != null) {
+            allowPop = true;
+          await _bloc.getData(widget.customer_lead_code!);
+          }
         }
       },
       child: Container(
@@ -1008,7 +1039,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                                 width: 5.0,
                               ),
                               Text(
-                                item.manageTypeWorkName ?? "N/A",
+                                item.manageTypeWorkName ?? NULL_VALUE,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: AppColors.primaryColor,
@@ -1097,7 +1128,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         child: Row(
                           children: [
                             CustomAvatarWithURL(
-                              name: item.staffFullName ?? "N/A",
+                              name: item.staffFullName ?? NULL_VALUE,
                               url: item.staffAvatar ?? "",
                               size: 50.0,
                             ),
@@ -1109,7 +1140,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  item.staffFullName ?? "N/A",
+                                  item.staffFullName ?? NULL_VALUE,
                                   style: TextStyle(
                                       fontSize: 16.0,
                                       color: AppColors.primaryColor,
@@ -1373,41 +1404,56 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         stream: _bloc.outputModel,
         initialData: null,
         builder: (_, snapshot) {
-          DetailPotentialData? model =
-              snapshot.data as DetailPotentialData?;
-          return ContainerDataBuilder(
-            data: model,
-            skeletonBuilder: _buildSkeleton(),
-            bodyBuilder: () {
-              if (_bloc.children == null && model!.tabConfigs != null) {
-                  _bloc.children = [];
-                for (var e in model.tabConfigs!) {
-                  switch (e.code) {
-                    case leadConfigDeal:
-                      _bloc.children!.add(_buildListDeal(e));
-                      _bloc.children!.add(SizedBox(height: AppSizes.minPadding/2));
-                      break;
-                    case leadConfigCustomerCare:
-                      _bloc.children!.add(_buildListCustomerCare(e));
-                      _bloc.children!.add(SizedBox(height: AppSizes.minPadding/2));
-                      break;
-                    case leadConfigContact:
-                      _bloc.children!.add(_buildListContact(e));
-                      break;
-                  }
-                }
-              }
-              return Column(
-                children: [
-                  if (_bloc.children != null) ..._bloc.children!,
-                ],
-              );
-            },
-          );
+          DetailPotentialData? model = snapshot.data as DetailPotentialData?;
+          return (model != null)
+              ? ContainerDataBuilder(
+                  data: model,
+                  skeletonBuilder: _buildSkeleton(),
+                  bodyBuilder: () {
+                    if (_bloc.children == null && model!.tabConfigs != null) {
+                      _bloc.children = [];
+                      for (var e in model.tabConfigs!) {
+                        switch (e.code) {
+                          case leadConfigDeal:
+                            _bloc.children!.add(_buildListDeal(e));
+                            _bloc.children!
+                                .add(SizedBox(height: AppSizes.minPadding / 2));
+                            break;
+                          case leadConfigCustomerCare:
+                            _bloc.children!.add(_buildListCustomerCare(e));
+                            _bloc.children!
+                                .add(SizedBox(height: AppSizes.minPadding / 2));
+                            break;
+                          case leadConfigContact:
+                          _bloc.children!
+                                .add(SizedBox(height: AppSizes.minPadding / 2));
+                            _bloc.children!.add(_buildListContact(e));
+                            break;
+                            case leadConfigNote:
+                          _bloc.children!
+                                .add(SizedBox(height: AppSizes.minPadding / 2));
+                            _bloc.children!.add(_buildLisNote(e));
+                            break;
+                            case leadConfigFile:
+                          _bloc.children!
+                                .add(SizedBox(height: AppSizes.minPadding / 2));
+                            _bloc.children!.add(_buildListFile(e));
+                            break;
+                        }
+                      }
+                    }
+                    return Column(
+                      children: [
+                        if (_bloc.children != null) ..._bloc.children!,
+                      ],
+                    );
+                  },
+                )
+              : SizedBox();
         });
   }
 
-   Widget _buildSkeleton() {
+  Widget _buildSkeleton() {
     return LoadingWidget(
         padding: EdgeInsets.zero,
         child: CustomListView(
@@ -1419,8 +1465,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   )),
         ));
   }
-
-  
 
   Widget _buildListDeal(CustomerDetailConfigModel e) {
     return StreamBuilder(
@@ -1440,8 +1484,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   title: e.tabNameVi ?? "",
                   isExpand: _bloc.expandDeal,
                   onTapList: _bloc.onTapListDeal,
-                  onTapPlus: () => print("onTapPlus"),
-                  quantity: e.total ?? 0,
+                  onTapPlus: () {
+                    if (Global.createDeal != null) {
+                      Global.createDeal;
+                    }
+                  },
+                  quantity: _bloc.listDealFromLead.length,
                   child: CustomListView(
                     padding: EdgeInsets.only(
                         top: AppSizes.minPadding, bottom: AppSizes.minPadding),
@@ -1470,7 +1518,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                 return CustomComboBox(
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandCare = event),
-                  onTapPlus:() => print("onTapPlus"),
+                  onTapPlus: () async {
+                    if (Global.createJob != null) {
+                      var result = await Global.createJob!(_bloc.detail!.toJson());
+                      if (result != null) {
+                        _bloc.getData(widget.customer_lead_code!);
+                      }
+                    }
+                  },
                   onTapList: _bloc.onTapListCustomerCare,
                   title: e.tabNameVi ?? "",
                   isExpand: _bloc.expandCare,
@@ -1482,6 +1537,85 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                     physics: NeverScrollableScrollPhysics(),
                     children: _bloc.listCareLead
                         .map((e) => customerCareItem(e))
+                        .toList(),
+                  ),
+                );
+              });
+        });
+  }
+
+  Widget _buildLisNote(CustomerDetailConfigModel e) {
+    return StreamBuilder(
+        stream: _bloc.outputExpandListNote,
+        initialData: _bloc.expandListNote,
+        builder: (_, snapshot) {
+          _bloc.expandListNote = snapshot.data as bool;
+          return StreamBuilder(
+              stream: _bloc.outputListNote,
+              initialData: _bloc.listNoteData,
+              builder: (context, snapshot) {
+                _bloc.listNoteData = snapshot.data as List<NoteData>;
+                return CustomComboBox(
+                  onChanged: (event) =>
+                      _bloc.onSetExpand(() => _bloc.expandListNote = event),
+                  title: e.tabNameVi ?? "Ghi chú",
+                  isExpand: _bloc.expandListNote,
+                  onTapList: _bloc.onTapListNote,
+                  onTapPlus: () {
+                    _bloc.onAddNote(() {
+                      _bloc.getListNote(context);
+                    });
+                  },
+                  quantity: _bloc.listNoteData.length,
+                  child: CustomListView(
+                   padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.minPadding/2,
+                        vertical: AppSizes.minPadding/2),
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: List.generate(
+                        _bloc.listNoteData.length,
+                        (index) => noteItem(
+                              _bloc.listNoteData[index],
+                              index,
+                            )).toList(),
+                  ),
+                );
+              });
+        });
+  }
+
+  Widget _buildListFile(CustomerDetailConfigModel e) {
+    return StreamBuilder(
+        stream: _bloc.outputExpandListFile,
+        initialData: _bloc.expandListFile,
+        builder: (_, snapshot) {
+          _bloc.expandListFile = snapshot.data as bool;
+          return StreamBuilder(
+              stream: _bloc.outputDealsFile,
+              initialData: _bloc.listLeadsFiles,
+              builder: (context, snapshot) {
+                _bloc.listLeadsFiles = snapshot.data as List<LeadFilesModel>;
+                return CustomComboBox(
+                  onChanged: (event) =>
+                      _bloc.onSetExpand(() => _bloc.expandListFile = event),
+                  onTapPlus: () {
+                    _bloc.onAddFile();
+                  },
+                  onTapList: () {
+                    _bloc.onTapListFile();
+                  },
+                  title: e.tabNameVi ?? "Tập tin",
+                  isExpand: _bloc.expandListFile,
+                  quantity: _bloc.listLeadsFiles.length,
+                  child: CustomListView(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.minPadding/2,
+                        vertical: AppSizes.minPadding/2),
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    children: _bloc.listLeadsFiles
+                        .map((e) => _fileItem(e,_bloc.listLeadsFiles.indexOf(e)))
                         .toList(),
                   ),
                 );
@@ -1505,9 +1639,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       _bloc.onSetExpand(() => _bloc.expandListContact = event),
                   title: e.tabNameVi ?? "",
                   isExpand: _bloc.expandListContact,
-                  onTapPlus: () => print("onTapPlus"),
+                  onTapPlus: _bloc.onAddContact,
                   onTapList: _bloc.onTapListContact,
-                  quantity: e.total ?? 0,
+                  quantity: _bloc.listContact.length,
                   child: CustomListView(
                     padding: EdgeInsets.only(
                         top: AppSizes.minPadding, bottom: AppSizes.minPadding),
@@ -1522,117 +1656,366 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         });
   }
 
-  Widget _listButtonRelevant() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: AppSizes.minPadding),
-      child: Row(
-        children: [
-          Flexible(
-            child: CustomButton(
-              style: AppTextStyles.style15WhiteNormal
-                  .copyWith(fontWeight: FontWeight.bold),
-              heightButton: AppSizes.sizeOnTap,
-              text: "Chỉnh sửa",
-              ontap: () async {
-                bool? result =
-                    await Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => EditPotentialCustomer(
-                              detailPotential: detail,
-                            )));
+    Widget noteItem(NoteData model, int index) {
+    String? name, date;
 
-                if (result != null && result) {
-                  reloadContactList = true;
-                  allowPop = true;
-                  selectedTab(index!);
-                  getData();
-                }
-              },
+    if (model.createdBy != null) {
+      name = model.createdBy ?? "";
+      date = model.createdAt ?? "";
+      print(name);
+      print(date);
+    }
+    return CustomContainerList(
+      child: Padding(
+        padding: EdgeInsets.all(AppSizes.minPadding),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              model.content ?? "",
+              style: AppTextStyles.style14BlackWeight600,
             ),
-          ),
-          SizedBox(
-            width: AppSizes.minPadding,
-          ),
-          Flexible(
-            child: CustomButton(
-              style: AppTextStyles.style15WhiteNormal
-                  .copyWith(fontWeight: FontWeight.bold),
-              heightButton: AppSizes.sizeOnTap,
-              text: AppLocalizations.text(LangKey.discuss),
-              ontap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ChatScreen(
-                          detail: detail,
-                        )));
-              },
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Expanded(
+                    child: CustomListView(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: EdgeInsets.zero,
+                  children: [
+                    Text(
+                      name ?? "",
+                      style: AppTextStyles.style14HintNormal,
+                    ),
+                    Text(
+                      parseAndFormatDate(date,
+                          format: AppFormat.formatDateTime),
+                      style: AppTextStyles.style14HintNormal,
+                    ),
+                  ],
+                )),
+                SizedBox(
+                  width: AppSizes.minPadding,
+                ),
+                CustomIndex(index: index)
+              ],
             ),
-          ),
-          SizedBox(
-            width: AppSizes.minPadding,
-          ),
-          Flexible(
-            child: CustomButton(
-              style: AppTextStyles.style15WhiteNormal
-                  .copyWith(fontWeight: FontWeight.bold),
-              heightButton: AppSizes.sizeOnTap,
-              text: "Liên hệ",
-              ontap: () {},
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  Widget _listButtonInfo() {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: AppSizes.minPadding),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Flexible(
-                  child: CustomButton(
-                    style: AppTextStyles.style15WhiteNormal
-                        .copyWith(fontWeight: FontWeight.bold),
-                    heightButton: AppSizes.sizeOnTap,
-                    text: "Chuyển đổi KH",
-                    ontap: () {},
+  Widget _fileItem(LeadFilesModel model, int index) {
+    String? name, date;
+
+    if (model.createdBy != null) {
+      name = model.createdBy ?? "";
+      date = model.createdAt ?? "";
+    }
+    return GestureDetector(
+      onTap: () {
+        _bloc.onOpenFile(model.fileName ?? "", model.path);
+      },
+      child: CustomContainerList(
+        child: Padding(
+          padding: EdgeInsets.all(AppSizes.minPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.primaryColor.withOpacity(0.1),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                    ),
+                    padding: EdgeInsets.symmetric(horizontal: 2.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Image.asset(
+                          pathToImage(model.path!)!,
+                          width: 24,
+                        ),
+                        Container(
+                          width: 5.0,
+                        ),
+                        Container(
+                          child: AutoSizeText(
+                            model.fileName!,
+                            style: AppTextStyles.style14BlackNormal,
+                            minFontSize: 1,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+              Text(
+                model.content ?? "",
+                style: AppTextStyles.style14BlackWeight600,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Expanded(
+                      child: CustomListView(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    children: [
+                      Text(
+                        name ?? "",
+                        style: AppTextStyles.style14HintNormal,
+                      ),
+                      Text(
+                        parseAndFormatDate(date,
+                            format: AppFormat.formatDateTime),
+                        style: AppTextStyles.style14HintNormal,
+                      ),
+                    ],
+                  )),
+                  SizedBox(
+                    width: AppSizes.minPadding,
                   ),
+                  CustomIndex(index: index)
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _listButtonRelevant() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: AppSizes.minPadding),
+          child: Row(
+            children: [
+              Flexible(
+                child: CustomButton(
+                  style: AppTextStyles.style15WhiteNormal
+                      .copyWith(fontWeight: FontWeight.bold),
+                  heightButton: AppSizes.sizeOnTap,
+                  text: "Chỉnh sửa",
+                  ontap: () async {
+                    bool? result =
+                        await Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => EditPotentialCustomer(
+                                  detailPotential: detail,
+                                )));
+        
+                    if (result != null && result) {
+                      reloadContactList = true;
+                      allowPop = true;
+                      selectedTab(index!);
+                      _bloc.getData(widget.customer_lead_code!);
+                    }
+                  },
+                ),
+              ),
+              SizedBox(
+                width: AppSizes.minPadding,
+              ),
+              Flexible(
+                child: CustomButton(
+                  style: AppTextStyles.style15WhiteNormal
+                      .copyWith(fontWeight: FontWeight.bold),
+                  heightButton: AppSizes.sizeOnTap,
+                  text: AppLocalizations.text(LangKey.discuss),
+                  ontap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => ChatScreen(
+                              detail: detail,
+                            )));
+                  },
+                ),
+              ),
+              SizedBox(
+                width: AppSizes.minPadding,
+              ),
+              Flexible(
+                child: CustomButton(
+                  style: AppTextStyles.style15WhiteNormal
+                      .copyWith(fontWeight: FontWeight.bold),
+                  heightButton: AppSizes.sizeOnTap,
+                  text: "Liên hệ",
+                  ontap: () {
+                    if (Global.callHotline != null) {
+                      Global.callHotline!({
+                        "id": detail?.customerLeadId,
+                        "code": detail?.customerLeadCode,
+                        "avatar": detail?.avatar,
+                        "name": detail?.fullName,
+                        "phone": detail?.phone,
+                        "type": detail?.customerType,
+                      });
+                    }
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1))
+      ],
+    );
+  }
+
+  Widget _listButtonInfo() {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+            padding: EdgeInsets.symmetric(horizontal: AppSizes.minPadding),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Flexible(
+                      child: CustomButton(
+                        style: AppTextStyles.style15WhiteNormal
+                            .copyWith(fontWeight: FontWeight.bold),
+                        heightButton: AppSizes.sizeOnTap,
+                        backgroundColor: AppColors.redColor,
+                        text: "XÓA LEAD",
+                        ontap: () {
+                          LeadConnection.showMyDialogWithFunction(context,
+                              AppLocalizations.text(LangKey.warningDeleteLead),
+                              ontap: () async {
+                            DescriptionModelResponse? result =
+                                await LeadConnection.deleteLead(
+                                    context, detail!.customerLeadCode);
+                            Navigator.of(context).pop();
+                            if (result != null) {
+                              if (result.errorCode == 0) {
+                                allowPop = true;
+                                print(result.errorDescription);
+                                await LeadConnection.showMyDialog(
+                                    context, result.errorDescription);
+                                Navigator.of(context).pop(true);
+                              } else {
+                                LeadConnection.showMyDialog(
+                                    context, result.errorDescription);
+                              }
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: AppSizes.minPadding,
+                    ),
+                    Flexible(
+                      child: CustomButton(
+                        style: AppTextStyles.style15WhiteNormal
+                            .copyWith(fontWeight: FontWeight.bold),
+                        heightButton: AppSizes.sizeOnTap,
+                        text: "CHUYỂN ĐỔI KH",
+                        ontap: () async {
+                          await _bloc
+                                .convertLead(_bloc.detail!.customerLeadId ?? 0)
+                                .then((value) {
+                              if ( value) {
+                                  CustomNavigator.pop(context, object: true);
+                                }
+                            });
+
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(
-                  width: AppSizes.minPadding,
+                  height: AppSizes.minPadding,
                 ),
-                Flexible(
-                  child: CustomButton(
-                    style: AppTextStyles.style15WhiteNormal
-                        .copyWith(fontWeight: FontWeight.bold),
-                    heightButton: AppSizes.sizeOnTap,
-                    text: "Cập nhật liên hệ",
-                    ontap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => ChatScreen(
-                                detail: detail,
-                              )));
-                    },
-                  ),
-                )
+                Row(
+                  children: [
+                    Flexible(
+                      child: CustomButton(
+                        style: AppTextStyles.style15WhiteNormal
+                            .copyWith(fontWeight: FontWeight.bold),
+                        heightButton: AppSizes.sizeOnTap,
+                        text: "THÊM DEAL",
+                        ontap: () async {
+                          if (Global.createDeal != null) {
+                            bool? result =
+                                await Global.createDeal!(detail!.toJson());
+                            if (result != null && result) {
+                              _bloc.getData(widget.customer_lead_code!);
+                            }
+                          }
+                          //
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      width: AppSizes.minPadding,
+                    ),
+                    Flexible(
+                      child: CustomButton(
+                        style: AppTextStyles.style15WhiteNormal
+                            .copyWith(fontWeight: FontWeight.bold),
+                        heightButton: AppSizes.sizeOnTap,
+                        text: (_bloc.detail?.saleId != null && _bloc.detail?.saleId != 0)
+                            ? "THU HỒI"
+                            : "PHÂN CÔNG",
+                        ontap: () async {
+                          if (detail?.saleId != null && detail?.saleId != 0) {
+                            await _bloc
+                                .assignRevokeLead(AssignRevokeLeadRequestModel(
+                                    customerLeadCode: detail?.customerLeadCode,
+                                    saleId: detail?.saleId ?? 0,
+                                    timeRevokeLead: detail?.timeRevokeLead ?? 0,
+                                    type: "revoke"))
+                                .then((value) {
+                              if ( value) {
+                                   allowPop = true;
+                                  _bloc.getData(detail?.customerLeadCode ?? "");
+                                }
+                            });
+                          } else {
+                            List<WorkListStaffModel>? models =
+                                await Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => PickOneStaffScreen()));
+                            if (models != null && models.length > 0) {
+                              await _bloc
+                                  .assignRevokeLead(AssignRevokeLeadRequestModel(
+                                      customerLeadCode: detail?.customerLeadCode,
+                                      saleId: models[0].staffId,
+                                      timeRevokeLead: detail?.timeRevokeLead ?? 0,
+                                      type: "assign"))
+                                  .then((value) {
+                                if (value) {
+                                  allowPop = true;
+                                  _bloc.getData(detail?.customerLeadCode ?? "");
+                                }
+                              });
+                            }
+                          }
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ],
-            ),
-            SizedBox(
-              height: AppSizes.minPadding,
-            ),
-            Flexible(
-              child: CustomButton(
-                style: AppTextStyles.style15WhiteNormal
-                    .copyWith(fontWeight: FontWeight.bold),
-                isExpand: true,
-                heightButton: AppSizes.sizeOnTap,
-                text: "Thêm cơ hội bán hàng",
-                ontap: () {},
-              ),
-            ),
-          ],
-        ));
+            )),
+            Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1))
+      ],
+    );
   }
 
   @override

@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -13,8 +10,8 @@ import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/edit_potential_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/get_journey_model_request.dart';
 import 'package:lead_plugin_epoint/model/request/get_list_staff_request_model.dart';
-import 'package:lead_plugin_epoint/model/response/add_lead_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/contact_list_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/customer_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
@@ -44,13 +41,12 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_scre
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
-import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class EditPotentialCustomer extends StatefulWidget {
-  DetailPotentialData? detailPotential;
-  String? customer_lead_code;
+  final DetailPotentialData? detailPotential;
+  final String? customer_lead_code;
   EditPotentialCustomer(
       {Key? key, this.detailPotential, this.customer_lead_code})
       : super(key: key);
@@ -72,9 +68,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   FocusNode _fullnameFocusNode = FocusNode();
   FocusNode _phoneNumberFocusNode = FocusNode();
 
-  TextEditingController _businessText = TextEditingController();
-  FocusNode _businessFocusNode = FocusNode();
-
   TextEditingController _taxText = TextEditingController();
   FocusNode _taxFocusNode = FocusNode();
 
@@ -82,16 +75,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   FocusNode _emailFocusNode = FocusNode();
 
   TextEditingController _representativeText = TextEditingController();
-  FocusNode _representativeFocusNode = FocusNode();
 
   bool showMoreAddress = false;
   bool showMoreAll = false;
   bool selectedPersonal = true;
-
-  String _imgAvatar = "";
-  File? _image;
-  PickedFile? _pickedFile;
-  final _picker = ImagePicker();
 
   AddLeadModelRequest requestModel = AddLeadModelRequest();
   List<ProvinceData>? provinces = <ProvinceData>[];
@@ -166,7 +153,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-     _bloc = CreatePotentialCustomerBloc(context);
+    _bloc = CreatePotentialCustomerBloc(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       LeadConnection.showLoading(context);
 
@@ -345,8 +332,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   }
 
   callApi() async {
-
-     _bloc.getBranch(context, showLoading: false).then((val) async {
+    _bloc.getBranch(context, showLoading: false).then((val) async {
       if (val != null) {
         try {
           var result = _bloc.listBranch.firstWhereOrNull(
@@ -354,25 +340,21 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           if (result != null) {
             result.selected = true;
             _bloc.branchSelected = result;
-            setState(() {
-              
-            });
+            setState(() {});
           }
         } catch (e) {}
       }
     });
 
-     _bloc.getCustomerGroup(context, showLoading: false).then((val) async {
+    _bloc.getCustomerGroup(context, showLoading: false).then((val) async {
       if (val != null) {
         try {
-          var result = _bloc.listCustomerGroupData.firstWhereOrNull(
-              (element) => (element.customerGroupId == detailNew?.customerGroupId));
+          var result = _bloc.listCustomerGroupData.firstWhereOrNull((element) =>
+              (element.customerGroupId == detailNew?.customerGroupId));
           if (result != null) {
             result.selected = true;
             _bloc.customerGroupSelected = result;
-            setState(() {
-              
-            });
+            setState(() {});
           }
         } catch (e) {}
       }
@@ -381,25 +363,29 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     _bloc.websiteController.text = detailNew?.zalo ?? "";
 
     if (detailNew?.provinceId != null || detailNew?.address != null) {
-        _bloc.addressModel = CustomerCreateAddressModel(
-            provinceModel: detailPotential.provinceId == null
-                ? null
-                : ProvinceModel(
-                    provinceid: detailNew!.provinceId,
-                    name: detailNew!.provinceName),
-            districtModel: detailNew?.districtId == null
-                ? null
-                : DistrictModel(
-                    districtid: detailNew!.districtId,
-                    name: detailNew!.districtName),
-            wardModel: detailNew?.wardId == null
-                ? null
-                : WardModel(
-                    wardId: detailNew!.wardId,
-                    name: detailNew!.wardName),
-            street: detailNew!.address);
-        _bloc.setAddressModel(_bloc.addressModel);
-      }
+      _bloc.addressModel = CustomerCreateAddressModel(
+          provinceModel: detailPotential.provinceId == null
+              ? null
+              : ProvinceModel(
+                  provinceid: detailNew!.provinceId,
+                  name: detailNew!.provinceName),
+          districtModel: detailNew?.districtId == null
+              ? null
+              : DistrictModel(
+                  districtid: detailNew!.districtId,
+                  name: detailNew!.districtName),
+          wardModel: detailNew?.wardId == null
+              ? null
+              : WardModel(wardId: detailNew!.wardId, name: detailNew!.wardName),
+          street: detailNew!.address);
+      _bloc.setAddressModel(_bloc.addressModel);
+    }
+
+    if (detailNew?.customerLeadReferId != null) {
+      _bloc.presenterModel = CustomerModel(
+          customerId: detailNew?.customerLeadReferId,
+          fullName: detailNew?.customerLeadReferName ?? "");
+    }
 
     var dataType_Source = await LeadConnection.getCustomerOption(context);
     if (dataType_Source != null) {
@@ -544,8 +530,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       journeysData = journeys.data;
 
       try {
-        var itemJourney = journeysData!.firstWhereOrNull((element) =>
-            element.journeyCode == detailPotential?.journeyCode ?? 0 as bool);
+        var itemJourney = journeysData!.firstWhereOrNull(
+            (element) => element.journeyCode == detailPotential.journeyCode);
         if (itemJourney != null) {
           itemJourney.selected = true;
           journeySelected = itemJourney;
@@ -776,8 +762,9 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   inputType: TextInputType.phone)
               : Container(),
 
-         checkVisibilityKey(VisibilityWidgetName.LE000003)
-              ? _buildAddPhone() : Container(),
+          checkVisibilityKey(VisibilityWidgetName.LE000003)
+              ? _buildAddPhone()
+              : Container(),
 
           // email
           checkVisibilityKey(VisibilityWidgetName.LE000003)
@@ -846,9 +833,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             if (journey != null) {
               journeySelected = journey;
               detailPotential.journeyCode = journeySelected!.journeyCode;
-              setState(() {
-                
-              });
+              setState(() {});
             }
           }),
 
@@ -907,8 +892,12 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
           // nhóm khách hàng
           _buildTextField(
-              "Chọn nhóm khách hàng", _bloc.customerGroupSelected?.groupName ?? "", Assets.iconName, false, true, false,
-              ontap: () async {
+              "Chọn nhóm khách hàng",
+              _bloc.customerGroupSelected?.groupName ?? "",
+              Assets.iconName,
+              false,
+              true,
+              false, ontap: () async {
             FocusScope.of(context).unfocus();
             _bloc.getCustomerGroup(context).then((val) async {
               if (val != null) {
@@ -926,10 +915,11 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             });
           }),
 
-          // Nhập người giới thiệu
-          _buildTextField("Nhập người giới thiệu", "", Assets.iconSearch, false,
-              false, true,
-              fillText: _bloc.referrerController, focusNode:  _bloc.referrerFocusNode),
+          // // Nhập người giới thiệu
+          // _buildTextField("Nhập người giới thiệu", "", Assets.iconSearch, false,
+          //     false, true,
+          //     fillText: _bloc.referrerController,
+          //     focusNode: _bloc.referrerFocusNode),
 
           _buildTextField(AppLocalizations.text(LangKey.chooseCards),
               tagsString, Assets.iconTag, false, true, false, ontap: () async {
@@ -961,6 +951,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               setState(() {});
             }
           }),
+
+          _buildPresenter(),
 
           !showMoreAddress
               ? InkWell(
@@ -1008,7 +1000,24 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     ];
   }
 
-   Widget _buildAddress() {
+  Widget _buildPresenter() {
+    return StreamBuilder(
+        stream: _bloc.outputPresenterModel,
+        initialData: _bloc.presenterModel,
+        builder: (_, snapshot) {
+          _bloc.presenterModel = snapshot.data as CustomerModel?;
+          return _buildTextField(
+              AppLocalizations.text(LangKey.presenter),
+              _bloc.presenterModel?.fullName ?? "",
+              Assets.iconSearch,
+              false,
+              true,
+              false,
+              ontap: _bloc.onPushPresenter);
+        });
+  }
+
+  Widget _buildAddress() {
     return StreamBuilder(
         stream: _bloc.outputAddressModel,
         initialData: _bloc.addressModel,
@@ -1020,7 +1029,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               Assets.iconAddress,
               false,
               true,
-              false, ontap: _bloc.onPushAddress);
+              false,
+              ontap: _bloc.onPushAddress);
         });
   }
 
@@ -1034,13 +1044,48 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           borderRadius: BorderRadius.circular(10)),
       child: InkWell(
         onTap: () async {
-          print("edit khtn");
-          print(detailPotential);
+          if (_phoneNumberText.text.isNotEmpty) {
+            if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
+                (!Validators().isNumber(_phoneNumberText.text.trim()))) {
+              LeadConnection.showMyDialog(context,
+                  AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
+                  warning: true);
+              return;
+            }
+          }
 
-          if (customerTypeSelected.customerTypeID == 1) {
-            await editPotentialPersonal();
+          if (detailPotential.contactPhone!.isNotEmpty) {
+            if ((!Validators()
+                    .isValidPhone(detailPotential.contactPhone!.trim())) &&
+                (!Validators()
+                    .isNumber(detailPotential.contactPhone!.trim()))) {
+              LeadConnection.showMyDialog(
+                  context, "Số điện thoại người liên hệ không đúng định dạng",
+                  warning: true);
+              return;
+            }
+          }
+
+          if (_fullNameText.text == "" ||
+              detailPotential.pipelineCode == "" ||
+              detailPotential.journeyCode == "" ||
+              detailPotential.saleId == 0 ||
+              _bloc.branchSelected == null) {
+            LeadConnection.showMyDialog(context,
+                AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
+                warning: true);
+            return;
+          }
+
+          if (_bloc.images.length > 0) {
+            await _bloc.uploadFileAWS(_bloc.images[0]).then((value) {
+              if (value != "") {
+                _bloc.imgAvatar = value;
+              }
+              editPotential(customerTypeSelected.customerTypeID ?? 0);
+            });
           } else {
-            await editPotentialBusiness();
+            await editPotential(customerTypeSelected.customerTypeID ?? 0);
           }
         },
         child: Center(
@@ -1057,7 +1102,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     );
   }
 
-    Widget _buildAddPhone() {
+  Widget _buildAddPhone() {
     return Column(
       children: [
         _buildListPhone(),
@@ -1156,7 +1201,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     );
   }
 
-
   Widget _buildTextField(String? title, String? content, String icon,
       bool mandatory, bool dropdown, bool textfield,
       {GestureTapCallback? ontap,
@@ -1231,13 +1275,13 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             if (fillText == _fullNameText) {
               detailPotential.fullName = _fullNameText.text;
             } else if (fillText == _phoneNumberText) {
-              detailPotential?.phone = _phoneNumberText.text;
+              detailPotential.phone = _phoneNumberText.text;
             } else if (fillText == _emailText) {
-              detailPotential?.email = _emailText.text;
+              detailPotential.email = _emailText.text;
             } else if (fillText == _taxText) {
-              detailPotential?.taxCode = _taxText.text;
+              detailPotential.taxCode = _taxText.text;
             } else if (fillText == _representativeText) {
-              detailPotential?.representative = _representativeText.text;
+              detailPotential.representative = _representativeText.text;
             }
           },
         ),
@@ -1273,45 +1317,42 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       DescriptionModelResponse? result = await LeadConnection.updateLead(
           context,
           EditPotentialRequestModel(
-              customerLeadCode: widget.detailPotential!.customerLeadCode ?? "",
-              avatar: "",
-              customerType: "personal",
-              customerSource: detailPotential.customerSource,
-              fullName: _fullNameText.text,
-              taxCode: "",
-              phone: detailPotential.phone,
-              email: detailPotential.email,
-              representative: "",
-              pipelineCode: pipelineSelected.pipelineCode,
-              journeyCode: journeySelected!.journeyCode,
-              saleId: detailPotential.saleId,
-              tagId: detailPotential.tagId,
-              gender: detailPotential.gender,
-              birthday: detailPotential.birthday,
-              bussinessId: 0,
-              employees: 0,
-              address: detailPotential.address,
-              provinceId: detailPotential.provinceId,
-              districtId: detailPotential.districtId,
-              wardId: detailPotential.wardId,
-              businessClue: detailPotential.businessClue,
-              zalo: detailPotential.zalo ?? "",
-              fanpage: detailPotential.fanpage ?? "",
-              contactAddress: "",
-              contactEmail: "",
-              contactFullName: "",
-              contactPhone: "",
-              position: detailPotential.position,
-              customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
-              branchId: _bloc.branchSelected?.branchId ?? 0,
-              note: _bloc.noteController.text,
-              customerLeadReferId: 0,
-              arrPhoneAttack: _bloc.listPhone,
-              website: _bloc.websiteController.text,
-              
-              
-              
-              ));
+            customerLeadCode: widget.detailPotential!.customerLeadCode ?? "",
+            avatar: "",
+            customerType: "personal",
+            customerSource: detailPotential.customerSource,
+            fullName: _fullNameText.text,
+            taxCode: "",
+            phone: detailPotential.phone,
+            email: detailPotential.email,
+            representative: "",
+            pipelineCode: pipelineSelected.pipelineCode,
+            journeyCode: journeySelected!.journeyCode,
+            saleId: detailPotential.saleId,
+            tagId: detailPotential.tagId,
+            gender: detailPotential.gender,
+            birthday: detailPotential.birthday,
+            bussinessId: 0,
+            employees: 0,
+            address: detailPotential.address,
+            provinceId: detailPotential.provinceId,
+            districtId: detailPotential.districtId,
+            wardId: detailPotential.wardId,
+            businessClue: detailPotential.businessClue,
+            zalo: detailPotential.zalo ?? "",
+            fanpage: detailPotential.fanpage ?? "",
+            contactAddress: "",
+            contactEmail: "",
+            contactFullName: "",
+            contactPhone: "",
+            position: detailPotential.position,
+            customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
+            branchId: _bloc.branchSelected?.branchId ?? 0,
+            note: _bloc.noteController.text,
+            customerLeadReferId: _bloc.presenterModel?.customerId ?? 0,
+            arrPhoneAttack: _bloc.listPhone,
+            website: _bloc.websiteController.text,
+          ));
       Navigator.of(context).pop();
       if (result != null) {
         if (result.errorCode == 0) {
@@ -1327,91 +1368,58 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     }
   }
 
-  Future<void> editPotentialBusiness() async {
-    print(detailPotential);
-    print("Business");
+  Future<void> editPotential(int customerTypeID) async {
+    bool typePersonnal = customerTypeID == 1;
+    LeadConnection.showLoading(context);
+    DescriptionModelResponse? result = await LeadConnection.updateLead(
+        context,
+        EditPotentialRequestModel(
+          customerLeadCode: widget.detailPotential!.customerLeadCode,
+          avatar: _bloc.imgAvatar ?? "",
+          customerType: typePersonnal ? "personal" : "business",
+          customerSource: detailPotential.customerSource,
+          fullName: _fullNameText.text,
+          taxCode: typePersonnal ? "" : _taxText.text,
+          phone: _phoneNumberText.text,
+          email: _emailText.text,
+          representative: typePersonnal ? "" : _representativeText.text,
+          pipelineCode: detailPotential.pipelineCode,
+          journeyCode: detailPotential.journeyCode,
+          saleId: detailPotential.saleId,
+          tagId: detailPotential.tagId,
+          gender: detailPotential.gender,
+          birthday: detailPotential.birthday,
+          bussinessId: typePersonnal ? 0 : detailPotential.bussinessId,
+          employees: typePersonnal ? 0 : detailPotential.employees,
+          address: "${_bloc.addressModel?.street ?? ""} ",
+          provinceId: _bloc.addressModel?.provinceModel?.provinceid ?? 0,
+          districtId: _bloc.addressModel?.districtModel?.districtid ?? 0,
+          wardId: _bloc.addressModel?.wardModel?.wardId ?? 0,
+          businessClue: detailPotential.businessClue,
+          zalo: detailPotential.zalo ?? "",
+          fanpage: detailPotential.fanpage ?? "",
+          contactAddress: typePersonnal ? "" : detailPotential.contactAddress,
+          contactEmail: typePersonnal ? "" : detailPotential.contactEmail,
+          contactFullName: typePersonnal ? "" : detailPotential.contactFullName,
+          contactPhone: typePersonnal ? "" : detailPotential.contactPhone,
+          position: typePersonnal ? "" : detailPotential.position,
+          customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
+          branchId: _bloc.branchSelected?.branchId ?? 0,
+          note: _bloc.noteController.text,
+          customerLeadReferId: 0,
+          arrPhoneAttack: _bloc.listPhone,
+          website: _bloc.websiteController.text,
+        ));
+    Navigator.of(context).pop();
+    if (result != null) {
+      if (result.errorCode == 0) {
+        print(result.errorDescription);
 
-    if (_phoneNumberText.text.isNotEmpty) {
-      if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
-          (!Validators().isNumber(_phoneNumberText.text.trim()))) {
-        print("so dien thoai sai oy");
-        LeadConnection.showMyDialog(
-            context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
-            warning: true);
-        return;
-      }
-    }
+        await LeadConnection.showMyDialog(context, result.errorDescription);
 
-    if (detailPotential.contactPhone!.isNotEmpty) {
-      if ((!Validators().isValidPhone(detailPotential.contactPhone!.trim())) &&
-          (!Validators().isNumber(detailPotential.contactPhone!.trim()))) {
-        print("so dien thoai sai oy");
-        LeadConnection.showMyDialog(
-            context, "Số điện thoại người liên hệ không đúng định dạng",
-            warning: true);
-        return;
-      }
-    }
-
-    if (_fullNameText.text == "" ||
-        _phoneNumberText.text == "" ||
-        detailPotential.pipelineCode == "" ||
-        detailPotential.journeyCode == "" ||
-        detailPotential.saleId == 0) {
-      LeadConnection.showMyDialog(
-          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
-          warning: true);
-    } else {
-      LeadConnection.showLoading(context);
-      DescriptionModelResponse? result = await LeadConnection.updateLead(
-          context,
-          EditPotentialRequestModel(
-              customerLeadCode: widget.detailPotential!.customerLeadCode,
-              avatar: "",
-              customerType: "business",
-              customerSource: detailPotential.customerSource,
-              fullName: _fullNameText.text,
-              taxCode: detailPotential.taxCode,
-              phone: detailPotential.phone,
-              email: detailPotential.email,
-              representative: detailPotential.representative,
-              pipelineCode: pipelineSelected.pipelineCode,
-              journeyCode: journeySelected!.journeyCode,
-              saleId: detailPotential.saleId,
-              tagId: detailPotential.tagId,
-              gender: "",
-              birthday: detailPotential.birthday,
-              bussinessId: detailPotential.bussinessId,
-              employees: detailPotential.employees,
-              address: detailPotential.address,
-              provinceId: detailPotential.provinceId,
-              districtId: detailPotential.districtId,
-              wardId: detailPotential.wardId,
-              businessClue: detailPotential.businessClue,
-              zalo: detailPotential.zalo ?? "",
-              fanpage: detailPotential.fanpage,
-              contactAddress: detailPotential.contactAddress,
-              contactEmail: detailPotential.contactEmail,
-              contactFullName: detailPotential.contactFullName,
-              contactPhone: detailPotential.contactPhone,
-              position: detailPotential.position,
-              customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
-              branchId: _bloc.branchSelected?.branchId ?? 0,
-              note: _bloc.noteController.text,
-              customerLeadReferId: 0,
-              arrPhoneAttack: _bloc.listPhone,
-              website: _bloc.websiteController.text,));
-      Navigator.of(context).pop();
-      if (result != null) {
-        if (result.errorCode == 0) {
-          print(result.errorDescription);
-
-          await LeadConnection.showMyDialog(context, result.errorDescription);
-
-          Navigator.of(context).pop(true);
-        } else {
-          LeadConnection.showMyDialog(context, result.errorDescription);
-        }
+        Navigator.of(context).pop(true);
+      } else {
+        LeadConnection.showMyDialog(context, result.errorDescription);
       }
     }
   }

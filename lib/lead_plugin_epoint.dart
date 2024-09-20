@@ -32,10 +32,10 @@ class LeadPluginEpoint {
       String? fullname,
       String? phone,
       String? customerLeadCode,
-      Function? createJob,
-      Function? editJob,
+      Function(Map<String,dynamic>)? createJob,
+      Function(int?)?  editJob,
       Function? openDetailDeal,
-      Function? createDeal,
+      Function(Map<String,dynamic>)? createDeal,
       Function(Map<String,dynamic>)? callHotline,
       List<Map<String, dynamic>>? permission}) async {
     if (permission != null) {
@@ -53,10 +53,8 @@ class LeadPluginEpoint {
       HTTPConnection.brandCode = brandCode;
       Global.brandCode = brandCode;
     }
-    if (token != null) {
-      HTTPConnection.asscessToken = token;
+    HTTPConnection.asscessToken = token;
       Global.asscessToken = token;
-    }
     if (createJob != null) {
       Global.createJob = createJob;
     }

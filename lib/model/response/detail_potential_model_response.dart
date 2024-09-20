@@ -80,14 +80,14 @@ class DetailPotentialData {
   int? customerLeadReferId;
   String? customerLeadReferName;
   String? genderVi;
-  int? branchCode;
+  String? branchCode;
   String? branchName;
   int? employQty;
   String? createdAt;
   String? createdByName;
   String? updatedAt;
   String? updatedByName;
-  String? assignBy;
+  int? assignBy;
   String? assignByName;
   String? fullAddress;
   int? customerContactId;
@@ -98,6 +98,13 @@ class DetailPotentialData {
   List<CustomerCare>? customerCare;
   List<CareHistory>? careHistory;
   List<ContactList>? contactList;
+
+  int? zaloId;
+  int? facebookId;
+  String? note;
+  String? website;
+
+
 
   DetailPotentialData(
       {this.customerLeadId,
@@ -171,7 +178,11 @@ class DetailPotentialData {
       this.fullAddress,
       this.customerContactId,
       this.customerContactName,
-      this.tabConfigs});
+      this.tabConfigs,
+      this.zaloId,
+      this.facebookId,
+      this.note,
+      this.website});
 
   DetailPotentialData.fromJson(Map<String, dynamic> json) {
     customerLeadId = json['customer_lead_id'];
@@ -282,6 +293,10 @@ class DetailPotentialData {
         contactList!.add(new ContactList.fromJson(v));
       });
     }
+    note = json['note'];
+    zaloId = json['zalo_id'];
+    facebookId = json['facebook_id'];
+    website = json['website'];
   }
 
   Map<String, dynamic> toJson() {
@@ -334,8 +349,9 @@ class DetailPotentialData {
     data['diff_day'] = this.diffDay;
     data['related_work'] = this.relatedWork;
     data['appointment '] = this.appointment;
-    data['birthday '] = this.birthday;
-    data['position '] = this.position;
+    data['birthday'] = this.birthday;
+    data['position'] = this.position;
+    data['website'] = this.website;
     
     if (this.journeyTracking != null) {
       data['journey_tracking'] =

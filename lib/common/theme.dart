@@ -77,6 +77,26 @@ class AppColors {
   static const disableColor = Color(0xFFDADADA);
   static const hintColor = Color(0xFF8E8E8E);
   static const borderColor = Color(0xFFE5E5E5);
+  static const grey50Color = Color(0xFFF6F6F6);
+    static const primaryColorButton = RadialGradient(
+      center: Alignment.centerRight,
+      radius: 0.75,
+      colors: <Color>[
+        AppColors.primaryColor,
+        AppColors.primaryGradiantColor,
+      ],
+      tileMode: TileMode.clamp);
+  static const primaryColorReport = LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      stops: [0.1, 0.45, 0.9],
+      colors: <Color>[
+        AppColors.primaryColor,
+        AppColors.primaryGradiantColor,
+        AppColors.white,
+      ],
+      tileMode: TileMode.clamp);
+  static const primaryGradiantColor = Color(0xFF5faee3);
 }
 
 class AppFonts {
@@ -197,6 +217,10 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
+  static TextStyle style12PrimaryBold = TextStyle(
+      fontSize: AppTextSizes.size12,
+      color: AppColors.primaryColor,
+      fontWeight: FontWeight.bold);
    static TextStyle style20BlackBold = TextStyle(
       fontSize: AppTextSizes.size20,
       color: Colors.black,

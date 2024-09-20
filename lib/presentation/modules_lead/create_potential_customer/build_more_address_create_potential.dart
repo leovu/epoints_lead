@@ -355,7 +355,7 @@ class _BuildMoreAddressCreatPotentialState
       children: [
         // Website
         _buildTextField("Website", "",
-            Assets.iconFanpage, false, false, true,
+            Assets.iconWebsite, false, false, true,
             fillText: widget.bloc.websiteController, focusNode: widget.bloc.websiteFocusNode),
    
         // Zalo

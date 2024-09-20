@@ -11,8 +11,9 @@ class CustomAvatarWithURL extends StatelessWidget {
   final double? size;
   final Color? borderColor;
   final GestureTapCallback? ontap;
+  final Color? backgroundColor;
 
-  CustomAvatarWithURL({this.url, this.name, this.size, this.borderColor, this.ontap});
+  CustomAvatarWithURL({this.url, this.name, this.size, this.borderColor, this.ontap, this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +39,7 @@ class CustomAvatarWithURL extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: AppColors.primaryColor.withOpacity(0.5)
+            color: backgroundColor ??  AppColors.primaryColor.withOpacity(0.5)
           ),
           padding: EdgeInsets.all(size! / 5),
           alignment: Alignment.center,

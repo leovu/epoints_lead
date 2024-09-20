@@ -18,10 +18,7 @@ import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_respo
 import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modal/business_areas_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/district_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/position_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/province_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/ward_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
@@ -510,6 +507,10 @@ class _BuildMoreAddressEditPotentialState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+
+        _buildTextField("Website", "",
+            Assets.iconWebsite, false, false, true,
+            fillText: widget.bloc.websiteController, focusNode: widget.bloc.websiteFocusNode),
         // Zalo
         checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.zalo), "",
             Assets.iconSource, false, false, true,

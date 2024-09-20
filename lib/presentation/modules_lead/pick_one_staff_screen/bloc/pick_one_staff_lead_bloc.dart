@@ -8,8 +8,9 @@ import 'package:lead_plugin_epoint/model/response/work_list_branch_responese_mod
 import 'package:lead_plugin_epoint/model/response/work_list_department_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
-import 'package:lead_plugin_epoint/widget/custom_dropdown.dart';
 import 'package:rxdart/rxdart.dart';
+
+import '../../../../widget/widget.dart';
 
 class PickOneStaffBloc extends BaseBloc {
   PickOneStaffBloc(BuildContext context, List<WorkListStaffModel>? models,

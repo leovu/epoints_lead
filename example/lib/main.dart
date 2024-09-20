@@ -7,7 +7,6 @@ void main() {
     locale: const Locale('vi', 'VN'),
     title: 'Navigation Basics',
     debugShowCheckedModeBanner: false,
-    
     home: MyApp(),
   ));
 }
@@ -33,29 +32,27 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Center(
           child: InkWell(
-            onTap:  () async {
-                    var result = await LeadPluginEpoint.open(
-                        context,
-                        const Locale(LangKey.langVi, 'vi'),
-                        'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdjIvdXNlci9sb2dpbiIsImlhdCI6MTcyNjc5Nzk0NCwiZXhwIjoxNzI2ODE5NTQ0LCJuYmYiOjE3MjY3OTc5NDQsImp0aSI6IjA5Y2QxTWs4SkVFaEN0aXMiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.cnjNIdSKsBTMlRoztXUX2hnxZ-Ax6xpEAntV3uXJBw0',
-                        2,
-                        domain: 'https://staff-api.stag.epoints.vn',
-                        brandCode: 'qc'
-                        );
+            onTap: () async {
+              var result = await LeadPluginEpoint.open(
+                  context,
+                  Locale(LangKey.langVi, 'vi'),
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdjIvdXNlci9sb2dpbiIsImlhdCI6MTcyNjc5Nzk0NCwiZXhwIjoxNzI2ODE5NTQ0LCJuYmYiOjE3MjY3OTc5NDQsImp0aSI6IjA5Y2QxTWs4SkVFaEN0aXMiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.cnjNIdSKsBTMlRoztXUX2hnxZ-Ax6xpEAntV3uXJBw0',
+                  2,
+                  domain: 'https://staff-api.stag.epoints.vn',
+                  brandCode: 'qc');
 
-                    if (result != null) {}
-                  },
+              if (result != null) {}
+            },
             child: Container(
-              decoration: BoxDecoration( 
+              decoration: BoxDecoration(
                   color: Color.fromARGB(249, 249, 64, 2),
-                  borderRadius: BorderRadius.circular(10)), 
+                  borderRadius: BorderRadius.circular(10)),
               height: 40,
               width: MediaQuery.of(context).size.width / 2,
               child: Center(child: Text("Open lead")),
             ),
           ),
         ),
-
       ),
     );
   }

@@ -26,15 +26,15 @@ class LeadPluginEpoint {
   }
 
   static Future<dynamic> open(
-      BuildContext context, Locale locale, String token, int create,
+      BuildContext context, Locale locale, String token, int type,
       {String? domain,
       String? brandCode,
       String? fullname,
       String? phone,
       String? customerLeadCode,
       Function(Map<String,dynamic>)? createJob,
-      Function(int?)?  editJob,
-      Function? openDetailDeal,
+      Function(Map<String,dynamic>)?  editJob,
+      Function(String)? openDetailDeal,
       Function(Map<String,dynamic>)? createDeal,
       Function(Map<String,dynamic>)? callHotline,
       List<Map<String, dynamic>>? permission}) async {
@@ -75,18 +75,18 @@ class LeadPluginEpoint {
     await AppLocalizations(LeadConnection.locale).load();
     bool result = await LeadConnection.init(token, domain: domain);
     if (result) {
-      if (create == 0) {
+      if (type == 0) {
         Map<String, dynamic>? event = await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => CreatePotentialCustomer(
                     fullname: fullname, phoneNumber: phone)));
         return event;
-      } else if (create == 1) {
+      } else if (type == 1) {
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
                 DetailPotentialCustomer(customer_lead_code: customerLeadCode)));
         return null;
-      } else if (create == 3) {
+      } else if (type == 3) {
         await Navigator.of(context).push(MaterialPageRoute(
             builder: (context) =>
                 EditPotentialCustomer(customer_lead_code: customerLeadCode)));

@@ -794,12 +794,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     return InkWell(
       onTap: () async {
         if (Global.openDetailDeal != null) {
-          var result = await Global.openDetailDeal!(item.dealCode);
+          var result = await Global.openDetailDeal!(item.dealCode!);
           if (result != null && result) {
             reloadInfoDeal = true;
             await _bloc.getData(widget.customer_lead_code!);
-            index = 1;
-            selectedTab(1);
           }
         }
       },
@@ -925,8 +923,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     return InkWell(
       onTap: () async {
         if (Global.editJob != null) {
-          var result = await Global.editJob!(item.manageWorkId);
-          if (result != null) {
+          var result = await Global.editJob!(_bloc.detail!.toJson());
+          if (result != null && result) {
             allowPop = true;
           await _bloc.getData(widget.customer_lead_code!);
           }
@@ -1484,10 +1482,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   title: e.tabNameVi ?? "",
                   isExpand: _bloc.expandDeal,
                   onTapList: _bloc.onTapListDeal,
-                  onTapPlus: () {
+                  onTapPlus: () async {
                     if (Global.createDeal != null) {
-                      Global.createDeal;
-                    }
+                            bool? result =
+                                await Global.createDeal!(detail!.toJson());
+                            if (result != null && result) {
+                              _bloc.getData(widget.customer_lead_code!);
+                            }
+                          }
                   },
                   quantity: _bloc.listDealFromLead.length,
                   child: CustomListView(
@@ -1521,7 +1523,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   onTapPlus: () async {
                     if (Global.createJob != null) {
                       var result = await Global.createJob!(_bloc.detail!.toJson());
-                      if (result != null) {
+                      if (result != null && result) {
                         _bloc.getData(widget.customer_lead_code!);
                       }
                     }

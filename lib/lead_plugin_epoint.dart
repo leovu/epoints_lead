@@ -32,7 +32,7 @@ class LeadPluginEpoint {
       String? fullname,
       String? phone,
       String? customerLeadCode,
-      Function(Map<String,dynamic>)? createJob,
+      Function? createJob,
       Function(Map<String,dynamic>)?  createCare,
       Function(int)?  editJob,
       Function(String)? openDetailDeal,
@@ -66,7 +66,7 @@ class LeadPluginEpoint {
     if (createCare != null) {
       Global.createCare = createCare;
     }
-    
+
     if (openDetailDeal != null) {
       Global.openDetailDeal = openDetailDeal;
     }

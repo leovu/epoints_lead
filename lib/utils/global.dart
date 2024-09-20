@@ -12,7 +12,7 @@ class Global {
 
   static bool validateWorkScheduleDate = true;
 
-  static Function(Map<String,dynamic>)?  createJob;
+  static Function?  createJob;
 
   static Function(Map<String,dynamic>)?  createCare;
 

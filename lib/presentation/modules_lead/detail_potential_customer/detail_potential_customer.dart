@@ -152,7 +152,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   Padding(
                     padding: EdgeInsets.only(
                         bottom: AppSizes.maxHeight * 0.1 +
-                            (index == 0 ? 0 : AppSizes.bottomHeight! + 16)),
+                            (index == 0 ? 0 : AppSizes.maxPadding + 16)),
                     child: Column(
                       children: [
                         buildListOption(),
@@ -170,7 +170,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                     alignment: Alignment.bottomCenter,
                     child: Container(
                         height: AppSizes.maxHeight * 0.1 +
-                            (index == 0 ? 0 : AppSizes.bottomHeight! + 16),
+                            (index == 0 ? 0 : AppSizes.maxPadding + 16),
                         child: (index == 0)
                             ? _listButtonRelevant()
                             : _listButtonInfo()),

@@ -636,32 +636,30 @@ class _BuildMoreAddressEditPotentialState
         stream: widget.bloc.streamImages.output,
         initialData: widget.bloc.images,
         builder: (_, snapshot) {
-          return (widget.bloc.images.length == 0 && (widget.bloc.detail?.avatar != null)) ? _buildAvatar() : CustomImageList(
-            models: widget.bloc.images
-                .map((e) => CustomImageListModel(file: e))
-                .toList(),
-            onAdd: widget.bloc.onImageAdd,
-            onRemove: widget.bloc.onImageRemove,
-          );
+          return (widget.bloc.images.length == 0 &&
+                  (widget.bloc.detail?.avatar != null))
+              ? _buildAvatar()
+              : CustomImageList(
+                limit: 1,
+                  models: widget.bloc.images
+                      .map((e) => CustomImageListModel(file: e))
+                      .toList(),
+                  onAdd: widget.bloc.onImageAdd,
+                  onRemove: widget.bloc.onImageRemove,
+                );
         });
   }
 
   Widget _buildAvatar() {
-    return Column(
+    return Container(
+        child: Center(
+            child: Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Container(
-          margin: EdgeInsets.only(top: 10.0),
-          child: Text(
-            "Ảnh đại diện",
-            style: TextStyle(
-                fontWeight: FontWeight.bold, color: AppColors.primaryColor),
-          ),
-        ),
-        SizedBox(height: 8.0),
+        SizedBox(height: 16.0),
         CustomNetworkImage(
             width: 90, height: 90, url: widget.bloc.detail?.avatar),
-        SizedBox(height: 8.0),
+        SizedBox(height: 16.0),
         GestureDetector(
           onTap: () {
             widget.bloc.onPickImage();
@@ -671,9 +669,10 @@ class _BuildMoreAddressEditPotentialState
             style: TextStyle(
                 color: AppColors.primaryColor, fontWeight: FontWeight.bold),
           ),
-        )
+        ),
+        SizedBox(height: 16.0),
       ],
-    );
+    )));
   }
 
   Widget sexInfo(int index) {

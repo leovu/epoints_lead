@@ -801,8 +801,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
       onTap: () async {
         if (Global.openDetailDeal != null) {
           var result = await Global.openDetailDeal!(item.dealCode!);
-          if (result != null && result) {
-            reloadInfoDeal = true;
+          if (result != null) {
+            allowPop = true;
             await _bloc.getData(widget.customer_lead_code!);
           }
         }
@@ -930,7 +930,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
       onTap: () async {
         if (Global.editJob != null) {
           var result = await Global.editJob!(item.manageWorkId ?? 0);
-          if (result != null && result) {
+          if (result != null) {
             allowPop = true;
           await _bloc.getData(widget.customer_lead_code!);
           }
@@ -1492,7 +1492,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                     if (Global.createDeal != null) {
                             bool? result =
                                 await Global.createDeal!(detail!.toJson());
-                            if (result != null && result) {
+                            if (result != null) {
+                              allowPop = true;
                               _bloc.getData(widget.customer_lead_code!);
                             }
                           }
@@ -1529,7 +1530,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   onTapPlus: () async {
                     if (Global.createCare != null) {
                       var result = await Global.createCare!(_bloc.detail!.toJson());
-                      if (result != null && result) {
+                      if (result != null) {
+                        allowPop = true;
                         _bloc.getData(widget.customer_lead_code!);
                       }
                     }
@@ -1537,7 +1539,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   onTapList: _bloc.onTapListCustomerCare,
                   title: e.tabNameVi ?? "",
                   isExpand: _bloc.expandCare,
-                  quantity: e.total ?? 0,
+                  quantity: _bloc.listCareLead.length,
                   child: CustomListView(
                     padding: EdgeInsets.only(
                         top: AppSizes.minPadding, bottom: AppSizes.minPadding),
@@ -1825,10 +1827,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                                   detailPotential: detail,
                                 )));
         
-                    if (result != null && result) {
-                      reloadContactList = true;
+                    if (result != null) {
                       allowPop = true;
-                      selectedTab(index!);
                       _bloc.getData(widget.customer_lead_code!);
                     }
                   },
@@ -1962,7 +1962,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                           if (Global.createDeal != null) {
                             bool? result =
                                 await Global.createDeal!(detail!.toJson());
-                            if (result != null && result) {
+                            if (result != null) {
+                              allowPop = true;
                               _bloc.getData(widget.customer_lead_code!);
                             }
                           }

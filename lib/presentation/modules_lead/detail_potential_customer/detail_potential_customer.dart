@@ -1490,12 +1490,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   onTapList: _bloc.onTapListDeal,
                   onTapPlus: () async {
                     if (Global.createDeal != null) {
-                            bool? result =
-                                await Global.createDeal!(detail!.toJson());
-                            if (result != null) {
-                              allowPop = true;
-                              _bloc.getData(widget.customer_lead_code!);
-                            }
+                        await Global.createDeal!(detail!.toJson());
+                        _bloc.getDetailLeadInfoDeal(context);
+                            // if (result != null) {
+                            //   allowPop = true;
+                            //   _bloc.getData(widget.customer_lead_code!);
+                            // }
                           }
                   },
                   quantity: _bloc.listDealFromLead.length,

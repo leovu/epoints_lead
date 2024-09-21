@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
               var result = await LeadPluginEpoint.open(
                   context,
                   Locale(LangKey.langVi, 'vi'),
-                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdjIvdXNlci9sb2dpbiIsImlhdCI6MTcyNjgzNzYyNywiZXhwIjoxNzI2ODU5MjI3LCJuYmYiOjE3MjY4Mzc2MjcsImp0aSI6InllQ1VYdUo3UEtUdXBUelciLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.nP5UhNM_lwqpfydP9950vP60y7MlC-jdhNd6cKAHoTo',
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5zdGFnLmVwb2ludHMudm4vdjIvdXNlci9sb2dpbiIsImlhdCI6MTcyNjkxMjYwMiwiZXhwIjoxNzI2OTM0MjAyLCJuYmYiOjE3MjY5MTI2MDIsImp0aSI6InpreDRCejdhR1N1UDBURnAiLCJzdWIiOjEsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBwaW9hcHBzLnZuIiwiYnJhbmRfY29kZSI6InFjIn0.6gORxBW9VbFaKV1eYQ-aNyDlTJ6txiSbaA0dmVc71sQ',
                   2,
                   domain: 'https://staff-api.stag.epoints.vn',
                   brandCode: 'qc');

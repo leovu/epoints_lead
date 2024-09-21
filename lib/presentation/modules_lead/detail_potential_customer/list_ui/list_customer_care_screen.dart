@@ -35,8 +35,8 @@ late ListCustomerCareBloc _bloc;
     _bloc = ListCustomerCareBloc(context);
     WidgetsBinding.instance
         .addPostFrameCallback((_) {
-          _bloc.listCareDeal = widget.bloc.listCareLead;
-           _bloc.setCareDeal(widget.bloc.listCareLead);
+          _bloc.listCareLead = widget.bloc.listCareLead;
+           _bloc.setCareLead(widget.bloc.listCareLead);
            _bloc.getStatusWork();
         });
   }
@@ -108,7 +108,7 @@ late ListCustomerCareBloc _bloc;
 
   Widget _buildContent() {
     return StreamBuilder(
-      stream: widget.bloc.outputCareLead,
+      stream: _bloc.outputCarLead,
       initialData: null,
       builder: (_, snapshot){
         List<CareLeadData>? models = snapshot.data as List<CareLeadData>?;

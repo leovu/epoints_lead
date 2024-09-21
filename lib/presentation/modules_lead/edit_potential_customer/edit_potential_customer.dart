@@ -388,6 +388,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           fullName: detailNew?.customerLeadReferName ?? "");
     }
 
+    if (detailNew?.avatar != null && detailNew?.avatar != "") {
+      _bloc.imgAvatar = detailNew?.avatar;
+    }
+
     var dataType_Source = await LeadConnection.getCustomerOption(context);
     if (dataType_Source != null) {
       customerOptonData = dataType_Source.data;
@@ -1288,85 +1292,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         ),
       ),
     );
-  }
-
-  Future<void> editPotentialPersonal() async {
-    print(detailPotential);
-    print("theemmm khtn");
-
-    if (detailPotential.phone!.isNotEmpty) {
-      if ((!Validators().isValidPhone(_phoneNumberText.text.trim())) &&
-          (!Validators().isNumber(_phoneNumberText.text.trim()))) {
-        print("so dien thoai sai oy");
-        LeadConnection.showMyDialog(
-            context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
-            warning: true);
-        return;
-      }
-    }
-
-    if (_fullNameText.text == "" ||
-        _phoneNumberText.text == "" ||
-        detailPotential.pipelineCode == "" ||
-        detailPotential.journeyCode == "" ||
-        detailPotential.saleId == 0) {
-      LeadConnection.showMyDialog(
-          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
-          warning: true);
-    } else {
-      LeadConnection.showLoading(context);
-      DescriptionModelResponse? result = await LeadConnection.updateLead(
-          context,
-          EditPotentialRequestModel(
-            customerLeadCode: widget.detailPotential!.customerLeadCode ?? "",
-            avatar: "",
-            customerType: "personal",
-            customerSource: detailPotential.customerSource,
-            fullName: _fullNameText.text,
-            taxCode: "",
-            phone: detailPotential.phone,
-            email: detailPotential.email,
-            representative: "",
-            pipelineCode: pipelineSelected.pipelineCode,
-            journeyCode: journeySelected!.journeyCode,
-            saleId: detailPotential.saleId,
-            tagId: detailPotential.tagId,
-            gender: detailPotential.gender,
-            birthday: detailPotential.birthday,
-            bussinessId: 0,
-            employees: 0,
-            address: detailPotential.address,
-            provinceId: detailPotential.provinceId,
-            districtId: detailPotential.districtId,
-            wardId: detailPotential.wardId,
-            businessClue: detailPotential.businessClue,
-            zalo: detailPotential.zalo ?? "",
-            fanpage: detailPotential.fanpage ?? "",
-            contactAddress: "",
-            contactEmail: "",
-            contactFullName: "",
-            contactPhone: "",
-            position: detailPotential.position,
-            customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
-            branchId: _bloc.branchSelected?.branchId ?? 0,
-            note: _bloc.noteController.text,
-            customerLeadReferId: _bloc.presenterModel?.customerId ?? 0,
-            arrPhoneAttack: _bloc.listPhone,
-            website: _bloc.websiteController.text,
-          ));
-      Navigator.of(context).pop();
-      if (result != null) {
-        if (result.errorCode == 0) {
-          print(result.errorDescription);
-
-          await LeadConnection.showMyDialog(context, result.errorDescription);
-
-          Navigator.of(context).pop(true);
-        } else {
-          LeadConnection.showMyDialog(context, result.errorDescription);
-        }
-      }
-    }
   }
 
   Future<void> editPotential(int customerTypeID) async {

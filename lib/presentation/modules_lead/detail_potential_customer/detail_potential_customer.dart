@@ -1492,9 +1492,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                     if (Global.createDeal != null) {
                             var result =
                                 await Global.createDeal!(detail!.toJson());
-                            print("detail_potential_customer $result");
                             if (result != null) {
-                              print("detail_potential_customer $result");
                               allowPop = true;
                               _bloc.getData(widget.customer_lead_code!);
                             }

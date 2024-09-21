@@ -23,9 +23,9 @@ class ListCustomerCareBloc extends BaseBloc {
    ValueStream<List<CustomDropdownModel>?> get outputStatusWorkData => _streamStatusWorkData.stream;
   setStatusWorkData(List<CustomDropdownModel>? event) => set(_streamStatusWorkData, event);
 
-    final _streamCareDeal = BehaviorSubject<List<CareLeadData>?>();
-  ValueStream<List<CareLeadData>?> get outputCareDeal => _streamCareDeal.stream;
-  setCareDeal(List<CareLeadData>? event) => set(_streamCareDeal, event);
+    final _streamCareLead = BehaviorSubject<List<CareLeadData>?>();
+  ValueStream<List<CareLeadData>?> get outputCarLead => _streamCareLead.stream;
+  setCareLead(List<CareLeadData>? event) => set(_streamCareLead, event);
 
   List<CustomDropdownModel>? statusWorkData;
   CustomDropdownModel? statusWorkDataSelected;
@@ -51,17 +51,17 @@ class ListCustomerCareBloc extends BaseBloc {
     );
   }).toList();
 }
-  List<CareLeadData>? listCareDeal;
+  List<CareLeadData>? listCareLead;
 
   onChange(CustomDropdownModel value) {
     statusWorkDataSelected = value;
-    setCareDeal(listCareDeal?.where((element) => element.manageStatusId == value.id).toList() ?? []);
+    setCareLead(listCareLead?.where((element) => element.manageStatusId == value.id).toList() ?? []);
     setStatusWorkData(statusWorkData);
   }
 
   onRemove() {
     statusWorkDataSelected = null;
-    setCareDeal(listCareDeal ?? []);
+    setCareLead(listCareLead ?? []);
     setStatusWorkData(statusWorkData);
   }
 }

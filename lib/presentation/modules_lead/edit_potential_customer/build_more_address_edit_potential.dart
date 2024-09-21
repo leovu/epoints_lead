@@ -23,6 +23,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_cu
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
+import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
@@ -190,10 +191,10 @@ class _BuildMoreAddressEditPotentialState
         }
       }
 
-
       try {
         var item = widget.positionData!.firstWhere((element) =>
-            element.staffTitleName!.toLowerCase() == widget.detailPotential!.position!.toLowerCase());
+            element.staffTitleName!.toLowerCase() ==
+            widget.detailPotential!.position!.toLowerCase());
         if (item != null) {
           item.selected = true;
           positionSelected = item;
@@ -249,8 +250,9 @@ class _BuildMoreAddressEditPotentialState
           selectedEstablishDate =
               DateTime.parse(widget.detailPotential!.birthday!);
 
-          _establishDateText.text =
-              DateFormat("dd/MM/yyyy").format(selectedEstablishDate!).toString();
+          _establishDateText.text = DateFormat("dd/MM/yyyy")
+              .format(selectedEstablishDate!)
+              .toString();
         }
       }
 
@@ -368,14 +370,13 @@ class _BuildMoreAddressEditPotentialState
                       signed: false, decimal: false))
               : Container(),
 
-                        // người đại diện
+          // người đại diện
           !widget.selectedPersonal!
               ? _buildTextField(AppLocalizations.text(LangKey.representative),
                   "", Assets.iconRepresentative, false, false, true,
                   fillText: widget.bloc.representativeController,
                   focusNode: widget.bloc.representativeFocusNode)
               : Container(),
-
 
           !showMoreAll
               ? InkWell(
@@ -413,7 +414,7 @@ class _BuildMoreAddressEditPotentialState
     );
   }
 
-   void _loadPositionModal() async {
+  void _loadPositionModal() async {
     PositionData position = await CustomNavigator.showCustomBottomDialog(
       context,
       PositionModal(positionData: widget.positionData),
@@ -507,18 +508,21 @@ class _BuildMoreAddressEditPotentialState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        _buildTextField("Website", "",
-            Assets.iconWebsite, false, false, true,
-            fillText: widget.bloc.websiteController, focusNode: widget.bloc.websiteFocusNode),
+        _buildTextField("Website", "", Assets.iconWebsite, false, false, true,
+            fillText: widget.bloc.websiteController,
+            focusNode: widget.bloc.websiteFocusNode),
         // Zalo
-        checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.zalo), "",
-            Assets.iconSource, false, false, true,
-            fillText: _zaloText, focusNode: _zaloFocusNode) : Container(),
+        checkVisibilityKey(VisibilityWidgetName.LE000003)
+            ? _buildTextField(AppLocalizations.text(LangKey.zalo), "",
+                Assets.iconSource, false, false, true,
+                fillText: _zaloText, focusNode: _zaloFocusNode)
+            : Container(),
         // Nhập Fanpage
-        checkVisibilityKey(VisibilityWidgetName.LE000003) ? _buildTextField(AppLocalizations.text(LangKey.inputFanpage), "",
-            Assets.iconFanpage, false, false, true,
-            fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode) : Container(),
+        checkVisibilityKey(VisibilityWidgetName.LE000003)
+            ? _buildTextField(AppLocalizations.text(LangKey.inputFanpage), "",
+                Assets.iconFanpage, false, false, true,
+                fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode)
+            : Container(),
 
         !widget.selectedPersonal!
             ? Column(
@@ -556,7 +560,7 @@ class _BuildMoreAddressEditPotentialState
                       Assets.iconEmail, false, false, true,
                       fillText: _emailContactPersonText,
                       focusNode: _emailContactPersonFocusNode),
-                  
+
                   _buildTextField(
                       AppLocalizations.text(LangKey.choose_position),
                       positionSelected?.staffTitleName ?? "",
@@ -566,7 +570,8 @@ class _BuildMoreAddressEditPotentialState
                       false, ontap: () async {
                     FocusScope.of(context).unfocus();
 
-                    if (widget.positionData == null || widget.positionData!.length == 0) {
+                    if (widget.positionData == null ||
+                        widget.positionData!.length == 0) {
                       LeadConnection.showLoading(context);
                       var positions = await LeadConnection.getPosition(context);
                       Navigator.of(context).pop();
@@ -591,8 +596,7 @@ class _BuildMoreAddressEditPotentialState
         Text(
           "Ghi chú",
           style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color:  AppColors.primaryColor),
+              fontWeight: FontWeight.bold, color: AppColors.primaryColor),
         ),
 
         SizedBox(height: 8.0),
@@ -632,7 +636,7 @@ class _BuildMoreAddressEditPotentialState
         stream: widget.bloc.streamImages.output,
         initialData: widget.bloc.images,
         builder: (_, snapshot) {
-          return CustomImageList(
+          return (widget.bloc.images.length == 0 && (widget.bloc.detail?.avatar != null)) ? _buildAvatar() : CustomImageList(
             models: widget.bloc.images
                 .map((e) => CustomImageListModel(file: e))
                 .toList(),
@@ -640,6 +644,36 @@ class _BuildMoreAddressEditPotentialState
             onRemove: widget.bloc.onImageRemove,
           );
         });
+  }
+
+  Widget _buildAvatar() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 10.0),
+          child: Text(
+            "Ảnh đại diện",
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: AppColors.primaryColor),
+          ),
+        ),
+        SizedBox(height: 8.0),
+        CustomNetworkImage(
+            width: 90, height: 90, url: widget.bloc.detail?.avatar),
+        SizedBox(height: 8.0),
+        GestureDetector(
+          onTap: () {
+            widget.bloc.onPickImage();
+          },
+          child: Text(
+            "Thay đổi ảnh",
+            style: TextStyle(
+                color: AppColors.primaryColor, fontWeight: FontWeight.bold),
+          ),
+        )
+      ],
+    );
   }
 
   Widget sexInfo(int index) {
@@ -790,7 +824,7 @@ class _BuildMoreAddressEditPotentialState
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: (ontap != null) ? ontap  : null,
+        onTap: (ontap != null) ? ontap : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

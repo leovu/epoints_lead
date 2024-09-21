@@ -4,12 +4,15 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
 import 'package:lead_plugin_epoint/model/request/get_customer_group_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/customer_response_model.dart';
+import 'package:lead_plugin_epoint/model/response/detail_lead_info_deal_response_model.dart';
+import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_branch_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_group_model_response.dart';
 import 'package:lead_plugin_epoint/model/response_model.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/module_address/src/ui/create_address_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/customer_new_screen.dart';
+import 'package:lead_plugin_epoint/utils/custom_image_picker.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:rxdart/streams.dart';
@@ -58,10 +61,13 @@ class CreatePotentialCustomerBloc extends BaseBloc {
       _streamAddressModel.stream;
 
   final _streamPresenterModel = BehaviorSubject<CustomerModel?>();
-  ValueStream<CustomerModel?> get outputPresenterModel => _streamPresenterModel.stream;
+  ValueStream<CustomerModel?> get outputPresenterModel =>
+      _streamPresenterModel.stream;
   setPresenterModel(CustomerModel? event) => set(_streamPresenterModel, event);
 
-   CustomerModel? presenterModel;
+  CustomerModel? presenterModel;
+
+  late DetailPotentialData? detail;
 
   setAddressModel(CustomerCreateAddressModel? event) =>
       set(_streamAddressModel, event);
@@ -89,6 +95,12 @@ class CreatePotentialCustomerBloc extends BaseBloc {
       addressModel = result;
       setAddressModel(addressModel);
     }
+  }
+
+  onPickImage() {
+    CustomImagePicker.showPicker(context!, (files) {
+      onImageAdd([files]);
+    });
   }
 
   Future<List<BranchData>?> getBranch(BuildContext context,

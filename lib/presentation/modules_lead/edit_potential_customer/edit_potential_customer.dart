@@ -158,6 +158,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       LeadConnection.showLoading(context);
 
       if (widget.detailPotential != null) {
+        _bloc.detail = widget.detailPotential;
         detailNew = widget.detailPotential;
         bool business = false;
         if (widget.detailPotential!.customerType == "business") {

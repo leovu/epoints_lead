@@ -41,12 +41,12 @@ late ListCustomerCareBloc _bloc;
         });
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    widget.bloc.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   widget.bloc.dispose();
+  //   super.dispose();
+  // }
 
   Widget _buildContainer(List<Widget> children){
     return CustomListView(

@@ -27,7 +27,6 @@ import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
-import 'package:lead_plugin_epoint/widget/custom_combobox.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_file_view.dart';
 import 'package:lead_plugin_epoint/widget/custom_information_lead_widget.dart';
@@ -82,9 +81,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   ];
   int? index = 0;
   bool allowPop = false;
-  bool reloadContactList = false;
-  bool reloadCSKH = false;
-  bool reloadInfoDeal = false;
   final formatter = NumberFormat.currency(
     locale: 'vi_VN',
     decimalDigits: 0,
@@ -1414,7 +1410,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   data: model,
                   skeletonBuilder: _buildSkeleton(),
                   bodyBuilder: () {
-                    if (_bloc.children == null && model!.tabConfigs != null) {
+                    if (_bloc.children == null && model.tabConfigs != null) {
                       _bloc.children = [];
                       for (var e in model.tabConfigs!) {
                         switch (e.code) {
@@ -1462,7 +1458,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         padding: EdgeInsets.zero,
         child: CustomListView(
           children: List.generate(
-              3,
+              5,
               (index) => CustomSkeleton(
                     height: 60,
                     radius: 4.0,
@@ -1485,9 +1481,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                 return CustomComboBox(
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandDeal = event),
-                  title: e.tabNameVi ?? "",
-                  isExpand: _bloc.expandDeal,
-                  onTapList: _bloc.onTapListDeal,
                   onTapPlus: () async {
                     if (Global.createDeal != null) {
                             var result =
@@ -1498,6 +1491,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                             }
                           }
                   },
+                  onTapList: () {
+                    _bloc.onTapListDeal();
+                  },
+                  title: e.tabNameVi ?? "",
+                  isExpand: _bloc.expandDeal,
                   quantity: _bloc.listDealFromLead.length,
                   child: CustomListView(
                     padding: EdgeInsets.only(
@@ -1536,8 +1534,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       }
                     }
                   },
-                  onTapList: _bloc.onTapListCustomerCare,
-                  title: e.tabNameVi ?? "",
+                  onTapList: () {
+                    _bloc.onTapListCustomerCare();
+                  },
+                  title: e.tabNameVi ?? "Chăm sóc khách hàng",
                   isExpand: _bloc.expandCare,
                   quantity: _bloc.listCareLead.length,
                   child: CustomListView(
@@ -1568,14 +1568,16 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                 return CustomComboBox(
                   onChanged: (event) =>
                       _bloc.onSetExpand(() => _bloc.expandListNote = event),
-                  title: e.tabNameVi ?? "Ghi chú",
-                  isExpand: _bloc.expandListNote,
-                  onTapList: _bloc.onTapListNote,
+                  onTapList: () {
+                    _bloc.onTapListNote();
+                  },
                   onTapPlus: () {
                     _bloc.onAddNote(() {
                       _bloc.getListNote(context);
                     });
                   },
+                  title: e.tabNameVi ?? "Ghi chú",
+                  isExpand: _bloc.expandListNote,
                   quantity: _bloc.listNoteData.length,
                   child: CustomListView(
                    padding: EdgeInsets.symmetric(
@@ -1649,8 +1651,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       _bloc.onSetExpand(() => _bloc.expandListContact = event),
                   title: e.tabNameVi ?? "",
                   isExpand: _bloc.expandListContact,
-                  onTapPlus: _bloc.onAddContact,
-                  onTapList: _bloc.onTapListContact,
+                  onTapPlus: () {
+                    _bloc.onAddContact();
+                  },
+                  onTapList: () {
+                    _bloc.onTapListContact();
+                  },
                   quantity: _bloc.listContact.length,
                   child: CustomListView(
                     padding: EdgeInsets.only(
@@ -1672,8 +1678,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     if (model.createdBy != null) {
       name = model.createdBy ?? "";
       date = model.createdAt ?? "";
-      print(name);
-      print(date);
     }
     return CustomContainerList(
       child: Padding(

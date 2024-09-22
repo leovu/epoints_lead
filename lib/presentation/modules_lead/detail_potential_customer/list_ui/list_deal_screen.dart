@@ -39,13 +39,6 @@ class ListDealScreenState extends State<ListDealScreen> {
         .addPostFrameCallback((_) => widget.bloc.getDetailLeadInfoDeal(context));
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    widget.bloc.dispose();
-    super.dispose();
-  }
-  
 
   Widget _buildContainer(List<Widget> children){
     return CustomListView(

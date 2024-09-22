@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/assets.dart';
-import 'package:lead_plugin_epoint/common/theme.dart';
-import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
-import 'package:lead_plugin_epoint/widget/widget.dart';
-
+part of widget;
 class CustomComboBox extends StatefulWidget {
   final String? icon;
   final String title;
@@ -14,6 +9,7 @@ class CustomComboBox extends StatefulWidget {
   final GestureTapCallback? onTapPlus;
   final GestureTapCallback? onTapList;
   final int quantity;
+  final bool? isShowPlus;
 
   const CustomComboBox(
       {super.key,
@@ -25,7 +21,8 @@ class CustomComboBox extends StatefulWidget {
       this.onTap,
       this.onTapPlus,
       this.onTapList,
-      this.quantity = 0});
+      this.quantity = 0,
+      this.isShowPlus = true});
 
   @override
   CustomComboBoxState createState() => CustomComboBoxState();
@@ -43,7 +40,6 @@ class CustomComboBoxState extends State<CustomComboBox> {
 
   @override
   void didUpdateWidget(covariant CustomComboBox oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 
     if (_expand != widget.isExpand) {
@@ -120,13 +116,15 @@ class CustomComboBoxState extends State<CustomComboBox> {
                   onTap: widget.onTapList,
                 )
               ],
-              SizedBox(width: 16),
-              InkWell(
+              if (widget.isShowPlus!) ...[
+                SizedBox(width: 16),
+                InkWell(
                   child: CustomImageIcon(
                     icon: Assets.iconPlusRound,
                   ),
                   onTap: widget.onTapPlus,
                 )
+              ]
             ],
           ),
         ),
@@ -135,6 +133,7 @@ class CustomComboBoxState extends State<CustomComboBox> {
           (widget.child == null || widget.quantity == 0
               ? null
               : () {
+                print("${widget.title}, ${widget.quantity}, ${widget.isExpand}");
                   if (widget.onChanged != null) {
                     widget.onChanged!(!_expand);
                   } else {
@@ -169,65 +168,5 @@ class CustomComboBoxState extends State<CustomComboBox> {
   @override
   Widget build(BuildContext context) {
     return _buildBody();
-  }
-}
-
-class CustomRotateTransaction extends StatefulWidget {
-  final Widget? child;
-  final bool? open;
-
-  CustomRotateTransaction({this.child, this.open = false});
-
-  @override
-  CustomRotateTransactionState createState() => CustomRotateTransactionState();
-}
-
-class CustomRotateTransactionState extends State<CustomRotateTransaction>
-    with TickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _controller = AnimationController(
-        duration: AppAnimation.duration, vsync: this, upperBound: 0.35);
-    _animation = CurvedAnimation(
-      parent: _controller,
-      curve: AppAnimation.curve,
-    );
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (widget.open!) {
-        _controller.forward();
-      }
-    });
-  }
-
-  @override
-  void didUpdateWidget(covariant CustomRotateTransaction oldWidget) {
-    // TODO: implement didUpdateWidget
-    super.didUpdateWidget(oldWidget);
-    if (widget.open!) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
-  }
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return RotationTransition(
-      turns: _animation,
-      child: widget.child,
-    );
   }
 }

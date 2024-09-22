@@ -39,3 +39,4 @@ part 'gaps_widget.dart';
 part 'custom_row_infomation.dart';
 part 'custom_dropdown.dart';
 part 'container_customer.dart';
+part 'custom_combobox.dart';

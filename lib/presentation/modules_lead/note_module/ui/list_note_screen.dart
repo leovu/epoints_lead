@@ -47,12 +47,12 @@ class ListNoteScreenState extends State<ListNoteScreen> {
         .addPostFrameCallback((_) => widget.bloc.getListNote(context));
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    widget.bloc.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   // TODO: implement dispose
+  //   widget.bloc.dispose();
+  //   super.dispose();
+  // }
 
   Widget _buildContainer(List<Widget> children) {
     return CustomListView(
@@ -99,8 +99,8 @@ class ListNoteScreenState extends State<ListNoteScreen> {
   Widget noteItem(NoteData model, int index) {
     String? name, date;
 
-    if (model.createdByName != null) {
-      name = model.createdByName ?? "";
+    if (model.createdBy != null) {
+      name = model.createdBy ?? "";
       date = model.createdAt ?? "";
     }
     return CustomContainerList(

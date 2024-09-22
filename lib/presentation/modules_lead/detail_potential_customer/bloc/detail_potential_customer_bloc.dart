@@ -58,13 +58,7 @@ class DetailPotentialCustomerBloc extends BaseBloc {
 
   List<PositionData>? positionData;
   PositionData? positionSelected;
-
-  bool expandCare = false;
-  bool expandDeal = false;
-  bool expandListContact = false;
-  bool expandListNote = false;
-  bool expandListFile = false;
-
+  
   final _streamModel = BehaviorSubject<DetailPotentialData?>();
   ValueStream<DetailPotentialData?> get outputModel => _streamModel.stream;
   setModel(DetailPotentialData? event) => set(_streamModel, event);
@@ -122,6 +116,13 @@ class DetailPotentialCustomerBloc extends BaseBloc {
 
   List<NoteData> listNoteData = [];
   List<LeadFilesModel> listLeadsFiles = [];
+
+  bool expandDeal = false;
+  bool expandCare = false;
+  bool expandListContact = false;
+  bool expandListNote = false;
+  bool expandListFile = false;
+
 
 
   resetExpand() {

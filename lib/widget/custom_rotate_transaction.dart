@@ -1,7 +1,6 @@
 part of widget;
 
 class CustomRotateTransaction extends StatefulWidget {
-
   final Widget? child;
   final bool? open;
 
@@ -11,8 +10,8 @@ class CustomRotateTransaction extends StatefulWidget {
   CustomRotateTransactionState createState() => CustomRotateTransactionState();
 }
 
-class CustomRotateTransactionState extends State<CustomRotateTransaction> with TickerProviderStateMixin {
-
+class CustomRotateTransactionState extends State<CustomRotateTransaction>
+    with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
 
@@ -21,17 +20,14 @@ class CustomRotateTransactionState extends State<CustomRotateTransaction> with T
     // TODO: implement initState
     super.initState();
     _controller = AnimationController(
-      duration: AppAnimation.duration,
-      vsync: this,
-        upperBound: 0.35
-    );
+        duration: AppAnimation.duration, vsync: this, upperBound: 0.35);
     _animation = CurvedAnimation(
       parent: _controller,
       curve: AppAnimation.curve,
     );
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if(widget.open!){
+      if (widget.open!) {
         _controller.forward();
       }
     });
@@ -41,10 +37,9 @@ class CustomRotateTransactionState extends State<CustomRotateTransaction> with T
   void didUpdateWidget(covariant CustomRotateTransaction oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
-    if(widget.open!){
+    if (widget.open!) {
       _controller.forward();
-    }
-    else {
+    } else {
       _controller.reverse();
     }
   }

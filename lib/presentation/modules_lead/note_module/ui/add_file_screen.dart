@@ -84,10 +84,12 @@ class _AddFileScreenState extends State<AddFileScreen>
                       child: GestureDetector(
                         onTap: () {
                           widget.bloc.uploadFile().then((value) {
-                            setState(() {
-                              file = value;
-                            });
-                          });
+                      setState(() {
+                        if (value != null) {
+                          file = value;
+                        }
+                      });
+                    });
                         },
                         child: Text(
                           "Thay đổi",

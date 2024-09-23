@@ -74,7 +74,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   TextEditingController _emailText = TextEditingController();
   FocusNode _emailFocusNode = FocusNode();
 
-  TextEditingController _representativeText = TextEditingController();
 
   bool showMoreAddress = false;
   bool showMoreAll = false;
@@ -495,7 +494,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     _fullNameText.text = detailPotential.fullName ?? "";
     _phoneNumberText.text = detailPotential.phone ?? "";
     _emailText.text = detailPotential.email ?? "";
-    _representativeText.text = detailPotential.representative ?? "";
+    _bloc.representativeController.text = detailPotential.representative ?? "";
     _taxText.text = detailPotential.taxCode ?? "";
 
     try {
@@ -1285,8 +1284,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               detailPotential.email = _emailText.text;
             } else if (fillText == _taxText) {
               detailPotential.taxCode = _taxText.text;
-            } else if (fillText == _representativeText) {
-              detailPotential.representative = _representativeText.text;
             }
           },
         ),
@@ -1308,7 +1305,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           taxCode: typePersonnal ? "" : _taxText.text,
           phone: _phoneNumberText.text,
           email: _emailText.text,
-          representative: typePersonnal ? "" : _representativeText.text,
+          representative: typePersonnal ? "" : _bloc.representativeController.text,
           pipelineCode: detailPotential.pipelineCode,
           journeyCode: detailPotential.journeyCode,
           saleId: detailPotential.saleId,

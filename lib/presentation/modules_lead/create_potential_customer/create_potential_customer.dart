@@ -72,7 +72,6 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   TextEditingController _taxText = TextEditingController();
   FocusNode _taxFocusNode = FocusNode();
 
-  TextEditingController _representativeText = TextEditingController();
   bool showMoreAddress = false;
   bool showMoreAll = false;
   bool selectedPersonal = true;
@@ -985,7 +984,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           taxCode:typePersonnal ? "" : _taxText.text,
           phone: _phoneNumberText.text,
           email: _emailText.text,
-          representative:typePersonnal ? "" : _representativeText.text,
+          representative:typePersonnal ? "" : _bloc.representativeController.text,
           pipelineCode: detailPotential.pipelineCode,
           journeyCode: detailPotential.journeyCode,
           saleId: detailPotential.saleId,

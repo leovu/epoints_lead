@@ -49,12 +49,13 @@ class DetailLeadInfoDealData {
   String? createdAt;
   int? saleId;
   String? staffName;
-  int? amount;
+  num? amount;
   String? dateLastCare;
   int? diffDay;
   String? journeyName;
   int? relatedWork;
-  int? appointment;
+  num? appointment;
+  
 
   DetailLeadInfoDealData(
       {this.dealId,

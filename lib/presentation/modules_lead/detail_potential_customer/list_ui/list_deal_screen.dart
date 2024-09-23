@@ -7,6 +7,7 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
+import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_empty.dart';
@@ -86,6 +87,13 @@ class ListDealScreenState extends State<ListDealScreen> {
   Widget dealInfomationItem(DetailLeadInfoDealData item) {
     return InkWell(
       onTap: () async {
+        if (Global.openDetailDeal != null) {
+          var result = await Global.openDetailDeal!(item.dealCode!);
+          if (result != null) {
+            widget.bloc.allowPop = true;
+            widget.bloc.getData(widget.bloc.detail!.customerLeadCode ?? "");
+          }
+        }
       },
       child: Container(
         padding: const EdgeInsets.all(4.0),

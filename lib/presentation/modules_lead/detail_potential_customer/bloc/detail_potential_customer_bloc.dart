@@ -116,6 +116,7 @@ class DetailPotentialCustomerBloc extends BaseBloc {
 
   List<NoteData> listNoteData = [];
   List<LeadFilesModel> listLeadsFiles = [];
+  bool allowPop = false;
 
   bool expandDeal = false;
   bool expandCare = false;
@@ -274,16 +275,18 @@ class DetailPotentialCustomerBloc extends BaseBloc {
     return null;
   }
 
-  onTapListCustomerCare() {
-    CustomNavigator.push(context!, ListCustomerCareScreen(bloc: this));
+  onTapListCustomerCare() async {
+   await CustomNavigator.push(context!, ListCustomerCareScreen(bloc: this));
+   allowPop = true;
   }
 
-  onTapListContact() {
-    CustomNavigator.push(context!, ListContactScreen(bloc: this));
+  onTapListContact() async {
+   await CustomNavigator.push(context!, ListContactScreen(bloc: this));
   }
 
-  onTapListDeal() {
-    CustomNavigator.push(context!, ListDealScreen(bloc: this));
+  onTapListDeal() async {
+    await CustomNavigator.push(context!, ListDealScreen(bloc: this));
+     allowPop = true;
   }
 
   onAddContact() async {

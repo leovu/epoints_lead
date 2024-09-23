@@ -159,6 +159,7 @@ late ListCustomerCareBloc _bloc;
         if (Global.editJob != null) {
           var result = await Global.editJob!(item.manageWorkId ?? 0);
           if (result != null) {
+            widget.bloc.allowPop = true;
             widget.bloc.getCareLead(context).then((value) {
               if (value != null) {
                 _bloc.onRemove();

@@ -80,7 +80,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         selected: false),
   ];
   int? index = 0;
-  bool allowPop = false;
   final formatter = NumberFormat.currency(
     locale: 'vi_VN',
     decimalDigits: 0,
@@ -798,7 +797,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         if (Global.openDetailDeal != null) {
           var result = await Global.openDetailDeal!(item.dealCode!);
           if (result != null) {
-            allowPop = true;
+            _bloc.allowPop = true;
             await _bloc.getData(widget.customer_lead_code!);
           }
         }
@@ -927,7 +926,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         if (Global.editJob != null) {
           var result = await Global.editJob!(item.manageWorkId ?? 0);
           if (result != null) {
-            allowPop = true;
+            _bloc.allowPop = true;
           await _bloc.getData(widget.customer_lead_code!);
           }
         }
@@ -1486,7 +1485,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                             var result =
                                 await Global.createDeal!(detail!.toJson());
                             if (result != null) {
-                              allowPop = true;
+                              _bloc.allowPop = true;
                               _bloc.getData(widget.customer_lead_code!);
                             }
                           }
@@ -1529,7 +1528,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                     if (Global.createCare != null) {
                       var result = await Global.createCare!(_bloc.detail!.toJson());
                       if (result != null) {
-                        allowPop = true;
+                        _bloc.allowPop = true;
                         _bloc.getData(widget.customer_lead_code!);
                       }
                     }
@@ -1832,7 +1831,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                                 )));
         
                     if (result != null) {
-                      allowPop = true;
+                      _bloc.allowPop = true;
                       _bloc.getData(widget.customer_lead_code!);
                     }
                   },
@@ -1919,7 +1918,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                             Navigator.of(context).pop();
                             if (result != null) {
                               if (result.errorCode == 0) {
-                                allowPop = true;
+                                _bloc.allowPop = true;
                                 print(result.errorDescription);
                                 await LeadConnection.showMyDialog(
                                     context, result.errorDescription);
@@ -1972,7 +1971,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                             bool? result =
                                 await Global.createDeal!(detail!.toJson());
                             if (result != null) {
-                              allowPop = true;
+                              _bloc.allowPop = true;
                               _bloc.getData(widget.customer_lead_code!);
                             }
                           }
@@ -2001,7 +2000,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                                     type: "revoke"))
                                 .then((value) {
                               if ( value) {
-                                   allowPop = true;
+                                   _bloc.allowPop = true;
                                   _bloc.getData(detail?.customerLeadCode ?? "");
                                 }
                             });
@@ -2018,7 +2017,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                                       type: "assign"))
                                   .then((value) {
                                 if (value) {
-                                  allowPop = true;
+                                  _bloc.allowPop = true;
                                   _bloc.getData(detail?.customerLeadCode ?? "");
                                 }
                               });
@@ -2046,12 +2045,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             ..pop(true);
         }
 
-        if (allowPop) {
-          Navigator.of(context).pop(allowPop);
+        if (_bloc.allowPop) {
+          Navigator.of(context).pop(_bloc.allowPop);
         } else {
           Navigator.of(context).pop();
         }
-        return allowPop;
+        return _bloc.allowPop;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -2159,7 +2158,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         //                           CustomerCarePotential(detail: detail)));
 
         //               if (result != null && result) {
-        //                 allowPop = true;
+        //                 _bloc.allowPop = true;
         //                 reloadCSKH = true;
         //                 getData();
         //                 index = 2;
@@ -2197,7 +2196,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
 
         //                 if (result != null) {
         //                   if (result.errorCode == 0) {
-        //                     allowPop = true;
+        //                     _bloc.allowPop = true;
         //                     print(result.errorDescription);
 
         //                     await LeadConnection.showMyDialog(
@@ -2240,7 +2239,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         //             if (result != null) {
         //               if (result) {
         //                 reloadContactList = true;
-        //                 allowPop = true;
+        //                 _bloc.allowPop = true;
         //                 selectedTab(index!);
         //                 getData();
         //                 ;

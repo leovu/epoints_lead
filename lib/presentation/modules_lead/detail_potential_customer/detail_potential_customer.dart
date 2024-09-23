@@ -349,7 +349,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             title: hidePhone(
                                 detail?.phone ?? "",
                                 checkVisibilityKey(
-                                    VisibilityWidgetName.CM000004)),
+                                    VisibilityWidgetName.LE000002)),
           ),
           SizedBox(
             height: AppSizes.minPadding! / 2,

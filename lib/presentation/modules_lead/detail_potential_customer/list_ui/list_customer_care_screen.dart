@@ -6,6 +6,7 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/model/response/care_lead_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/bloc/detail_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/bloc/list_customer_care_bloc.dart';
+import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_empty.dart';
@@ -155,6 +156,18 @@ late ListCustomerCareBloc _bloc;
 
     return InkWell(
       onTap: () async {
+        if (Global.editJob != null) {
+          var result = await Global.editJob!(item.manageWorkId ?? 0);
+          if (result != null) {
+            widget.bloc.getCareLead(context).then((value) {
+              if (value != null) {
+                _bloc.onRemove();
+                _bloc.setCareLead(widget.bloc.listCareLead);
+              }
+            });
+          }
+        }
+
       },
       child: Container(
         child: Container(

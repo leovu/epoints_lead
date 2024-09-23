@@ -381,7 +381,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       _bloc.setAddressModel(_bloc.addressModel);
     }
 
-    if (detailNew?.customerLeadReferId != null) {
+    if (detailNew?.customerLeadReferId != null && detailNew?.customerLeadReferName != null) {
       _bloc.presenterModel = CustomerModel(
           customerId: detailNew?.customerLeadReferId,
           fullName: detailNew?.customerLeadReferName ?? "");
@@ -1329,7 +1329,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
           branchId: _bloc.branchSelected?.branchId ?? 0,
           note: _bloc.noteController.text,
-          customerLeadReferId: 0,
+          customerLeadReferId: _bloc.presenterModel?.customerId ?? 0,
           arrPhoneAttack: _bloc.listPhone,
           website: _bloc.websiteController.text,
         ));

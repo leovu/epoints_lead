@@ -1865,7 +1865,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   heightButton: AppSizes.sizeOnTap,
                   text: "Liên hệ",
                   ontap: () {
-                    if (Global.callHotline != null) {
+                    if (detail?.phone != null && detail?.phone != "") {
+                      if (Global.callHotline != null) {
                       Global.callHotline!({
                         "id": detail?.customerLeadId,
                         "code": detail?.customerLeadCode,
@@ -1874,6 +1875,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         "phone": detail?.phone,
                         "type": detail?.customerType,
                       });
+                    } else {
+                      LeadConnection.showMyDialog(
+                          context, "Không có số điện thoại");
+                    }
                     }
                   },
                 ),

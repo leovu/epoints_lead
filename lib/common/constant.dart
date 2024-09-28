@@ -11,3 +11,7 @@ final int customerGuestId = 1;
 final String customerTypePersonal = "personal";
 final String customerTypeBusiness = "business";
 
+final String genderMale = "male";
+final String genderFemale = "female";
+final String genderOther = "other";
+

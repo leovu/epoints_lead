@@ -390,6 +390,10 @@ class DetailPotentialCustomerBloc extends BaseBloc {
     }
   }
 
+  onPushPresenter () {
+    
+  }
+
 
 
 

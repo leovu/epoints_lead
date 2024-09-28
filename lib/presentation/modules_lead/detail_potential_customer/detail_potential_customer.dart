@@ -113,13 +113,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         (value) {
           if (value) {
             detail = _bloc.detail;
-            setState(() {
-              
-            });
+            setState(() {});
           }
         },
       );
-
     });
   }
 
@@ -137,12 +134,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     return (detail == null)
         ? Container()
         : StreamBuilder(
-          stream: _bloc.outputModel,
-          initialData: _bloc.detail,
-          builder: (context, snapshot) {
-            _bloc.detail = snapshot.data as DetailPotentialData?;
-            detail = _bloc.detail;
-            return Stack(
+            stream: _bloc.outputModel,
+            initialData: _bloc.detail,
+            builder: (context, snapshot) {
+              _bloc.detail = snapshot.data as DetailPotentialData?;
+              detail = _bloc.detail;
+              return Stack(
                 children: [
                   Padding(
                     padding: EdgeInsets.only(
@@ -151,13 +148,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                     child: Column(
                       children: [
                         buildListOption(),
-                        Expanded(
-                            child: ListView(
-                          padding: EdgeInsets.zero,
-                          physics: AlwaysScrollableScrollPhysics(),
-                          controller: _controller,
-                          children: buildInfomation(),
-                        )),
+                        Expanded(child: buildInfomation()),
                       ],
                     ),
                   ),
@@ -172,12 +163,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   )
                 ],
               );
-          }
-        );
+            });
   }
 
-  List<Widget> buildInfomation() {
-    return [(index == 0) ? _listInfomationRelevant() : generalInfomationV2()];
+  Widget buildInfomation() {
+    return (index == 0)
+        ? _listInfomationRelevant()
+        : generalInfomationV2();
   }
 
   Widget buildListOption() {
@@ -312,389 +304,684 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     );
   }
 
+  // Widget generalInfomationV2() {
+  //   return StreamBuilder(
+  //       stream: _bloc.outputModel,
+  //       initialData: _bloc.detail,
+  //       builder: (context, snapshot) {
+  //         _bloc.detail = snapshot.data as DetailPotentialData?;
+  //         detail = _bloc.detail;
+  //         return (_bloc.detail != null)
+  //             ? _bloc.detail!.customerType == "personal"
+  //                 ? generalInfomationPersonal()
+  //                 : generalInfomationBusiness()
+  //             : SizedBox();
+  //       });
+  // }
+
+  Widget _buildRow(Widget child, Widget child1) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(child: child),
+        SizedBox(
+          width: AppSizes.minPadding,
+        ),
+        Expanded(child: child1)
+      ],
+    );
+  }
+
+  Widget _buildInfo(DetailPotentialData model) {
+    return Row(
+      children: [
+        CustomAvatar(
+          url: model.avatar,
+          name: model.fullName,
+          size: 60.0,
+        ),
+        SizedBox(
+          width: AppSizes.minPadding,
+        ),
+        Expanded(
+            child: CustomListView(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          children: [
+            Text(
+              model.fullName ?? "",
+              style: AppTextStyles.style14PrimaryBold,
+            ),
+            if ((model.customerTypeName ?? "").isNotEmpty)
+              Text(
+                model.customerTypeName ?? "",
+                style: AppTextStyles.style14HintNormal,
+              ),
+            if ((model.phone ?? "").isNotEmpty)
+              Text(
+                hidePhone(model.phone,
+                    checkVisibilityKey(VisibilityWidgetName.CM000004)),
+                style: AppTextStyles.style14BlackNormal,
+              ),
+          ],
+        )),
+      ],
+    );
+  }
+
+  Widget _buildCode(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconBarcode,
+        title: "Mã khách hàng",
+        content: model.customerLeadCode);
+  }
+
+  Widget _buildEmail(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconMail,
+        title: AppLocalizations.text(LangKey.email),
+        content: hideEmail(
+            model.email, checkVisibilityKey(VisibilityWidgetName.CM000004)));
+  }
+
+  Widget _buildWebsite(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconWebsite,
+        title: "Website",
+        content: hideSocial(
+            model.hotline, checkVisibilityKey(VisibilityWidgetName.CM000004)));
+  }
+
+  Widget _buildAddress(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconMarker,
+        title: AppLocalizations.text(LangKey.address),
+        content: model.fullAddress);
+  }
+
+  Widget _buildJourney(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconItinerary,
+        title: AppLocalizations.text(LangKey.journey),
+        content: model.journeyName);
+  }
+
+  Widget _buildPipeline(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconPin,
+        title: AppLocalizations.text(LangKey.pipeline),
+        content: model.pipelineName);
+  }
+
+  Widget _buildSource(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconUserGroup,
+        title: AppLocalizations.text(LangKey.customer_source),
+        content: model.customerSourceName);
+  }
+
+  Widget _buildGroup(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconGroup,
+        title: AppLocalizations.text(LangKey.customer_group),
+        content: model.customerGroupName);
+  }
+
+  Widget _buildTag(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+      icon: Assets.iconTagFill,
+      title: AppLocalizations.text(LangKey.tags),
+      child: (model.tag?.length ?? 0) > 0
+          ? SizedBox(
+              width: double.infinity,
+              child: Wrap(
+                children: List.generate(detail!.tag!.length,
+                    (index) => _tagDetail(detail!.tag![index])),
+                spacing: 10,
+                runSpacing: 10,
+              ),
+            )
+          : null,
+    );
+  }
+
+  Widget _buildAllottedPersone(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconPersonTag,
+        title: AppLocalizations.text(LangKey.allottedPerson),
+        content: model.saleName);
+  }
+
+  Widget _buildPresenter(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+      icon: Assets.iconSearch,
+      title: AppLocalizations.text(LangKey.presenter),
+      content: model.customerLeadReferName ?? "",
+      styleContent: _bloc.detail!.customerLeadReferId == null
+          ? null
+          : AppTextStyles.style14PrimaryBold
+              .copyWith(decoration: TextDecoration.underline),
+      onTap: _bloc.detail!.customerLeadReferId == null
+          ? null
+          : _bloc.onPushPresenter,
+    );
+  }
+
+  Widget _buildFoundingDate(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconCalendarFill,
+        title: AppLocalizations.text(LangKey.founding_date),
+        content: model.birthday);
+  }
+
+  Widget _buildGender(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconGen,
+        title: AppLocalizations.text(LangKey.gender),
+        content: model.gender == genderMale
+            ? AppLocalizations.text(LangKey.male)
+            : model.gender == genderFemale
+                ? AppLocalizations.text(LangKey.female)
+                : AppLocalizations.text(LangKey.other));
+  }
+
+  Widget _buildDate(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconCalendarFill,
+        title: AppLocalizations.text(LangKey.birthday),
+        content: model.birthday);
+  }
+
+  Widget _buildZalo(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconZalo,
+        title: "Zalo",
+        content: hideSocial(
+            model.zalo, checkVisibilityKey(VisibilityWidgetName.CM000004)));
+  }
+
+  Widget _buildFacebook(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconFacebook,
+        title: "Facebook",
+        content: hideSocial(
+            model.fanpage, checkVisibilityKey(VisibilityWidgetName.CM000004)));
+  }
+
+  Widget _buildTaxCode(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconTax,
+        title: AppLocalizations.text(LangKey.tax_code_1),
+        content: model.taxCode);
+  }
+
+  Widget _buildArea(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconBusinessArea,
+        title: AppLocalizations.text(LangKey.business_areas),
+        content: model.businessName);
+  }
+
+  Widget _buildRepresentative(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconUserStand,
+        title: AppLocalizations.text(LangKey.representative),
+        content: model.representative);
+  }
+
+  Widget _buildQuantity(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconQuantity,
+        title: AppLocalizations.text(LangKey.number_of_employees),
+        content: (model.employQty ?? "").toString());
+  }
+
+  Widget _buildBranch(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconBranch,
+        title: AppLocalizations.text(LangKey.branch),
+        content: model.branchName);
+  }
+
+  Widget _buildCreateBy(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconUserSetting,
+        title: AppLocalizations.text(LangKey.creator),
+        content: model.createdByName);
+  }
+
+  Widget _buildUpdateBy(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconUserUpdate,
+        title: AppLocalizations.text(LangKey.updater),
+        content: model.updatedByName);
+  }
+
+  Widget _buildNote(DetailPotentialData model) {
+    return CustomColumnIconInformation(
+        icon: Assets.iconEditNote,
+        title: AppLocalizations.text(LangKey.note),
+        content: model.note);
+  }
+
   Widget generalInfomationV2() {
     return StreamBuilder(
-        stream: _bloc.outputModel,
-        initialData: _bloc.detail,
-        builder: (context, snapshot) {
-          _bloc.detail = snapshot.data as DetailPotentialData?;
-          detail = _bloc.detail;
-          return (_bloc.detail != null)
-              ? _bloc.detail!.customerType == "personal"
-                  ? generalInfomationPersonal()
-                  : generalInfomationBusiness()
-              : SizedBox();
-        });
-  }
-
-  Widget generalInfomationPersonal() {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomInfomationLeadWidget(
-            avatarUrl: detail?.avatar,
-            name: detail?.fullName ?? "",
-            type: detail!.customerType == "personal"
-                ? AppLocalizations.text(LangKey.personal)
-                : AppLocalizations.text(LangKey.business),
-          ),
-          SizedBox(
-            height: AppSizes.minPadding,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconCall,
-            title: hidePhone(
-                                detail?.phone ?? "",
-                                checkVisibilityKey(
-                                    VisibilityWidgetName.LE000002)),
-          ),
-          SizedBox(
-            height: AppSizes.minPadding! / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconEmail,
-              title: hideEmail(detail?.email ?? "",
-                          checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
-                      ""
-                  ? hideEmail(detail?.email ?? "",
-                      checkVisibilityKey(VisibilityWidgetName.LE000002))
-                  : NULL_VALUE),
-          SizedBox(
-            height: AppSizes.minPadding! / 2,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconAddress,
-            title: "Địa chỉ: ${detail!.fullAddress ?? NULL_VALUE}",
-          ),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconUserGroup,
-            title: "Nhóm khách hàng: ${detail!.customerGroupName ?? NULL_VALUE}",
-          ),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconSourceCustomer,
-            title: "Nguồn khách hàng: ${detail!.customerSourceName ?? NULL_VALUE}",
-          ),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconSearch,
-            iconColor: AppColors.primaryColor,
-            child:Row(
+      stream: _bloc.outputModel,
+      initialData: null,
+      builder: (_, snapshot) {
+        DetailPotentialData? model = snapshot.data as DetailPotentialData?;
+        return ContainerDataBuilder(
+          data: model,
+          skeletonBuilder: _buildSkeleton(),
+          bodyBuilder: () {
+            bool isPersonal = model!.customerType == customerTypePersonal;
+            return CustomListView(
+              shrinkWrap: true,
+              physics: ClampingScrollPhysics(),
+              separatorPadding: AppSizes.maxPadding,
               children: [
-                _buildSaleNameText(detail?.customerLeadReferName ?? NULL_VALUE),
-                _buildIntroductionText(),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconSex, title: "Giới tính: ${getGenderText(detail!.gender ?? "")}"),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconPin,
-              title:
-                  "${AppLocalizations.text(LangKey.pipeline)}: ${detail?.pipelineName ?? NULL_VALUE} "),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconItinerary,
-              title:
-                  "${AppLocalizations.text(LangKey.journey)}: ${detail?.journeyName ?? NULL_VALUE} "),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconBirthday,
-              title: "Ngày sinh: ${detail?.birthday ?? NULL_VALUE} "),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconWebsite,
-              child: _buildLink(hideSocial(detail?.website ?? "",
-                          checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
-                      ""
-                  ? hideSocial(detail?.fanpage ?? "",
-                      checkVisibilityKey(VisibilityWidgetName.LE000002))
-                  : NULL_VALUE)),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconSource,
-              child: _buildLink(hideSocial(detail?.zalo ?? "",false))),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconFanpage,
-              child: _buildLink(hideSocial(detail?.fanpage ?? "",
-                          checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
-                      ""
-                  ? hideSocial(detail?.fanpage ?? "",
-                      checkVisibilityKey(VisibilityWidgetName.LE000002))
-                  : NULL_VALUE)),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconBranch, title: "Chi nhánh: ${detail?.branchName ?? NULL_VALUE} "),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconPersonTag,
-              title:
-                  "${AppLocalizations.text(LangKey.allottedPerson)}: ${detail?.saleName ?? NULL_VALUE}"),
-          if (detail?.tag != null && (detail?.tag!.length ?? 0) > 0)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  Assets.iconTag,
-                  scale: 3.0,
-                ),
-                SizedBox(width: AppSizes.minPadding),
-                Expanded(
-                  child: Container(
-                    child: Wrap(
-                      children: List.generate(detail!.tag!.length,
-                          (index) => _tagDetail(detail!.tag![index])),
-                      spacing: 10,
-                      runSpacing: 10,
-                    ),
+                _buildInfo(model),
+                _buildRow(_buildCode(model), _buildEmail(model)),
+                if (!isPersonal) _buildWebsite(model),
+                _buildAddress(model),
+                _buildRow(_buildPipeline(model), _buildJourney(model)),
+                _buildRow(_buildSource(model), _buildGroup(model)),
+                _buildAllottedPersone(model),
+                _buildTag(model),
+                _buildPresenter(model),
+                if (!isPersonal)
+                  _buildFoundingDate(model)
+                else
+                  _buildRow(
+                    _buildGender(model),
+                    _buildDate(model),
                   ),
-                ),
+                _buildRow(_buildZalo(model), _buildFacebook(model)),
+                if (!isPersonal) ...[
+                  _buildRow(_buildTaxCode(model), _buildArea(model)),
+                  _buildRow(_buildRepresentative(model), _buildQuantity(model)),
+                ],
+                _buildRow(_buildBranch(model), _buildCreateBy(model)),
+                _buildUpdateBy(model),
+                _buildNote(model)
               ],
-            ),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              "Ghi chú",
-              style: AppTextStyles.style14PrimaryBold,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              detail?.note ?? NULL_VALUE,
-              style: AppTextStyles.style14BlackNormal,
-            ),
-          )
-        ],
-      ),
+              onRefresh: () => _bloc.getData(_bloc.detail!.customerLeadCode!),
+            );
+          },
+        );
+      },
     );
   }
 
-  Widget generalInfomationBusiness() {
-    return Container(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          CustomInfomationLeadWidget(
-            avatarUrl: detail?.avatar,
-            name: detail?.fullName ?? "",
-            type: detail!.customerType == "personal"
-                ? AppLocalizations.text(LangKey.personal)
-                : AppLocalizations.text(LangKey.business),
-          ),
-          SizedBox(
-            height: AppSizes.minPadding,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconCall,
-            title:  hidePhone(
-                                detail?.phone ?? "",
-                                checkVisibilityKey(
-                                    VisibilityWidgetName.CM000004)),
-          ),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconEmail,
-              title: hideEmail(detail?.email ?? "",
-                          checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
-                      ""
-                  ? hideEmail(detail?.email ?? "",
-                      checkVisibilityKey(VisibilityWidgetName.LE000002))
-                  : NULL_VALUE),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconAddress,
-            title: detail!.fullAddress ?? NULL_VALUE,
-          ),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconSourceCustomer,
-            title: detail!.customerSourceName ?? NULL_VALUE,
-          ),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-            icon: Assets.iconSearch,
-            iconColor: AppColors.primaryColor,
-            child:Row(
-              children: [
-                _buildSaleNameText(detail?.customerLeadReferName ?? NULL_VALUE),
-                _buildIntroductionText(),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconPin,
-              title:
-                  "${AppLocalizations.text(LangKey.pipeline)}: ${detail?.pipelineName} "),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconItinerary,
-              title:
-                  "${AppLocalizations.text(LangKey.journey)}: ${detail?.journeyName} "),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconBranch, title: "Chi nhánh: ${detail?.branchName ?? NULL_VALUE}  "),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconPersonTag,
-              title:
-                  "${AppLocalizations.text(LangKey.allottedPerson)}: ${detail?.saleName ?? NULL_VALUE}"),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconProject,
-              title:
-                  "${AppLocalizations.text(LangKey.businessAreas)}: ${detail?.businessName ?? NULL_VALUE}"),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconWebsite,
-              title: "Website: ${detail?.website ?? NULL_VALUE}"),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconSource,
-              child: _buildLink(hideSocial(detail?.zalo ?? "",
-                          checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
-                      ""
-                  ? hideSocial(detail?.zalo ?? "",
-                      checkVisibilityKey(VisibilityWidgetName.LE000002))
-                  : NULL_VALUE)),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconFanpage,
-              child: _buildLink(hideSocial(detail?.fanpage ?? "",
-                          checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
-                      ""
-                  ? hideSocial(detail?.fanpage ?? "",
-                      checkVisibilityKey(VisibilityWidgetName.LE000002))
-                  : NULL_VALUE)),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconBirthday,
-              title: "Ngày thành lập: ${detail?.birthday ?? NULL_VALUE}"),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconTax,
-              title:
-                  "${AppLocalizations.text(LangKey.tax)}: ${detail?.taxCode ?? NULL_VALUE}"),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconNumberEmployees,
-              title:
-                  "${AppLocalizations.text(LangKey.numberEmployees)}: ${detail?.employees ?? NULL_VALUE}"),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconRepresentative,
-              title:
-                  "${AppLocalizations.text(LangKey.representative)} - ${detail?.representative ?? NULL_VALUE}"),
-          SizedBox(
-            height: AppSizes.minPadding / 2,
-          ),
-          CustomRowImageContentWidget(
-              icon: Assets.iconContact,
-              title:
-                  "${AppLocalizations.text(LangKey.contactPerson)} - ${detail?.customerContactName ?? NULL_VALUE}"),
-          if (detail?.tag != null && (detail?.tag!.length ?? 0) > 0)
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Image.asset(
-                  Assets.iconTag,
-                  scale: 3.0,
-                ),
-                SizedBox(width: AppSizes.minPadding),
-                Expanded(
-                  child: Container(
-                    child: Wrap(
-                      children: List.generate(detail!.tag!.length,
-                          (index) => _tagDetail(detail!.tag![index])),
-                      spacing: 10,
-                      runSpacing: 10,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              "Ghi chú",
-              style: AppTextStyles.style14PrimaryBold,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Text(
-              _bloc.detail?.note ?? NULL_VALUE,
-              style: AppTextStyles.style14BlackNormal,
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget generalInfomationPersonal() {
+  //   return Container(
+  //     padding: EdgeInsets.all(8.0),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         CustomInfomationLeadWidget(
+  //           avatarUrl: detail?.avatar,
+  //           name: detail?.fullName ?? "",
+  //           type: detail!.customerType == "personal"
+  //               ? AppLocalizations.text(LangKey.personal)
+  //               : AppLocalizations.text(LangKey.business),
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconCall,
+  //           title: hidePhone(
+  //                               detail?.phone ?? "",
+  //                               checkVisibilityKey(
+  //                                   VisibilityWidgetName.LE000002)),
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding! / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconEmail,
+  //             title: hideEmail(detail?.email ?? "",
+  //                         checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
+  //                     ""
+  //                 ? hideEmail(detail?.email ?? "",
+  //                     checkVisibilityKey(VisibilityWidgetName.LE000002))
+  //                 : NULL_VALUE),
+  //         SizedBox(
+  //           height: AppSizes.minPadding! / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconAddress,
+  //           title: "Địa chỉ: ${detail!.fullAddress ?? NULL_VALUE}",
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconUserGroup,
+  //           title: "Nhóm khách hàng: ${detail!.customerGroupName ?? NULL_VALUE}",
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconSourceCustomer,
+  //           title: "Nguồn khách hàng: ${detail!.customerSourceName ?? NULL_VALUE}",
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconSearch,
+  //           iconColor: AppColors.primaryColor,
+  //           child:Row(
+  //             children: [
+  //               _buildSaleNameText(detail?.customerLeadReferName ?? NULL_VALUE),
+  //               _buildIntroductionText(),
+  //             ],
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconSex, title: "Giới tính: ${getGenderText(detail!.gender ?? "")}"),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconPin,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.pipeline)}: ${detail?.pipelineName ?? NULL_VALUE} "),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconItinerary,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.journey)}: ${detail?.journeyName ?? NULL_VALUE} "),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconBirthday,
+  //             title: "Ngày sinh: ${detail?.birthday ?? NULL_VALUE} "),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconWebsite,
+  //             child: _buildLink(hideSocial(detail?.website ?? "",
+  //                         checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
+  //                     ""
+  //                 ? hideSocial(detail?.fanpage ?? "",
+  //                     checkVisibilityKey(VisibilityWidgetName.LE000002))
+  //                 : NULL_VALUE)),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconSource,
+  //             child: _buildLink(hideSocial(detail?.zalo ?? "",false))),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconFanpage,
+  //             child: _buildLink(hideSocial(detail?.fanpage ?? "",
+  //                         checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
+  //                     ""
+  //                 ? hideSocial(detail?.fanpage ?? "",
+  //                     checkVisibilityKey(VisibilityWidgetName.LE000002))
+  //                 : NULL_VALUE)),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconBranch, title: "Chi nhánh: ${detail?.branchName ?? NULL_VALUE} "),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconPersonTag,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.allottedPerson)}: ${detail?.saleName ?? NULL_VALUE}"),
+  //         if (detail?.tag != null && (detail?.tag!.length ?? 0) > 0)
+  //           Row(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Image.asset(
+  //                 Assets.iconTag,
+  //                 scale: 3.0,
+  //               ),
+  //               SizedBox(width: AppSizes.minPadding),
+  //               Expanded(
+  //                 child: Container(
+  //                   child: Wrap(
+  //                     children: List.generate(detail!.tag!.length,
+  //                         (index) => _tagDetail(detail!.tag![index])),
+  //                     spacing: 10,
+  //                     runSpacing: 10,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         Padding(
+  //           padding: EdgeInsets.only(left: 8.0),
+  //           child: Text(
+  //             "Ghi chú",
+  //             style: AppTextStyles.style14PrimaryBold,
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: EdgeInsets.only(left: 8.0),
+  //           child: Text(
+  //             detail?.note ?? NULL_VALUE,
+  //             style: AppTextStyles.style14BlackNormal,
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // Widget generalInfomationBusiness() {
+  //   return Container(
+  //     padding: EdgeInsets.all(8.0),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         CustomInfomationLeadWidget(
+  //           avatarUrl: detail?.avatar,
+  //           name: detail?.fullName ?? "",
+  //           type: detail!.customerType == "personal"
+  //               ? AppLocalizations.text(LangKey.personal)
+  //               : AppLocalizations.text(LangKey.business),
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconCall,
+  //           title:  hidePhone(
+  //                               detail?.phone ?? "",
+  //                               checkVisibilityKey(
+  //                                   VisibilityWidgetName.CM000004)),
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconEmail,
+  //             title: hideEmail(detail?.email ?? "",
+  //                         checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
+  //                     ""
+  //                 ? hideEmail(detail?.email ?? "",
+  //                     checkVisibilityKey(VisibilityWidgetName.LE000002))
+  //                 : NULL_VALUE),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconAddress,
+  //           title: detail!.fullAddress ?? NULL_VALUE,
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconSourceCustomer,
+  //           title: detail!.customerSourceName ?? NULL_VALUE,
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //           icon: Assets.iconSearch,
+  //           iconColor: AppColors.primaryColor,
+  //           child:Row(
+  //             children: [
+  //               _buildSaleNameText(detail?.customerLeadReferName ?? NULL_VALUE),
+  //               _buildIntroductionText(),
+  //             ],
+  //           ),
+  //         ),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconPin,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.pipeline)}: ${detail?.pipelineName} "),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconItinerary,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.journey)}: ${detail?.journeyName} "),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconBranch, title: "Chi nhánh: ${detail?.branchName ?? NULL_VALUE}  "),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconPersonTag,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.allottedPerson)}: ${detail?.saleName ?? NULL_VALUE}"),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconProject,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.businessAreas)}: ${detail?.businessName ?? NULL_VALUE}"),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconWebsite,
+  //             title: "Website: ${detail?.website ?? NULL_VALUE}"),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconSource,
+  //             child: _buildLink(hideSocial(detail?.zalo ?? "",
+  //                         checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
+  //                     ""
+  //                 ? hideSocial(detail?.zalo ?? "",
+  //                     checkVisibilityKey(VisibilityWidgetName.LE000002))
+  //                 : NULL_VALUE)),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconFanpage,
+  //             child: _buildLink(hideSocial(detail?.fanpage ?? "",
+  //                         checkVisibilityKey(VisibilityWidgetName.LE000002)) !=
+  //                     ""
+  //                 ? hideSocial(detail?.fanpage ?? "",
+  //                     checkVisibilityKey(VisibilityWidgetName.LE000002))
+  //                 : NULL_VALUE)),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconBirthday,
+  //             title: "Ngày thành lập: ${detail?.birthday ?? NULL_VALUE}"),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconTax,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.tax)}: ${detail?.taxCode ?? NULL_VALUE}"),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconNumberEmployees,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.numberEmployees)}: ${detail?.employees ?? NULL_VALUE}"),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconRepresentative,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.representative)} - ${detail?.representative ?? NULL_VALUE}"),
+  //         SizedBox(
+  //           height: AppSizes.minPadding / 2,
+  //         ),
+  //         CustomRowImageContentWidget(
+  //             icon: Assets.iconContact,
+  //             title:
+  //                 "${AppLocalizations.text(LangKey.contactPerson)} - ${detail?.customerContactName ?? NULL_VALUE}"),
+  //         if (detail?.tag != null && (detail?.tag!.length ?? 0) > 0)
+  //           Row(
+  //             crossAxisAlignment: CrossAxisAlignment.start,
+  //             children: [
+  //               Image.asset(
+  //                 Assets.iconTag,
+  //                 scale: 3.0,
+  //               ),
+  //               SizedBox(width: AppSizes.minPadding),
+  //               Expanded(
+  //                 child: Container(
+  //                   child: Wrap(
+  //                     children: List.generate(detail!.tag!.length,
+  //                         (index) => _tagDetail(detail!.tag![index])),
+  //                     spacing: 10,
+  //                     runSpacing: 10,
+  //                   ),
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         Padding(
+  //           padding: EdgeInsets.only(left: 8.0),
+  //           child: Text(
+  //             "Ghi chú",
+  //             style: AppTextStyles.style14PrimaryBold,
+  //           ),
+  //         ),
+  //         Padding(
+  //           padding: EdgeInsets.only(left: 8.0),
+  //           child: Text(
+  //             _bloc.detail?.note ?? NULL_VALUE,
+  //             style: AppTextStyles.style14BlackNormal,
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _infoItemV2(String icon, String title) {
     return Container(
@@ -927,7 +1214,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           var result = await Global.editJob!(item.manageWorkId ?? 0);
           if (result != null) {
             _bloc.allowPop = true;
-          await _bloc.getData(widget.customer_lead_code!);
+            await _bloc.getData(widget.customer_lead_code!);
           }
         }
       },
@@ -1424,17 +1711,17 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                                 .add(SizedBox(height: AppSizes.minPadding / 2));
                             break;
                           case leadConfigContact:
-                          _bloc.children!
+                            _bloc.children!
                                 .add(SizedBox(height: AppSizes.minPadding / 2));
                             _bloc.children!.add(_buildListContact(e));
                             break;
-                            case leadConfigNote:
-                          _bloc.children!
+                          case leadConfigNote:
+                            _bloc.children!
                                 .add(SizedBox(height: AppSizes.minPadding / 2));
                             _bloc.children!.add(_buildLisNote(e));
                             break;
-                            case leadConfigFile:
-                          _bloc.children!
+                          case leadConfigFile:
+                            _bloc.children!
                                 .add(SizedBox(height: AppSizes.minPadding / 2));
                             _bloc.children!.add(_buildListFile(e));
                             break;
@@ -1482,13 +1769,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       _bloc.onSetExpand(() => _bloc.expandDeal = event),
                   onTapPlus: () async {
                     if (Global.createDeal != null) {
-                            var result =
-                                await Global.createDeal!(detail!.toJson());
-                            if (result != null) {
-                              _bloc.allowPop = true;
-                              _bloc.getData(widget.customer_lead_code!);
-                            }
-                          }
+                      var result = await Global.createDeal!(detail!.toJson());
+                      if (result != null) {
+                        _bloc.allowPop = true;
+                        _bloc.getData(widget.customer_lead_code!);
+                      }
+                    }
                   },
                   onTapList: () {
                     _bloc.onTapListDeal();
@@ -1526,7 +1812,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       _bloc.onSetExpand(() => _bloc.expandCare = event),
                   onTapPlus: () async {
                     if (Global.createCare != null) {
-                      var result = await Global.createCare!(_bloc.detail!.toJson());
+                      var result =
+                          await Global.createCare!(_bloc.detail!.toJson());
                       if (result != null) {
                         _bloc.allowPop = true;
                         _bloc.getData(widget.customer_lead_code!);
@@ -1579,9 +1866,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   isExpand: _bloc.expandListNote,
                   quantity: _bloc.listNoteData.length,
                   child: CustomListView(
-                   padding: EdgeInsets.symmetric(
-                        horizontal: AppSizes.minPadding/2,
-                        vertical: AppSizes.minPadding/2),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSizes.minPadding / 2,
+                        vertical: AppSizes.minPadding / 2),
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     children: List.generate(
@@ -1621,12 +1908,13 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   quantity: _bloc.listLeadsFiles.length,
                   child: CustomListView(
                     padding: EdgeInsets.symmetric(
-                        horizontal: AppSizes.minPadding/2,
-                        vertical: AppSizes.minPadding/2),
+                        horizontal: AppSizes.minPadding / 2,
+                        vertical: AppSizes.minPadding / 2),
                     shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
                     children: _bloc.listLeadsFiles
-                        .map((e) => _fileItem(e,_bloc.listLeadsFiles.indexOf(e)))
+                        .map((e) =>
+                            _fileItem(e, _bloc.listLeadsFiles.indexOf(e)))
                         .toList(),
                   ),
                 );
@@ -1671,7 +1959,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         });
   }
 
-    Widget noteItem(NoteData model, int index) {
+  Widget noteItem(NoteData model, int index) {
     String? name, date;
 
     if (model.createdBy != null) {
@@ -1829,7 +2117,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                             builder: (context) => EditPotentialCustomer(
                                   detailPotential: detail,
                                 )));
-        
+
                     if (result != null) {
                       _bloc.allowPop = true;
                       _bloc.getData(widget.customer_lead_code!);
@@ -1866,18 +2154,18 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   ontap: () {
                     if (detail?.phone != null && detail?.phone != "") {
                       if (Global.callHotline != null) {
-                      Global.callHotline!({
-                        "id": detail?.customerLeadId,
-                        "code": detail?.customerLeadCode,
-                        "avatar": detail?.avatar,
-                        "name": detail?.fullName,
-                        "phone": detail?.phone,
-                        "type": detail?.customerType,
-                      });
-                    } else {
-                      LeadConnection.showMyDialog(
-                          context, "Không có số điện thoại");
-                    }
+                        Global.callHotline!({
+                          "id": detail?.customerLeadId,
+                          "code": detail?.customerLeadCode,
+                          "avatar": detail?.avatar,
+                          "name": detail?.fullName,
+                          "phone": detail?.phone,
+                          "type": detail?.customerType,
+                        });
+                      } else {
+                        LeadConnection.showMyDialog(
+                            context, "Không có số điện thoại");
+                      }
                     }
                   },
                 ),
@@ -1943,13 +2231,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         text: "CHUYỂN ĐỔI KH",
                         ontap: () async {
                           await _bloc
-                                .convertLead(_bloc.detail!.customerLeadId ?? 0)
-                                .then((value) {
-                              if ( value) {
-                                  CustomNavigator.pop(context, object: true);
-                                }
-                            });
-
+                              .convertLead(_bloc.detail!.customerLeadId ?? 0)
+                              .then((value) {
+                            if (value) {
+                              CustomNavigator.pop(context, object: true);
+                            }
+                          });
                         },
                       ),
                     ),
@@ -1987,7 +2274,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         style: AppTextStyles.style15WhiteNormal
                             .copyWith(fontWeight: FontWeight.bold),
                         heightButton: AppSizes.sizeOnTap,
-                        text: (_bloc.detail?.saleId != null && _bloc.detail?.saleId != 0)
+                        text: (_bloc.detail?.saleId != null &&
+                                _bloc.detail?.saleId != 0)
                             ? "THU HỒI"
                             : "PHÂN CÔNG",
                         ontap: () async {
@@ -1999,22 +2287,27 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                                     timeRevokeLead: detail?.timeRevokeLead ?? 0,
                                     type: "revoke"))
                                 .then((value) {
-                              if ( value) {
-                                   _bloc.allowPop = true;
-                                  _bloc.getData(detail?.customerLeadCode ?? "");
-                                }
+                              if (value) {
+                                _bloc.allowPop = true;
+                                _bloc.getData(detail?.customerLeadCode ?? "");
+                              }
                             });
                           } else {
                             List<WorkListStaffModel>? models =
-                                await Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (context) => PickOneStaffScreen()));
+                                await Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PickOneStaffScreen()));
                             if (models != null && models.length > 0) {
                               await _bloc
-                                  .assignRevokeLead(AssignRevokeLeadRequestModel(
-                                      customerLeadCode: detail?.customerLeadCode,
-                                      saleId: models[0].staffId,
-                                      timeRevokeLead: detail?.timeRevokeLead ?? 0,
-                                      type: "assign"))
+                                  .assignRevokeLead(
+                                      AssignRevokeLeadRequestModel(
+                                          customerLeadCode:
+                                              detail?.customerLeadCode,
+                                          saleId: models[0].staffId,
+                                          timeRevokeLead:
+                                              detail?.timeRevokeLead ?? 0,
+                                          type: "assign"))
                                   .then((value) {
                                 if (value) {
                                   _bloc.allowPop = true;
@@ -2030,7 +2323,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                 ),
               ],
             )),
-            Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1))
+        Positioned(top: 0, left: 0, right: 0, child: Gaps.line(1))
       ],
     );
   }

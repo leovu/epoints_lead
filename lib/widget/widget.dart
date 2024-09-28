@@ -40,3 +40,4 @@ part 'custom_row_infomation.dart';
 part 'custom_dropdown.dart';
 part 'container_customer.dart';
 part 'custom_combobox.dart';
+part 'custom_column_icon_infomation.dart';

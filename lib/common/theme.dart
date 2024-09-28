@@ -217,6 +217,15 @@ class AppTextSizes {
 }
 
 class AppTextStyles {
+  static TextStyle style14HintNormalItalic = TextStyle(
+      fontSize: AppTextSizes.size14,
+      color: AppColors.hintColor,
+      fontWeight: FontWeight.normal,
+      fontStyle: FontStyle.italic);
+  static TextStyle style13BlackBold = TextStyle(
+      fontSize: AppTextSizes.size13,
+      color: Colors.black,
+      fontWeight: FontWeight.bold);
   static TextStyle style12PrimaryBold = TextStyle(
       fontSize: AppTextSizes.size12,
       color: AppColors.primaryColor,

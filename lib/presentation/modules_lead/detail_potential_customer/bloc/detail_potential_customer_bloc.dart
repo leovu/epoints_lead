@@ -29,6 +29,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/note_module/ui/add_
 import 'package:lead_plugin_epoint/presentation/modules_lead/note_module/ui/create_note_screen.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/note_module/ui/list_note_screen.dart';
 import 'package:lead_plugin_epoint/utils/custom_document_picker.dart';
+import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/widget/custom_file_view.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:rxdart/streams.dart';
@@ -390,11 +391,7 @@ class DetailPotentialCustomerBloc extends BaseBloc {
     }
   }
 
-  onPushPresenter () {
-    
+  onPushPresenter () async {
+    await Global.negativeDetailPrefer?.call(detail?.customerLeadReferId ?? 0);
   }
-
-
-
-
 }

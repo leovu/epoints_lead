@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 
 class AppColors {
   static const subColor = Color(0xFF2F2E41);
-  static const primaryColor = Color(0xFF0067AC);
+  static const primaryColor = Color(0xFF3298DD);
   static const primary50Color = Color(0xFFF9DECF);
   static const white = Color(0xFFFFFFFF);
   static const white50 = Color(0xFFFAFAFA);

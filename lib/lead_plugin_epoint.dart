@@ -35,6 +35,7 @@ class LeadPluginEpoint {
       Function? createJob,
       Function(Map<String,dynamic>)?  createCare,
       Function(int)?  editJob,
+      Function(int)?  negativeDetailPrefer,
       Function(String)? openDetailDeal,
       Function(Map<String,dynamic>)? createDeal,
       Function(Map<String,dynamic>)? callHotline,
@@ -70,6 +71,11 @@ class LeadPluginEpoint {
     if (openDetailDeal != null) {
       Global.openDetailDeal = openDetailDeal;
     }
+
+    if (negativeDetailPrefer != null) {
+      Global.negativeDetailPrefer = negativeDetailPrefer;
+    }
+
     if (createDeal != null) {
       Global.createDeal = createDeal;
     }

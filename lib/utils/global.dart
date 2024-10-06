@@ -18,6 +18,8 @@ class Global {
 
   static Function(int)? editJob;
 
+  static Function(int)? negativeDetailPrefer;
+
   static Function(String)? openDetailDeal;
 
   static Function(Map<String,dynamic>)? createDeal;

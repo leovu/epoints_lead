@@ -75,10 +75,10 @@ class LeadConnection {
 
   static Future<ListCustomLeadModelReponse?> getList(
       BuildContext context, ListCustomLeadModelRequest model) async {
-    showLoading(context);
+    // showLoading(context);
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/list-customer-lead', model.toJson());
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
     if (responseData.isSuccess) {
       if (responseData.data != null) {
         ListCustomLeadModelReponse data =

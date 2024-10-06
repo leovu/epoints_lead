@@ -9,6 +9,7 @@ import 'package:lead_plugin_epoint/model/filter_screen_model.dart';
 import 'package:lead_plugin_epoint/model/request/list_customer_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
+import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/create_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
@@ -16,6 +17,9 @@ import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
+import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
+import 'package:lead_plugin_epoint/widget/widget.dart';
+import 'package:rxdart/subjects.dart';
 import 'dart:ui' as ui;
 
 import '../../../widget/custom_avatar_with_url.dart';
@@ -45,8 +49,10 @@ class _LeadScreen extends State<LeadScreen> {
     "QLCV"
   ];
 
-  int? currentPage = 1;
-  int? nextPage = 2;
+  final streamModel = BehaviorSubject<List<ListCustomLeadItems>?>();
+
+  int currentPage = 1;
+  int nextPage = 1;
 
   ListCustomLeadModelRequest? filterModel = ListCustomLeadModelRequest(
     search: "",
@@ -69,7 +75,7 @@ class _LeadScreen extends State<LeadScreen> {
   @override
   void initState() {
     super.initState();
-    _controller.addListener(_scrollListener);
+    // _controller.addListener(_scrollListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       filterScreenModel = FilterScreenModel(
@@ -121,24 +127,27 @@ class _LeadScreen extends State<LeadScreen> {
       } else {
         items!.addAll(model.data?.items as Iterable<ListCustomLeadItems>);
       }
-      currentPage = model.data?.pageInfo?.currentPage;
-      nextPage = model.data?.pageInfo?.nextPage;
-      setState(() {});
+      currentPage = model.data?.pageInfo?.currentPage ?? 1;
+      nextPage = model.data?.pageInfo?.nextPage ?? 1;
+      streamModel.set(items);
     } else {
       items = [];
-      setState(() {});
+      streamModel.set([]);
     }
   }
 
-  _scrollListener() async {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      if (this.currentPage! < this.nextPage!) {
-        filterModel!.page = currentPage! + 1;
-        getData(true);
-      }
-    }
-  }
+  // _scrollListener() async {
+  //   if (_controller.offset >= _controller.position.maxScrollExtent &&
+  //       !_controller.position.outOfRange) {
+  //     if (this.currentPage! < this.nextPage!) {
+        // filterModel!.page = currentPage! + 1;
+        // // getData(true);
+        // setState(() {
+          
+        // });
+  //     }
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -218,27 +227,57 @@ class _LeadScreen extends State<LeadScreen> {
         children: [
           _buildSearch(),
           Expanded(
-            child: CustomListView(
-              padding: EdgeInsets.only(
+            child: StreamBuilder(
+              stream: streamModel.output,
+              builder: (context, snapshot) {
+                items = snapshot.data as List<ListCustomLeadItems>?;
+                return CustomListView(
+                  padding: EdgeInsets.only(
                   top: 30.0, bottom: 10.0, left: 10.0, right: 10.0),
-              physics: const AlwaysScrollableScrollPhysics(),
-              controller: _controller,
-              // separator: const Divider(),
-              children: [
-                (items == null)
-                    ? Container()
-                    : (items!.length > 0)
-                        ? Column(
-                            children:
-                                items!.map((e) => potentialItemV2(e)).toList())
-                        : CustomDataNotFound(),
-                Container(height: 100)
-              ],
+                  onRefresh: () async {
+                    filterModel!.page = 1;
+                    getData(false);
+                  },
+                  onLoadmore: () async {
+                    if (currentPage < this.nextPage) {
+                      filterModel!.page = currentPage + 1;
+                      getData(true);
+                    }
+                  },
+                  physics: AlwaysScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  controller: _controller,
+                  children: [
+                    (items == null)
+                        ? _buildSkeleton()
+                        : (items!.length > 0)
+                            ? Column(
+                                children: items!.map((e) => potentialItemV2(e)).toList())
+                            : CustomDataNotFound(),
+                    Container(height: 50)
+                  ],
+                );
+              }
             ),
           ),
         ],
       ),
     );
+  }
+
+   Widget _buildSkeleton() {
+    return LoadingWidget(
+        padding: EdgeInsets.zero,
+        child: CustomListView(
+          padding: EdgeInsets.all(8),
+          shrinkWrap: true,
+          children: List.generate(
+              10,
+              (index) => CustomSkeleton(
+                    height: 200,
+                    radius: 4.0,
+                  )),
+        ));
   }
 
   Widget _buildSearch() {

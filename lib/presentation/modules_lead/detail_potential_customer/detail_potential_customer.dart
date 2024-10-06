@@ -1054,16 +1054,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     );
   }
 
-  Widget _buildIntroductionText() {
-    return Text(
-      " là người giới thiệu",
-      style: TextStyle(
-        fontSize: 13,
-        fontWeight: FontWeight.w400,
-        color: AppColors.black,
-      ),
-    );
-  }
 
   Widget dealInfomationV2() {
     return Container(

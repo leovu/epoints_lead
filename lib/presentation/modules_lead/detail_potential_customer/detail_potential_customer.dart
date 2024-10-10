@@ -2132,7 +2132,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   },
                 ),
               ),
-              SizedBox(
+              if (checkVisibilityKey(VisibilityWidgetName.CM000008)) ...[
+                SizedBox(
                 width: AppSizes.minPadding,
               ),
               Flexible(
@@ -2160,6 +2161,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   },
                 ),
               ),
+              ]
             ],
           ),
         ),

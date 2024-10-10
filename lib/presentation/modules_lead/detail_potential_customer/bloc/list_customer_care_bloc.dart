@@ -47,6 +47,7 @@ class ListCustomerCareBloc extends BaseBloc {
     return CustomDropdownModel(
       id: statusWorkData.manageStatusId,
       text: statusWorkData.manageStatusName,
+      color: HexColor(statusWorkData.manageStatusColor),
       data: statusWorkData,
     );
   }).toList();
@@ -64,4 +65,20 @@ class ListCustomerCareBloc extends BaseBloc {
     setCareLead(listCareLead ?? []);
     setStatusWorkData(statusWorkData);
   }
+}
+
+
+class HexColor extends Color {
+  static int getColorFromHex(String? hexColor) {
+    if((hexColor ?? "") == ""){
+      hexColor = "000000";
+    }
+    hexColor = hexColor!.toUpperCase().replaceAll("#", "");
+    if (hexColor.length == 6) {
+      hexColor = "FF" + hexColor;
+    }
+    return int.parse(hexColor, radix: 16);
+  }
+
+  HexColor(final String? hexColor) : super(getColorFromHex(hexColor));
 }

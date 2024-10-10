@@ -488,8 +488,7 @@ class _LeadScreen extends State<LeadScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-
-                            if (item.phone != "")
+                            if ((checkVisibilityKey(VisibilityWidgetName.CM000008)) && item.phone != "")
                               InkWell(
                                 onTap: () async {
                                   if (Global.callHotline != null) {

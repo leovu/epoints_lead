@@ -476,9 +476,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     var pipelines = await LeadConnection.getPipeline(context);
     if (pipelines != null) {
       pipeLineData = pipelines.data;
-
       List<String?> listPipeline = [];
-
       for (int i = 0; i < pipeLineData!.length; i++) {
         listPipeline.add(pipeLineData![i].pipelineCode);
       }
@@ -495,11 +493,6 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     if (response != null) {
       _modelStaff = response.data ?? [];
     }
-
-    // var allocator = await LeadConnection.getAllocator(context);
-    // if (allocator != null) {
-    //   allocatorData = allocator.data;
-    // }
     bindingModel();
   }
 

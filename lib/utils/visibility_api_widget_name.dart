@@ -2,26 +2,6 @@
 import 'package:lead_plugin_epoint/utils/global.dart';
 
 class VisibilityWidgetName {
-  static const String LE000000 = "LE000000"; //Code KHTN
-  // static const String LE000001 = "LE000001"; //Tạo KHTN
-  // static const String LE000002 = "LE000002"; //Xem chi tiết KHTN
-  // static const String LE000003 = "LE000003"; //Tab thông tin chi tiết KHTN
-  // static const String LE000004 = "LE000004"; //Tab cơ hội bán hàng chi tiết KHTN
-  // static const String LE000005 = "LE000005"; //Xem chi tiết CHBH
-  // static const String LE000006 = "LE000006"; //Tab chăm sóc khách hàng
-  // static const String LE000007 = "LE000007"; //Xem chi tiết chăm sóc khách hàng
-  // static const String LE000008 = "LE000008"; //Chỉnh sửa Chăm sóc khách hàng
-  // static const String LE000009 = "LE000009"; //Tab trao đổi
-  // static const String LE000010 = "LE000010"; //Tab Người liên hệ
-  // static const String LE000011 = "LE000011"; //Tạo CHBH asisitive touch
-  // static const String LE000012 = "LE000012"; //Tạo CSKH
-  // static const String LE000013 = "LE000013"; //Xóa KHTN
-  // static const String LE000014 = "LE000014"; //Chỉnh sửa KHTN
-  static const String LE000001 = "LE000001"; //Tạo KHTN
-  static const String LE000002 = "LE000002"; //Xem liên hệ khách hàng tiềm năng
-  static const String LE000003 = "LE000002"; //Chỉnh sửa liên hệ khách hàng khách hàng tiềm năng
-  static const String LE000004 = "LE000004"; //Cập nhật người giới thiệu khách hàng tiềm năng
-
   static const String CM000000 = "CM000000"; //Khóa/bật chức năng khách hàng
   static const String CM000001 = "CM000001"; //Tạo khách hàng
   static const String CM000002 = "CM000002"; //Xem chi tiết khách hàng
@@ -30,6 +10,7 @@ class VisibilityWidgetName {
   static const String CM000005 = "CM000005"; //Chỉnh sửa liên hệ khách hàng
   static const String CM000006 = "CM000006"; //Cập nhật người giới thiệu khách hàng
   static const String CM000007 = "CM000007"; //Xem thông tin giá trị đơn hàng
+  static const String CM000008 = "CM000008"; //Call hot line
   static const String OD000000 = "OD000000"; //Khóa/bật chức năng đơn hàng
   static const String OD000001 = "OD000001"; //Tạo đơn hàng
   static const String OD000002 = "OD000002"; //Xem chi tiết đơn hàng
@@ -70,6 +51,11 @@ class VisibilityWidgetName {
   static const String WA000001 = "WA000001"; //Quét mã bảo hành
   static const String MA000000 = "MA000000"; //Bảo trì
   static const String CH000001 = "CH000001"; //Chat Hub
+  static const String LE000000 = "LE000000"; //Khách hàng tiềm năng
+  static const String LE000001 = "LE000001"; //Thêm khách hàng tiềm năng
+  static const String LE000002 = "LE000002"; //Xem liên hệ khách hàng tiềm năng
+  static const String LE000003 = "LE000003"; //Chỉnh sửa liên hệ khách hàng khách hàng tiềm năng
+  static const String LE000004 = "LE000004"; //Cập nhật người giới thiệu khách hàng tiềm năng
   static const String DE000000 = "DE000000"; //Cơ hội bán hàng
   static const String PR000000 = "PR000000"; //Quản lý dự án
   static const String PR000001 = "PR000001"; //Thêm dự án

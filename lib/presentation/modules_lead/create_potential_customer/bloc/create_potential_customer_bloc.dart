@@ -4,7 +4,6 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
 import 'package:lead_plugin_epoint/model/request/get_customer_group_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/customer_response_model.dart';
-import 'package:lead_plugin_epoint/model/response/detail_lead_info_deal_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_branch_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_group_model_response.dart';
@@ -75,9 +74,6 @@ class CreatePotentialCustomerBloc extends BaseBloc {
   onImageAdd(List<File> files) {
     images.addAll(files);
     streamImages.set(images);
-    // if (images.length == 3) {
-    //   streamImageError.add(null);
-    // }
   }
 
   onImageRemove(int index) {

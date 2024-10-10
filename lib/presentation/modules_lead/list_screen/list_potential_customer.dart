@@ -488,10 +488,10 @@ class _LeadScreen extends State<LeadScreen> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            if ((checkVisibilityKey(VisibilityWidgetName.CM000008)) && item.phone != "")
+                            if ((checkVisibilityKey(VisibilityWidgetName.CM000008)))
                               InkWell(
                                 onTap: () async {
-                                  if (Global.callHotline != null) {
+                                  if (Global.callHotline != null && item.phone != "") {
                                     Global.callHotline!({
                                       "id": item.customerLeadId,
                                       "code": item.customerLeadCode,
@@ -500,6 +500,9 @@ class _LeadScreen extends State<LeadScreen> {
                                       "phone": item.phone,
                                       "type": item.customerType,
                                     });
+                                  }  else {
+                                    LeadConnection.showMyDialog(
+                                        context, "Không có thông tin số điện thoại");
                                   }
                                 },
                                 child: Container(

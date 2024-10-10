@@ -2155,7 +2155,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         });
                       } else {
                         LeadConnection.showMyDialog(
-                            context, "Không có số điện thoại");
+                            context, "Không có thông tin số điện thoại");
                       }
                     }
                   },

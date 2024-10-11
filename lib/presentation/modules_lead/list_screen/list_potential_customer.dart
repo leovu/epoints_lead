@@ -502,7 +502,7 @@ class _LeadScreen extends State<LeadScreen> {
                                     });
                                   }  else {
                                     LeadConnection.showMyDialog(
-                                        context, "Không có thông tin số điện thoại");
+                                        context, "Không có thông tin số điện thoại.");
                                   }
                                 },
                                 child: Container(

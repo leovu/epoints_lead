@@ -17,13 +17,11 @@ class CustomAvatarWithURL extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<String> names = (name ?? "").split(" ");
-    names.remove("");
+    List<String> names = (name ?? "").split(" ").where((element) => element.isNotEmpty).toList();
     String? placeholder;
-    if(names.length == 1 && names[0].isNotEmpty){
+    if (names.length == 1 && names[0].isNotEmpty) {
       placeholder = names[0][0];
-    }
-    else if(names.length > 1){
+    } else if (names.length > 1) {
       placeholder = "${names[names.length - 2][0]}${names[names.length - 1][0]}";
     }
     return InkWell(

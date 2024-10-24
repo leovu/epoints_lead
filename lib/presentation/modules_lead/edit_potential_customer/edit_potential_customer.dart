@@ -848,11 +848,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   ? _modelStaffSelected[0].staffName ?? ""
                   : "",
               Assets.iconName,
-              false,
+              true,
               true,
               false, ontap: () async {
             FocusScope.of(context).unfocus();
-            print("Chọn người được phân bổ");
 
             List<WorkListStaffModel>? _model =
                 await Navigator.of(context).push(MaterialPageRoute(

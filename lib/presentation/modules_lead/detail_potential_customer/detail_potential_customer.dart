@@ -284,14 +284,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             icon: Assets.iconInteraction,
             child: RichText(
                 text: TextSpan(
-                    text: detail!.dateLastCare! + " ",
+                    text: "${detail?.dateLastCare ?? NULL_VALUE}" + " ",
                     style: TextStyle(
                         fontSize: 14.0,
                         color: Colors.black,
                         fontWeight: FontWeight.normal),
                     children: [
                   TextSpan(
-                      text: "(${detail!.diffDay} ngày)",
+                      text: "(${detail?.diffDay ?? NULL_VALUE} ngày)",
                       style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 14.0,

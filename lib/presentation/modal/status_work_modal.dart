@@ -28,7 +28,7 @@ class _StatusWorkModalState extends State<StatusWorkModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.manageStatusName ?? "",
+                          element.manageStatusName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.statusWorkData!.length - 1,

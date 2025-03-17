@@ -9,9 +9,6 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
-import 'package:lead_plugin_epoint/connection/aws_connection.dart';
-import 'package:lead_plugin_epoint/connection/aws_interaction.dart';
-import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/add_work_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
@@ -23,17 +20,14 @@ import 'package:lead_plugin_epoint/model/response/get_type_work_response_model.d
 // import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_project_model_response.dart';
 import 'package:lead_plugin_epoint/model/type_card_model.dart';
-import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modal/list_projects_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/status_work_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/type_of_work_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/customer_care_potential/customer_care_bloc.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 import 'package:lead_plugin_epoint/utils/custom_document_picker.dart';
-import 'package:lead_plugin_epoint/utils/custom_permission_request.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_chip.dart';
 import 'package:lead_plugin_epoint/widget/custom_column_infomation.dart';
@@ -171,7 +165,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {
@@ -204,28 +198,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
     }
   }
 
-  static Future<List<File>?> openMultiDocument(
-    BuildContext context, {
-    List<String>? params,
-  }) async {
-    try {
-      bool permission = true;
-      permission = await CustomPermissionRequest.request(
-          context, PermissionRequestType.STORAGE);
-
-      if (!permission) return null;
-    } catch (_) {
-      return null;
-    }
-
-    FilePickerResult? files = await FilePicker.platform.pickFiles(
-        type: FileType.custom, allowedExtensions: params, allowMultiple: true);
-
-    return files == null ? null : files.files.map((e) => File(e.path!)).toList();
-  }
-
-  String getNameFromPath(String path) {
-    String event = path ?? "";
+  String getNameFromPath(String event) {
     return event.contains("/") ? event.split("/").last : event;
   }
 
@@ -291,7 +264,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               focusNode: _titleFocusNode),
           _buildTextField(
               AppLocalizations.text(LangKey.chooseTypeOfWork),
-              typeOfWorkSelected?.manageTypeWorkName ?? "",
+              typeOfWorkSelected.manageTypeWorkName ?? "",
               Assets.iconMenu,
               false,
               true,
@@ -307,7 +280,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               if (types != null) {
                 typeOfWorkData = types.data;
 
-                GetTypeWorkData typeSelected =
+                GetTypeWorkData? typeSelected =
                     await CustomNavigator.showCustomBottomDialog(
                   context,
                   TypeOfWorkModal(typeOfWorkData: typeOfWorkData),
@@ -321,7 +294,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                 }
               }
             } else {
-              GetTypeWorkData typeSelected =
+              GetTypeWorkData? typeSelected =
                   await CustomNavigator.showCustomBottomDialog(
                 context,
                 TypeOfWorkModal(typeOfWorkData: typeOfWorkData),
@@ -335,7 +308,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
           _buildTextField(
               AppLocalizations.text(LangKey.chooseStartDay),
-              _fromDateText.text ?? "",
+              _fromDateText.text,
               Assets.iconEstablish,
               false,
               true,
@@ -346,7 +319,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
           _buildTextField(
               AppLocalizations.text(LangKey.chooseCompleteDay),
-              _toDateText.text ?? "",
+              _toDateText.text,
               Assets.iconEstablish,
               true,
               true,
@@ -356,7 +329,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
           _buildTextField(
               AppLocalizations.text(LangKey.chooseStatus),
-              statusWorkSelected?.manageStatusName ?? "",
+              statusWorkSelected.manageStatusName ?? "",
               Assets.iconStatus,
               true,
               true,
@@ -371,7 +344,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               if (statusWorkModel != null) {
                 statusWorkData = statusWorkModel.data;
 
-                GetStatusWorkData status =
+                GetStatusWorkData? status =
                     await CustomNavigator.showCustomBottomDialog(
                   context,
                   StatusWorkModal(statusWorkData: statusWorkData),
@@ -384,7 +357,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                 }
               }
             } else {
-              GetStatusWorkData status =
+              GetStatusWorkData? status =
                   await CustomNavigator.showCustomBottomDialog(
                 context,
                 StatusWorkModal(statusWorkData: statusWorkData),
@@ -401,7 +374,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
           _buildTextField(
               AppLocalizations.text(LangKey.chooseExecutor),
               (_modelStaffSelected != null && _modelStaffSelected!.length > 0)
-                  ? _modelStaffSelected![0]?.staffName ?? ""
+                  ? _modelStaffSelected![0].staffName ?? ""
                   : "",
               Assets.iconPerson,
               true,
@@ -462,12 +435,12 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                           ? Container()
                           : Container(
                               padding:
-                                  EdgeInsets.only(bottom: AppSizes.minPadding!),
+                                  EdgeInsets.only(bottom: AppSizes.minPadding),
                               margin: EdgeInsets.only(right: 5.0),
                               alignment: Alignment.centerLeft,
                               child: Wrap(
-                                spacing: AppSizes.minPadding!,
-                                runSpacing: AppSizes.minPadding!,
+                                spacing: AppSizes.minPadding,
+                                runSpacing: AppSizes.minPadding,
                                 children: models
                                     .map((e) => Row(
                                           mainAxisSize: MainAxisSize.min,
@@ -649,7 +622,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                               //           BoxShadow(
                               //             offset: Offset(0, 1),
                               //             blurRadius: 2,
-                              //             color: Colors.black.withOpacity(0.3),
+                              //             color: Colors.black.withValues(alpha: 0.3),
                               //           )
                               //         ],
                               //         borderRadius: BorderRadius.circular(5.0)),
@@ -988,10 +961,6 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
   _showToDate() {
     DateTime selectedDate = _toDate ?? _fromDate ?? _now;
-    DateTime? maximumTime = _now;
-    if (_toDate?.year == _now.year &&
-        _toDate?.month == _now.month &&
-        (_toDate?.day ?? 0) > _now.day) maximumTime = _toDate;
     showModalBottomSheet(
         context: context,
         useRootNavigator: true,
@@ -1093,11 +1062,11 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
             DescriptionModelResponse? result = await LeadConnection.addWork(
                 context,
                 AddWorkRequestModel(
-                    manageWorkTitle: _titleText.text ?? "",
+                    manageWorkTitle: _titleText.text,
                     manageWorkCustomerType: "lead",
                     manageTypeWorkId: addWorkModel.manageTypeWorkId,
-                    from_date: _fromDateText.text ?? "",
-                    to_date: _toDateText.text ?? "",
+                    from_date: _fromDateText.text,
+                    to_date: _toDateText.text,
                     // date_start: _fromDateText.text ?? "",
                     // date_finish: _toDateText.text ?? "",
                     time: null,
@@ -1106,7 +1075,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                     approveId: null,
                     remindWork: _switchValue
                         ? RemindWork(
-                            dateRemind: _toDateText.text ?? "",
+                            dateRemind: _toDateText.text,
                             timeType: "m",
                             time: 15,
                             description: "Nhắc nhở " + _enterWorkDescText.text)
@@ -1114,7 +1083,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                     progress: null,
                     staffSupport: addWorkModel.staffSupport,
                     parentId: null,
-                    description: _enterWorkDescText.text ?? "",
+                    description: _enterWorkDescText.text,
                     manageProjectId: addWorkModel.manageProjectId,
                     customerId: widget.detail!.customerLeadId,
                     listTag: addWorkModel.listTag,

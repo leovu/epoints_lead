@@ -7,10 +7,7 @@ import 'package:lead_plugin_epoint/model/request/list_project_model_request.dart
 import 'package:lead_plugin_epoint/model/response/list_project_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
-import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
-import 'package:lead_plugin_epoint/widget/custom_shimer.dart';
-import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 
 class ListProjectsModal extends StatefulWidget {
   ListProjectItems? projectSelected = ListProjectItems();
@@ -46,7 +43,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
-      if (this.nextPage != null && this.currentPage < this.nextPage) {
+      if (this.currentPage < this.nextPage) {
         filterModel.page = currentPage + 1;
         getData(true);
       }
@@ -139,9 +136,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
                 ) : Container() )
               ,
           (_searchext.text == "" && listProjectData!.length > 0 &&
-                      this.nextPage != null &&
-                      this.currentPage < this.nextPage ??
-                  0 as bool)
+                      this.currentPage < this.nextPage)
               ? Container(
                   height: 20.0,
                   margin: EdgeInsets.only(bottom: 40),
@@ -292,10 +287,8 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
       onChanged: (event) {
         searchModel(event);
         print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
-      },
+        print(_searchext.text);
+            },
     );
   }
 

@@ -1,5 +1,6 @@
 
 import 'package:lead_plugin_epoint/utils/global.dart';
+import 'package:lead_plugin_epoint/utils/ultility.dart';
 
 class VisibilityWidgetName {
   static const String CM000000 = "CM000000"; //Khóa/bật chức năng khách hàng
@@ -66,13 +67,10 @@ class VisibilityWidgetName {
 bool checkVisibilityKey(String key) {
 
   bool returnCheck = false;
-  try{
-    final model = Global.permissionModels!.firstWhere((element) => element['widget_id'] == key);
-    if(model != null){
-      returnCheck = true;
-    }
+  final model = Global.permissionModels!.firstWhereOrNull((element) => element['widget_id'] == key);
+  if(model != null){
+    returnCheck = true;
   }
-  catch(_){}
   return returnCheck;
 }
 

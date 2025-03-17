@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:lead_plugin_epoint/common/constant.dart';
@@ -123,13 +123,15 @@ class CustomScaffold extends StatelessWidget {
       enable: Platform.isIOS || Platform.isMacOS,
       child: onWillPop == null
           ? _buildBody()
-          : WillPopScope(
+          : PopScope(
         child: _buildBody(),
-        onWillPop: () async {
-          onWillPop!();
-          return false;
+        canPop: false,
+        onPopInvokedWithResult: (event, _) {
+          if (!event) {
+            onWillPop!();
+          }
         },
-      ),
+      )
     );
   }
 }

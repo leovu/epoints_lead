@@ -230,10 +230,6 @@ class _TagsModalState extends State<TagsModal> {
       ),
       onChanged: (event) {
         searchModel(event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
       },
     );
   }

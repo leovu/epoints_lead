@@ -8,7 +8,6 @@ import 'package:lead_plugin_epoint/utils/custom_permission_request.dart';
 import 'package:lead_plugin_epoint/widget/custom_bottom_option.dart';
 import 'package:lead_plugin_epoint/widget/custom_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
-import 'package:image/image.dart' as img;
 
 class CustomImagePicker {
   static showPicker(BuildContext context, Function(File) onConfirm, {bool isSelfie = false}){
@@ -94,11 +93,6 @@ class CustomImagePicker {
 
     return File(pickedFile.path);
   }
-  
-  static Future<File> _orientationImage(BuildContext context, XFile file) async {
-
-    return File(file.path);
-  }
 
   static Future<List<File>?> pickMultiImage(BuildContext context) async {
     try {
@@ -110,8 +104,6 @@ class CustomImagePicker {
       return null;
     }
     List<XFile> pickedFile = await ImagePicker().pickMultiImage();
-    if (pickedFile == null)
-      return null;
     return pickedFile.map((e) => File(e.path)).toList();
   }
 }

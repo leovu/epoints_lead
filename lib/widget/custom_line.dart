@@ -11,7 +11,7 @@ class CustomLine extends StatelessWidget{
     this.isVertical = true,
     this.size,
     this.color
-  }):assert(isVertical != null);
+  });
 
   @override
   Widget build(BuildContext context) {

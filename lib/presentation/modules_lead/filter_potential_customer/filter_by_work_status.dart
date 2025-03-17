@@ -182,10 +182,6 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
       ),
       onChanged: (event) {
         searchModel(event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
       },
     );
   }

@@ -30,7 +30,7 @@ class CustomDataNotFound extends StatelessWidget {
             width: MediaQuery.of(context).size.width / 4,
             child: Icon(Icons.not_interested, color: Colors.grey[850],size: 50,),
           ),
-          if (isTitle ?? true)
+          if (isTitle)
             Padding(
               padding: EdgeInsets.only(
                   top: 20.0,

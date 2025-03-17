@@ -1,6 +1,3 @@
-
-
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -22,8 +19,6 @@ class CustomFileView extends StatefulWidget {
 class CustomFileViewState extends State<CustomFileView> {
 
   late WebViewController _controller;
-
-  bool _isStarted = false;
 
   @override
   void initState() {

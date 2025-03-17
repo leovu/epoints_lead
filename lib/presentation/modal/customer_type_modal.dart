@@ -30,7 +30,7 @@ class _CustomerTypeModalState extends State<CustomerTypeModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.customerTypeName ?? "",
+                          element.customerTypeName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.customerTypeData!.length - 1,

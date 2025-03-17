@@ -3,13 +3,11 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
-import 'package:lead_plugin_epoint/model/response/care_lead_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/contact_list_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/bloc/detail_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_empty.dart';
-import 'package:lead_plugin_epoint/widget/custom_line.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:lead_plugin_epoint/widget/custom_scaffold.dart';
@@ -101,7 +99,7 @@ class ListContactScreenState extends State<ListContactScreen> {
           Row(
             children: [
               CustomAvatarWithURL(
-                name: item!.fullName ?? "",
+                name: item.fullName ?? "",
                 size: 50.0,
               ),
               Container(
@@ -134,9 +132,8 @@ class ListContactScreenState extends State<ListContactScreen> {
               )),
               (item.phone != null && item.phone != "")
                   ? InkWell(
-                      onTap: () async {
-                        print(item.phone ?? "");
-                        await widget.bloc.callPhone(item?.phone ?? "");
+                      onTap: () {
+                        widget.bloc.callPhone(item.phone ?? "");
                       },
                       child: Container(
                         padding: EdgeInsets.all(20.0 / 2),

@@ -29,7 +29,7 @@ class _PositionModalState extends State<PositionModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.staffTitleName ?? "",
+                          element.staffTitleName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.positionData!.length - 1,

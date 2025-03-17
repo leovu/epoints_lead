@@ -212,7 +212,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return Container(
       child: CustomListView(
         padding: EdgeInsets.symmetric(
-            vertical: AppSizes.minPadding!, horizontal: AppSizes.maxPadding!),
+            vertical: AppSizes.minPadding, horizontal: AppSizes.maxPadding),
         children: models == null
             ? List.generate(4, (index) => _buildComment(null))
             : models.map((e) => _buildComment(e)).toList(),
@@ -260,7 +260,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   return Container();
                 }
                 return Container(
-                  padding: EdgeInsets.only(bottom: AppSizes.minPadding!),
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
                   child: InkWell(
                     child: Row(
                       children: [
@@ -300,7 +300,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 }
 
                 return Container(
-                  padding: EdgeInsets.only(bottom: AppSizes.minPadding!),
+                  padding: EdgeInsets.only(bottom: AppSizes.minPadding),
                   child: Row(
                     children: [
                       InkWell(

@@ -195,7 +195,7 @@ abstract class HttpConnection<T> {
       } else
         response =
         await http.get(uri).timeout(Duration(seconds: _timeOut));
-    } on TimeoutException catch (error) {
+    } on TimeoutException catch (_) {
       response = getError(AppLocalizations.text(LangKey.timeout_error));
       return await handleError(response);
     } on SocketException catch (error) {

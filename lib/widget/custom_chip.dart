@@ -1,6 +1,6 @@
 
 
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
@@ -75,8 +75,8 @@ class CustomChip extends StatelessWidget {
         ),
         padding: padding??(onClose == null?EdgeInsets.symmetric(
             vertical: 5.0,
-            horizontal: isExpand?2.0:AppSizes.maxPadding!
-        ):EdgeInsets.only(left: AppSizes.minPadding!)),
+            horizontal: isExpand?2.0:AppSizes.maxPadding
+        ):EdgeInsets.only(left: AppSizes.minPadding)),
         child: icons != null
             ? Icon(
           icons,
@@ -115,7 +115,7 @@ class CustomChip extends StatelessWidget {
                 if(onClose != null)
                   InkWell(
                     child: Container(
-                      padding: EdgeInsets.all(AppSizes.minPadding!),
+                      padding: EdgeInsets.all(AppSizes.minPadding),
                       child: Icon(
                         Icons.close,
                         color: AppColors.white,
@@ -220,8 +220,8 @@ class ContainerChipSelected extends StatelessWidget {
       children: [
         Container(
           padding: titlePadding ?? EdgeInsets.symmetric(
-            horizontal: AppSizes.maxPadding!,
-            vertical: AppSizes.minPadding!
+            horizontal: AppSizes.maxPadding,
+            vertical: AppSizes.minPadding
           ),
           child: Row(
             children: [
@@ -239,19 +239,19 @@ class ContainerChipSelected extends StatelessWidget {
           Container(
             color: AppColors.white,
             padding: EdgeInsets.symmetric(
-                horizontal: AppSizes.maxPadding!,
-                vertical: AppSizes.minPadding!
+                horizontal: AppSizes.maxPadding,
+                vertical: AppSizes.minPadding
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Wrap(
-                  spacing: AppSizes.minPadding!,
-                  runSpacing: AppSizes.minPadding!,
+                  spacing: AppSizes.minPadding,
+                  runSpacing: AppSizes.minPadding,
                   children: children!,
                 ),
                 child == null?Container():Container(
-                  padding: EdgeInsets.only(top: AppSizes.maxPadding!),
+                  padding: EdgeInsets.only(top: AppSizes.maxPadding),
                   child: child,
                 )
               ],

@@ -31,7 +31,7 @@ class _PipelineModalState extends State<PipelineModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.pipelineName ?? "",
+                          element.pipelineName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.pipeLineData!.length - 1,

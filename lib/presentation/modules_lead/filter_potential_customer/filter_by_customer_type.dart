@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lead_plugin_epoint/common/lang_key.dart';
-import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/customer_type.dart';
-import 'package:lead_plugin_epoint/model/response/get_customer_option_model_response.dart';
 
 class FilterByCustomerType extends StatefulWidget {
   List<CustomerTypeModel>? customerTypeData = <CustomerTypeModel>[];

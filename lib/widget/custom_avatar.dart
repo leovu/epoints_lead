@@ -9,7 +9,7 @@ class CustomAvatar extends StatelessWidget {
 
   CustomAvatar({
     required this.name, this.textSize, this.color
-  }):assert(name != null);
+  });
 
   String getFirstChar(String event){
     if(event.length == 0)
@@ -23,7 +23,7 @@ class CustomAvatar extends StatelessWidget {
     String newName;
     List<String> models = name.split(" ");
 
-    if(models != null && models.length > 1)
+    if(models.isNotEmpty && models.length > 1)
       newName = getFirstChar(models[0]) + getFirstChar(models[models.length - 1]);
     else
       newName = getFirstChar(name);

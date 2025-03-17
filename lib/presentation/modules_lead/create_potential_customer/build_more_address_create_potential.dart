@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,10 +18,7 @@ import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_respo
 import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modal/business_areas_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/district_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/position_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/province_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/ward_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
@@ -53,10 +49,8 @@ class BuildMoreAddressCreatPotential extends StatefulWidget {
 class _BuildMoreAddressCreatPotentialState
     extends State<BuildMoreAddressCreatPotential> {
   TextEditingController _addressText = TextEditingController();
-  FocusNode _addressFocusNode = FocusNode();
 
   TextEditingController _addressContactText = TextEditingController();
-  FocusNode _addressContactFocusNode = FocusNode();
 
   TextEditingController _emailContactPersonText = TextEditingController();
   FocusNode _emailContactPersonFocusNode = FocusNode();
@@ -68,7 +62,6 @@ class _BuildMoreAddressCreatPotentialState
   FocusNode _zaloFocusNode = FocusNode();
   TextEditingController _fanpageFBText = TextEditingController();
   FocusNode _fanpageFBFocusNode = FocusNode();
-  TextEditingController _emailText = TextEditingController();
   // FocusNode _emailFocusNode = FocusNode();
   TextEditingController _birthdayText = TextEditingController();
   TextEditingController _establishDateText = TextEditingController();
@@ -162,7 +155,7 @@ class _BuildMoreAddressCreatPotentialState
             height: 16.0,
           ),
           widget.selectedPersonal!
-              ? sexInfo(genderSelected?.genderID ?? 0)
+              ? sexInfo(genderSelected.genderID ?? 0)
               : _buildTextField(
                   AppLocalizations.text(LangKey.businessAreas),
                   businessAreasSelected?.businessName ?? "",
@@ -181,15 +174,16 @@ class _BuildMoreAddressCreatPotentialState
                   if (listBusiness != null && listBusiness.length > 0) {
                     listBusinessData = listBusiness;
 
-                    var result = listBusinessData
-                        .firstWhere((element) => element.selected!);
-                    if (result != null) {
+                    try {
+                      var result = listBusinessData
+                          .firstWhere((element) => element.selected!);
                       businessAreasSelected = result;
                       widget.detailPotential!.bussinessId =
                           businessAreasSelected!.createdBy;
-                    }
 
-                    // widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
+                      // widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
+                    }
+                    catch(_){}
                     setState(() {});
                   }
                 }),
@@ -197,7 +191,7 @@ class _BuildMoreAddressCreatPotentialState
           widget.selectedPersonal!
               ? _buildTextField(
                   AppLocalizations.text(LangKey.choose_birth_day),
-                  _birthdayText.text ?? "",
+                  _birthdayText.text,
                   Assets.iconBirthday,
                   false,
                   true,
@@ -207,7 +201,7 @@ class _BuildMoreAddressCreatPotentialState
                 })
               : _buildTextField(
                   AppLocalizations.text(LangKey.chooseDateOfEstablishment),
-                  _establishDateText.text ?? "",
+                  _establishDateText.text,
                   Assets.iconEstablish,
                   false,
                   true,
@@ -477,7 +471,7 @@ class _BuildMoreAddressCreatPotentialState
   }
 
   void _loadPositionModal() async {
-    PositionData position = await CustomNavigator.showCustomBottomDialog(
+    PositionData? position = await CustomNavigator.showCustomBottomDialog(
       context,
       PositionModal(positionData: positionData),
     );
@@ -549,7 +543,7 @@ class _BuildMoreAddressCreatPotentialState
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: (genderSelected?.genderID == 0)
+                        color: (genderSelected.genderID == 0)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
                         borderRadius: BorderRadius.circular(10)),
@@ -561,7 +555,7 @@ class _BuildMoreAddressCreatPotentialState
                         AppLocalizations.text(LangKey.male)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: (genderSelected?.genderID == 0)
+                            color: (genderSelected.genderID == 0)
                                 ? Colors.white
                                 : Color(0xFF9E9E9E),
                             fontWeight: FontWeight.normal),
@@ -576,7 +570,7 @@ class _BuildMoreAddressCreatPotentialState
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: (genderSelected?.genderID == 1)
+                        color: (genderSelected.genderID == 1)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
                         borderRadius: BorderRadius.circular(10)),
@@ -587,7 +581,7 @@ class _BuildMoreAddressCreatPotentialState
                       AppLocalizations.text(LangKey.female)!,
                       style: TextStyle(
                           fontSize: AppTextSizes.size15,
-                          color: (genderSelected?.genderID == 1)
+                          color: (genderSelected.genderID == 1)
                               ? Colors.white
                               : Color(0xFF9E9E9E),
                           fontWeight: FontWeight.normal),
@@ -602,7 +596,7 @@ class _BuildMoreAddressCreatPotentialState
                   child: Container(
                     height: 28,
                     decoration: BoxDecoration(
-                        color: (genderSelected?.genderID == 2)
+                        color: (genderSelected.genderID == 2)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
                         borderRadius: BorderRadius.circular(10)),
@@ -614,7 +608,7 @@ class _BuildMoreAddressCreatPotentialState
                         AppLocalizations.text(LangKey.other)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: (genderSelected?.genderID == 2)
+                            color: (genderSelected.genderID == 2)
                                 ? Colors.white
                                 : Color(0xFF9E9E9E),
                             fontWeight: FontWeight.normal),

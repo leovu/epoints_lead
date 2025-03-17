@@ -18,7 +18,7 @@ class CustomContainerList extends StatelessWidget {
               BoxShadow(
                   offset: Offset(0.0, 0.0),
                   blurRadius: 4.0,
-                  color: AppColors.black.withOpacity(0.25)
+                  color: AppColors.black.withValues(alpha: 0.25)
               )
             ]
         ),

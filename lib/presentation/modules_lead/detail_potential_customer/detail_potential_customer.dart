@@ -1,6 +1,6 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_direct_call_plus/flutter_direct_call.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/constant.dart';
@@ -29,13 +29,11 @@ import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_file_view.dart';
-import 'package:lead_plugin_epoint/widget/custom_information_lead_widget.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:lead_plugin_epoint/widget/custom_row_image_content_widget.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 import 'package:lead_plugin_epoint/widget/widget.dart';
-import 'dart:ui' as ui;
 
 class DetailPotentialCustomer extends StatefulWidget {
   final String? customer_lead_code;
@@ -61,11 +59,6 @@ class DetailPotentialCustomer extends StatefulWidget {
 
 class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     with AutomaticKeepAliveClientMixin<DetailPotentialCustomer> {
-  final double _radius = 5.0;
-
-  late String _lang;
-
-  final ScrollController _controller = ScrollController();
   List<WorkListStaffModel> models = [];
   List<ContactListData>? contactListData;
   List<CareLeadData>? customerCareLead;
@@ -95,7 +88,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   void initState() {
     super.initState();
     _bloc = DetailPotentialCustomerBloc(context);
-    _lang = LangKey.langDefault;
 
     index = widget.indexTab;
     for (int i = 0; i < tabPotentials.length; i++) {
@@ -1027,34 +1019,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     }
   }
 
-  Widget _buildSaleNameText(String? saleName) {
-    return Text(
-      saleName ?? "",
-      style: TextStyle(
-        decoration: TextDecoration.underline,
-        decorationColor: Colors.blue,
-        decorationStyle: TextDecorationStyle.solid,
-        fontSize: 13,
-        fontWeight: FontWeight.bold,
-        color: AppColors.primaryColor,
-      ),
-    );
-  }
-
-  Widget _buildLink(String? link) {
-    return Text(
-      link ?? "",
-      style: TextStyle(
-        decorationColor: Colors.blue,
-        decorationStyle: TextDecorationStyle.solid,
-        fontSize: 13,
-        fontWeight: FontWeight.w500,
-        color: AppColors.primaryColor,
-      ),
-    );
-  }
-
-
   Widget dealInfomationV2() {
     return Container(
       margin: EdgeInsets.only(bottom: 20),
@@ -1295,7 +1259,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                           BoxShadow(
                             offset: Offset(0, 1),
                             blurRadius: 2,
-                            color: Colors.black.withOpacity(0.3),
+                            color: Colors.black.withValues(alpha: 0.3),
                           )
                         ], color: Colors.white),
                         child: Padding(
@@ -1306,7 +1270,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                               CustomNetworkImage(
                                 width: 15,
                                 height: 15,
-                                url: item?.manageTypeWorkIcon ??
+                                url: item.manageTypeWorkIcon ??
                                     "https://epoint-bucket.s3.ap-southeast-1.amazonaws.com/0f73a056d6c12b508a05eea29735e8a52022/07/14/3Ujo25165778317714072022.png",
                                 fit: BoxFit.fill,
                                 backgroundColor: Colors.transparent,
@@ -1462,7 +1426,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         BoxShadow(
           offset: Offset(0, 1),
           blurRadius: 2,
-          color: Colors.black.withOpacity(0.3),
+          color: Colors.black.withValues(alpha: 0.3),
         )
       ], color: Colors.white),
       child: Row(
@@ -1646,8 +1610,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     );
   }
 
-  _callPhone(String phone) async {
-    await FlutterPhoneDirectCaller.callNumber(phone);
+  _callPhone(String phone) {
+    FlutterDirectCall.makeDirectCall(phone);
   }
 
   Widget buildButtonConvert(String title, GestureTapCallback ontap) {
@@ -2020,7 +1984,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: AppColors.primaryColor.withOpacity(0.1),
+                      color: AppColors.primaryColor.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.all(Radius.circular(5.0)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 2.0),
@@ -2322,21 +2286,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (widget.customerCare != null) {
-          Navigator.of(context)
-            // ..pop()
-            ..pop(true);
-        }
-
-        if (_bloc.allowPop) {
-          Navigator.of(context).pop(_bloc.allowPop);
-        } else {
-          Navigator.of(context).pop();
-        }
-        return _bloc.allowPop;
-      },
+    super.build(context);
+    return PopScope(
       child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -2360,7 +2311,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         //   initialOpen: false,
         //   curveAnimation: Curves.easeOutSine,
         //   childrenBoxDecoration: BoxDecoration(
-        //       color: Colors.black.withOpacity(0.35),
+        //       color: Colors.black.withValues(alpha: 0.35),
         //       borderRadius: BorderRadius.circular(10.0)),
         //   childrenCount: 4,
         //   distance: 10,
@@ -2373,7 +2324,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         //             BoxShadow(
         //               offset: Offset(0, 1),
         //               blurRadius: 2,
-        //               color: Colors.black.withOpacity(0.3),
+        //               color: Colors.black.withValues(alpha: 0.3),
         //             )
         //           ],
         //           shape: BoxShape.circle,
@@ -2389,7 +2340,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         //         BoxShadow(
         //           offset: Offset(0, 1),
         //           blurRadius: 2,
-        //           color: Colors.black.withOpacity(0.3),
+        //           color: Colors.black.withValues(alpha: 0.3),
         //         )
         //       ], shape: BoxShape.circle, color: Color(0xFF5F5F5F)),
         //       width: 60,
@@ -2552,6 +2503,22 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         //   ],
         // ),
       ),
+      canPop: false,
+      onPopInvokedWithResult: (event, _) {
+        if (!event) {
+          if (widget.customerCare != null) {
+            Navigator.of(context)
+            // ..pop()
+              ..pop(true);
+          }
+
+          if (_bloc.allowPop) {
+            Navigator.of(context).pop(_bloc.allowPop);
+          } else {
+            Navigator.of(context).pop();
+          }
+        }
+      },
     );
   }
 }

@@ -18,7 +18,7 @@ class AWSInteraction extends AWSConnection<ResponseModel> {
     this.context,
     required this.file,
     this.showError = true,
-  }):assert(file != null);
+  });
 
 
   @override

@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:http/http.dart' as http;
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/connection/network_connectivity.dart';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 abstract class AWSConnection<T>{
 
@@ -30,16 +31,18 @@ abstract class AWSConnection<T>{
         file: file.file!,
         bucket: bucket,
         region: region,
+        destDir: "",
+        filename: basename(file.file!.path),
         contentType: mimeType
     );
 
-    if((url ?? "").isEmpty){
+    if(url.isEmpty){
       return await handleError(getError(
         AppLocalizations.text(LangKey.server_error),
       ));
     }
 
-    return await handleResponse(http.Response(url!, 200));
+    return await handleResponse(http.Response(url, 200));
   }
 
   Future<T?> _checkConnectivity() async {

@@ -9,7 +9,6 @@ import 'package:lead_plugin_epoint/presentation/modal/create_new_business_modal.
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 
 import 'package:lead_plugin_epoint/widget/custom_avatar.dart';
-import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class ListBusinessModal extends StatefulWidget {
@@ -206,12 +205,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
         isDense: true,
       ),
       onChanged: (event) {
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-
-          // searchModel(allocators,event);
-        }
+        // searchModel(allocators,event);
       },
     );
   }
@@ -237,7 +231,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
   }
 
   searchModel(List<AllocatorData> model, String value) {
-    if (model == null || value.isEmpty) {
+    if (value.isEmpty) {
       // _model.data = allocators;
       setState(() {});
     } else {
@@ -264,7 +258,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
 
 extension NumberParsing on String {
   double? tryParseDouble({bool isRound = false}) {
-    if (this == null || this == "null") {
+    if (this == "null") {
       return 0.0;
     }
     String param = this.toString().replaceAll(",", "");

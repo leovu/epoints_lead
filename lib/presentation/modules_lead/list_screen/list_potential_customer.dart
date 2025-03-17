@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_direct_call_plus/flutter_direct_call.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -318,12 +318,6 @@ class _LeadScreen extends State<LeadScreen> {
                 BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
             isDense: true,
           ),
-          onChanged: (event) {
-            // print(event.toLowerCase());
-            if (_searchtext != null) {
-              // print(_searchext.text);
-            }
-          },
           onSubmitted: (event) async {
             filterModel!.page = 1;
             getData(false);
@@ -435,7 +429,7 @@ class _LeadScreen extends State<LeadScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               infoItem(
-                                  Assets.iconName, item?.staffFullName ?? ""),
+                                  Assets.iconName, item.staffFullName ?? ""),
                               // infoItem(Assets.iconInteraction, "12/12/2022"),
 
                               Container(
@@ -530,7 +524,7 @@ class _LeadScreen extends State<LeadScreen> {
                               children: [
                                 _actionItem(
                                     Assets.iconCalendar, Color(0xFF26A7AD),
-                                    number: item?.relatedWork ?? 0,
+                                    number: item.relatedWork ?? 0,
                                     ontap: () async {
                                   bool? result = await Navigator.of(context)
                                       .push(MaterialPageRoute(
@@ -548,7 +542,7 @@ class _LeadScreen extends State<LeadScreen> {
                                 }),
                                 _actionItem(
                                     Assets.iconOutdate, Color(0xFFDD2C00),
-                                    number: item?.appointment ?? 0,
+                                    number: item.appointment ?? 0,
                                     ontap: () async {
                                   bool? result = await Navigator.of(context)
                                       .push(MaterialPageRoute(
@@ -640,7 +634,7 @@ class _LeadScreen extends State<LeadScreen> {
                             borderRadius: BorderRadius.circular(100),
                             color: Color(0xFFF45E38)),
                         child: Center(
-                            child: Text((number > 9) ? "9+" : "${number ?? 0}",
+                            child: Text((number > 9) ? "9+" : "${number}",
                                 style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 14.0,
@@ -720,10 +714,7 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-  callPhone(String phone) async {
-    await FlutterPhoneDirectCaller.callNumber(phone);
-    // final regSpace = RegExp(r"\s+");
-    // // return await launchUrl(Uri.parse("tel:" + phone.replaceAll(regSpace, "")));
-    // return await launch("tel:" + phone.replaceAll(regSpace, ""));
+  callPhone(String phone) {
+    FlutterDirectCall.makeDirectCall(phone);
   }
 }

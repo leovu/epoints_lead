@@ -121,7 +121,7 @@ class MultipleStaffBloc extends BaseBloc {
     }
   }
 
- selected(List<WorkListStaffModel>? models, WorkListStaffModel model){
+  selected(List<WorkListStaffModel>? models, WorkListStaffModel model) {
     model.isSelected = !model.isSelected!;
     setModels(models);
   }
@@ -136,24 +136,20 @@ class MultipleStaffBloc extends BaseBloc {
   delete(String event) {
     try {
       var results = _models!.where((element) => element.isSelected!).toList();
-      if (results != null) {
-        for (var e in results) {
-          e.isSelected = false;
-        }
+      for (var e in results) {
+        e.isSelected = false;
       }
     } catch (_) {}
 
     search(event);
   }
 
- confirm(List<WorkListStaffModel>? events) {
+  confirm(List<WorkListStaffModel>? events) {
     List<WorkListStaffModel> models = [];
     try {
       var results = _models!.where((element) => element.isSelected!).toList();
       print(results.length);
-      if (results != null) {
-        models = results;
-      }
+      models = results;
     } catch (_) {}
 
     Navigator.of(context!).pop(models);
@@ -164,7 +160,7 @@ class MultipleStaffBloc extends BaseBloc {
       models = [];
       try {
         var results = _models!.where((element) => element.isSelected!).toList();
-        if ((results?.length ?? 0) != 0) {
+        if (results.length != 0) {
           models = results;
         }
       } catch (_) {}
@@ -227,17 +223,15 @@ class MultipleStaffBloc extends BaseBloc {
         try {
           var result =
               staffs!.firstWhere((element) => element.staffId == e.staffId);
-          if (result != null) {
-            result.isSelected = true;
-          }
+          result.isSelected = true;
         } catch (_) {}
       }
     }
   }
 
-     // search chi nhánh
+  // search chi nhánh
   searchAgency(String event) {
-    if (_branchModels == null || event.isEmpty) {
+    if (_branchModels.isEmpty || event.isEmpty) {
       setBranchModels(_branchModels);
     } else {
       List<CustomDropdownModel> listModel = <CustomDropdownModel>[];
@@ -253,7 +247,7 @@ class MultipleStaffBloc extends BaseBloc {
           }
           return result;
         }).toList();
-        listModel = models ?? [];
+        listModel = models;
         setBranchModels(listModel);
       } catch (_) {
         setBranchModels(_branchModels);
@@ -261,9 +255,9 @@ class MultipleStaffBloc extends BaseBloc {
     }
   }
 
-    // search department
+  // search department
   searchDepartment(String event) {
-    if (_departmentModels == null || event.isEmpty) {
+    if (_departmentModels.isEmpty || event.isEmpty) {
       setDepartmentModels(_departmentModels);
     } else {
       List<CustomDropdownModel> listModel = <CustomDropdownModel>[];
@@ -279,7 +273,7 @@ class MultipleStaffBloc extends BaseBloc {
           }
           return result;
         }).toList();
-        listModel = models ?? [];
+        listModel = models;
         setDepartmentModels(listModel);
       } catch (_) {
         setDepartmentModels(_departmentModels);

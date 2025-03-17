@@ -188,7 +188,7 @@ class ContainerBooking extends StatelessWidget {
                 ? null
                 : [
                     BoxShadow(
-                      color: AppColors.black.withOpacity(0.25),
+                      color: AppColors.black.withValues(alpha: 0.25),
                       blurRadius: 2.0,
                       offset: Offset.zero,
                     )

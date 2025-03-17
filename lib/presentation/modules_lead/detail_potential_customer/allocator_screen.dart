@@ -165,12 +165,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
         isDense: true,
       ),
       onChanged: (event) {
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-
-          searchModel(allocators,event);
-        }
+        searchModel(allocators,event);
       },
     );
   }
@@ -227,7 +222,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
 
 extension NumberParsing on String {
   double? tryParseDouble({bool isRound = false}) {
-    if (this == null || this == "null") {
+    if (this == "null") {
       return 0.0;
     }
     String param = this.toString().replaceAll(",", "");

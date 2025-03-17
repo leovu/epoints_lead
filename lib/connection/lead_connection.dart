@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -41,18 +41,16 @@ import 'package:lead_plugin_epoint/model/response/get_status_work_response_model
 import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_type_work_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
-import 'package:http/http.dart' as http;
 import 'package:lead_plugin_epoint/model/response/list_business_areas_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/list_project_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
-import 'package:lead_plugin_epoint/model/response/upload_image_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_branch_responese_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_comment_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_department_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_file_response_model.dart';
-import 'package:lead_plugin_epoint/model/response_model.dart';
 import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 import '../model/response/list_customer_lead_model_response.dart';
 
@@ -64,7 +62,7 @@ class LeadConnection {
   static Locale? locale;
 
   static Future<bool> init(String token, {String? domain}) async {
-    if (domain != null && token != null) {
+    if (domain != null) {
       HTTPConnection.domain = domain;
       HTTPConnection.asscessToken = token;
       return true;
@@ -340,7 +338,7 @@ class LeadConnection {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/care-lead',
         {"customer_lead_id": customer_lead_id});
-    if (responseData.isSuccess && responseData != null) {
+    if (responseData.isSuccess && responseData.data != null) {
       CareLeadResponseModel data =
           CareLeadResponseModel.fromJson(responseData.data!);
       return data;
@@ -574,10 +572,12 @@ class LeadConnection {
         file: file,
         bucket: "epoint-bucket",
         region: "ap-southeast-1",
+        destDir: "",
+        filename: basename(file.path),
         contentType: mimeType
     );
 
-    if((url ?? "").isEmpty){
+    if(url.isEmpty){
       handleError(context!,AppLocalizations.text(LangKey.server_error));
       return null;
     } else {

@@ -50,7 +50,7 @@ class CustomColumnInformation extends StatelessWidget {
           CustomSkeleton(width: AppSizes.maxWidth! / 4,),
           Container(height: AppSizes.minPadding,),
           CustomSkeleton(
-            height: AppSizes.maxPadding! * 2,
+            height: AppSizes.maxPadding * 2,
             radius: 5.0,
           )
         ],
@@ -74,7 +74,7 @@ class CustomColumnInformation extends StatelessWidget {
                   children: [
                     if(titleIcon != null)
                       Padding(
-                        padding: EdgeInsets.only(right: AppSizes.minPadding! / 2),
+                        padding: EdgeInsets.only(right: AppSizes.minPadding / 2),
                         child: (titleIcon is IconData) ? Icon(
                           titleIcon,
                           size: _titleIconSize,
@@ -102,7 +102,7 @@ class CustomColumnInformation extends StatelessWidget {
                     ),
                     if(titleSuffixIcon != null)
                       Padding(
-                        padding: EdgeInsets.only(left: AppSizes.minPadding! / 2),
+                        padding: EdgeInsets.only(left: AppSizes.minPadding / 2),
                         child: Icon(
                           titleSuffixIcon,
                           size: 18.0,
@@ -128,7 +128,7 @@ class CustomColumnInformation extends StatelessWidget {
                     color: borderColor!
                 )
             ),
-            padding: EdgeInsets.all(AppSizes.minPadding!),
+            padding: EdgeInsets.all(AppSizes.minPadding),
             child: Row(
               children: [
                 Expanded(
@@ -138,7 +138,7 @@ class CustomColumnInformation extends StatelessWidget {
                   ),
                 ),
                 (suffixIcon == null && suffixIconData == null)?Container():Container(
-                  padding: EdgeInsets.only(left: AppSizes.minPadding!),
+                  padding: EdgeInsets.only(left: AppSizes.minPadding),
                   child: suffixIcon != null? CustomImageIcon(
                     icon: suffixIcon,
                     size: 20.0,

@@ -177,7 +177,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {
@@ -271,7 +271,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                         BoxShadow(
                           offset: Offset(0, 1),
                           blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                         )
                       ]),
                   child: Center(
@@ -307,7 +307,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                         BoxShadow(
                           offset: Offset(0, 1),
                           blurRadius: 2,
-                          color: Colors.black.withOpacity(0.3),
+                          color: Colors.black.withValues(alpha: 0.3),
                         )
                       ]),
                   child: Center(

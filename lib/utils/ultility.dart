@@ -88,14 +88,14 @@ class Validators {
   var validateNumber = RegExp(r"^[\d]*$");
 
  bool isValidPhone(String phone){
-    if (phone!=null&&phone.isNotEmpty&&validatePhone.hasMatch(phone)){
+    if (phone.isNotEmpty&&validatePhone.hasMatch(phone)){
       return true;
     }
     return false;
   }
 
   bool isNumber(String number){
-    if (number!=null&&number.isNotEmpty&&validateNumber.hasMatch(number)){
+    if (number.isNotEmpty&&validateNumber.hasMatch(number)){
       return true;
     }
     return false;

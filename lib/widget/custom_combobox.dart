@@ -146,9 +146,6 @@ class CustomComboBoxState extends State<CustomComboBox> {
   }
 
   Widget _buildContent() {
-    if (_expand == null) {
-      return Container();
-    }
     return CustomSizeTransaction(
       child: widget.child,
       open: _expand,

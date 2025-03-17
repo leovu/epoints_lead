@@ -1,15 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
-import 'package:lead_plugin_epoint/common/theme.dart';
-import 'package:lead_plugin_epoint/connection/lead_connection.dart';
-import 'package:lead_plugin_epoint/model/request/list_customer_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_response.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
-
-import 'package:lead_plugin_epoint/utils/ultility.dart';
-import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
-import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class BusinessFocalPointModal extends StatefulWidget {
   ListCustomLeadItems? businessFocalPointSeleted = ListCustomLeadItems();
@@ -24,10 +16,6 @@ class BusinessFocalPointModal extends StatefulWidget {
 }
 
 class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
-  final ScrollController _controller = ScrollController();
-  final TextEditingController _searchext = TextEditingController();
-  final FocusNode _fonusNode = FocusNode();
-
 // ListCustomLeadData _model ;
 
 //   ListCustomLeadModelRequest filterModel = ListCustomLeadModelRequest(

@@ -4,12 +4,10 @@ class WorkListFileResponseModel {
   WorkListFileResponseModel({this.data});
 
   WorkListFileResponseModel.fromJson(List<dynamic> json) {
-    if (json != null) {
-      data = <WorkListFileModel>[];
-      json.forEach((v) {
-        data!.add(new WorkListFileModel.fromJson(v));
-      });
-    }
+    data = <WorkListFileModel>[];
+    json.forEach((v) {
+      data!.add(new WorkListFileModel.fromJson(v));
+    });
   }
 
   Map<String, dynamic> toJson() {

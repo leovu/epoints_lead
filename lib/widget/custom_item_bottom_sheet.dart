@@ -64,7 +64,7 @@ class CustomItemBottomSheet extends StatelessWidget {
                     ),
                   subText == null
                       ? Expanded(
-                          child: Text(text ?? "",
+                          child: Text(text,
                               style: textStyle ??
                                   TextStyle(
                                       fontSize: 15.0,
@@ -78,7 +78,7 @@ class CustomItemBottomSheet extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              text ?? "",
+                              text,
                               style: textStyle ??
                                   TextStyle(
                                       fontSize: 14.0,

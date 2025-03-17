@@ -32,9 +32,9 @@ class ProgressDialog {
         opaque: false,
         // settings: RouteSettings(name: AppKeys.keyHUD),
         pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-          return WillPopScope(
+          return PopScope(
             child: Scaffold(
-              backgroundColor: Colors.black.withOpacity(0.3),
+              backgroundColor: Colors.black.withValues(alpha: 0.3),
               body: Container(
                 height: MediaQuery.of(context).size.height,
                 child: Center(
@@ -42,7 +42,7 @@ class ProgressDialog {
                 ),
               ),
             ),
-            onWillPop: () async => false,
+            canPop: false,
           );
         },
       ),

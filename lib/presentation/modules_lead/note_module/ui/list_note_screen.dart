@@ -163,7 +163,7 @@ class CustomIndex extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: AppColors.primaryColor.withOpacity(0.5),
+          color: AppColors.primaryColor.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(4.0)
       ),
       padding: EdgeInsets.all(4.0),

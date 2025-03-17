@@ -7,7 +7,6 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/edit_potential_customer.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/list_screen/list_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
-import 'package:lead_plugin_epoint/utils/ultility.dart';
 
 import 'common/localization/app_localizations.dart';
 import 'lead_plugin_epoint_platform_interface.dart';

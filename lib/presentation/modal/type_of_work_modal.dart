@@ -29,7 +29,7 @@ class _TypeOfWorkModalState extends State<TypeOfWorkModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.manageTypeWorkName ?? "",
+                          element.manageTypeWorkName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.typeOfWorkData!.length - 1,

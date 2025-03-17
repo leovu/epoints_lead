@@ -21,7 +21,7 @@ class ContainerDataBuilder extends StatelessWidget {
     required this.bodyBuilder,
     this.onRefresh,
     this.emptyPhysics
-  }):assert(bodyBuilder != null);
+  });
 
   Widget? _buildBody(){
     if(data == null) {
@@ -51,7 +51,7 @@ class ContainerDataBuilder extends StatelessWidget {
     }
 
     return ContainerScrollable(
-      child: bodyBuilder()??Container(),
+      child: bodyBuilder(),
       onRefresh: onRefresh,
     );
   }

@@ -7,7 +7,6 @@ import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 class CustomPermissionRequest {
   static Future<bool> request(BuildContext context, PermissionRequestType type) async {
     return PermissionRequest.request(type, (){
-      assert (context != null);
       String? permission;
       if(type == PermissionRequestType.CAMERA){
         permission = AppLocalizations.text(LangKey.camera);

@@ -1,11 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:flutter_direct_call_plus/flutter_direct_call.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
-import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/note_file_req_res_model.dart';
 import 'package:lead_plugin_epoint/model/request/add_contact_req_model.dart';
@@ -149,8 +147,8 @@ class DetailPotentialCustomerBloc extends BaseBloc {
     setExpandListFile(expandListFile);
   }
 
-  callPhone(String phone) async {
-    await FlutterPhoneDirectCaller.callNumber(phone);
+  callPhone(String phone) {
+    FlutterDirectCall.makeDirectCall(phone);
   }
 
   Future<List<CareLeadData>?> getCareLead(BuildContext context) async {

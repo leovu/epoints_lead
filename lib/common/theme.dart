@@ -627,7 +627,7 @@ class AppSizes {
     sizeOnTapCheckIn = 64;
     sizeOnTap = 40.0;
     maxPadding = sizeOnTap! / 2;
-    minPadding = maxPadding! / 2;
+    minPadding = maxPadding / 2;
     sizeAppBar = statusBarHeight + kToolbarHeight;
     screenHeight = maxHeight - statusBarHeight;
     iconSize = 24;

@@ -6,7 +6,6 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/add_business_areas_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
-import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 
 class CreateNewBusinessAreaModal extends StatefulWidget {
   CreateNewBusinessAreaModal({Key? key}) : super(key: key);
@@ -32,7 +31,7 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
 
   @override
   void didChangeMetrics() {
-    final bottomInset = WidgetsBinding.instance.window.viewInsets.bottom;
+    final bottomInset = View.of(context).viewInsets.bottom;
     final newValue = bottomInset > 0.0;
     if (newValue != _isKeyboardVisible) {
       setState(() {

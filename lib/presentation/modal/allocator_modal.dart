@@ -28,7 +28,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
   @override
   void initState() {
     super.initState();
-    allocatorData= widget.allocatorData;
+    allocatorData = widget.allocatorData;
     allocatorSelected = widget.allocatorSelected;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       for (int i = 0; i < allocatorData!.length; i++) {
@@ -116,15 +116,14 @@ class _AllocatorModalState extends State<AllocatorModal> {
     return (_model!.data != null)
         ? List.generate(
             _model!.data!.length,
-            (index) => _buildItem(
-                    _model!.data![index].fullName!, _model!.data![index].selected!,
-                    () {
+            (index) => _buildItem(_model!.data![index].fullName!,
+                    _model!.data![index].selected!, () {
                   selectedItem(index);
                 }))
         : [CustomDataNotFound()];
   }
 
- Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
+  Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
     return InkWell(
       onTap: ontap,
       child: Container(
@@ -136,12 +135,16 @@ class _AllocatorModalState extends State<AllocatorModal> {
               title,
               style: TextStyle(
                   fontSize: 15.0,
-                  color: selected ?AppColors.primaryColor : Color(0xFF040C21),
-                  fontWeight:
-                      selected ? FontWeight.w700 : FontWeight.w400),
+                  color: selected ? AppColors.primaryColor : Color(0xFF040C21),
+                  fontWeight: selected ? FontWeight.w700 : FontWeight.w400),
             ),
-
-            selected ? Icon(Icons.check, color: AppColors.primaryColor,size: 20,) : Container(),
+            selected
+                ? Icon(
+                    Icons.check,
+                    color: AppColors.primaryColor,
+                    size: 20,
+                  )
+                : Container(),
           ],
         ),
       ),
@@ -171,12 +174,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
         isDense: true,
       ),
       onChanged: (event) {
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-
-          searchModel(allocatorData, event);
-        }
+        searchModel(allocatorData, event);
       },
     );
   }

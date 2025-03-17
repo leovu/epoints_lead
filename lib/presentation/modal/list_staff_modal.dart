@@ -212,12 +212,7 @@ class _ListStaffModalState extends State<ListStaffModal> {
         isDense: true,
       ),
       onChanged: (event) {
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-
-          searchModel(allocators,event);
-        }
+        searchModel(allocators,event);
       },
     );
   }

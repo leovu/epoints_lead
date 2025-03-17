@@ -60,11 +60,9 @@ class BuildMoreAddressEditPotential extends StatefulWidget {
 class _BuildMoreAddressEditPotentialState
     extends State<BuildMoreAddressEditPotential> {
   final TextEditingController _addressText = TextEditingController();
-  FocusNode _addressFocusNode = FocusNode();
   final TextEditingController _focalPointText = TextEditingController();
   final TextEditingController _zaloText = TextEditingController();
   final TextEditingController _fanpageFBText = TextEditingController();
-  final TextEditingController _emailText = TextEditingController();
   TextEditingController _birthdayText = TextEditingController();
   TextEditingController _establishDateText = TextEditingController();
   TextEditingController _emailContactPersonText = TextEditingController();
@@ -178,10 +176,8 @@ class _BuildMoreAddressEditPotentialState
       try {
         var item = widget.listBusinessData!.firstWhere((element) =>
             element.createdBy == widget.detailPotential!.bussinessId);
-        if (item != null) {
-          item.selected = true;
-          businessSelected = item;
-        }
+        item.selected = true;
+        businessSelected = item;
       } catch (e) {}
 
       for (int i = 0; i < genderData.length; i++) {
@@ -195,19 +191,15 @@ class _BuildMoreAddressEditPotentialState
         var item = widget.positionData!.firstWhere((element) =>
             element.staffTitleName!.toLowerCase() ==
             widget.detailPotential!.position!.toLowerCase());
-        if (item != null) {
-          item.selected = true;
-          positionSelected = item;
-        }
+        item.selected = true;
+        positionSelected = item;
       } catch (e) {}
 
       try {
         var item = widget.provinces!.firstWhere((element) =>
             (widget.detailPotential!.provinceId ?? 0) == element.provinceid);
-        if (item != null) {
-          item.selected = true;
-          provinceSeleted = item;
-        }
+        item.selected = true;
+        provinceSeleted = item;
       } catch (e) {}
 
       var dataDistrict =
@@ -218,10 +210,8 @@ class _BuildMoreAddressEditPotentialState
         try {
           var item = districts!.firstWhere((element) =>
               (widget.detailPotential!.districtId ?? 0) == element.districtid);
-          if (item != null) {
-            item.selected = true;
-            distictSelected = item;
-          }
+          item.selected = true;
+          distictSelected = item;
         } catch (e) {}
       }
 
@@ -233,10 +223,8 @@ class _BuildMoreAddressEditPotentialState
         try {
           var item = wards!.firstWhere((element) =>
               (widget.detailPotential!.wardId ?? 0) == element.wardid);
-          if (item != null) {
-            item.selected = true;
-            wardSelected = item;
-          }
+          item.selected = true;
+          wardSelected = item;
         } catch (e) {}
       }
 
@@ -308,7 +296,7 @@ class _BuildMoreAddressEditPotentialState
             height: 16.0,
           ),
           widget.selectedPersonal!
-              ? sexInfo(genderSelected?.genderID ?? 0)
+              ? sexInfo(genderSelected.genderID ?? 0)
               : _buildTextField(
                   AppLocalizations.text(LangKey.businessAreas),
                   businessSelected?.businessName ?? "",
@@ -329,11 +317,9 @@ class _BuildMoreAddressEditPotentialState
                     try {
                       var result = widget.listBusinessData!
                           .firstWhere((element) => element.selected!);
-                      if (result != null) {
-                        businessSelected = result;
-                        widget.detailPotential!.bussinessId =
-                            businessSelected!.createdBy;
-                      }
+                      businessSelected = result;
+                      widget.detailPotential!.bussinessId =
+                          businessSelected!.createdBy;
                     } catch (e) {}
 
                     // widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
@@ -344,7 +330,7 @@ class _BuildMoreAddressEditPotentialState
           widget.selectedPersonal!
               ? _buildTextField(
                   AppLocalizations.text(LangKey.choose_birth_day),
-                  _birthdayText.text ?? "",
+                  _birthdayText.text,
                   Assets.iconBirthday,
                   false,
                   true,
@@ -353,7 +339,7 @@ class _BuildMoreAddressEditPotentialState
                 })
               : _buildTextField(
                   AppLocalizations.text(LangKey.chooseDateOfEstablishment),
-                  _establishDateText.text ?? "",
+                  _establishDateText.text,
                   Assets.iconEstablish,
                   false,
                   true,
@@ -419,11 +405,9 @@ class _BuildMoreAddressEditPotentialState
       context,
       PositionModal(positionData: widget.positionData),
     );
-    if (position != null) {
-      positionSelected = position;
-      widget.detailPotential!.position = positionSelected!.staffTitleName;
-      setState(() {});
-    }
+    positionSelected = position;
+    widget.detailPotential!.position = positionSelected!.staffTitleName;
+    setState(() {});
   }
 
   _showBirthDay() {
@@ -640,7 +624,7 @@ class _BuildMoreAddressEditPotentialState
                   (widget.bloc.detail?.avatar != null))
               ? _buildAvatar()
               : CustomImageList(
-                limit: 1,
+                  limit: 1,
                   models: widget.bloc.images
                       .map((e) => CustomImageListModel(file: e))
                       .toList(),
@@ -721,7 +705,7 @@ class _BuildMoreAddressEditPotentialState
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: (genderSelected?.genderID == 0)
+                        color: (genderSelected.genderID == 0)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
                         borderRadius: BorderRadius.circular(10)),
@@ -733,7 +717,7 @@ class _BuildMoreAddressEditPotentialState
                         AppLocalizations.text(LangKey.male)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: (genderSelected?.genderID == 0)
+                            color: (genderSelected.genderID == 0)
                                 ? Colors.white
                                 : Color(0xFF9E9E9E),
                             fontWeight: FontWeight.normal),
@@ -748,7 +732,7 @@ class _BuildMoreAddressEditPotentialState
                   },
                   child: Container(
                     decoration: BoxDecoration(
-                        color: (genderSelected?.genderID == 1)
+                        color: (genderSelected.genderID == 1)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
                         borderRadius: BorderRadius.circular(10)),
@@ -759,7 +743,7 @@ class _BuildMoreAddressEditPotentialState
                       AppLocalizations.text(LangKey.female)!,
                       style: TextStyle(
                           fontSize: AppTextSizes.size15,
-                          color: (genderSelected?.genderID == 1)
+                          color: (genderSelected.genderID == 1)
                               ? Colors.white
                               : Color(0xFF9E9E9E),
                           fontWeight: FontWeight.normal),
@@ -774,7 +758,7 @@ class _BuildMoreAddressEditPotentialState
                   child: Container(
                     height: 28,
                     decoration: BoxDecoration(
-                        color: (genderSelected?.genderID == 2)
+                        color: (genderSelected.genderID == 2)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
                         borderRadius: BorderRadius.circular(10)),
@@ -786,7 +770,7 @@ class _BuildMoreAddressEditPotentialState
                         AppLocalizations.text(LangKey.other)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: (genderSelected?.genderID == 2)
+                            color: (genderSelected.genderID == 2)
                                 ? Colors.white
                                 : Color(0xFF9E9E9E),
                             fontWeight: FontWeight.normal),

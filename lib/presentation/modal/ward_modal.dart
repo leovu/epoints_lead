@@ -172,10 +172,6 @@ class _WardModalState extends State<WardModal> {
       ),
       onChanged: (event) {
         searchModel(ward, event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
       },
     );
   }

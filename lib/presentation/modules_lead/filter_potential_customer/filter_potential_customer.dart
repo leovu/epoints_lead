@@ -504,38 +504,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        if (allowPop) {
-          widget.filterScreenModel = FilterScreenModel(
-              filterModel: ListCustomLeadModelRequest(
-                search: "",
-                page: 1,
-                statusAssign: "",
-                customerType: "",
-                tagId: [],
-                customerSourceId: [],
-                staffId: [],
-                pipelineId: [],
-                journeyId: [],
-                careHistory: "",
-                isConvert: "",
-                createdAt: "",
-                allocationDate: "",
-              ),
-              fromDate_allocation_date: null,
-              toDate_allocation_date: null,
-              fromDate_created_at: null,
-              toDate_created_at: null,
-              id_created_at: "",
-              id_allocation_date: "");
-
-          Navigator.of(context).pop(widget.filterScreenModel);
-        } else {
-          Navigator.of(context).pop();
-        }
-        return allowPop;
-      },
+    return PopScope(
       child: Scaffold(
           appBar: AppBar(
             iconTheme: const IconThemeData(
@@ -550,6 +519,39 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           body: Container(
               decoration: const BoxDecoration(color: AppColors.white),
               child: _buildBody())),
+      canPop: false,
+      onPopInvokedWithResult: (event, _) {
+        if (!event) {
+          if (allowPop) {
+            widget.filterScreenModel = FilterScreenModel(
+                filterModel: ListCustomLeadModelRequest(
+                  search: "",
+                  page: 1,
+                  statusAssign: "",
+                  customerType: "",
+                  tagId: [],
+                  customerSourceId: [],
+                  staffId: [],
+                  pipelineId: [],
+                  journeyId: [],
+                  careHistory: "",
+                  isConvert: "",
+                  createdAt: "",
+                  allocationDate: "",
+                ),
+                fromDate_allocation_date: null,
+                toDate_allocation_date: null,
+                fromDate_created_at: null,
+                toDate_created_at: null,
+                id_created_at: "",
+                id_allocation_date: "");
+
+            Navigator.of(context).pop(widget.filterScreenModel);
+          } else {
+            Navigator.of(context).pop();
+          }
+        }
+      },
     );
   }
 

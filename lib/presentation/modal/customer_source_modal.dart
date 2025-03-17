@@ -31,7 +31,7 @@ class _CustomerSourceModalState extends State<CustomerSourceModal> {
                         .map((index, element) => MapEntry(
                         index,
                         CustomItemBottomSheet(
-                          element?.sourceName ?? "",
+                          element.sourceName ?? "",
                               () => selectedItem( index),
                           isBorder:
                           index < widget.sources!.length - 1,

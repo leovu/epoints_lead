@@ -13,8 +13,8 @@ import 'package:rxdart/rxdart.dart';
 import '../../../../widget/widget.dart';
 
 class MultipleStaffCustomerCareBloc extends BaseBloc {
-  MultipleStaffCustomerCareBloc(BuildContext context, List<WorkListStaffModel>? models,
-      List<WorkListStaffModel>? staffs) {
+  MultipleStaffCustomerCareBloc(BuildContext context,
+      List<WorkListStaffModel>? models, List<WorkListStaffModel>? staffs) {
     setContext(context);
 
     if (staffs != null) {
@@ -121,7 +121,7 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
     }
   }
 
- selected(List<WorkListStaffModel>? models, WorkListStaffModel model){
+  selected(List<WorkListStaffModel>? models, WorkListStaffModel model) {
     model.isSelected = !model.isSelected!;
     setModels(models);
   }
@@ -136,10 +136,8 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
   delete(String event) {
     try {
       var results = _models!.where((element) => element.isSelected!).toList();
-      if (results != null) {
-        for (var e in results) {
-          e.isSelected = false;
-        }
+      for (var e in results) {
+        e.isSelected = false;
       }
     } catch (_) {}
 
@@ -150,20 +148,19 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
     List<WorkListStaffModel> models = [];
     try {
       var results = events.where((element) => element.isSelected!).toList();
-      if (results != null) {
-        models = results;
-      }
+      models = results;
     } catch (_) {}
 
     Navigator.of(context!).pop(models);
   }
 
-  workListStaff(List<WorkListStaffModel>? models, String event, int? id ,List<WorkListStaffModel>? modelsSelectedCustomerCare) async {
+  workListStaff(List<WorkListStaffModel>? models, String event, int? id,
+      List<WorkListStaffModel>? modelsSelectedCustomerCare) async {
     if ((_models?.length ?? 0) != 0) {
       models = [];
       try {
         var results = _models!.where((element) => element.isSelected!).toList();
-        if ((results?.length ?? 0) != 0) {
+        if (results.length != 0) {
           models = results;
         }
       } catch (_) {}
@@ -174,13 +171,11 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
       _models = response.data ?? [];
 
       try {
-        var item = _models!.firstWhere((element) => element.staffId == modelsSelectedCustomerCare![0].staffId);
+        var item = _models!.firstWhere((element) =>
+            element.staffId == modelsSelectedCustomerCare![0].staffId);
 
-        if (item != null) {
-          _models!.remove(item);
-        }
-      } catch (e) {
-      }
+        _models!.remove(item);
+      } catch (e) {}
 
       _handleStaffs(models, _models);
     } else {
@@ -235,17 +230,15 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
         try {
           var result =
               staffs!.firstWhere((element) => element.staffId == e.staffId);
-          if (result != null) {
-            result.isSelected = true;
-          }
+          result.isSelected = true;
         } catch (_) {}
       }
     }
   }
 
-    // search chi nhánh
+  // search chi nhánh
   searchAgency(String event) {
-    if (_branchModels == null || event.isEmpty) {
+    if (_branchModels.isEmpty || event.isEmpty) {
       setBranchModels(_branchModels);
     } else {
       List<CustomDropdownModel> listModel = <CustomDropdownModel>[];
@@ -261,7 +254,7 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
           }
           return result;
         }).toList();
-        listModel = models ?? [];
+        listModel = models;
         setBranchModels(listModel);
       } catch (_) {
         setBranchModels(_branchModels);
@@ -269,9 +262,9 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
     }
   }
 
-    // search department
+  // search department
   searchDepartment(String event) {
-    if (_departmentModels == null || event.isEmpty) {
+    if (_departmentModels.isEmpty || event.isEmpty) {
       setDepartmentModels(_departmentModels);
     } else {
       List<CustomDropdownModel> listModel = <CustomDropdownModel>[];
@@ -287,7 +280,7 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
           }
           return result;
         }).toList();
-        listModel = models ?? [];
+        listModel = models;
         setDepartmentModels(listModel);
       } catch (_) {
         setDepartmentModels(_departmentModels);

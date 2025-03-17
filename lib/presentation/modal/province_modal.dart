@@ -135,10 +135,6 @@ class _ProvinceModalState extends State<ProvinceModal> {
       ),
       onChanged: (event) {
         searchModel(provinces, event);
-        print(event.toLowerCase());
-        if (_searchext != null) {
-          print(_searchext.text);
-        }
       },
     );
   }

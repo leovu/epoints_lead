@@ -375,9 +375,9 @@
     },
     {
       "name": "js",
-      "rootUri": "file:///Users/trungnt110/.pub-cache/hosted/pub.dev/js-0.6.7",
+      "rootUri": "file:///Users/trungnt110/.pub-cache/hosted/pub.dev/js-0.7.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.7"
     },
     {
       "name": "just_audio",
@@ -836,10 +836,10 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2025-03-17T11:05:25.756376Z",
+  "generated": "2025-05-28T04:48:33.222112Z",
   "generator": "pub",
-  "generatorVersion": "3.7.0",
+  "generatorVersion": "3.7.2",
   "flutterRoot": "file:///Users/trungnt110/Documents/Project/Flutter/sdk/flutter",
-  "flutterVersion": "3.29.0",
+  "flutterVersion": "3.29.2",
   "pubCache": "file:///Users/trungnt110/.pub-cache"
 }

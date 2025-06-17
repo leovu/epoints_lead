@@ -540,7 +540,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               : Container(),
 
           _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
-              Assets.iconCall, false, false, true,
+              Assets.iconCall, true, false, true,
               fillText: _phoneNumberText,
               focusNode: _phoneNumberFocusNode,
               inputType: TextInputType.numberWithOptions(

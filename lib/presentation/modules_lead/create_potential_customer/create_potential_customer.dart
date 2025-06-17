@@ -164,6 +164,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
       if (widget.phoneNumber != null) {
         _phoneNumberText.text = widget.phoneNumber!;
       }
+      await _bloc.onGetBranch(context);
+      setState(() {});
     });
   }
 
@@ -866,7 +868,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
         initialData: _bloc.presenterModel,
         builder: (_, snapshot) {
           _bloc.presenterModel = snapshot.data as CustomerModel?;
-           return _buildTextField(
+          return _buildTextField(
               AppLocalizations.text(LangKey.presenter),
               _bloc.presenterModel?.fullName ?? "",
               Assets.iconSearch,
@@ -874,7 +876,6 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               true,
               false,
               ontap: _bloc.onPushPresenter);
-
         });
   }
 
@@ -978,21 +979,22 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
         context,
         AddLeadModelRequest(
           avatar: _bloc.imgAvatar ?? "",
-          customerType:typePersonnal ? "personal" : "business",
+          customerType: typePersonnal ? "personal" : "business",
           customerSource: detailPotential.customerSource,
           fullName: _fullNameText.text,
-          taxCode:typePersonnal ? "" : _taxText.text,
+          taxCode: typePersonnal ? "" : _taxText.text,
           phone: _phoneNumberText.text,
           email: _emailText.text,
-          representative:typePersonnal ? "" : _bloc.representativeController.text,
+          representative:
+              typePersonnal ? "" : _bloc.representativeController.text,
           pipelineCode: detailPotential.pipelineCode,
           journeyCode: detailPotential.journeyCode,
           saleId: detailPotential.saleId,
           tagId: detailPotential.tagId,
           gender: detailPotential.gender,
           birthday: detailPotential.birthday,
-          bussinessId:typePersonnal ? 0 : detailPotential.bussinessId,
-          employees: typePersonnal ? 0:detailPotential.employees,
+          bussinessId: typePersonnal ? 0 : detailPotential.bussinessId,
+          employees: typePersonnal ? 0 : detailPotential.employees,
           address: "${_bloc.addressModel?.street ?? ""} ",
           provinceId: _bloc.addressModel?.provinceModel?.provinceid ?? 0,
           districtId: _bloc.addressModel?.districtModel?.districtid ?? 0,
@@ -1000,19 +1002,17 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           businessClue: detailPotential.businessClue,
           zalo: detailPotential.zalo ?? "",
           fanpage: detailPotential.fanpage ?? "",
-          contactAddress:typePersonnal ? "" : detailPotential.contactAddress,
-          contactEmail:typePersonnal ? "" : detailPotential.contactEmail,
-          contactFullName:typePersonnal ? "" : detailPotential.contactFullName,
-          contactPhone:typePersonnal ? "" : detailPotential.contactPhone,
-          position:typePersonnal ? "" : detailPotential.position, 
+          contactAddress: typePersonnal ? "" : detailPotential.contactAddress,
+          contactEmail: typePersonnal ? "" : detailPotential.contactEmail,
+          contactFullName: typePersonnal ? "" : detailPotential.contactFullName,
+          contactPhone: typePersonnal ? "" : detailPotential.contactPhone,
+          position: typePersonnal ? "" : detailPotential.position,
           customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
           branchId: _bloc.branchSelected?.branchId ?? 0,
           note: _bloc.noteController.text,
           customerLeadReferId: _bloc.presenterModel?.customerId ?? 0,
           arrPhoneAttack: _bloc.listPhone,
           website: _bloc.websiteController.text,
-
-          
         ));
     Navigator.of(context).pop();
     if (result != null) {

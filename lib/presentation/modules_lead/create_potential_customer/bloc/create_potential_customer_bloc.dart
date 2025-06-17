@@ -115,6 +115,11 @@ class CreatePotentialCustomerBloc extends BaseBloc {
     return null;
   }
 
+  Future<void> onGetBranch(BuildContext context) async {
+    List<BranchData>? data = await getBranch(context);
+    branchSelected = data?.first;
+  }
+
   Future<List<CustomerGroupData>?> getCustomerGroup(BuildContext context,
       {bool showLoading = true}) async {
     if (listCustomerGroupData.length > 0) {

@@ -1,0 +1,115 @@
+
+import 'dart:convert';
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:lead_plugin_epoint/common/assets.dart';
+import 'package:lead_plugin_epoint/common/theme.dart';
+import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
+
+void keyboardDismissOnTap(BuildContext context) {
+  final currentFocus = FocusScope.of(context);
+  FocusScopeNode rootScope = WidgetsBinding.instance.focusManager.rootScope;
+
+  if (currentFocus != rootScope) {
+    if (currentFocus.hasFocus && !currentFocus.hasPrimaryFocus) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
+  }
+}
+
+customPrint(dynamic event) {
+  log(event.toString());
+  
+}
+
+String parseAndFormatDate(String? event,
+    {DateFormat? format, DateFormat? parse}) {
+  if ((event ?? "").isEmpty) {
+    return "";
+  }
+
+  return (format ?? AppFormat.formatDate)
+      .format((parse ?? AppFormat.formatDateResponse).parse(event!));
+}
+
+String? pathToImage(String paths) {
+  String path = paths.split(".").last;
+
+  if (path == "doc" || path == "docx") {
+    return Assets.imageMSWord;
+  } else if (path == "xls" || path == "xlsx" || path == "xlsm") {
+    return Assets.imageMSExcel;
+  } else if (path == "pdf") {
+    return Assets.imagePDF;
+  } else if (path == "ppt" || path == "pptx") {
+    return Assets.imagePPT;
+  }
+
+  return Assets.imageMSWord;
+}
+
+ double getWidthOfItemPerRow(BuildContext context, int itemPerRow,
+      {double? padding, double? separate}) {
+    return (AppSizes.maxWidth! -
+            (padding ?? AppSizes.maxPadding) * 2 -
+            ((itemPerRow - 1) * (separate ?? AppSizes.minPadding)) -
+            1) /
+        itemPerRow;
+  }
+
+dynamic stringToJson(String? event) {
+  if (event == null) return null;
+  return json.decode(event);
+}
+
+String parseAddress(CustomerCreateAddressModel? model) {
+  if (model == null) {
+    return "";
+  }
+  List<String> events = [
+    if (model.street != null) model.street!,
+    if (model.wardModel != null) model.wardModel!.name ?? "",
+    if (model.districtModel != null) model.districtModel!.name ?? "",
+    if (model.provinceModel != null) model.provinceModel!.name ?? "",
+  ];
+
+  return events.join(", ");
+}
+
+
+fieldFocus(BuildContext context, FocusNode? focusNode) {
+  FocusScope.of(context).requestFocus(focusNode);
+}
+
+class Validators {
+  var validatePhone = RegExp(r"^[+#*()\[\]]*([0-9][ ext+-pw#*()\[\]]*){10,45}$");
+  var validateNumber = RegExp(r"^[\d]*$");
+
+ bool isValidPhone(String phone){
+    if (phone.isNotEmpty&&validatePhone.hasMatch(phone)){
+      return true;
+    }
+    return false;
+  }
+
+  bool isNumber(String number){
+    if (number.isNotEmpty&&validateNumber.hasMatch(number)){
+      return true;
+    }
+    return false;
+  }
+
+
+}
+
+extension IterableModifier<E> on Iterable<E> {
+  E? firstWhereOrNull(bool Function(E) test) {
+    try {
+      return cast<E>().firstWhere((v) => v != null && test(v));
+    } catch (e) {
+      return null;
+    }
+  }
+}

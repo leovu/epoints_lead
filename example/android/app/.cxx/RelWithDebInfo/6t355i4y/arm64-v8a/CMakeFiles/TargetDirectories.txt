@@ -1,0 +1,2 @@
+/Users/trungnt110/Documents/Project/Flutter/Projects/epoints_lead/example/android/app/.cxx/RelWithDebInfo/6t355i4y/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/trungnt110/Documents/Project/Flutter/Projects/epoints_lead/example/android/app/.cxx/RelWithDebInfo/6t355i4y/arm64-v8a/CMakeFiles/rebuild_cache.dir

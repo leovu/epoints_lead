@@ -1,0 +1,2 @@
+D:/WAO/epoints_lead/example/android/app/.cxx/Debug/48271r5y/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/WAO/epoints_lead/example/android/app/.cxx/Debug/48271r5y/armeabi-v7a/CMakeFiles/rebuild_cache.dir

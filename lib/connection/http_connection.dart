@@ -145,9 +145,28 @@ class HTTPConnection {
 }
 
 class ResponseData {
-   late bool isSuccess;
-   Map<String,dynamic>? data;
-   List<dynamic>? datas;
+  bool isSuccess;
+  Map<String, dynamic>? data;
+  List<dynamic>? datas;
+
+  ResponseData({
+    this.isSuccess=false,
+    this.data,
+    this.datas,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'isSuccess': isSuccess,
+      'data': data,
+      'datas': datas,
+    };
+  }
+
+  @override
+  String toString() {
+    return 'ResponseData(isSuccess: $isSuccess, data: $data, datas: $datas)';
+  }
 }
 
 class MultipartFileModel {

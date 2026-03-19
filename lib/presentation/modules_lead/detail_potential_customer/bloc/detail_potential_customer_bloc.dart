@@ -33,6 +33,9 @@ import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../../../../connection/http_connection.dart';
+import '../../../modal/upload_file_res_model.dart';
+
 class DetailPotentialCustomerBloc extends BaseBloc {
   DetailPotentialCustomerBloc(BuildContext context) {
     setContext(context);
@@ -57,7 +60,7 @@ class DetailPotentialCustomerBloc extends BaseBloc {
 
   List<PositionData>? positionData;
   PositionData? positionSelected;
-  
+
   final _streamModel = BehaviorSubject<DetailPotentialData?>();
   ValueStream<DetailPotentialData?> get outputModel => _streamModel.stream;
   setModel(DetailPotentialData? event) => set(_streamModel, event);
@@ -81,7 +84,7 @@ class DetailPotentialCustomerBloc extends BaseBloc {
   setLeadInfoDeal(List<DetailLeadInfoDealData>? event) =>
       set(_streamLeadInfoDeal, event);
 
-       final _streamListNote = BehaviorSubject<List<NoteData>?>();
+  final _streamListNote = BehaviorSubject<List<NoteData>?>();
   ValueStream<List<NoteData>?> get outputListNote => _streamListNote.stream;
   setListNoteData(List<NoteData>? event) => set(_streamListNote, event);
 
@@ -104,7 +107,6 @@ class DetailPotentialCustomerBloc extends BaseBloc {
       _streamExpandListContact.stream;
   setExpandistContact(bool event) => set(_streamExpandListContact, event);
 
-
   final _streamExpandListNote = BehaviorSubject<bool>();
   ValueStream<bool> get outputExpandListNote => _streamExpandListNote.stream;
   setExpandListNote(bool event) => set(_streamExpandListNote, event);
@@ -122,8 +124,6 @@ class DetailPotentialCustomerBloc extends BaseBloc {
   bool expandListContact = false;
   bool expandListNote = false;
   bool expandListFile = false;
-
-
 
   resetExpand() {
     expandDeal = false;
@@ -177,8 +177,8 @@ class DetailPotentialCustomerBloc extends BaseBloc {
   }
 
   Future<bool> getData(String customer_lead_code) async {
-    var dataDetail = await LeadConnection.getdetailPotential(
-        context!, customer_lead_code);
+    var dataDetail =
+        await LeadConnection.getdetailPotential(context!, customer_lead_code);
     if (dataDetail != null) {
       if (dataDetail.errorCode == 0) {
         detail = dataDetail.data;
@@ -189,9 +189,9 @@ class DetailPotentialCustomerBloc extends BaseBloc {
         getListNote(context!);
         getListFile(context!);
         return true;
-
       } else {
-        await LeadConnection.showMyDialog(context!, dataDetail.errorDescription);
+        await LeadConnection.showMyDialog(
+            context!, dataDetail.errorDescription);
         Navigator.of(context!).pop();
         return false;
       }
@@ -226,26 +226,27 @@ class DetailPotentialCustomerBloc extends BaseBloc {
 
   Future<bool> assignRevokeLead(AssignRevokeLeadRequestModel model) async {
     try {
-       CustomNavigator.showProgressDialog(context);
-    final value = await LeadConnection.assignRevokeLead(context!, model);
-     CustomNavigator.hideProgressDialog();
-    return value != null;
-  } catch (e) {
-    // Handle any errors if necessary
-    return false;
-  }
+      CustomNavigator.showProgressDialog(context);
+      final value = await LeadConnection.assignRevokeLead(context!, model);
+      CustomNavigator.hideProgressDialog();
+      return value != null;
+    } catch (e) {
+      // Handle any errors if necessary
+      return false;
+    }
   }
 
-   Future<bool> convertLead(int customer_lead_id) async {
+  Future<bool> convertLead(int customer_lead_id) async {
     try {
       CustomNavigator.showProgressDialog(context);
-    final value = await LeadConnection.convertLead(context!, customer_lead_id);
-    CustomNavigator.hideProgressDialog();
-    return value != null;
-  } catch (e) {
-    // Handle any errors if necessary
-    return false;
-  }
+      final value =
+          await LeadConnection.convertLead(context!, customer_lead_id);
+      CustomNavigator.hideProgressDialog();
+      return value != null;
+    } catch (e) {
+      // Handle any errors if necessary
+      return false;
+    }
   }
 
   Future<List<LeadFilesModel>?> getListFile(BuildContext context) async {
@@ -275,17 +276,17 @@ class DetailPotentialCustomerBloc extends BaseBloc {
   }
 
   onTapListCustomerCare() async {
-   await CustomNavigator.push(context!, ListCustomerCareScreen(bloc: this));
-   allowPop = true;
+    await CustomNavigator.push(context!, ListCustomerCareScreen(bloc: this));
+    allowPop = true;
   }
 
   onTapListContact() async {
-   await CustomNavigator.push(context!, ListContactScreen(bloc: this));
+    await CustomNavigator.push(context!, ListContactScreen(bloc: this));
   }
 
   onTapListDeal() async {
     await CustomNavigator.push(context!, ListDealScreen(bloc: this));
-     allowPop = true;
+    allowPop = true;
   }
 
   onAddContact() async {
@@ -306,8 +307,6 @@ class DetailPotentialCustomerBloc extends BaseBloc {
       onReload?.call();
     }
   }
-
-
 
   Future<bool> loadPositionModal() async {
     PositionData? position = await CustomNavigator.showCustomBottomDialog(
@@ -360,23 +359,22 @@ class DetailPotentialCustomerBloc extends BaseBloc {
   }
 
   onSaveFile(File file, String content) {
-    uploadFileAWS(file, content: content);
+    uploadFileAWS(MultipartFileModel(file: file), content: content);
   }
 
-  uploadFileAWS(File model, {String content = ""}) async {
-    CustomNavigator.showProgressDialog(context);
-    String? result = await LeadConnection.uploadFileAWS(context, model);
-    CustomNavigator.hideProgressDialog();
-    if (result != null) {
+  uploadFileAWS(MultipartFileModel model, {String content = ""}) async {
+    try {
+      ResponseData res = await LeadConnection.uploadFile(context, model);
+      CustomNavigator.hideProgressDialog();
       bool value = await addFile(UploadFileReqModel(
-          customer_lead_id: detail?.customerLeadId,
-          path: result,
-          content: content,
-          fileName: model.path.split("/").last));
-        return value;
-    } else {
-      LeadConnection.handleError(
-          context!, AppLocalizations.text(LangKey.server_error));
+        customer_lead_id: detail?.customerLeadId,
+        path: res.data?['Data']['link'],
+        content: content,
+        fileName: model.file?.path.split("/").last
+      ));
+      return value;
+    } catch (e) {
+      print('____________$e');
     }
   }
 
@@ -389,7 +387,7 @@ class DetailPotentialCustomerBloc extends BaseBloc {
     }
   }
 
-  onPushPresenter () async {
+  onPushPresenter() async {
     await Global.negativeDetailPrefer?.call(detail?.customerLeadReferId ?? 0);
   }
 }

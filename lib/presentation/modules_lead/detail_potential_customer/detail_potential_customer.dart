@@ -35,6 +35,8 @@ import 'package:lead_plugin_epoint/widget/custom_row_image_content_widget.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 import 'package:lead_plugin_epoint/widget/widget.dart';
 
+import '../../../common/custom_app_format.dart';
+
 class DetailPotentialCustomer extends StatefulWidget {
   final String? customer_lead_code;
   final int? indexTab;
@@ -66,7 +68,10 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   List<DetailLeadInfoDealData>? detailLeadInfoDealData;
 
   List<DetailPotentialTabModel> tabPotentials = [
-    DetailPotentialTabModel(typeName: "Liên quan", index: 0, selected: true),
+    DetailPotentialTabModel(
+        typeName: AppLocalizations.text(LangKey.related),
+        index: 0,
+        selected: true),
     DetailPotentialTabModel(
         typeName: AppLocalizations.text(LangKey.generalInfomation),
         index: 1,
@@ -159,9 +164,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   }
 
   Widget buildInfomation() {
-    return (index == 0)
-        ? _listInfomationRelevant()
-        : generalInfomationV2();
+    return (index == 0) ? _listInfomationRelevant() : generalInfomationV2();
   }
 
   Widget buildListOption() {
@@ -228,7 +231,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   }
 
   Widget _listInfomationRelevant() {
-    return Padding(
+    return SingleChildScrollView(
       padding: EdgeInsets.all(AppSizes.minPadding),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -283,7 +286,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         fontWeight: FontWeight.normal),
                     children: [
                   TextSpan(
-                      text: "(${detail!.diffDay} ngày)",
+                      text:
+                          "(${detail!.diffDay} ${AppLocalizations.text(LangKey.day)?.toLowerCase()})",
                       style: TextStyle(
                           color: AppColors.primaryColor,
                           fontSize: 14.0,
@@ -365,7 +369,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   Widget _buildCode(DetailPotentialData model) {
     return CustomColumnIconInformation(
         icon: Assets.iconBarcode,
-        title: "Mã khách hàng",
+        title: AppLocalizations.text(LangKey.customerCode),
         content: model.customerLeadCode);
   }
 
@@ -482,7 +486,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     return CustomColumnIconInformation(
         icon: Assets.iconCalendarFill,
         title: AppLocalizations.text(LangKey.birthday),
-        content: model.birthday);
+        content: formatDate(model.birthday ?? ''));
   }
 
   Widget _buildZalo(DetailPotentialData model) {
@@ -1196,7 +1200,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         style: TextStyle(color: Colors.grey),
                       ),
                       Text(
-                        '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
+                        '${createTime.day},\n${AppLocalizations.text(LangKey.month)?.toLowerCase()} ${createTime.month},\n${AppLocalizations.text(LangKey.year)?.toLowerCase()} ${createTime.year}',
                         style: TextStyle(
                             color: Colors.black, fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
@@ -1777,7 +1781,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   onTapList: () {
                     _bloc.onTapListCustomerCare();
                   },
-                  title: e.tabNameVi ?? "Chăm sóc khách hàng",
+                  title: e.tabNameVi ??
+                      AppLocalizations.text(LangKey.customerCare)!,
                   isExpand: _bloc.expandCare,
                   quantity: _bloc.listCareLead.length,
                   child: CustomListView(
@@ -1816,7 +1821,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       _bloc.getListNote(context);
                     });
                   },
-                  title: e.tabNameVi ?? "Ghi chú",
+                  title: e.tabNameVi ?? AppLocalizations.text(LangKey.note)!,
                   isExpand: _bloc.expandListNote,
                   quantity: _bloc.listNoteData.length,
                   child: CustomListView(
@@ -1857,7 +1862,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   onTapList: () {
                     _bloc.onTapListFile();
                   },
-                  title: e.tabNameVi ?? "Tập tin",
+                  title: e.tabNameVi ?? AppLocalizations.text(LangKey.file)!,
                   isExpand: _bloc.expandListFile,
                   quantity: _bloc.listLeadsFiles.length,
                   child: CustomListView(
@@ -1993,7 +1998,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Image.asset(
-                          pathToImage(model.path!)!,
+                          pathToImage(model.path??'')??'',
                           width: 24,
                         ),
                         Container(
@@ -2064,7 +2069,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   style: AppTextStyles.style15WhiteNormal
                       .copyWith(fontWeight: FontWeight.bold),
                   heightButton: AppSizes.sizeOnTap,
-                  text: "Chỉnh sửa",
+                  text: AppLocalizations.text(LangKey.edit),
                   ontap: () async {
                     bool? result =
                         await Navigator.of(context).push(MaterialPageRoute(
@@ -2098,33 +2103,33 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
               ),
               if (checkVisibilityKey(VisibilityWidgetName.CM000008)) ...[
                 SizedBox(
-                width: AppSizes.minPadding,
-              ),
-              Flexible(
-                child: CustomButton(
-                  style: AppTextStyles.style15WhiteNormal
-                      .copyWith(fontWeight: FontWeight.bold),
-                  heightButton: AppSizes.sizeOnTap,
-                  text: "Liên hệ",
-                  ontap: () {
-                    if (detail?.phone != null && detail?.phone != "") {
-                      if (Global.callHotline != null) {
-                        Global.callHotline!({
-                          "id": detail?.customerLeadId,
-                          "code": detail?.customerLeadCode,
-                          "avatar": detail?.avatar,
-                          "name": detail?.fullName,
-                          "phone": detail?.phone,
-                          "type": detail?.customerType,
-                        });
-                      } else {
-                        LeadConnection.showMyDialog(
-                            context, "Không có thông tin số điện thoại");
-                      }
-                    }
-                  },
+                  width: AppSizes.minPadding,
                 ),
-              ),
+                Flexible(
+                  child: CustomButton(
+                    style: AppTextStyles.style15WhiteNormal
+                        .copyWith(fontWeight: FontWeight.bold),
+                    heightButton: AppSizes.sizeOnTap,
+                    text: AppLocalizations.text(LangKey.contact),
+                    ontap: () {
+                      if (detail?.phone != null && detail?.phone != "") {
+                        if (Global.callHotline != null) {
+                          Global.callHotline!({
+                            "id": detail?.customerLeadId,
+                            "code": detail?.customerLeadCode,
+                            "avatar": detail?.avatar,
+                            "name": detail?.fullName,
+                            "phone": detail?.phone,
+                            "type": detail?.customerType,
+                          });
+                        } else {
+                          LeadConnection.showMyDialog(context,
+                              AppLocalizations.text(LangKey.noPhoneNumber));
+                        }
+                      }
+                    },
+                  ),
+                ),
               ]
             ],
           ),
@@ -2151,7 +2156,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                             .copyWith(fontWeight: FontWeight.bold),
                         heightButton: AppSizes.sizeOnTap,
                         backgroundColor: AppColors.redColor,
-                        text: "XÓA LEAD",
+                        text: AppLocalizations.text(LangKey.deleteLead),
                         ontap: () {
                           LeadConnection.showMyDialogWithFunction(context,
                               AppLocalizations.text(LangKey.warningDeleteLead),
@@ -2184,7 +2189,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         style: AppTextStyles.style15WhiteNormal
                             .copyWith(fontWeight: FontWeight.bold),
                         heightButton: AppSizes.sizeOnTap,
-                        text: "CHUYỂN ĐỔI KH",
+                        text: AppLocalizations.text(LangKey.convertCustomer),
                         ontap: () async {
                           await _bloc
                               .convertLead(_bloc.detail!.customerLeadId ?? 0)
@@ -2208,7 +2213,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         style: AppTextStyles.style15WhiteNormal
                             .copyWith(fontWeight: FontWeight.bold),
                         heightButton: AppSizes.sizeOnTap,
-                        text: "THÊM DEAL",
+                        text: AppLocalizations.text(LangKey.addDeal),
                         ontap: () async {
                           if (Global.createDeal != null) {
                             bool? result =
@@ -2232,8 +2237,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         heightButton: AppSizes.sizeOnTap,
                         text: (_bloc.detail?.saleId != null &&
                                 _bloc.detail?.saleId != 0)
-                            ? "THU HỒI"
-                            : "PHÂN CÔNG",
+                            ? AppLocalizations.text(LangKey.recall)
+                            : AppLocalizations.text(LangKey.assignment),
                         ontap: () async {
                           if (detail?.saleId != null && detail?.saleId != 0) {
                             await _bloc
@@ -2508,7 +2513,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         if (!event) {
           if (widget.customerCare != null) {
             Navigator.of(context)
-            // ..pop()
+              // ..pop()
               ..pop(true);
           }
 

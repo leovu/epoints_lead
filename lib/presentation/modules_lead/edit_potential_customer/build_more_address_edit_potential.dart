@@ -649,7 +649,7 @@ class _BuildMoreAddressEditPotentialState
             widget.bloc.onPickImage();
           },
           child: Text(
-            "Thay đổi ảnh",
+            AppLocalizations.text(LangKey.changePhoto)!,
             style: TextStyle(
                 color: AppColors.primaryColor, fontWeight: FontWeight.bold),
           ),

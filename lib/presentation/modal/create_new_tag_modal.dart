@@ -111,7 +111,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
             }
           }
         } else {
-          LeadConnection.showMyDialog(context, "Vui lòng nhập tên nhãn");
+          LeadConnection.showMyDialog(context, AppLocalizations.text(LangKey.pleaseEnterTagName));
         }
       },
       child: Container(

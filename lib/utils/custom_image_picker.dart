@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
-import 'package:lead_plugin_epoint/utils/custom_permission_request.dart';
 import 'package:lead_plugin_epoint/widget/custom_bottom_option.dart';
 import 'package:lead_plugin_epoint/widget/custom_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
@@ -69,19 +68,6 @@ class CustomImagePicker {
   static Future<File?> pickImage(BuildContext? context, ImageSource? source,
       {bool isSelfie = false}) async {
     if (source == null) return null;
-    try {
-      bool permission = false;
-      if (source == ImageSource.camera) {
-        permission = await CustomPermissionRequest.request(
-            context!, PermissionRequestType.CAMERA);
-      } else {
-        permission = await CustomPermissionRequest.request(
-            context!, PermissionRequestType.STORAGE);
-      }
-      if (!permission) return null;
-    } catch (_) {
-      return null;
-    }
 
     final pickedFile = await ImagePicker().pickImage(
         source: source,
@@ -95,14 +81,6 @@ class CustomImagePicker {
   }
 
   static Future<List<File>?> pickMultiImage(BuildContext context) async {
-    try {
-      bool permission = false;
-      permission = await CustomPermissionRequest.request(
-          context, PermissionRequestType.STORAGE);
-      if (!permission) return null;
-    } catch (_) {
-      return null;
-    }
     List<XFile> pickedFile = await ImagePicker().pickMultiImage();
     return pickedFile.map((e) => File(e.path)).toList();
   }

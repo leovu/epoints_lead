@@ -57,7 +57,7 @@ class _CreateNewPhoneModalState extends State<CreateNewPhoneModal>
               topLeft: Radius.circular(10), topRight: Radius.circular(10))),
       height: _isKeyboardVisible
           ? MediaQuery.of(context).size.height * 0.55
-          : MediaQuery.of(context).size.height * 0.28,
+          : MediaQuery.of(context).size.height * 0.3,
       child: Column(
         children: [
           Container(
@@ -74,7 +74,7 @@ class _CreateNewPhoneModalState extends State<CreateNewPhoneModal>
           textfield(AppLocalizations.text(LangKey.enter_phone_number), "", Assets.iconCall,
               fillText: _nameText, focusNode: _nameFocusNode),
           SizedBox(
-            height: 23.0,
+            height: 16.0,
           ),
           Visibility(visible: !_isKeyboardVisible, child: _buildButton()),
         ],

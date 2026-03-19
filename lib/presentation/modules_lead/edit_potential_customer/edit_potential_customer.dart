@@ -171,7 +171,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             }
           } else {
             LeadConnection.showMyDialog(
-                context, "Không tìm thấy thông tin người liên hệ");
+                context, AppLocalizations.text(LangKey.contactNotFound));
           }
         } else {
           business = false;
@@ -255,7 +255,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                 }
               } else {
                 LeadConnection.showMyDialog(
-                    context, "Không tìm thấy thông tin người liên hệ");
+                    context, AppLocalizations.text(LangKey.contactNotFound));
               }
             } else {
               business = false;
@@ -824,7 +824,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           }),
 
           // chọn hành trình
-          _buildTextField("Chọn hành trình", journeySelected?.journeyName ?? "",
+          _buildTextField(AppLocalizations.text(LangKey.chooseJourney) ?? "Chọn hành trình", journeySelected?.journeyName ?? "",
               Assets.iconItinerary, true, true, false, ontap: () async {
             print("Chọn hành trình");
 
@@ -871,7 +871,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
           // Chọn chi nhánh
           _buildTextField(
-              "Chọn chi nhánh",
+              AppLocalizations.text(LangKey.chooseBranch),
               _bloc.branchSelected?.branchName ?? "",
               Assets.iconName,
               true,
@@ -1064,7 +1064,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                 (!Validators()
                     .isNumber(detailPotential.contactPhone!.trim()))) {
               LeadConnection.showMyDialog(
-                  context, "Số điện thoại người liên hệ không đúng định dạng",
+                  context, AppLocalizations.text(LangKey.contactPhoneInvalid),
                   warning: true);
               return;
             }

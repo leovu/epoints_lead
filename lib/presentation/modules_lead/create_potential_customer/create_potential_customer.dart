@@ -429,6 +429,10 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                   Navigator.of(context).pop();
                   if (journeys != null) {
                     journeysData = journeys.data;
+                    if (journeysData != null && journeysData!.isNotEmpty) {
+                      journeySelected = journeysData!.first;
+                      detailPotential.journeyCode = journeySelected!.journeyCode;
+                    }
                   }
                   setState(() {});
                 }
@@ -453,6 +457,10 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 Navigator.of(context).pop();
                 if (journeys != null) {
                   journeysData = journeys.data;
+                  if (journeysData != null && journeysData!.isNotEmpty) {
+                    journeySelected = journeysData!.first;
+                    detailPotential.journeyCode = journeySelected!.journeyCode;
+                  }
                 }
                 setState(() {});
               }
@@ -513,7 +521,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
 
           // Chọn chi nhánh
           _buildTextField(
-              "Chọn chi nhánh",
+              AppLocalizations.text(LangKey.chooseBranch),
               _bloc.branchSelected?.branchName ?? "",
               Assets.iconName,
               true,
@@ -828,7 +836,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 (!Validators()
                     .isNumber(detailPotential.contactPhone!.trim()))) {
               LeadConnection.showMyDialog(
-                  context, "Số điện thoại người liên hệ không đúng định dạng",
+                  context, AppLocalizations.text(LangKey.contactPhoneInvalid),
                   warning: true);
               return;
             }

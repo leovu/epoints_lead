@@ -179,7 +179,7 @@ class _AddContactBusinessScreenState extends State<AddContactBusinessScreen>
         },
         child: Center(
           child: Text(
-            "Thêm người liên hệ",
+            AppLocalizations.text(LangKey.addContact)!,
             style: AppTextStyles.style14WhiteWeight600,
             maxLines: 1,
           ),
@@ -195,7 +195,7 @@ class _AddContactBusinessScreenState extends State<AddContactBusinessScreen>
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: CustomScaffold(
-        title: "Thêm người liên hệ",
+        title: AppLocalizations.text(LangKey.addContact),
         body: _buildBody(),
       ),
     );

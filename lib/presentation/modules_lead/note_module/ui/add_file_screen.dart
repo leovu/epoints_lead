@@ -3,11 +3,15 @@ import 'dart:io';
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
+import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/bloc/detail_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
 import 'package:lead_plugin_epoint/widget/custom_scaffold.dart';
+
+import '../../../../common/lang_key.dart';
+import '../../../../common/localization/app_localizations.dart';
 
 class AddFileScreen extends StatefulWidget {
   final DetailPotentialCustomerBloc bloc;
@@ -51,7 +55,8 @@ class _AddFileScreenState extends State<AddFileScreen>
 
   bool validateAllow() {
     if (file == null) {
-      LeadConnection.showMyDialog(context, "Vui lòng tải lên tập tin",
+      LeadConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.pleaseUploadFile),
           warning: true);
       return false;
     }
@@ -84,15 +89,15 @@ class _AddFileScreenState extends State<AddFileScreen>
                       child: GestureDetector(
                         onTap: () {
                           widget.bloc.uploadFile().then((value) {
-                      setState(() {
-                        if (value != null) {
-                          file = value;
-                        }
-                      });
-                    });
+                            setState(() {
+                              if (value != null) {
+                                file = value;
+                              }
+                            });
+                          });
                         },
                         child: Text(
-                          "Thay đổi",
+                          AppLocalizations.text(LangKey.change)!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: AppColors.primaryColor),
@@ -111,7 +116,7 @@ class _AddFileScreenState extends State<AddFileScreen>
                       });
                     });
                   },
-                  text: "Chọn tập tin",
+                  text: AppLocalizations.text(LangKey.chooseFile),
                   style: AppTextStyles.style14PrimaryBold,
                 ),
           SizedBox(height: 10),
@@ -148,14 +153,14 @@ class _AddFileScreenState extends State<AddFileScreen>
                     Container(
                       width: 5.0,
                     ),
-                    Container(
+                    ConstrainedBox(
+                      constraints: BoxConstraints(
+                          maxWidth: MediaQuery.sizeOf(context).width * 0.5),
                       child: AutoSizeText(
                         file.path.split('/').last,
                         style: AppTextStyles.style14BlackNormal,
-                        minFontSize: 1,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
                       ),
                     )
                   ],
@@ -171,7 +176,7 @@ class _AddFileScreenState extends State<AddFileScreen>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "Nội dung đính kèm",
+          AppLocalizations.text(LangKey.attachmentContent)!,
           style: TextStyle(
               fontWeight: FontWeight.bold, color: AppColors.primaryColor),
         ),
@@ -183,7 +188,7 @@ class _AddFileScreenState extends State<AddFileScreen>
           maxLength: 500,
           decoration: InputDecoration(
             counterText: "",
-            hintText: "Đây là một nội dung đính kèm",
+            hintText: AppLocalizations.text(LangKey.thisIsAttachmentContent),
             hintStyle: AppTextStyles.style13GrayWeight400,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
@@ -214,7 +219,10 @@ class _AddFileScreenState extends State<AddFileScreen>
       child: InkWell(
         onTap: () async {
           if (validateAllow()) {
-            widget.bloc.uploadFileAWS(file!, content: noteController.text).then((value) {
+            widget.bloc
+                .uploadFileAWS(MultipartFileModel(file: file),
+                    content: noteController.text)
+                .then((value) {
               if (value) {
                 widget.bloc.getListFile(context);
                 Navigator.pop(context);
@@ -224,7 +232,7 @@ class _AddFileScreenState extends State<AddFileScreen>
         },
         child: Center(
           child: Text(
-            "LƯU",
+            AppLocalizations.text(LangKey.save)!,
             style: AppTextStyles.style14WhiteWeight600,
             maxLines: 1,
           ),
@@ -236,7 +244,7 @@ class _AddFileScreenState extends State<AddFileScreen>
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      title: "Tải tập tin",
+      title: AppLocalizations.text(LangKey.uploadFile),
       body: _buildBody(),
     );
   }

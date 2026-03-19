@@ -431,7 +431,7 @@ class _BuildMoreAddressCreatPotentialState
             : Container(),
 
         Text(
-          "Ghi chú",
+          AppLocalizations.text(LangKey.note)!,
           style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color:  AppColors.primaryColor),
@@ -446,7 +446,7 @@ class _BuildMoreAddressCreatPotentialState
           maxLength: 500,
           decoration: InputDecoration(
             counterText: "",
-            hintText: "Đây là một nội dung ghi chú",
+            hintText: AppLocalizations.text(LangKey.thisIsANote),
             hintStyle: AppTextStyles.style13GrayWeight400,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),

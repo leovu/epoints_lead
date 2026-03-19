@@ -88,7 +88,6 @@ class LeadConnection {
     return null;
   }
 
-
   static Future<DetailPotentialModelResponse?> getdetailPotential(
       BuildContext context, String? customer_lead_code) async {
     showLoading(context);
@@ -155,8 +154,7 @@ class LeadConnection {
     return null;
   }
 
-  static Future<List<ProvinceData>?> getProvince(
-      BuildContext context) async {
+  static Future<List<ProvinceData>?> getProvince(BuildContext context) async {
     ResponseData responseData =
         await connection.post('/customer-lead/customer-lead/get-province', {});
     if (responseData.isSuccess) {
@@ -297,7 +295,8 @@ class LeadConnection {
       BuildContext context, int customer_lead_id) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/convert-lead', {"customer_lead_id" : customer_lead_id});
+        '/customer-lead/customer-lead/convert-lead',
+        {"customer_lead_id": customer_lead_id});
     Navigator.of(context).pop();
     if (responseData.isSuccess) {
       DescriptionModelResponse data =
@@ -320,7 +319,8 @@ class LeadConnection {
     return null;
   }
 
-  static Future<PositionResponseModel?> getPosition(BuildContext context) async {
+  static Future<PositionResponseModel?> getPosition(
+      BuildContext context) async {
     showLoading(context);
     ResponseData responseData =
         await connection.post('/customer-lead/customer-lead/position', {});
@@ -487,7 +487,7 @@ class LeadConnection {
     return null;
   }
 
-   static Future<DescriptionModelResponse?> addPhone(
+  static Future<DescriptionModelResponse?> addPhone(
       BuildContext context, AddPhoneModelRequest model) async {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/add-phone', model.toJson());
@@ -501,7 +501,8 @@ class LeadConnection {
 
   static Future<WorkUploadFileResponseModel?> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
-    ResponseData response =  await connection.upload('/manage-work/upload-file', model);
+    ResponseData response =
+        await connection.upload('/manage-work/upload-file', model);
     if (response.isSuccess) {
       WorkUploadFileResponseModel responseModel =
           WorkUploadFileResponseModel.fromJson(response.data!);
@@ -555,13 +556,20 @@ class LeadConnection {
     return null;
   }
 
+  static uploadFile(BuildContext? context, MultipartFileModel model) async {
+    var data = await _checkConnectivity(context);
+    if (data != null) {
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
+    }
+    model.name = "file_name";
+    return await connection.upload('/user/upload-file', model);
+  }
 
- static Future<String?> uploadFileAWS(
-      BuildContext? context, File file) async {
+  static Future<String?> uploadFileAWS(BuildContext? context, File file) async {
     // showLoading(context);
     var data = await _checkConnectivity(context);
     if (data != null) {
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
 
     final mimeType = lookupMimeType(file.path)!;
@@ -574,29 +582,26 @@ class LeadConnection {
         region: "ap-southeast-1",
         destDir: "",
         filename: basename(file.path),
-        contentType: mimeType
-    );
+        contentType: mimeType);
 
-    if(url.isEmpty){
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
+    if (url.isEmpty) {
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
       return null;
     } else {
       return url;
     }
   }
 
-   static Future _checkConnectivity(BuildContext? context) async {
+  static Future _checkConnectivity(BuildContext? context) async {
     if (!(await NetworkConnectivity.isConnected())) {
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
     return null;
   }
 
-
   static Future handleError(BuildContext context, String? title) async {
     await showMyDialog(context, AppLocalizations.text(LangKey.server_error));
-  } 
-
+  }
 
   static Future showLoading(BuildContext context) async {
     return await showDialog(
@@ -731,8 +736,8 @@ class LeadConnection {
                     },
                   ),
                   TextButton(
-                    child:
-                        Center(child: Text(AppLocalizations.text(LangKey.yes)!)),
+                    child: Center(
+                        child: Text(AppLocalizations.text(LangKey.yes)!)),
                     onPressed: ontap,
                   ),
                 ],

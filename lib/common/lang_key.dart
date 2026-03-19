@@ -1237,4 +1237,32 @@ class LangKey {
   static const String max_images = "max_images";
   
 
+  static const String pleaseEnterBusinessAreaName = "pleaseEnterBusinessAreaName";
+  static const String pleaseEnterTagName = "pleaseEnterTagName";
+  static const String customerGroup = "customerGroup";
+  static const String addContact = "addContact";
+  static const String thisIsANote = "thisIsANote";
+  // static const String chooseBranch = "chooseBranch";
+  static const String contactPhoneInvalid = "contactPhoneInvalid";
+  static const String pleaseSelectEmployeeBefore = "pleaseSelectEmployeeBefore";
+  static const String related = "related";
+  static const String customerCode = "customerCode";
+  static const String year = "year";
+  // static const String customerCare = "customerCare";
+  static const String noPhoneNumber = "noPhoneNumber";
+  static const String deleteLead = "deleteLead";
+  static const String convertCustomer = "convertCustomer";
+  static const String addDeal = "addDeal";
+  // static const String chooseStatus = "chooseStatus";
+  static const String changePhoto = "changePhoto";
+  static const String contactNotFound = "contactNotFound";
+  static const String chooseJourney = "chooseJourney";
+  static const String useExcel = "useExcel";
+  static const String timekeeping = "timekeeping";
+  static const String jobManagement = "jobManagement";
+  static const String pleaseUploadFile = "pleaseUploadFile";
+  static const String chooseFile = "chooseFile";
+  static const String attachmentContent = "attachmentContent";
+  static const String thisIsAttachmentContent = "thisIsAttachmentContent";
+  static const String uploadFile = "uploadFile";
 }

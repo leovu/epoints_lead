@@ -113,7 +113,7 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
             }
           }
         } else {
-          LeadConnection.showMyDialog(context, "Vui lòng nhập tên lĩnh vực kinh doanh");
+          LeadConnection.showMyDialog(context, AppLocalizations.text(LangKey.pleaseEnterBusinessAreaName));
         }
       },
       child: Container(

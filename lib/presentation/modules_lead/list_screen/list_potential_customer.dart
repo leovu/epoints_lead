@@ -41,11 +41,11 @@ class _LeadScreen extends State<LeadScreen> {
   List<ListCustomLeadItems>? items;
   List<String> listFunction = [
     "CRM",
-    "Dùng excel",
-    "Chấm công",
+    AppLocalizations.text(LangKey.useExcel)!,
+    AppLocalizations.text(LangKey.timekeeping)!,
     "Chathub",
-    "Quản lý công việc",
-    "Chấm công",
+    AppLocalizations.text(LangKey.jobManagement)!,
+    AppLocalizations.text(LangKey.timekeeping)!,
     "QLCV"
   ];
 
@@ -460,7 +460,7 @@ class _LeadScreen extends State<LeadScreen> {
                                                     children: [
                                                   TextSpan(
                                                       text:
-                                                          "(${item.diffDay} ngày)",
+                                                          "(${item.diffDay} ${AppLocalizations.text(LangKey.day)?.toLowerCase()})",
                                                       style: TextStyle(
                                                           color: AppColors
                                                               .primaryColor,
@@ -496,7 +496,7 @@ class _LeadScreen extends State<LeadScreen> {
                                     });
                                   }  else {
                                     LeadConnection.showMyDialog(
-                                        context, "Không có thông tin số điện thoại");
+                                        context, AppLocalizations.text(LangKey.noPhoneNumber));
                                   }
                                 },
                                 child: Container(

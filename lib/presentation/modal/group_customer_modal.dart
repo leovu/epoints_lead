@@ -7,6 +7,9 @@ import 'package:lead_plugin_epoint/widget/custom_item_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 
+import '../../common/lang_key.dart';
+import '../../common/localization/app_localizations.dart';
+
 class GroupCustomerModal extends StatefulWidget {
  final List<CustomerGroupData>? datas;
  GroupCustomerModal({ Key? key , this.datas}) : super(key: key);
@@ -23,7 +26,7 @@ class _GroupCustomerModalState extends State<GroupCustomerModal> {
   @override
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
-      title: "Nhóm khách hàng",
+      title: AppLocalizations.text(LangKey.customerGroup),
       widget: (widget.datas!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),

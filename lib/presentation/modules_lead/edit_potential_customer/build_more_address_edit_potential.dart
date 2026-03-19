@@ -578,7 +578,7 @@ class _BuildMoreAddressEditPotentialState
             : Container(),
 
         Text(
-          "Ghi chú",
+          AppLocalizations.text(LangKey.choose_position)!,
           style: TextStyle(
               fontWeight: FontWeight.bold, color: AppColors.primaryColor),
         ),
@@ -592,7 +592,7 @@ class _BuildMoreAddressEditPotentialState
           maxLength: 500,
           decoration: InputDecoration(
             counterText: "",
-            hintText: "Đây là một nội dung ghi chú",
+            hintText: "",
             hintStyle: AppTextStyles.style13GrayWeight400,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),

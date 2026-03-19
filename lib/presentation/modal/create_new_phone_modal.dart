@@ -64,14 +64,14 @@ class _CreateNewPhoneModalState extends State<CreateNewPhoneModal>
               padding: EdgeInsets.all(15.0),
               child: Center(
                 child: Text(
-                  "Thêm số điện thoại",
+                 AppLocalizations.text(LangKey.enter_phone_number)!,
                   style: TextStyle(
                       fontSize: 18.0,
                       color: Colors.black,
                       fontWeight: FontWeight.w600),
                 ),
               )),
-          textfield("Nhập số điện thoại", "", Assets.iconCall,
+          textfield(AppLocalizations.text(LangKey.enter_phone_number), "", Assets.iconCall,
               fillText: _nameText, focusNode: _nameFocusNode),
           SizedBox(
             height: 23.0,
@@ -108,7 +108,7 @@ class _CreateNewPhoneModalState extends State<CreateNewPhoneModal>
           child: Center(
             child: Text(
               // AppLocalizations.text(LangKey.convertCustomers),
-              "THÊM SỐ ĐIỆN THOẠI",
+              AppLocalizations.text(LangKey.enter_phone_number)!.toUpperCase(),
               style: TextStyle(
                   fontSize: 14.0,
                   color: Colors.white,

@@ -200,9 +200,8 @@
   "createDeal": "Tạo deal",
   "enter_keyword": "Nhập từ khoá tìm kiếm",
   "tax_acronym": "Mst",
-  "journey":"Hành trình",
-  "group_customer":"Nhóm khách hàng",
-
+  "journey": "Hành trình",
+  "group_customer": "Nhóm khách hàng",
   "data_error": "Lỗi dữ liệu!",
   "work": "Công việc",
   "list_job": "Danh sách công việc",
@@ -257,7 +256,6 @@
   "week": "Tuần",
   "task": "Tác vụ",
   "select": "Chọn",
-
   "detail_deal": "CHI TIẾT CƠ HỘI BÁN HÀNG",
   "list_deal": "DANH SÁCH CƠ HỘI BÁN HÀNG",
   "edit_deal": "CHỈNH SỬA CƠ HỘI BÁN HÀNG",
@@ -1183,6 +1181,10 @@
   "submit_review": "Gửi đánh giá",
   "submit_review_success_message": "Gửi đánh giá dịch vụ cho khách hàng thành công",
   "purpose_of_appointment": "Mục đích lịch hẹn",
-  "create_order_from_booking_message": "Xác nhận tạo đơn hàng từ lịch hẹn này?"
-
+  "create_order_from_booking_message": "Xác nhận tạo đơn hàng từ lịch hẹn này?",
+  "select_customer_group": "Chọn nhóm khách hàng",
+  "enter_phone_number": "Nhập số điện thoại",
+  "add_phone_number": "Thêm số điện thoại",
+  "tap_to_upload_image": "Nhấn để tải hình ảnh lên",
+  "max_images": "Chỉ được chọn tối đa @count ảnh"
 }

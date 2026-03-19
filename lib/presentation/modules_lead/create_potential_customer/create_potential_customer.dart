@@ -460,8 +460,13 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           }),
 
           //  chọn hành trình
-          _buildTextField("Chọn hành trình", journeySelected?.journeyName ?? "",
-              Assets.iconItinerary, true, true, false, ontap: () async {
+          _buildTextField(
+              AppLocalizations.text(LangKey.chooseItinerary),
+              journeySelected?.journeyName ?? "",
+              Assets.iconItinerary,
+              true,
+              true,
+              false, ontap: () async {
             print("Chọn hành trình");
 
             FocusScope.of(context).unfocus();
@@ -557,7 +562,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
 
           // nhóm khách hàng
           _buildTextField(
-              "Chọn nhóm khách hàng",
+              AppLocalizations.text(LangKey.select_customer_group),
               _bloc.customerGroupSelected?.groupName ?? "",
               Assets.iconName,
               false,
@@ -725,7 +730,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           child: Center(
             child: Padding(
               padding: EdgeInsets.only(bottom: 16.0),
-              child: Text("+ Thêm số điện thoại",
+              child: Text(
+                  "+  ${AppLocalizations.text(LangKey.add_phone_number)}",
                   style: AppTextStyles.style14BlueWeight500),
             ),
           ),

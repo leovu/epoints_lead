@@ -896,7 +896,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
           // nhóm khách hàng
           _buildTextField(
-              "Chọn nhóm khách hàng",
+              AppLocalizations.text(LangKey.select_customer_group),
               _bloc.customerGroupSelected?.groupName ?? "",
               Assets.iconName,
               false,
@@ -1134,7 +1134,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           child: Center(
             child: Padding(
               padding: EdgeInsets.only(bottom: 16.0),
-              child: Text("+ Thêm số điện thoại",
+              child: Text("+ ${AppLocalizations.text(LangKey.enter_phone_number)}",
                   style: AppTextStyles.style14BlueWeight500),
             ),
           ),

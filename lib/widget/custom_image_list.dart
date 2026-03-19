@@ -49,8 +49,10 @@ class CustomImageList extends StatelessWidget {
                               if (((models?.length ?? 0)) > limit!) {
                                 CustomNavigator.showCustomAlertDialog(
                                     context,
-                                    "Thông báo",
-                                    "Chỉ được chọn tối đa $limit ảnh");
+                                    AppLocalizations.text(LangKey.notification),
+                                    // "Chỉ được chọn tối đa $limit ảnh");
+                                    AppLocalizations.text(LangKey.max_images)!
+                                        .replaceAll('{count}', '$limit'));
                               } else {
                                 onAdd!([files]);
                               }
@@ -72,7 +74,7 @@ class CustomImageList extends StatelessWidget {
                   ),
                   child: Center(
                       child: Text(
-                    "Nhấn để tải hình ảnh lên",
+                    AppLocalizations.text(LangKey.tap_to_upload_image)!,
                     style: TextStyle(
                         color: AppColors.grey500Color,
                         fontSize: AppTextSizes.size14),

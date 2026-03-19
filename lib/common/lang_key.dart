@@ -1230,5 +1230,11 @@ class LangKey {
   static const String purpose_of_appointment = "purpose_of_appointment";
   static const String create_order_from_booking_message = "create_order_from_booking_message";
   
+  static const String select_customer_group = "select_customer_group";
+  static const String enter_phone_number = "enter_phone_number";
+  static const String add_phone_number = "add_phone_number";
+  static const String tap_to_upload_image = "tap_to_upload_image";
+  static const String max_images = "max_images";
+  
 
 }

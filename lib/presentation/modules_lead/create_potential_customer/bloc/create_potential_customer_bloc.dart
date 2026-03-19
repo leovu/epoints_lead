@@ -17,6 +17,8 @@ import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
+import '../../../../connection/http_connection.dart';
+
 class CreatePotentialCustomerBloc extends BaseBloc {
   CreatePotentialCustomerBloc(BuildContext context) {
     setContext(context);
@@ -144,9 +146,9 @@ class CreatePotentialCustomerBloc extends BaseBloc {
   Future<String> uploadFileAWS(File images, {String content = ""}) async {
     try {
       CustomNavigator.showProgressDialog(context);
-      String? result = await LeadConnection.uploadFileAWS(context, images);
+      ResponseData? result = await LeadConnection.uploadFile(context, MultipartFileModel(file: images));
       CustomNavigator.hideProgressDialog();
-      return result ?? "";
+      return result?.data?['Data']['link'];
     } catch (e) {
       return "";
     }

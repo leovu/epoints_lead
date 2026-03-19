@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:aws_s3_upload_lite/aws_s3_upload_lite.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
@@ -49,8 +48,6 @@ import 'package:lead_plugin_epoint/model/response/work_list_comment_model_respon
 import 'package:lead_plugin_epoint/model/response/work_list_department_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_file_response_model.dart';
 import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
-import 'package:mime/mime.dart';
-import 'package:path/path.dart';
 
 import '../model/response/list_customer_lead_model_response.dart';
 
@@ -565,32 +562,32 @@ class LeadConnection {
     return await connection.upload('/user/upload-file', model);
   }
 
-  static Future<String?> uploadFileAWS(BuildContext? context, File file) async {
-    // showLoading(context);
-    var data = await _checkConnectivity(context);
-    if (data != null) {
-      handleError(context!, AppLocalizations.text(LangKey.server_error));
-    }
+  // static Future<String?> uploadFileAWS(BuildContext? context, File file) async {
+  //   // showLoading(context);
+  //   var data = await _checkConnectivity(context);
+  //   if (data != null) {
+  //     handleError(context!, AppLocalizations.text(LangKey.server_error));
+  //   }
 
-    final mimeType = lookupMimeType(file.path)!;
+  //   final mimeType = lookupMimeType(file.path)!;
 
-    final url = await AwsS3.uploadFile(
-        accessKey: "AKIAUO66DKWUKVBVJCJK",
-        secretKey: "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",
-        file: file,
-        bucket: "epoint-bucket",
-        region: "ap-southeast-1",
-        destDir: "",
-        filename: basename(file.path),
-        contentType: mimeType);
+  //   final url = await AwsS3.uploadFile(
+  //       accessKey: "AKIAUO66DKWUKVBVJCJK",
+  //       secretKey: "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",
+  //       file: file,
+  //       bucket: "epoint-bucket",
+  //       region: "ap-southeast-1",
+  //       destDir: "",
+  //       filename: basename(file.path),
+  //       contentType: mimeType);
 
-    if (url.isEmpty) {
-      handleError(context!, AppLocalizations.text(LangKey.server_error));
-      return null;
-    } else {
-      return url;
-    }
-  }
+  //   if (url.isEmpty) {
+  //     handleError(context!, AppLocalizations.text(LangKey.server_error));
+  //     return null;
+  //   } else {
+  //     return url;
+  //   }
+  // }
 
   static Future _checkConnectivity(BuildContext? context) async {
     if (!(await NetworkConnectivity.isConnected())) {

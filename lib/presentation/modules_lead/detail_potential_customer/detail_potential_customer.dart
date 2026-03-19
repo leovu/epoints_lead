@@ -1998,7 +1998,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Image.asset(
-                          pathToImage(model.path??'')??'',
+                          pathToImage(model.path ?? '') ?? '',
                           width: 24,
                         ),
                         Container(

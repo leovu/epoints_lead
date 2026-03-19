@@ -71,7 +71,7 @@ class _AddFileScreenState extends State<AddFileScreen>
         children: [
           SizedBox(height: 10),
           Text(
-            "Tập tin",
+            "File",
             style: TextStyle(
                 fontWeight: FontWeight.bold, color: AppColors.primaryColor),
           ),

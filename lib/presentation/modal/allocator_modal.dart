@@ -7,6 +7,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_cu
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
+// ignore: must_be_immutable
 class AllocatorModal extends StatefulWidget {
   List<AllocatorData>? allocatorData = <AllocatorData>[];
   AllocatorData? allocatorSelected = AllocatorData();

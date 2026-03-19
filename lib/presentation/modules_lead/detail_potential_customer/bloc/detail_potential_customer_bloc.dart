@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_direct_call_plus/flutter_direct_call.dart';
-import 'package:lead_plugin_epoint/common/lang_key.dart';
-import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/note_file_req_res_model.dart';
 import 'package:lead_plugin_epoint/model/request/add_contact_req_model.dart';
@@ -34,7 +32,6 @@ import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 
 import '../../../../connection/http_connection.dart';
-import '../../../modal/upload_file_res_model.dart';
 
 class DetailPotentialCustomerBloc extends BaseBloc {
   DetailPotentialCustomerBloc(BuildContext context) {
@@ -367,11 +364,10 @@ class DetailPotentialCustomerBloc extends BaseBloc {
       ResponseData res = await LeadConnection.uploadFile(context, model);
       CustomNavigator.hideProgressDialog();
       bool value = await addFile(UploadFileReqModel(
-        customer_lead_id: detail?.customerLeadId,
-        path: res.data?['Data']['link'],
-        content: content,
-        fileName: model.file?.path.split("/").last
-      ));
+          customer_lead_id: detail?.customerLeadId,
+          path: res.data?['Data']['link'],
+          content: content,
+          fileName: model.file?.path.split("/").last));
       return value;
     } catch (e) {
       print('____________$e');

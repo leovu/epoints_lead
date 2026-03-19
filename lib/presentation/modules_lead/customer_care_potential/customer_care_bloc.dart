@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
+import 'package:lead_plugin_epoint/connection/http_connection.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:rxdart/rxdart.dart';
@@ -31,14 +32,14 @@ class CustomerCareBloc extends BaseBloc {
     LeadConnection.showLoading(context!);
 
     
-    String? result = await LeadConnection.uploadFileAWS(context, model);
+    ResponseData? result = await LeadConnection.uploadFile(context, MultipartFileModel(file: model));
 
 
     Navigator.of(context!).pop();
     if(result != null){
       // WorkUploadFileResponse response = result.url;
 
-      _files.add(result);
+      _files.add(result.data?['Data']['link']);
       setFiles(_files);
     } else {
       LeadConnection.handleError(context!, AppLocalizations.text(LangKey.server_error));

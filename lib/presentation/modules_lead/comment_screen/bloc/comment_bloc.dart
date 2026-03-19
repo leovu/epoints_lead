@@ -57,12 +57,12 @@ class CommentBloc extends BaseBloc {
     LeadConnection.showLoading(context!);
 
     
-    String? result = await LeadConnection.uploadFileAWS(context, model);
+    ResponseData? result = await LeadConnection.uploadFile(context, MultipartFileModel(file: model));
 
 
     Navigator.of(context!).pop();
     if(result != null){
-      setFile(result);
+      setFile(result.data?['Data']['link']);
     } else {
       LeadConnection.handleError(context!, AppLocalizations.text(LangKey.server_error));
     }

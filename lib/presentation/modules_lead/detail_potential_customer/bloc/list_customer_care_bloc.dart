@@ -9,8 +9,7 @@ import 'package:rxdart/subjects.dart';
 import '../../../../widget/widget.dart';
 
 class ListCustomerCareBloc extends BaseBloc {
-
-  ListCustomerCareBloc(BuildContext context){
+  ListCustomerCareBloc(BuildContext context) {
     setContext(context);
   }
 
@@ -20,10 +19,12 @@ class ListCustomerCareBloc extends BaseBloc {
   }
 
   final _streamStatusWorkData = BehaviorSubject<List<CustomDropdownModel>?>();
-   ValueStream<List<CustomDropdownModel>?> get outputStatusWorkData => _streamStatusWorkData.stream;
-  setStatusWorkData(List<CustomDropdownModel>? event) => set(_streamStatusWorkData, event);
+  ValueStream<List<CustomDropdownModel>?> get outputStatusWorkData =>
+      _streamStatusWorkData.stream;
+  setStatusWorkData(List<CustomDropdownModel>? event) =>
+      set(_streamStatusWorkData, event);
 
-    final _streamCareLead = BehaviorSubject<List<CareLeadData>?>();
+  final _streamCareLead = BehaviorSubject<List<CareLeadData>?>();
   ValueStream<List<CareLeadData>?> get outputCarLead => _streamCareLead.stream;
   setCareLead(List<CareLeadData>? event) => set(_streamCareLead, event);
 
@@ -33,8 +34,8 @@ class ListCustomerCareBloc extends BaseBloc {
   getStatusWork() async {
     try {
       var statusWorkModel = await LeadConnection.getStatusWork(context!);
-     List<GetStatusWorkData> model = statusWorkModel?.data ?? [];
-     statusWorkData = convertToDropdownModel(model);
+      List<GetStatusWorkData> model = statusWorkModel?.data ?? [];
+      statusWorkData = convertToDropdownModel(model);
       setStatusWorkData(convertToDropdownModel(model));
     } catch (e) {
       // Handle any errors if necessary
@@ -42,21 +43,26 @@ class ListCustomerCareBloc extends BaseBloc {
     }
   }
 
-  List<CustomDropdownModel> convertToDropdownModel(List<GetStatusWorkData> statusWorkDataList) {
-  return statusWorkDataList.map((statusWorkData) {
-    return CustomDropdownModel(
-      id: statusWorkData.manageStatusId,
-      text: statusWorkData.manageStatusName,
-      color: HexColor(statusWorkData.manageStatusColor),
-      data: statusWorkData,
-    );
-  }).toList();
-}
+  List<CustomDropdownModel> convertToDropdownModel(
+      List<GetStatusWorkData> statusWorkDataList) {
+    return statusWorkDataList.map((statusWorkData) {
+      return CustomDropdownModel(
+        id: statusWorkData.manageStatusId,
+        text: statusWorkData.manageStatusName,
+        color: HexColor(statusWorkData.manageStatusColor),
+        data: statusWorkData,
+      );
+    }).toList();
+  }
+
   List<CareLeadData>? listCareLead;
 
   onChange(CustomDropdownModel value) {
     statusWorkDataSelected = value;
-    setCareLead(listCareLead?.where((element) => element.manageStatusId == value.id).toList() ?? []);
+    setCareLead(listCareLead
+            ?.where((element) => element.manageStatusId == value.id)
+            .toList() ??
+        []);
     setStatusWorkData(statusWorkData);
   }
 
@@ -67,10 +73,9 @@ class ListCustomerCareBloc extends BaseBloc {
   }
 }
 
-
 class HexColor extends Color {
   static int getColorFromHex(String? hexColor) {
-    if((hexColor ?? "") == ""){
+    if ((hexColor ?? "") == "") {
       hexColor = "000000";
     }
     hexColor = hexColor!.toUpperCase().replaceAll("#", "");

@@ -67,6 +67,7 @@ class LangKey {
   static const String delete = "delete";
   static const String createJobs = "create_jobs";
   static const String recall = "recall";
+  static const String unassign = "unassign";
 
   static const String filter = "filter";
   static const String byLabel = "by_label";

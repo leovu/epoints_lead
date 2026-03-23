@@ -160,7 +160,7 @@ class ListDealScreenState extends State<ListDealScreen> {
                   ),
                   Expanded(
                     child: Text(
-                      "${NumberFormat("#,###", "vi-VN").format(item.amount ?? 0)} VNĐ",
+                      "${NumberFormat("#,###", "en_AU").format(item.amount ?? 0)}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           color: AppColors.primaryColor,

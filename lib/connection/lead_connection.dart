@@ -54,8 +54,6 @@ import '../model/response/list_customer_lead_model_response.dart';
 class LeadConnection {
   static late BuildContext buildContext;
   static HTTPConnection connection = HTTPConnection();
-  // static Account account;
-  // static Locale locale = Locale('vi', 'VN');
   static Locale? locale;
 
   static Future<bool> init(String token, {String? domain}) async {
@@ -710,7 +708,7 @@ class LeadConnection {
                 ),
                 Center(
                     child: Text(
-                  title!,
+                  title??'',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey[700]),
                 )),

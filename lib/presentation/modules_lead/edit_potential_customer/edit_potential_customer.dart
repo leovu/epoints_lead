@@ -74,7 +74,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   TextEditingController _emailText = TextEditingController();
   FocusNode _emailFocusNode = FocusNode();
 
-
   bool showMoreAddress = false;
   bool showMoreAll = false;
   bool selectedPersonal = true;
@@ -154,9 +153,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
     WidgetsBinding.instance.addObserver(this);
     _bloc = CreatePotentialCustomerBloc(context);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      LeadConnection.showLoading(context);
+      // LeadConnection.showLoading(context);
 
       if (widget.detailPotential != null) {
+        print('_________${widget.detailPotential?.toJson()}');
         _bloc.detail = widget.detailPotential;
         detailNew = widget.detailPotential;
         bool business = false;
@@ -182,7 +182,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             avatar: "",
             customerType: widget.detailPotential!.customerType ?? "",
             customerSource:
-                widget.detailPotential!.customerSource ?? "" as int?,
+                int.tryParse(widget.detailPotential!.customerSource.toString()),
             fullName: widget.detailPotential!.fullName ?? "",
             taxCode: widget.detailPotential!.taxCode,
             phone: widget.detailPotential!.phone ?? "",
@@ -239,6 +239,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         DetailPotentialModelResponse? dataDetail =
             await LeadConnection.getdetailPotential(
                 context, widget.customer_lead_code);
+        // getdetailPotential tự showLoading nhưng không tự pop → đóng tại đây
+        if (context.mounted) Navigator.of(context).pop();
 
         if (dataDetail != null) {
           if (dataDetail.errorCode == 0) {
@@ -322,7 +324,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           } else {
             await LeadConnection.showMyDialog(
                 context, dataDetail.errorDescription);
-            Navigator.of(context).pop();
+            // Navigator.of(context).pop();
           }
         }
       }
@@ -332,36 +334,138 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   }
 
   callApi() async {
-    _bloc.getBranch(context, showLoading: false).then((val) async {
-      if (val != null) {
-        try {
-          var result = _bloc.listBranch.firstWhereOrNull(
-              (element) => (element.branchCode == detailNew?.branchCode));
-          if (result != null) {
-            result.selected = true;
-            _bloc.branchSelected = result;
-            setState(() {});
+    LeadConnection.showLoading(context);
+    try {
+      // 1. Chi nhánh
+      await _bloc.getBranch(context, showLoading: false);
+      try {
+        var result = _bloc.listBranch.firstWhereOrNull(
+            (element) => element.branchCode == detailNew?.branchCode);
+        if (result != null) {
+          result.selected = true;
+          _bloc.branchSelected = result;
+        }
+      } catch (e) {}
+
+      // 2. Nhóm khách hàng
+      await _bloc.getCustomerGroup(context, showLoading: false);
+      try {
+        var result = _bloc.listCustomerGroupData.firstWhereOrNull(
+            (element) => element.customerGroupId == detailNew?.customerGroupId);
+        if (result != null) {
+          result.selected = true;
+          _bloc.customerGroupSelected = result;
+        }
+      } catch (e) {}
+
+      // 3. Loại khách hàng & nguồn khách hàng
+      try {
+        var dataType_Source = await LeadConnection.getCustomerOption(context);
+        if (dataType_Source != null) {
+          customerOptonData = dataType_Source.data;
+          customerSourcesData = customerOptonData!.source;
+          if (customerOptonData?.customerType != null) {
+            customerTypeData.add(CustomerTypeModel(
+                customerTypeName: customerOptonData!.customerType!.personal,
+                customerTypeID: 1,
+                selected: false));
+            customerTypeData.add(CustomerTypeModel(
+                customerTypeName: customerOptonData!.customerType!.business,
+                customerTypeID: 2,
+                selected: false));
           }
-        } catch (e) {}
-      }
-    });
+        }
+      } catch (e) {}
 
-    _bloc.getCustomerGroup(context, showLoading: false).then((val) async {
-      if (val != null) {
-        try {
-          var result = _bloc.listCustomerGroupData.firstWhereOrNull((element) =>
-              (element.customerGroupId == detailNew?.customerGroupId));
-          if (result != null) {
-            result.selected = true;
-            _bloc.customerGroupSelected = result;
-            setState(() {});
+      // 4. Tỉnh / thành phố
+      try {
+        var dataProvinces = await LeadConnection.getProvince(context);
+        if (dataProvinces != null) provinces = dataProvinces;
+      } catch (e) {}
+
+      // 5. Pipeline
+      try {
+        var pipelines = await LeadConnection.getPipeline(context);
+        if (pipelines != null) pipeLineData = pipelines.data;
+      } catch (e) {}
+
+      // 6. Nhân viên (chỉ gọi 1 lần)
+      try {
+        var listStaff = await LeadConnection.workListStaff(
+            context, WorkListStaffRequestModel(manageProjectId: null));
+        if (listStaff != null) {
+          _modelStaff = listStaff.data ?? [];
+          var item = _modelStaff.firstWhereOrNull(
+              (element) => element.staffId == detailPotential.saleId);
+          _modelStaffSelected = item != null ? [item] : [];
+        } else {
+          _modelStaff = [];
+        }
+      } catch (e) {}
+
+      // 7. Lĩnh vực kinh doanh
+      try {
+        ListBusinessAreasModelResponse? model =
+            await LeadConnection.getListBusinessAreas(context);
+        if (model != null) listBusinessData = model.data;
+      } catch (e) {}
+
+      // 8. Chức vụ (getPosition tự quản lý loading nội bộ)
+      try {
+        PositionResponseModel? positions =
+            await LeadConnection.getPosition(context);
+        if (positions != null) positionData = positions.data;
+      } catch (e) {}
+
+      // 9. Tag
+      try {
+        var tags = await LeadConnection.getTag(context);
+        if (tags != null) {
+          tagsData = tags.data;
+          if (detailPotential.tagId!.isNotEmpty) {
+            for (int i = 0; i < detailPotential.tagId!.length; i++) {
+              tagsData!
+                  .firstWhereOrNull(
+                      (element) => element.tagId == detailPotential.tagId![i])
+                  ?.selected = true;
+            }
+            for (int i = 0; i < tagsData!.length; i++) {
+              if (tagsData![i].selected!) {
+                tagsString = tagsString.isEmpty
+                    ? tagsData![i].name ?? ""
+                    : "$tagsString, ${tagsData![i].name}";
+              }
+            }
           }
-        } catch (e) {}
-      }
-    });
+        }
+      } catch (e) {}
 
-    _bloc.websiteController.text = detailNew?.zalo ?? "";
+      // 10. Hành trình (theo pipelineCode thực tế)
+      try {
+        var journeys = await LeadConnection.getJourney(context,
+            GetJourneyModelRequest(
+                pipelineCode: [detailPotential.pipelineCode]));
+        if (journeys != null) journeysData = journeys.data;
+      } catch (e) {}
+    } finally {
+      if (context.mounted) Navigator.of(context).pop();
+      initModel();
+    }
+  }
 
+  void initModel() {
+    if (!mounted) return;
+
+    // --- TextFields ---
+    _fullNameText.text = detailPotential.fullName ?? "";
+    _phoneNumberText.text = detailPotential.phone ?? "";
+    _emailText.text = detailPotential.email ?? "";
+    _taxText.text = detailPotential.taxCode ?? "";
+    _bloc.representativeController.text = detailPotential.representative ?? "";
+    _bloc.websiteController.text = detailNew?.website ?? "";
+    _bloc.noteController.text = detailNew?.note ?? "";
+
+    // --- Địa chỉ ---
     if (detailNew?.provinceId != null && detailNew?.fullAddress != null) {
       _bloc.addressModel = CustomerCreateAddressModel(
           provinceModel: detailPotential.provinceId == null
@@ -381,168 +485,59 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       _bloc.setAddressModel(_bloc.addressModel);
     }
 
-    if (detailNew?.customerLeadReferId != null && detailNew?.customerLeadReferName != null) {
+    // --- Người giới thiệu ---
+    if (detailNew?.customerLeadReferId != null &&
+        detailNew?.customerLeadReferName != null) {
       _bloc.presenterModel = CustomerModel(
           customerId: detailNew?.customerLeadReferId,
           fullName: detailNew?.customerLeadReferName ?? "");
     }
 
+    // --- Avatar ---
     if (detailNew?.avatar != null && detailNew?.avatar != "") {
       _bloc.imgAvatar = detailNew?.avatar;
     }
 
-    var dataType_Source = await LeadConnection.getCustomerOption(context);
-    if (dataType_Source != null) {
-      customerOptonData = dataType_Source.data;
-      customerSourcesData = customerOptonData!.source;
-
-      customerTypeData.add(CustomerTypeModel(
-          customerTypeName: customerOptonData!.customerType!.personal,
-          customerTypeID: 1,
-          selected: false));
-      customerTypeData.add(CustomerTypeModel(
-          customerTypeName: customerOptonData!.customerType!.business,
-          customerTypeID: 2,
-          selected: false));
-    }
-
-    var dataProvinces = await LeadConnection.getProvince(context);
-    if (dataProvinces != null) {
-      provinces = dataProvinces;
-      print(provinces);
-    }
-
-    var pipelines = await LeadConnection.getPipeline(context);
-    if (pipelines != null) {
-      pipeLineData = pipelines.data;
-    }
-
-    var journeys = await LeadConnection.getJourney(context,
-        GetJourneyModelRequest(pipelineCode: [requestModel.journeyCode]));
-    if (journeys != null) {
-      journeysData = journeys.data;
-    }
-
-    var response = await LeadConnection.workListStaff(
-        context, WorkListStaffRequestModel(manageProjectId: null));
-    if (response != null) {
-      _modelStaff = response.data ?? [];
-    } else {
-      _modelStaff = [];
-    }
-
-    ListBusinessAreasModelResponse? model =
-        await LeadConnection.getListBusinessAreas(context);
-
-    if (model != null) {
-      listBusinessData = model.data;
-    }
-
-    PositionResponseModel? positions =
-        await LeadConnection.getPosition(context);
-    if (positions != null) {
-      positionData = positions.data;
-    }
-
-    var tags = await LeadConnection.getTag(context);
-    if (tags != null) {
-      tagsData = tags.data;
-
-      if (detailPotential.tagId!.length > 0) {
-        for (int i = 0; i < detailPotential.tagId!.length; i++) {
-          try {
-            tagsData!
-                .firstWhereOrNull(
-                    (element) => element.tagId == detailPotential.tagId![i])
-                ?.selected = true;
-          } catch (e) {}
-        }
-
-        for (int i = 0; i < tagsData!.length; i++) {
-          if (tagsData![i].selected!) {
-            // widget.detailDeal.tag.add(tagsSelected[i].tagId);
-            if (tagsString == "") {
-              tagsString = tagsData![i].name ?? "";
-            } else {
-              tagsString += ", ${tagsData![i].name}";
-            }
-          }
-        }
-      }
-    }
-
-    var listStaff = await LeadConnection.workListStaff(
-        context, WorkListStaffRequestModel(manageProjectId: null));
-    if (listStaff != null) {
-      _modelStaff = listStaff.data ?? [];
-
-      try {
-        var item = _modelStaff.firstWhereOrNull(
-            (element) => element.staffId == detailPotential.saleId);
-        if (item != null) {
-          _modelStaffSelected.add(item);
-        } else {
-          _modelStaffSelected = [];
-        }
-      } catch (e) {}
-    }
-
-    initModel();
-  }
-
-  void initModel() async {
-    _fullNameText.text = detailPotential.fullName ?? "";
-    _phoneNumberText.text = detailPotential.phone ?? "";
-    _emailText.text = detailPotential.email ?? "";
-    _bloc.representativeController.text = detailPotential.representative ?? "";
-    _taxText.text = detailPotential.taxCode ?? "";
-
+    // --- Dropdown: Loại khách hàng ---
+    selectedPersonal =
+        (detailPotential.customerType ?? "").toLowerCase() == "personal";
     try {
-      var itemCustomerType = customerTypeData.firstWhereOrNull((element) =>
-          element.customerTypeName!.toLowerCase() ==
-          (detailPotential.customerType ?? "").toLowerCase());
-      if (itemCustomerType != null) {
-        itemCustomerType.selected = true;
-        customerTypeSelected = itemCustomerType;
-        selectedPersonal =
-            itemCustomerType.customerTypeName == "Personal" ? true : false;
-      }
+      var item = customerTypeData[selectedPersonal ? 0 : 1];
+      item.selected = true;
+      customerTypeSelected = item;
     } catch (_) {}
 
+    // --- Dropdown: Nguồn khách hàng ---
     try {
-      var itemCustomerSource = customerSourcesData!.firstWhereOrNull(
-          (element) =>
-              element.customerSourceId ==
-              (detailPotential.customerSource ?? 0));
-      if (itemCustomerSource != null) {
-        itemCustomerSource.selected = true;
-        customerSourceSelected = itemCustomerSource;
-      }
-    } catch (e) {}
-    try {
-      var itemPipeline = pipeLineData!.firstWhereOrNull((element) =>
-          element.pipelineCode == (detailPotential.pipelineCode ?? 0));
-      if (itemPipeline != null) {
-        itemPipeline.selected = true;
-        pipelineSelected = itemPipeline;
+      var item = customerSourcesData!.firstWhereOrNull((element) =>
+          element.customerSourceId == (detailPotential.customerSource ?? 0));
+      if (item != null) {
+        item.selected = true;
+        customerSourceSelected = item;
       }
     } catch (e) {}
 
-    var journeys = await LeadConnection.getJourney(context,
-        GetJourneyModelRequest(pipelineCode: [detailPotential.pipelineCode]));
-    if (journeys != null) {
-      journeysData = journeys.data;
+    // --- Dropdown: Pipeline ---
+    try {
+      var item = pipeLineData!.firstWhereOrNull((element) =>
+          element.pipelineCode == (detailPotential.pipelineCode ?? ""));
+      if (item != null) {
+        item.selected = true;
+        pipelineSelected = item;
+      }
+    } catch (e) {}
 
-      try {
-        var itemJourney = journeysData!.firstWhereOrNull(
-            (element) => element.journeyCode == detailPotential.journeyCode);
-        if (itemJourney != null) {
-          itemJourney.selected = true;
-          journeySelected = itemJourney;
-        }
-      } catch (e) {}
-    }
-    Navigator.of(context).pop();
+    // --- Dropdown: Hành trình ---
+    // Dùng toString() vì API detail có thể trả journey_code dạng int
+    try {
+      var item = journeysData!.firstWhereOrNull((element) =>
+          element.journeyCode?.toString() ==
+          detailPotential.journeyCode?.toString());
+      if (item != null) {
+        item.selected = true;
+        journeySelected = item;
+      }
+    } catch (e) {}
 
     setState(() {});
   }
@@ -824,8 +819,13 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           }),
 
           // chọn hành trình
-          _buildTextField(AppLocalizations.text(LangKey.chooseJourney) ?? "Chọn hành trình", journeySelected?.journeyName ?? "",
-              Assets.iconItinerary, true, true, false, ontap: () async {
+          _buildTextField(
+              AppLocalizations.text(LangKey.chooseJourney) ?? "Chọn hành trình",
+              journeySelected?.journeyName ?? "",
+              Assets.iconItinerary,
+              true,
+              true,
+              false, ontap: () async {
             print("Chọn hành trình");
 
             FocusScope.of(context).unfocus();
@@ -1134,7 +1134,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           child: Center(
             child: Padding(
               padding: EdgeInsets.only(bottom: 16.0),
-              child: Text("+ ${AppLocalizations.text(LangKey.enter_phone_number)}",
+              child: Text(
+                  "+ ${AppLocalizations.text(LangKey.enter_phone_number)}",
                   style: AppTextStyles.style14BlueWeight500),
             ),
           ),
@@ -1305,7 +1306,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           taxCode: typePersonnal ? "" : _taxText.text,
           phone: _phoneNumberText.text,
           email: _emailText.text,
-          representative: typePersonnal ? "" : _bloc.representativeController.text,
+          representative:
+              typePersonnal ? "" : _bloc.representativeController.text,
           pipelineCode: detailPotential.pipelineCode,
           journeyCode: detailPotential.journeyCode,
           saleId: detailPotential.saleId,

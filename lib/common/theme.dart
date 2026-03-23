@@ -647,14 +647,14 @@ class AppFormat {
   static DateFormat formatDateTime = DateFormat("dd/MM/yyyy HH:mm");
   static DateFormat formatDateMonth = DateFormat("dd/MM");
   static DateFormat formatTime = DateFormat("HH:mm");
-  static NumberFormat moneyFormatDot = NumberFormat("#,###", "vi-VN");
+  static NumberFormat moneyFormatDot = NumberFormat("#,###", "en_AU");
   static NumberFormat moneyFormat = NumberFormat("#,###");
   static DateFormat formatDateTimeEn = DateFormat("dd MMMM, yyyy", "en_US");
-  static DateFormat formatDateTimeVn = DateFormat("dd MMMM, yyyy", "vi_VN");
+  static DateFormat formatDateTimeVn = DateFormat("dd MMMM, yyyy", "en_AU");
   static DateFormat formatHHMMDateTimeEn =
       DateFormat("HH:mm - dd MMMM, yyyy", "en_US");
   static DateFormat formatHHMMDateTimeVn =
-      DateFormat("HH:mm - dd MMMM, yyyy", "vi_VN");
+      DateFormat("HH:mm - dd MMMM, yyyy", "en_AU");
   static String formatNonSale = "d2d-nonsale/{instanceVer}";
 }
 class AppSizeWebConfig {

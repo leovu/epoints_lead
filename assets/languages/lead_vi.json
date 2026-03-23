@@ -1214,5 +1214,6 @@
   "chooseFile": "Chọn tập tin",
   "attachmentContent": "Nội dung đính kèm",
   "thisIsAttachmentContent": "Đây là một nội dung đính kèm",
-  "uploadFile": "Tải tập tin"
+  "uploadFile": "Tải tập tin",
+  "unassign": "Thu hồi"
 }

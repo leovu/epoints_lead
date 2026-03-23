@@ -926,7 +926,7 @@
   "alert_push_project_detail": "Go to project details",
   "alert_push_project_list": "Return to the project list screen",
   "delete_project_alert": "Do you want to delete this project ?",
-  "title_chart_budget_unit": "Budget ( Unit VND )",
+  "title_chart_budget_unit": "Budget ( Unit AUD )",
   "budget_revenue": "Revenue",
   "budget_expenditure": "Expenditure",
   "title_chart_member_in_project": "Member in project",
@@ -1215,5 +1215,6 @@
   "chooseFile": "Choose file",
   "attachmentContent": "Attachment content",
   "thisIsAttachmentContent": "This is an attachment content",
-  "uploadFile": "Upload file"
+  "uploadFile": "Upload file",
+  "unassign": "Un Assign"
 }

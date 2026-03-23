@@ -4,7 +4,7 @@ import 'package:lead_plugin_epoint/lead_plugin_epoint.dart';
 
 void main() {
   runApp(MaterialApp(
-    locale: const Locale('vi', 'VN'),
+    locale: const Locale('en', 'AU'),
     title: 'Navigation Basics',
     debugShowCheckedModeBanner: false,
     home: MyApp(),
@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
               var result = await LeadPluginEpoint.open(
                   context,
                   Locale(LangKey.langEn, 'en'),
-                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5kZXYubWF0dGhld3NsaXF1b3IuY29tLmF1L3VzZXIvbG9naW4iLCJpYXQiOjE3NzM4OTQ1MzEsImV4cCI6MTc3MzkxNjEzMSwibmJmIjoxNzczODk0NTMxLCJqdGkiOiI3bHJUaG5jQzhEQVdacGpzIiwic3ViIjoyMDcsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBtYXR0aGV3c2xpcXVvci5jb20iLCJwaG9uZSI6ImFkbWluQG1hdHRoZXdzbGlxdW9yLmNvbSIsImJyYW5kX2NvZGUiOiJtYXR0aGV3c2xpcXVvciIsImltZWkiOiI0MjY3OGQzZGQ2MGUzZmJjIn0.Sl_xpcA0ABgK25cVpKH7pafercv1VRjPr1lvh2hVRog',
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5kZXYubWF0dGhld3NsaXF1b3IuY29tLmF1L2N1c3RvbWVyLWxlYWQvY3VzdG9tZXItbGVhZC9saXN0LWZpbGUiLCJpYXQiOjE3NzQyMjg5MTgsImV4cCI6MTc3NDI1NDA2NywibmJmIjoxNzc0MjMyNDY3LCJqdGkiOiJkN1VBZUFDOTFuWlFNT05vIiwic3ViIjoyMDcsInBydiI6ImEwZjNlNzRiZWRmNTEyYzQ3NzgyOTdkZTVmOTIwODZkYWQzOWNhOWYiLCJzaWQiOiJhZG1pbkBtYXR0aGV3c2xpcXVvci5jb20iLCJwaG9uZSI6ImFkbWluQG1hdHRoZXdzbGlxdW9yLmNvbSIsImJyYW5kX2NvZGUiOiJtYXR0aGV3c2xpcXVvciIsImltZWkiOiI0MjY3OGQzZGQ2MGUzZmJjIn0.oDoPCqhcyQIaaG8Ff6m0BDB6XksxyEmMjI9qitWwW6A',
                   2,
                   customerLeadCode: 'LEAD_19032026442',
                   domain: 'https://staff-api.dev.matthewsliquor.com.au',

@@ -79,7 +79,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   ];
   int? index = 0;
   final formatter = NumberFormat.currency(
-    locale: 'vi_VN',
+    locale: 'en_AU',
     decimalDigits: 0,
     symbol: '',
   );
@@ -1114,7 +1114,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   ),
                   Expanded(
                     child: Text(
-                      "${NumberFormat("#,###", "vi-VN").format(item.amount ?? 0)} VNĐ",
+                      "${NumberFormat.currency(locale: 'en_AU',).format(item.amount ?? 0)}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           color: AppColors.primaryColor,
@@ -2075,6 +2075,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         await Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => EditPotentialCustomer(
                                   detailPotential: detail,
+                                  customer_lead_code: detail?.customerLeadCode??'',
                                 )));
 
                     if (result != null) {
@@ -2237,7 +2238,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         heightButton: AppSizes.sizeOnTap,
                         text: (_bloc.detail?.saleId != null &&
                                 _bloc.detail?.saleId != 0)
-                            ? AppLocalizations.text(LangKey.recall)
+                            ? AppLocalizations.text(LangKey.unassign)
                             : AppLocalizations.text(LangKey.assignment),
                         ontap: () async {
                           if (detail?.saleId != null && detail?.saleId != 0) {

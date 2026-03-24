@@ -246,7 +246,7 @@ class DetailPotentialData {
     genderVi = json['gender_vi'];
     branchCode = json['branch_code'];
     branchName = json['branch_name'];
-    employQty = json['employ_qty'];
+    employQty = json['employees'];
     createdAt = json['created_at'];
     createdByName = json['created_by_name'];
     updatedAt = json['updated_at'];

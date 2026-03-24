@@ -57,7 +57,7 @@ class _CreateNewPhoneModalState extends State<CreateNewPhoneModal>
               topLeft: Radius.circular(10), topRight: Radius.circular(10))),
       height: _isKeyboardVisible
           ? MediaQuery.of(context).size.height * 0.55
-          : MediaQuery.of(context).size.height * 0.3,
+          : MediaQuery.of(context).size.height * 0.32,
       child: Column(
         children: [
           Container(

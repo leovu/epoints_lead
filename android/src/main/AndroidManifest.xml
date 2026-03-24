@@ -4,6 +4,9 @@
   <!-- Camera: required for image_picker camera source -->
   <uses-permission android:name="android.permission.CAMERA" />
 
+  <!-- Phone call: required to launch tel: URI for calling contacts -->
+  <uses-permission android:name="android.permission.CALL_PHONE" />
+
   <!-- Gallery + file picker on Android 9–12; Android 13+ uses Photo Picker / SAF (no permission needed) -->
   <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
       android:maxSdkVersion="32" />

@@ -179,7 +179,7 @@ class _BuildMoreAddressCreatPotentialState
                           .firstWhere((element) => element.selected!);
                       businessAreasSelected = result;
                       widget.detailPotential!.bussinessId =
-                          businessAreasSelected!.createdBy;
+                          businessAreasSelected!.businessId;
 
                       // widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
                     }

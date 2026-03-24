@@ -22,7 +22,6 @@ import 'package:lead_plugin_epoint/presentation/modal/position_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
-import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
@@ -175,7 +174,7 @@ class _BuildMoreAddressEditPotentialState
 
       try {
         var item = widget.listBusinessData!.firstWhere((element) =>
-            element.createdBy == widget.detailPotential!.bussinessId);
+            element.businessId == widget.detailPotential!.bussinessId);
         item.selected = true;
         businessSelected = item;
       } catch (e) {}
@@ -200,6 +199,7 @@ class _BuildMoreAddressEditPotentialState
             (widget.detailPotential!.provinceId ?? 0) == element.provinceid);
         item.selected = true;
         provinceSeleted = item;
+        print('___________________${item.provinceid}____${item.name}');
       } catch (e) {}
 
       var dataDistrict =
@@ -212,6 +212,8 @@ class _BuildMoreAddressEditPotentialState
               (widget.detailPotential!.districtId ?? 0) == element.districtid);
           item.selected = true;
           distictSelected = item;
+
+          print('___________________${item.districtid}____${item.name}');
         } catch (e) {}
       }
 
@@ -318,8 +320,8 @@ class _BuildMoreAddressEditPotentialState
                       var result = widget.listBusinessData!
                           .firstWhere((element) => element.selected!);
                       businessSelected = result;
-                      widget.detailPotential!.bussinessId =
-                          businessSelected!.createdBy;
+                      widget.detailPotential!.bussinessId = int.tryParse(
+                          (businessSelected?.businessId ?? '0').toString());
                     } catch (e) {}
 
                     // widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
@@ -496,17 +498,18 @@ class _BuildMoreAddressEditPotentialState
             fillText: widget.bloc.websiteController,
             focusNode: widget.bloc.websiteFocusNode),
         // Zalo
-        checkVisibilityKey(VisibilityWidgetName.LE000003)
-            ? _buildTextField(AppLocalizations.text(LangKey.zalo), "",
-                Assets.iconSource, false, false, true,
-                fillText: _zaloText, focusNode: _zaloFocusNode)
-            : Container(),
+        // checkVisibilityKey(VisibilityWidgetName.LE000003) ?
+        _buildTextField(AppLocalizations.text(LangKey.zalo), "",
+            Assets.iconSource, false, false, true,
+            fillText: _zaloText, focusNode: _zaloFocusNode),
+        // : Container(),
         // Nhập Fanpage
-        checkVisibilityKey(VisibilityWidgetName.LE000003)
-            ? _buildTextField(AppLocalizations.text(LangKey.inputFanpage), "",
-                Assets.iconFanpage, false, false, true,
-                fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode)
-            : Container(),
+        // checkVisibilityKey(VisibilityWidgetName.LE000003)
+        //     ?
+        _buildTextField(AppLocalizations.text(LangKey.inputFanpage), "",
+            Assets.iconFanpage, false, false, true,
+            fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode),
+        // : Container(),
 
         !widget.selectedPersonal!
             ? Column(
@@ -569,16 +572,16 @@ class _BuildMoreAddressEditPotentialState
                     }
                   }),
 
-                  _buildTextField(AppLocalizations.text(LangKey.inputAddress),
-                      "", Assets.iconAddress, false, false, true,
-                      fillText: _addressContactText,
-                      focusNode: _addressContactFocusNode),
+                  // _buildTextField(AppLocalizations.text(LangKey.inputAddress),
+                  //     "", Assets.iconAddress, false, false, true,
+                  //     fillText: _addressContactText,
+                  //     focusNode: _addressContactFocusNode),
                 ],
               )
             : Container(),
 
         Text(
-          AppLocalizations.text(LangKey.choose_position)!,
+          AppLocalizations.text(LangKey.note)!,
           style: TextStyle(
               fontWeight: FontWeight.bold, color: AppColors.primaryColor),
         ),

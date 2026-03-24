@@ -29,13 +29,14 @@ class ListBusinessAreasModelResponse {
 }
 
 class ListBusinessAreasItem {
+  int? businessId;
   String? businessName;
   String? description;
   int? createdBy;
   String? createdAt;
   bool? selected;
 
-  ListBusinessAreasItem({this.businessName, this.description, this.createdBy, this.createdAt});
+  ListBusinessAreasItem({this.businessName, this.description, this.createdBy, this.createdAt, this.businessId});
 
   ListBusinessAreasItem.fromJson(Map<String, dynamic> json) {
     businessName = json['business_name'];
@@ -43,6 +44,7 @@ class ListBusinessAreasItem {
     createdBy = json['created_by'];
     createdAt = json['created_at'];
     selected = json['selected'] ?? false;
+    businessId = json['id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -52,6 +54,7 @@ class ListBusinessAreasItem {
     data['created_by'] = this.createdBy;
     data['created_at'] = this.createdAt;
     data['selected'] = this.selected;
+    data['id'] = this.businessId;
     return data;
   }
 }

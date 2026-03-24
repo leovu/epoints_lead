@@ -1,6 +1,6 @@
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_direct_call_plus/flutter_direct_call.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/constant.dart';
@@ -386,7 +386,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
         icon: Assets.iconWebsite,
         title: "Website",
         content: hideSocial(
-            model.hotline, checkVisibilityKey(VisibilityWidgetName.CM000004)));
+            model.website, checkVisibilityKey(VisibilityWidgetName.CM000004)));
   }
 
   Widget _buildAddress(DetailPotentialData model) {
@@ -1114,7 +1114,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                   ),
                   Expanded(
                     child: Text(
-                      "${NumberFormat.currency(locale: 'en_AU',).format(item.amount ?? 0)}",
+                      "${NumberFormat.currency(
+                        locale: 'en_AU',
+                      ).format(item.amount ?? 0)}",
                       textAlign: TextAlign.start,
                       style: TextStyle(
                           color: AppColors.primaryColor,
@@ -1614,8 +1616,11 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     );
   }
 
-  _callPhone(String phone) {
-    FlutterDirectCall.makeDirectCall(phone);
+  Future<void> _callPhone(String phone) async {
+    final uri = Uri(scheme: 'tel', path: phone);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    }
   }
 
   Widget buildButtonConvert(String title, GestureTapCallback ontap) {
@@ -2075,7 +2080,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         await Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => EditPotentialCustomer(
                                   detailPotential: detail,
-                                  customer_lead_code: detail?.customerLeadCode??'',
+                                  customer_lead_code:
+                                      detail?.customerLeadCode ?? '',
                                 )));
 
                     if (result != null) {
@@ -2311,203 +2317,6 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             decoration: BoxDecoration(color: AppColors.white),
             child: buildBody()),
         floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
-        // floatingActionButton: ExpandableDraggableFab(
-        //   initialDraggableOffset:
-        //       Offset(12, MediaQuery.of(context).size.height * 11 / 14),
-        //   initialOpen: false,
-        //   curveAnimation: Curves.easeOutSine,
-        //   childrenBoxDecoration: BoxDecoration(
-        //       color: Colors.black.withValues(alpha: 0.35),
-        //       borderRadius: BorderRadius.circular(10.0)),
-        //   childrenCount: 4,
-        //   distance: 10,
-        //   childrenType: ChildrenType.columnChildren,
-        //   childrenAlignment: Alignment.centerRight,
-        //   childrenInnerMargin: EdgeInsets.all(15.0),
-        //   openWidget: Container(
-        //       decoration: BoxDecoration(
-        //           boxShadow: [
-        //             BoxShadow(
-        //               offset: Offset(0, 1),
-        //               blurRadius: 2,
-        //               color: Colors.black.withValues(alpha: 0.3),
-        //             )
-        //           ],
-        //           shape: BoxShape.circle,
-        //           color: Color.fromARGB(255, 105, 136, 156)),
-        //       width: 60,
-        //       height: 60,
-        //       child: Image.asset(
-        //         Assets.iconFABMenu,
-        //         scale: 2.5,
-        //       )),
-        //   closeWidget: Container(
-        //       decoration: BoxDecoration(boxShadow: [
-        //         BoxShadow(
-        //           offset: Offset(0, 1),
-        //           blurRadius: 2,
-        //           color: Colors.black.withValues(alpha: 0.3),
-        //         )
-        //       ], shape: BoxShape.circle, color: Color(0xFF5F5F5F)),
-        //       width: 60,
-        //       height: 60,
-        //       child: Icon(
-        //         Icons.clear,
-        //         size: 35,
-        //         color: Colors.white,
-        //       )),
-        //   children: [
-        //     Column(
-        //       children: [
-        //         FloatingActionButton(
-        //             backgroundColor: Color(0xFFF45E38),
-        //             heroTag: "btn0",
-        //             onPressed: () async {
-        //               if (Global.createDeal != null) {
-        //                 bool? result =
-        //                     await Global.createDeal!(detail!.toJson() ?? "");
-        //                 if (result != null && result) {
-        //                   reloadInfoDeal = true;
-        //                   getData();
-        //                   index = 1;
-        //                   selectedTab(1);
-        //                 }
-        //               }
-        //             },
-        //             child: Image.asset(
-        //               Assets.iconCreateDeal,
-        //               scale: 2.5,
-        //             )),
-        //         SizedBox(
-        //           height: 5.0,
-        //         ),
-        //         Text(AppLocalizations.text(LangKey.createDeal)!,
-        //             style: TextStyle(
-        //                 color: Colors.white,
-        //                 fontSize: 14.0,
-        //                 fontWeight: FontWeight.w400))
-        //       ],
-        //     ),
-        //     Column(
-        //       children: [
-        //         FloatingActionButton(
-        //             backgroundColor: Color(0xFF41AC8D),
-        //             heroTag: "btn1",
-        //             onPressed: () async {
-        //               bool? result = await Navigator.of(context).push(
-        //                   MaterialPageRoute(
-        //                       builder: (context) =>
-        //                           CustomerCarePotential(detail: detail)));
-
-        //               if (result != null && result) {
-        //                 _bloc.allowPop = true;
-        //                 reloadCSKH = true;
-        //                 getData();
-        //                 index = 2;
-        //                 selectedTab(2);
-        //               }
-        //             },
-        //             child: Image.asset(
-        //               Assets.iconCustomerCare,
-        //               scale: 2.5,
-        //             )),
-        //         SizedBox(
-        //           height: 5.0,
-        //         ),
-        //         Text("CSKH",
-        //             style: TextStyle(
-        //                 color: Colors.white,
-        //                 fontSize: 14.0,
-        //                 fontWeight: FontWeight.w400))
-        //       ],
-        //     ),
-        //     Column(
-        //       children: [
-        //         FloatingActionButton(
-        //             backgroundColor: Color(0xFFDD2C00),
-        //             heroTag: "btn3",
-        //             onPressed: () async {
-        //               LeadConnection.showMyDialogWithFunction(context,
-        //                   AppLocalizations.text(LangKey.warningDeleteLead),
-        //                   ontap: () async {
-        //                 DescriptionModelResponse? result =
-        //                     await LeadConnection.deleteLead(
-        //                         context, detail!.customerLeadCode);
-
-        //                 Navigator.of(context).pop();
-
-        //                 if (result != null) {
-        //                   if (result.errorCode == 0) {
-        //                     _bloc.allowPop = true;
-        //                     print(result.errorDescription);
-
-        //                     await LeadConnection.showMyDialog(
-        //                         context, result.errorDescription);
-
-        //                     Navigator.of(context).pop(true);
-        //                   } else {
-        //                     LeadConnection.showMyDialog(
-        //                         context, result.errorDescription);
-        //                   }
-        //                 }
-        //               });
-        //               print("iconDelete");
-        //             },
-        //             child: Image.asset(
-        //               Assets.iconDelete,
-        //               scale: 2.5,
-        //             )),
-        //         SizedBox(
-        //           height: 5.0,
-        //         ),
-        //         Text(AppLocalizations.text(LangKey.delete)!,
-        //             style: TextStyle(
-        //                 color: Colors.white,
-        //                 fontSize: 14.0,
-        //                 fontWeight: FontWeight.w400))
-        //       ],
-        //     ),
-        //     Column(
-        //       children: [
-        //         FloatingActionButton(
-        //           heroTag: "btn4",
-        //           onPressed: () async {
-        //             bool? result =
-        //                 await Navigator.of(context).push(MaterialPageRoute(
-        //                     builder: (context) => EditPotentialCustomer(
-        //                           detailPotential: detail,
-        //                         )));
-
-        //             if (result != null) {
-        //               if (result) {
-        //                 reloadContactList = true;
-        //                 _bloc.allowPop = true;
-        //                 selectedTab(index!);
-        //                 getData();
-        //                 ;
-        //               }
-        //             }
-
-        //             print("iconEdit");
-        //           },
-        //           backgroundColor: Color(0xFF00BE85),
-        //           child: Image.asset(
-        //             Assets.iconEdit,
-        //             scale: 2.5,
-        //           ),
-        //         ),
-        //         SizedBox(
-        //           height: 5.0,
-        //         ),
-        //         Text(AppLocalizations.text(LangKey.edit)!,
-        //             style: TextStyle(
-        //                 color: Colors.white,
-        //                 fontSize: 14.0,
-        //                 fontWeight: FontWeight.w400))
-        //       ],
-        //     )
-        //   ],
-        // ),
       ),
       canPop: false,
       onPopInvokedWithResult: (event, _) {

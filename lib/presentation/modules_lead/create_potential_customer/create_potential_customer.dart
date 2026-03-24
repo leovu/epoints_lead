@@ -431,7 +431,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                     journeysData = journeys.data;
                     if (journeysData != null && journeysData!.isNotEmpty) {
                       journeySelected = journeysData!.first;
-                      detailPotential.journeyCode = journeySelected!.journeyCode;
+                      detailPotential.journeyCode =
+                          journeySelected!.journeyCode;
                     }
                   }
                   setState(() {});
@@ -989,45 +990,44 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   Future<void> addPotential(int customerTypeID) async {
     bool typePersonnal = customerTypeID == 1;
     LeadConnection.showLoading(context);
-    AddLeadModelResponse? result = await LeadConnection.addLead(
-        context,
-        AddLeadModelRequest(
-          avatar: _bloc.imgAvatar ?? "",
-          customerType: typePersonnal ? "personal" : "business",
-          customerSource: detailPotential.customerSource,
-          fullName: _fullNameText.text,
-          taxCode: typePersonnal ? "" : _taxText.text,
-          phone: _phoneNumberText.text,
-          email: _emailText.text,
-          representative:
-              typePersonnal ? "" : _bloc.representativeController.text,
-          pipelineCode: detailPotential.pipelineCode,
-          journeyCode: detailPotential.journeyCode,
-          saleId: detailPotential.saleId,
-          tagId: detailPotential.tagId,
-          gender: detailPotential.gender,
-          birthday: detailPotential.birthday,
-          bussinessId: typePersonnal ? 0 : detailPotential.bussinessId,
-          employees: typePersonnal ? 0 : detailPotential.employees,
-          address: "${_bloc.addressModel?.street ?? ""} ",
-          provinceId: _bloc.addressModel?.provinceModel?.provinceid ?? 0,
-          districtId: _bloc.addressModel?.districtModel?.districtid ?? 0,
-          wardId: _bloc.addressModel?.wardModel?.wardId ?? 0,
-          businessClue: detailPotential.businessClue,
-          zalo: detailPotential.zalo ?? "",
-          fanpage: detailPotential.fanpage ?? "",
-          contactAddress: typePersonnal ? "" : detailPotential.contactAddress,
-          contactEmail: typePersonnal ? "" : detailPotential.contactEmail,
-          contactFullName: typePersonnal ? "" : detailPotential.contactFullName,
-          contactPhone: typePersonnal ? "" : detailPotential.contactPhone,
-          position: typePersonnal ? "" : detailPotential.position,
-          customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
-          branchId: _bloc.branchSelected?.branchId ?? 0,
-          note: _bloc.noteController.text,
-          customerLeadReferId: _bloc.presenterModel?.customerId ?? 0,
-          arrPhoneAttack: _bloc.listPhone,
-          website: _bloc.websiteController.text,
-        ));
+    final req = AddLeadModelRequest(
+      avatar: _bloc.imgAvatar ?? "",
+      customerType: typePersonnal ? "personal" : "business",
+      customerSource: detailPotential.customerSource,
+      fullName: _fullNameText.text,
+      taxCode: typePersonnal ? "" : _taxText.text,
+      phone: _phoneNumberText.text,
+      email: _emailText.text,
+      representative: typePersonnal ? "" : _bloc.representativeController.text,
+      pipelineCode: detailPotential.pipelineCode,
+      journeyCode: detailPotential.journeyCode,
+      saleId: detailPotential.saleId,
+      tagId: detailPotential.tagId,
+      gender: detailPotential.gender,
+      birthday: detailPotential.birthday,
+      bussinessId: typePersonnal ? 0 : detailPotential.bussinessId,
+      employees: typePersonnal ? 0 : detailPotential.employees,
+      address: "${_bloc.addressModel?.street ?? ""} ",
+      provinceId: _bloc.addressModel?.provinceModel?.provinceid ?? 0,
+      districtId: _bloc.addressModel?.districtModel?.districtid ?? 0,
+      wardId: _bloc.addressModel?.wardModel?.wardId ?? 0,
+      businessClue: detailPotential.businessClue,
+      zalo: detailPotential.zalo ?? "",
+      fanpage: detailPotential.fanpage ?? "",
+      contactAddress: typePersonnal ? "" : detailPotential.contactAddress,
+      contactEmail: typePersonnal ? "" : detailPotential.contactEmail,
+      contactFullName: typePersonnal ? "" : detailPotential.contactFullName,
+      contactPhone: typePersonnal ? "" : detailPotential.contactPhone,
+      position: typePersonnal ? "" : detailPotential.position,
+      customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,
+      branchId: _bloc.branchSelected?.branchId ?? 0,
+      note: _bloc.noteController.text,
+      customerLeadReferId: _bloc.presenterModel?.customerId ?? 0,
+      arrPhoneAttack: _bloc.listPhone,
+      website: _bloc.websiteController.text,
+    );
+    print('____REQUEST CREATE: ${req.toJson()}');
+    AddLeadModelResponse? result = await LeadConnection.addLead(context, req);
     Navigator.of(context).pop();
     if (result != null) {
       if (result.errorCode == 0) {

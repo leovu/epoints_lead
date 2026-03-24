@@ -47,6 +47,8 @@ import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
+import '../../../utils/visibility_api_widget_name.dart';
+
 class EditPotentialCustomer extends StatefulWidget {
   final DetailPotentialData? detailPotential;
   final String? customer_lead_code;
@@ -795,27 +797,27 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   fillText: _taxText, focusNode: _taxFocusNode)
               : Container(),
 
-          // checkVisibilityKey(VisibilityWidgetName.LE000003)
-          //     ?
+          checkVisibilityKey(VisibilityWidgetName.LE000003)
+              ?
           _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
               Assets.iconCall, true, false, true,
               fillText: _phoneNumberText,
               focusNode: _phoneNumberFocusNode,
-              inputType: TextInputType.phone),
-          // : Container(),
+              inputType: TextInputType.phone)
+          : Container(),
 
-          // checkVisibilityKey(VisibilityWidgetName.LE000003)
-          //     ?
-          _buildAddPhone(),
-          // : Container(),
+          checkVisibilityKey(VisibilityWidgetName.LE000003)
+              ?
+          _buildAddPhone()
+          : Container(),
 
           // email
-          // checkVisibilityKey(VisibilityWidgetName.LE000003)
-          //     ?
+          checkVisibilityKey(VisibilityWidgetName.LE000003)
+              ?
           _buildTextField(AppLocalizations.text(LangKey.email), "",
               Assets.iconEmail, false, false, true,
-              fillText: _emailText, focusNode: _emailFocusNode),
-          // : Container(),
+              fillText: _emailText, focusNode: _emailFocusNode)
+          : Container(),
           // chọn pipeline
           _buildTextField(
               AppLocalizations.text(LangKey.choosePipeline),

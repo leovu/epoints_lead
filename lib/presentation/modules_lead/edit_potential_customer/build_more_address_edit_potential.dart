@@ -28,6 +28,8 @@ import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:lead_plugin_epoint/widget/widget.dart';
 
+import '../../../utils/visibility_api_widget_name.dart';
+
 class BuildMoreAddressEditPotential extends StatefulWidget {
   AddLeadModelRequest? detailPotential;
   List<ProvinceData>? provinces = <ProvinceData>[];
@@ -498,18 +500,18 @@ class _BuildMoreAddressEditPotentialState
             fillText: widget.bloc.websiteController,
             focusNode: widget.bloc.websiteFocusNode),
         // Zalo
-        // checkVisibilityKey(VisibilityWidgetName.LE000003) ?
+        checkVisibilityKey(VisibilityWidgetName.LE000003) ?
         _buildTextField(AppLocalizations.text(LangKey.zalo), "",
             Assets.iconSource, false, false, true,
-            fillText: _zaloText, focusNode: _zaloFocusNode),
-        // : Container(),
+            fillText: _zaloText, focusNode: _zaloFocusNode)
+        : Container(),
         // Nhập Fanpage
-        // checkVisibilityKey(VisibilityWidgetName.LE000003)
-        //     ?
+        checkVisibilityKey(VisibilityWidgetName.LE000003)
+            ?
         _buildTextField(AppLocalizations.text(LangKey.inputFanpage), "",
             Assets.iconFanpage, false, false, true,
-            fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode),
-        // : Container(),
+            fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode)
+        : Container(),
 
         !widget.selectedPersonal!
             ? Column(

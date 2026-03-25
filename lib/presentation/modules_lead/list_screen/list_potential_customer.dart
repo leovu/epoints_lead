@@ -197,8 +197,7 @@ class _LeadScreen extends State<LeadScreen> {
       ),
       backgroundColor: Colors.white,
       body: _buildBody(),
-      floatingActionButton: !checkVisibilityKey(VisibilityWidgetName.LE000001)
-          ? FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
               backgroundColor: AppColors.primaryColor,
               onPressed: () async {
                 var result = await Navigator.of(context).push(MaterialPageRoute(
@@ -216,7 +215,26 @@ class _LeadScreen extends State<LeadScreen> {
                 size: 50,
               ),
             )
-          : Container(),
+      // !checkVisibilityKey(VisibilityWidgetName.LE000001)
+      //     ? FloatingActionButton(
+      //         backgroundColor: AppColors.primaryColor,
+      //         onPressed: () async {
+      //           var result = await Navigator.of(context).push(MaterialPageRoute(
+      //               builder: (context) => CreatePotentialCustomer()));
+      //           if (result != null) {
+      //             var status = result["status"];
+      //             if (status) {
+      //               getData(false);
+      //             }
+      //           }
+      //         },
+      //         child: const Icon(
+      //           Icons.add,
+      //           color: Colors.white,
+      //           size: 50,
+      //         ),
+      //       )
+      //     : Container(),
     );
   }
 

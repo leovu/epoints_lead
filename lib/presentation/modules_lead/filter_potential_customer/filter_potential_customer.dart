@@ -34,6 +34,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_history_care_date.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
+import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class FilterPotentialCustomer extends StatefulWidget {
   FilterScreenModel? filterScreenModel = FilterScreenModel();
@@ -268,25 +269,25 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     super.initState();
     filterScreenModel = FilterScreenModel(
         filterModel: ListCustomLeadModelRequest.fromJson(
-            widget.filterScreenModel!.filterModel!.toJson()),
-        fromDate_created_at: widget.filterScreenModel!.fromDate_created_at,
-        toDate_created_at: widget.filterScreenModel!.toDate_created_at,
+            widget.filterScreenModel?.filterModel!.toJson()??{}),
+        fromDate_created_at: widget.filterScreenModel?.fromDate_created_at,
+        toDate_created_at: widget.filterScreenModel?.toDate_created_at,
         fromDate_allocation_date:
-            widget.filterScreenModel!.fromDate_allocation_date,
+            widget.filterScreenModel?.fromDate_allocation_date,
         toDate_allocation_date:
-            widget.filterScreenModel!.toDate_allocation_date,
+            widget.filterScreenModel?.toDate_allocation_date,
         fromDate_history_care_date:
-            widget.filterScreenModel!.fromDate_history_care_date,
+            widget.filterScreenModel?.fromDate_history_care_date,
         toDate_history_care_date:
-            widget.filterScreenModel!.toDate_history_care_date,
+            widget.filterScreenModel?.toDate_history_care_date,
         fromDate_work_schedule_date:
-            widget.filterScreenModel!.fromDate_work_schedule_date,
+            widget.filterScreenModel?.fromDate_work_schedule_date,
         toDate_work_schedule_date:
-            widget.filterScreenModel!.toDate_work_schedule_date,
-        id_history_care_date: widget.filterScreenModel!.id_history_care_date,
-        id_work_schedule_date: widget.filterScreenModel!.id_work_schedule_date,
-        id_created_at: widget.filterScreenModel!.id_created_at,
-        id_allocation_date: widget.filterScreenModel!.id_allocation_date);
+            widget.filterScreenModel?.toDate_work_schedule_date,
+        id_history_care_date: widget.filterScreenModel?.id_history_care_date,
+        id_work_schedule_date: widget.filterScreenModel?.id_work_schedule_date,
+        id_created_at: widget.filterScreenModel?.id_created_at,
+        id_allocation_date: widget.filterScreenModel?.id_allocation_date);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       LeadConnection.showLoading(context);
@@ -339,11 +340,11 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
     for (int i = 0; i < convertStatusOptions.length; i++) {
       if (widget.filterScreenModel!.filterModel!.isConvert ==
-            "${convertStatusOptions[i].statusID}") {
-          convertStatusOptions[i].selected = true;
-        } else {
-          convertStatusOptions[i].selected = false;
-        }
+          "${convertStatusOptions[i].statusID}") {
+        convertStatusOptions[i].selected = true;
+      } else {
+        convertStatusOptions[i].selected = false;
+      }
     }
 
     if (filterScreenModel.filterModel!.customerSourceId!.length > 0) {
@@ -923,7 +924,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: ontap ,
+        onTap: ontap,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,
@@ -1090,6 +1091,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               allowPop = false;
               print("xoa");
               await clearData();
+              // CustomNavigator.pop(context, object: null);
             },
             child: Center(
               child: Text(

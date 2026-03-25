@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_direct_call_plus/flutter_direct_call.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -15,6 +14,7 @@ import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_cu
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/detail_potential_customer.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
+import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
@@ -75,7 +75,6 @@ class _LeadScreen extends State<LeadScreen> {
   @override
   void initState() {
     super.initState();
-    // _controller.addListener(_scrollListener);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       filterScreenModel = FilterScreenModel(
@@ -117,13 +116,14 @@ class _LeadScreen extends State<LeadScreen> {
     if (model != null) {
       models = [];
       if (!loadMore) {
-        items = [];
-        items = model.data?.items;
-        _controller.animateTo(
-          _controller.position.minScrollExtent,
-          duration: Duration(seconds: 2),
-          curve: Curves.fastOutSlowIn,
-        );
+        items = model.data?.items ?? [];
+        if (_controller.hasClients) {
+          _controller.animateTo(
+            _controller.position.minScrollExtent,
+            duration: const Duration(seconds: 2),
+            curve: Curves.fastOutSlowIn,
+          );
+        }
       } else {
         items!.addAll(model.data?.items as Iterable<ListCustomLeadItems>);
       }
@@ -131,23 +131,11 @@ class _LeadScreen extends State<LeadScreen> {
       nextPage = model.data?.pageInfo?.nextPage ?? 1;
       streamModel.set(items);
     } else {
+      print('!!!!!!!!!!!!!!!!!!!@#');
       items = [];
       streamModel.set([]);
     }
   }
-
-  // _scrollListener() async {
-  //   if (_controller.offset >= _controller.position.maxScrollExtent &&
-  //       !_controller.position.outOfRange) {
-  //     if (this.currentPage! < this.nextPage!) {
-        // filterModel!.page = currentPage! + 1;
-        // // getData(true);
-        // setState(() {
-          
-        // });
-  //     }
-  //   }
-  // }
 
   @override
   void dispose() {
@@ -168,7 +156,6 @@ class _LeadScreen extends State<LeadScreen> {
           style: TextStyle(color: Colors.white, fontSize: 16.0),
           textAlign: TextAlign.start,
         ),
-        // leadingWidth: 20.0,
         actions: [
           InkWell(
             onTap: () async {
@@ -184,6 +171,10 @@ class _LeadScreen extends State<LeadScreen> {
                 filterModel!.page = 1;
                 getData(false);
               }
+              //  else {
+              //   filterModel!.page = 1;
+              //   getData(false);
+              // }
             },
             child: Padding(
               padding: EdgeInsets.only(right: 8.0),
@@ -198,49 +189,29 @@ class _LeadScreen extends State<LeadScreen> {
       backgroundColor: Colors.white,
       body: _buildBody(),
       floatingActionButton: FloatingActionButton(
-              backgroundColor: AppColors.primaryColor,
-              onPressed: () async {
-                var result = await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => CreatePotentialCustomer()));
-                if (result != null) {
-                  var status = result["status"];
-                  if (status) {
-                    getData(false);
-                  }
-                }
-              },
-              child: const Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 50,
-              ),
-            )
-      // !checkVisibilityKey(VisibilityWidgetName.LE000001)
-      //     ? FloatingActionButton(
-      //         backgroundColor: AppColors.primaryColor,
-      //         onPressed: () async {
-      //           var result = await Navigator.of(context).push(MaterialPageRoute(
-      //               builder: (context) => CreatePotentialCustomer()));
-      //           if (result != null) {
-      //             var status = result["status"];
-      //             if (status) {
-      //               getData(false);
-      //             }
-      //           }
-      //         },
-      //         child: const Icon(
-      //           Icons.add,
-      //           color: Colors.white,
-      //           size: 50,
-      //         ),
-      //       )
-      //     : Container(),
+        backgroundColor: AppColors.primaryColor,
+        onPressed: () async {
+          var result = await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => CreatePotentialCustomer()));
+          if (result != null) {
+            var status = result["status"];
+            if (status) {
+              getData(false);
+            }
+          }
+        },
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 50,
+        ),
+      ),
     );
   }
 
   Widget _buildBody() {
     return Container(
-      padding: EdgeInsets.only(top: 16.0, bottom: 16.0),
+      padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
       child: Column(
         children: [
           _buildSearch(),
@@ -249,33 +220,40 @@ class _LeadScreen extends State<LeadScreen> {
               stream: streamModel.output,
               builder: (context, snapshot) {
                 items = snapshot.data as List<ListCustomLeadItems>?;
-                return CustomListView(
-                  padding: EdgeInsets.only(
-                  top: 30.0, bottom: 10.0, left: 10.0, right: 10.0),
+                return ContainerDataBuilder(
+                  data: items,
+                  skeletonBuilder: _buildSkeleton(),
+                  emptyBuilder: CustomEmptyData(),
                   onRefresh: () async {
                     filterModel!.page = 1;
                     getData(false);
                   },
-                  onLoadmore: () async {
-                    if (currentPage < this.nextPage) {
-                      filterModel!.page = currentPage + 1;
-                      getData(true);
-                    }
-                  },
-                  physics: AlwaysScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  controller: _controller,
-                  children: [
-                    (items == null)
-                        ? _buildSkeleton()
-                        : (items!.length > 0)
-                            ? Column(
-                                children: items!.map((e) => potentialItemV2(e)).toList())
-                            : CustomDataNotFound(),
-                    Container(height: 50)
-                  ],
+                  bodyBuilder: () => CustomListView(
+                    padding: const EdgeInsets.only(
+                        top: 30.0, bottom: 10.0, left: 10.0, right: 10.0),
+                    onLoadmore: () async {
+                      if (currentPage < nextPage) {
+                        filterModel!.page = currentPage + 1;
+                        getData(true);
+                      }
+                    },
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    controller: _controller,
+                    children: [
+                      Column(
+                        children: items!
+                            .map((e) => _LeadCard(
+                                  item: e,
+                                  onRefresh: () => getData(false),
+                                ))
+                            .toList(),
+                      ),
+                      const SizedBox(height: 50),
+                    ],
+                  ),
                 );
-              }
+              },
             ),
           ),
         ],
@@ -283,7 +261,7 @@ class _LeadScreen extends State<LeadScreen> {
     );
   }
 
-   Widget _buildSkeleton() {
+  Widget _buildSkeleton() {
     return LoadingWidget(
         padding: EdgeInsets.zero,
         child: CustomListView(
@@ -305,14 +283,11 @@ class _LeadScreen extends State<LeadScreen> {
           enabled: true,
           controller: _searchtext,
           focusNode: _fonusNode,
-          // focusNode: _focusNode,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(
-              // borderSide:
-              //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
               borderRadius: BorderRadius.circular(10.0),
             ),
             focusedBorder: OutlineInputBorder(
@@ -339,263 +314,69 @@ class _LeadScreen extends State<LeadScreen> {
           onSubmitted: (event) async {
             filterModel!.page = 1;
             getData(false);
-          }
-          // },
-          ),
+          }),
     );
   }
+}
 
-  Widget potentialItemV2(ListCustomLeadItems item) {
+// ---------------------------------------------------------------------------
+// Card widget
+// ---------------------------------------------------------------------------
+
+class _LeadCard extends StatelessWidget {
+  final ListCustomLeadItems item;
+  final VoidCallback onRefresh;
+
+  const _LeadCard({required this.item, required this.onRefresh});
+
+  Future<void> _navigateToDetail(BuildContext context) async {
+    bool? result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => DetailPotentialCustomer(
+              customer_lead_code: item.customerLeadCode,
+              indexTab: 0,
+              typeCustomer: item.customerType,
+            )));
+    if (result != null && result) onRefresh();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       children: [
         Container(
-          margin: EdgeInsets.only(bottom: 32.0),
-          // padding: EdgeInsets.only(bot),
+          margin: const EdgeInsets.only(bottom: 32.0),
           child: InkWell(
-            onTap: () async {
-              bool? result = await Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => DetailPotentialCustomer(
-                        customer_lead_code: item.customerLeadCode,
-                        indexTab: 0,
-                        typeCustomer: item.customerType,
-                      )));
-
-              if (result != null && result) {
-                getData(false);
-              }
-            },
+            onTap: () => _navigateToDetail(context),
             child: Container(
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(5),
-                  border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+                  border: Border.all(width: 1, color: const Color(0xFFC3C8D3))),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(right: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(left: 107),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        RichText(
-                            text: TextSpan(
-                                text: item.customerSourceName ?? "",
-                                style: TextStyle(
-                                    height: 1.5,
-                                    fontSize: 16.0,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.normal),
-                                children: [
-                              TextSpan(
-                                  text: (item.customerSourceName != "" &&
-                                          item.customerSourceName != null)
-                                      ? (" - " + item.leadFullName!)
-                                      : ("" + item.leadFullName!),
-                                  style: TextStyle(
-                                      color: AppColors.primaryColor,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                              WidgetSpan(
-                                  child: SizedBox(
-                                width: 5.0,
-                              )),
-                              WidgetSpan(
-                                  alignment: ui.PlaceholderAlignment.top,
-                                  child: Container(
-                                    margin: EdgeInsets.only(right: 8.0),
-                                    decoration: BoxDecoration(
-                                        color: Color(0xFF3AEDB6),
-                                        borderRadius:
-                                            BorderRadius.circular(4.0)),
-                                    child: Padding(
-                                      padding: EdgeInsets.all(3.0),
-                                      child: Text(item.journeyName ?? "N/A",
-                                          style: TextStyle(
-                                              color: Color.fromARGB(
-                                                  255, 3, 68, 48),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.normal)),
-                                    ),
-                                  )),
-                            ])),
-                        SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                            hidePhone(
-                                item.phone ?? "",
-                                checkVisibilityKey(
-                                    VisibilityWidgetName.LE000002)),
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.black,
-                                fontWeight: FontWeight.normal)),
-                      ],
-                    ),
+                  _LeadCardHeader(item: item),
+                  _LeadCardInfoRow(
+                    item: item,
+                    onNavigate: () => _navigateToDetail(context),
+                    onCall: () {
+                      if (Global.callHotline != null && item.phone != '') {
+                        Global.callHotline!({
+                          'id': item.customerLeadId,
+                          'code': item.customerLeadCode,
+                          'avatar': item.avatar,
+                          'name': item.leadFullName,
+                          'phone': item.phone,
+                          'type': item.customerType,
+                        });
+                      } else {
+                        LeadConnection.showMyDialog(context,
+                            AppLocalizations.text(LangKey.noPhoneNumber));
+                      }
+                    },
                   ),
-                  Container(
-                    padding: EdgeInsets.only(right: 8.0, bottom: 8.0, top: 8.0),
-                    margin: EdgeInsets.only(right: 8.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                            child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              infoItem(
-                                  Assets.iconName, item.staffFullName ?? ""),
-                              // infoItem(Assets.iconInteraction, "12/12/2022"),
-
-                              Container(
-                                padding:
-                                    const EdgeInsets.only(left: 8, bottom: 8.0),
-                                margin: EdgeInsets.only(bottom: 8.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      margin:
-                                          const EdgeInsets.only(right: 10.0),
-                                      height: 15.0,
-                                      width: 15.0,
-                                      child:
-                                          Image.asset(Assets.iconInteraction),
-                                    ),
-                                    (item.dateLastCare != null)
-                                        ? Expanded(
-                                            child: RichText(
-                                                text: TextSpan(
-                                                    text: item.dateLastCare! +
-                                                        " ",
-                                                    style: TextStyle(
-                                                        fontSize: 14.0,
-                                                        color: Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.normal),
-                                                    children: [
-                                                  TextSpan(
-                                                      text:
-                                                          "(${item.diffDay} ${AppLocalizations.text(LangKey.day)?.toLowerCase()})",
-                                                      style: TextStyle(
-                                                          color: AppColors
-                                                              .primaryColor,
-                                                          fontSize: 14.0,
-                                                          fontWeight: FontWeight
-                                                              .normal))
-                                                ])),
-                                          )
-                                        : Container(),
-                                  ],
-                                ),
-                              ),
-                              infoItem(
-                                  Assets.iconChance, item.pipelineName ?? ""),
-                            ],
-                          ),
-                        )),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            if ((checkVisibilityKey(VisibilityWidgetName.CM000008)))
-                              InkWell(
-                                onTap: () async {
-                                  if (Global.callHotline != null && item.phone != "") {
-                                    Global.callHotline!({
-                                      "id": item.customerLeadId,
-                                      "code": item.customerLeadCode,
-                                      "avatar": item.avatar,
-                                      "name": item.leadFullName,
-                                      "phone": item.phone,
-                                      "type": item.customerType,
-                                    });
-                                  }  else {
-                                    LeadConnection.showMyDialog(
-                                        context, AppLocalizations.text(LangKey.noPhoneNumber));
-                                  }
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(20.0 / 2),
-                                  height: 45,
-                                  width: 45,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF06A605),
-                                    borderRadius: BorderRadius.circular(50),
-                                    // border:  Border.all(color: AppColors.white,)
-                                  ),
-                                  child: Center(
-                                      child: Image.asset(
-                                    Assets.iconCall,
-                                    color: AppColors.white,
-                                  )),
-                                ),
-                              ),
-                            SizedBox(
-                              height: AppSizes.minPadding,
-                            ),
-
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                _actionItem(
-                                    Assets.iconCalendar, Color(0xFF26A7AD),
-                                    number: item.relatedWork ?? 0,
-                                    ontap: () async {
-                                  bool? result = await Navigator.of(context)
-                                      .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              DetailPotentialCustomer(
-                                                customer_lead_code:
-                                                    item.customerLeadCode,
-                                                indexTab: 0,
-                                                typeCustomer: item.customerType,
-                                              )));
-
-                                  if (result != null && result) {
-                                    getData(false);
-                                  }
-                                }),
-                                _actionItem(
-                                    Assets.iconOutdate, Color(0xFFDD2C00),
-                                    number: item.appointment ?? 0,
-                                    ontap: () async {
-                                  bool? result = await Navigator.of(context)
-                                      .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              DetailPotentialCustomer(
-                                                customer_lead_code:
-                                                    item.customerLeadCode,
-                                                typeCustomer: item.customerType,
-                                                indexTab: 0,
-                                              )));
-
-                                  if (result != null && result) {
-                                    getData(false);
-                                  }
-                                }),
-                              ],
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  item.tag!.length > 0
-                      ? Container(
-                          // width: AppSizes.maxWidth * 0.55,
-                          padding: EdgeInsets.only(
-                              left: 8.0, right: 8.0, bottom: 8.0),
-                          child: Wrap(
-                            children: List.generate(item.tag!.length,
-                                (index) => _optionItem(item.tag![index])),
-                            spacing: 10,
-                            runSpacing: 10,
-                          ),
-                        )
-                      : Container()
+                  if (item.tag!.isNotEmpty) _LeadCardTags(tags: item.tag!),
                 ],
               ),
             ),
@@ -603,136 +384,398 @@ class _LeadScreen extends State<LeadScreen> {
         ),
         Positioned(
           left: 10,
-          top: -22,
+          top: -10,
           child: CustomAvatarWithURL(
-                    backgroundColor: Color(0xFFEEB132),
-                    url: item.avatar ?? "",
-                    name: item.leadFullName,
-                    size: 80.0,
-                  ),
+            backgroundColor: const Color(0xFFEEB132),
+            url: item.avatar ?? '',
+            name: item.leadFullName,
+            size: 60.0,
+          ),
         ),
       ],
     );
   }
+}
 
-  Widget _actionItem(String icon, Color color,
-      {required num number, GestureTapCallback? ontap, Color? colorIcon}) {
-    return InkWell(
-      onTap: ontap,
-      child: Container(
-          margin: EdgeInsets.only(left: 14.0),
-          child: Stack(
-            clipBehavior: Clip.none,
+// ---------------------------------------------------------------------------
+// Header: source - name (bold) + journey badge + phone
+// ---------------------------------------------------------------------------
+
+class _LeadCardHeader extends StatelessWidget {
+  final ListCustomLeadItems item;
+
+  const _LeadCardHeader({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 4.0),
+      margin: const EdgeInsets.only(left: 80),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 45,
-                width: 45,
-                decoration: BoxDecoration(
-                    color: color, borderRadius: BorderRadius.circular(1000.0)),
-                child: Center(
-                  child: Image.asset(
-                    icon,
-                    scale: 2.5,
-                    color: colorIcon,
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    text: item.customerSourceName ?? '',
+                    style: const TextStyle(
+                      height: 1.5,
+                      fontSize: 16.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: (item.customerSourceName != null &&
+                                item.customerSourceName != '')
+                            ? ' - ${item.leadFullName!}'
+                            : item.leadFullName!,
+                        style: TextStyle(
+                          color: AppColors.primaryColor,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const WidgetSpan(child: SizedBox(width: 5.0)),
+                      WidgetSpan(
+                        alignment: ui.PlaceholderAlignment.top,
+                        child: _LeadJourneyBadge(name: item.journeyName),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              (number > 0)
-                  ? Positioned(
-                      left: 30,
-                      bottom: 30,
-                      child: Container(
-                        width: (number > 99)
-                            ? 30
-                            : (number > 9)
-                                ? 25
-                                : 22,
-                        height: 20,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Color(0xFFF45E38)),
-                        child: Center(
-                            child: Text((number > 9) ? "9+" : "${number}",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w600))),
-                      ))
-                  : Container()
+              _LeadActionIcon(
+                color: AppColors.bluePrimary,
+                icon: Icons.notifications,
+                number: item.relatedWork ?? 0,
+              ),
             ],
-          )),
-    );
-  }
-
-  Widget statusPotential(String title, Color color, Color colorText) {
-    return Container(
-      margin: EdgeInsets.only(right: 8.0),
-      decoration:
-          BoxDecoration(color: color, borderRadius: BorderRadius.circular(4.0)),
-      child: Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Text(title,
-            style: TextStyle(
-                color: colorText, fontSize: 14, fontWeight: FontWeight.normal)),
-      ),
-    );
-  }
-
-  Widget _optionItem(Tag item) {
-    return Container(
-      padding: EdgeInsets.only(left: 4.0, right: 4.0),
-      height: 24,
-      decoration: BoxDecoration(
-          color: Color(0x420067AC), borderRadius: BorderRadius.circular(5.0)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-              height: 8.0,
-              width: 8.0,
-              margin: EdgeInsets.only(right: 5.0),
-              decoration: BoxDecoration(
-                  color: Color(0x790067AC),
-                  borderRadius: BorderRadius.circular(1000.0))),
-          Text(item.tagName!,
-              style: TextStyle(
-                  color: Color(0xFF0067AC),
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.w600))
-        ],
-      ),
-    );
-  }
-
-  Widget infoItem(String icon, String title) {
-    return Container(
-      padding: const EdgeInsets.only(left: 8, bottom: 8.0),
-      margin: EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(right: 10.0),
-            height: 15.0,
-            width: 15.0,
-            child: Image.asset(icon),
           ),
-          Expanded(
-            child: Text(
-              title,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
-                  fontWeight: FontWeight.normal),
-              // maxLines: 1,
+          Text(
+            hidePhone(item.phone ?? '',
+                checkVisibilityKey(VisibilityWidgetName.LE000002)),
+            style: const TextStyle(
+              fontSize: 16.0,
+              color: Colors.black,
+              fontWeight: FontWeight.normal,
             ),
           ),
         ],
       ),
     );
   }
+}
 
-  callPhone(String phone) {
-    FlutterDirectCall.makeDirectCall(phone);
+// ---------------------------------------------------------------------------
+// Info row: left = staff / lastCare / pipeline, right = action icons
+// ---------------------------------------------------------------------------
+
+class _LeadCardInfoRow extends StatelessWidget {
+  final ListCustomLeadItems item;
+  final VoidCallback onNavigate;
+  final VoidCallback onCall;
+
+  const _LeadCardInfoRow({
+    required this.item,
+    required this.onNavigate,
+    required this.onCall,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0, bottom: 8.0, top: 4.0),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _LeadInfoTile(
+                    iconAsset: Assets.iconName,
+                    title: item.staffFullName ?? ''),
+                _LeadLastCareTile(
+                    dateLastCare: item.dateLastCare, diffDay: item.diffDay),
+                _LeadInfoTile(
+                    iconAsset: Assets.iconChance,
+                    title: item.pipelineName ?? ''),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // if (checkVisibilityKey(VisibilityWidgetName.CM000008))
+              //   _LeadCallIcon(onTap: onCall),
+              // _LeadActionIcon(
+              //   icon: Icons.calendar_month_outlined,
+              //   color: const Color(0xFF26A7AD),
+              //   number: item.relatedWork ?? 0,
+              //   onTap: onNavigate,
+              // ),
+              // _LeadActionIcon(
+              //   icon: Icons.meeting_room_outlined,
+              //   color: const Color(0xFFDD2C00),
+              //   number: item.appointment ?? 0,
+              //   onTap: onNavigate,
+              // ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Tags row
+// ---------------------------------------------------------------------------
+
+class _LeadCardTags extends StatelessWidget {
+  final List<Tag> tags;
+
+  const _LeadCardTags({required this.tags});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 8.0),
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 6,
+        children: tags.map((t) => _LeadTagChip(tag: t)).toList(),
+      ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Small reusable widgets
+// ---------------------------------------------------------------------------
+
+class _LeadJourneyBadge extends StatelessWidget {
+  final String? name;
+
+  const _LeadJourneyBadge({this.name});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(right: 8.0),
+      decoration: BoxDecoration(
+        color: const Color(0xFF3AEDB6),
+        borderRadius: BorderRadius.circular(4.0),
+      ),
+      padding: const EdgeInsets.all(3.0),
+      child: Text(
+        name ?? 'N/A',
+        style: const TextStyle(
+          color: Color.fromARGB(255, 3, 68, 48),
+          fontSize: 12,
+          fontWeight: FontWeight.normal,
+        ),
+      ),
+    );
+  }
+}
+
+class _LeadInfoTile extends StatelessWidget {
+  final String iconAsset;
+  final String title;
+
+  const _LeadInfoTile({required this.iconAsset, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+      child: Row(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(right: 8.0),
+            height: 15.0,
+            width: 15.0,
+            child: Image.asset(iconAsset),
+          ),
+          Expanded(
+            child: Text(
+              title,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14.0,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LeadLastCareTile extends StatelessWidget {
+  final String? dateLastCare;
+  final dynamic diffDay;
+
+  const _LeadLastCareTile({this.dateLastCare, this.diffDay});
+
+  @override
+  Widget build(BuildContext context) {
+    if (dateLastCare == null) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+      child: Row(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(right: 8.0),
+            height: 15.0,
+            width: 15.0,
+            child: Image.asset(Assets.iconInteraction),
+          ),
+          Expanded(
+            child: RichText(
+              text: TextSpan(
+                text: '$dateLastCare ',
+                style: const TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                ),
+                children: [
+                  TextSpan(
+                    text:
+                        '($diffDay ${AppLocalizations.text(LangKey.day)?.toLowerCase()})',
+                    style: TextStyle(
+                      color: AppColors.primaryColor,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LeadTagChip extends StatelessWidget {
+  final Tag tag;
+
+  const _LeadTagChip({required this.tag});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      height: 24,
+      decoration: BoxDecoration(
+        color: const Color(0x420067AC),
+        borderRadius: BorderRadius.circular(5.0),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 8.0,
+            width: 8.0,
+            margin: const EdgeInsets.only(right: 5.0),
+            decoration: BoxDecoration(
+              color: const Color(0x790067AC),
+              borderRadius: BorderRadius.circular(1000.0),
+            ),
+          ),
+          Text(
+            tag.tagName!,
+            style: const TextStyle(
+              color: Color(0xFF0067AC),
+              fontSize: 14.0,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LeadCallIcon extends StatelessWidget {
+  final VoidCallback? onTap;
+
+  const _LeadCallIcon({this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4),
+      child: const Padding(
+        padding: EdgeInsets.all(6.0),
+        child: Icon(Icons.phone, color: Color(0xFF06A605), size: 24),
+      ),
+    );
+  }
+}
+
+class _LeadActionIcon extends StatelessWidget {
+  final IconData icon;
+  final Color color;
+  final int number;
+  final VoidCallback? onTap;
+
+  const _LeadActionIcon({
+    required this.icon,
+    required this.color,
+    required this.number,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(4),
+      child: Padding(
+        padding: const EdgeInsets.all(6.0),
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Icon(icon, color: color, size: 24),
+            if (number > 0)
+              Positioned(
+                left: 14,
+                bottom: 14,
+                child: Container(
+                  width: number > 9 ? 22 : 18,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(100),
+                    color: const Color(0xFFF45E38),
+                  ),
+                  child: Center(
+                    child: Text(
+                      number > 9 ? '9+' : '$number',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
   }
 }

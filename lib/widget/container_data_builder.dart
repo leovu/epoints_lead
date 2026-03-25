@@ -4,7 +4,6 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/container_scrollable.dart';
 
 class ContainerDataBuilder extends StatelessWidget {
-
   final dynamic data;
   final Widget? emptyBuilder;
   final bool emptyShinkWrap;
@@ -13,34 +12,30 @@ class ContainerDataBuilder extends StatelessWidget {
   final CustomRefreshCallback? onRefresh;
   final ScrollPhysics? emptyPhysics;
 
-  ContainerDataBuilder({
-    this.data,
-    this.emptyBuilder,
-    this.emptyShinkWrap = false,
-    this.skeletonBuilder,
-    required this.bodyBuilder,
-    this.onRefresh,
-    this.emptyPhysics
-  });
+  ContainerDataBuilder(
+      {this.data,
+      this.emptyBuilder,
+      this.emptyShinkWrap = false,
+      this.skeletonBuilder,
+      required this.bodyBuilder,
+      this.onRefresh,
+      this.emptyPhysics});
 
-  Widget? _buildBody(){
-    if(data == null) {
+  Widget? _buildBody() {
+    if (data == null) {
       return skeletonBuilder;
     }
 
-    if(data is List){
+    if (data is List) {
       Widget body;
-      if(data.isEmpty){
+      if (data.isEmpty) {
         body = ListView(
           physics: emptyPhysics ?? AlwaysScrollableScrollPhysics(),
           padding: EdgeInsets.zero,
           shrinkWrap: emptyShinkWrap,
-          children: [
-            emptyBuilder??Container()
-          ],
+          children: [emptyBuilder ?? Container()],
         );
-      }
-      else{
+      } else {
         body = bodyBuilder();
       }
 

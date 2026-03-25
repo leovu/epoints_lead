@@ -58,3 +58,69 @@ class CustomDataNotFound extends StatelessWidget {
     );
   }
 }
+
+
+class CustomEmptyData extends StatelessWidget {
+  final String? title;
+  final String? content;
+  final IconData icon;
+  final Color? iconColor;
+  final bool isTitle;
+  final double? height;
+
+  const CustomEmptyData({
+    Key? key,
+    this.title,
+    this.content,
+    this.icon = Icons.inbox_outlined,
+    this.iconColor,
+    this.isTitle = true,
+    this.height,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    return SizedBox(
+      height: height ?? MediaQuery.of(context).size.height * 0.6,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            size: 64,
+            color: iconColor ?? Colors.grey[400],
+          ),
+
+          if (isTitle)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+              child: Text(
+                title ?? AppLocalizations.text(LangKey.searchNotFound)!,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.style14Black50Weight400.copyWith(
+                  color: Colors.grey[700],
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            )
+          else
+            const SizedBox(height: 20),
+
+          if (content != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                content!,
+                textAlign: TextAlign.center,
+                style: AppTextStyles.style14Black50Weight400.copyWith(
+                  color: AppColors.grey500Color,
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}

@@ -35,6 +35,7 @@ class AddLeadModelRequest {
   int? customerLeadReferId;
   String? website;
   List<String>? arrPhoneAttack;
+  String? createAllocationDate;
 
   AddLeadModelRequest(
       {this.avatar,
@@ -72,7 +73,8 @@ class AddLeadModelRequest {
       this.note,
       this.customerLeadReferId,
       this.website,
-      this.arrPhoneAttack});
+      this.arrPhoneAttack,
+      this.createAllocationDate});
 
   AddLeadModelRequest.fromJson(Map<String, dynamic> json) {
     avatar = json['avatar'];
@@ -111,6 +113,7 @@ class AddLeadModelRequest {
     customerLeadReferId = json['customer_lead_refer_id'];
     website = json['website'];
     arrPhoneAttack = json['arrPhoneAttack'].cast<String>();
+    createAllocationDate = json['create_allocation_date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -151,6 +154,7 @@ class AddLeadModelRequest {
     data['customer_lead_refer_id'] = this.customerLeadReferId;
     data['website'] = this.website;
     data['arrPhoneAttack'] = this.arrPhoneAttack;
+    data['create_allocation_date'] = this.createAllocationDate;
     return data;
   }
 }

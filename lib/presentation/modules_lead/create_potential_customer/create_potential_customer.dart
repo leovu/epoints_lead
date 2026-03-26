@@ -991,6 +991,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
     bool typePersonnal = customerTypeID == 1;
     LeadConnection.showLoading(context);
     final req = AddLeadModelRequest(
+      // createAllocationDate: DateTime.,
       avatar: _bloc.imgAvatar ?? "",
       customerType: typePersonnal ? "personal" : "business",
       customerSource: detailPotential.customerSource,
@@ -1025,6 +1026,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
       customerLeadReferId: _bloc.presenterModel?.customerId ?? 0,
       arrPhoneAttack: _bloc.listPhone,
       website: _bloc.websiteController.text,
+
     );
     print('____REQUEST CREATE: ${req.toJson()}');
     AddLeadModelResponse? result = await LeadConnection.addLead(context, req);

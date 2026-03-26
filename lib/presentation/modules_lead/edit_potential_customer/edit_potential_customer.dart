@@ -274,6 +274,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             }
 
             detailPotential = AddLeadModelRequest(
+              // createAllocationDate: DateTime.now().,
                 avatar: "",
                 customerType: dataDetail.data!.customerType ?? "",
                 customerSource: dataDetail.data!.customerSource ?? "" as int?,

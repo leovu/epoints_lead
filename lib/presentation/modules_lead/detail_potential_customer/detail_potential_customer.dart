@@ -2157,6 +2157,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
               children: [
                 Row(
                   children: [
+                    //delete
                     Flexible(
                       child: CustomButton(
                         style: AppTextStyles.style15WhiteNormal
@@ -2165,8 +2166,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                         backgroundColor: AppColors.redColor,
                         text: AppLocalizations.text(LangKey.deleteLead),
                         ontap: () {
-                          LeadConnection.showMyDialogWithFunction(context,
-                              AppLocalizations.text(LangKey.warningDeleteLead),
+                          LeadConnection.showMyDialogWithFunction(
+                              context, 'Are you sure you want delete lead?',
                               ontap: () async {
                             DescriptionModelResponse? result =
                                 await LeadConnection.deleteLead(
@@ -2175,13 +2176,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                             if (result != null) {
                               if (result.errorCode == 0) {
                                 _bloc.allowPop = true;
-                                print(result.errorDescription);
-                                await LeadConnection.showMyDialog(
-                                    context, result.errorDescription);
+                                // if (result.errorDescription != null)
+                                await LeadConnection.showMyDialog(context,
+                                    result.errorDescription ?? 'Success');
                                 Navigator.of(context).pop(true);
                               } else {
-                                LeadConnection.showMyDialog(
-                                    context, result.errorDescription);
+                                if (result.errorDescription != null)
+                                  LeadConnection.showMyDialog(
+                                      context, result.errorDescription);
                               }
                             }
                           });
@@ -2191,6 +2193,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                     SizedBox(
                       width: AppSizes.minPadding,
                     ),
+                    //convertCustomer
                     Flexible(
                       child: CustomButton(
                         style: AppTextStyles.style15WhiteNormal
@@ -2215,25 +2218,26 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                 ),
                 Row(
                   children: [
-                    Flexible(
-                      child: CustomButton(
-                        style: AppTextStyles.style15WhiteNormal
-                            .copyWith(fontWeight: FontWeight.bold),
-                        heightButton: AppSizes.sizeOnTap,
-                        text: AppLocalizations.text(LangKey.addDeal),
-                        ontap: () async {
-                          if (Global.createDeal != null) {
-                            bool? result =
-                                await Global.createDeal!(detail!.toJson());
-                            if (result != null) {
-                              _bloc.allowPop = true;
-                              _bloc.getData(widget.customer_lead_code!);
+                    if (checkVisibilityKey(VisibilityWidgetName.DE000000))
+                      Flexible(
+                        child: CustomButton(
+                          style: AppTextStyles.style15WhiteNormal
+                              .copyWith(fontWeight: FontWeight.bold),
+                          heightButton: AppSizes.sizeOnTap,
+                          text: AppLocalizations.text(LangKey.addDeal),
+                          ontap: () async {
+                            if (Global.createDeal != null) {
+                              bool? result =
+                                  await Global.createDeal!(detail!.toJson());
+                              if (result != null) {
+                                _bloc.allowPop = true;
+                                _bloc.getData(widget.customer_lead_code!);
+                              }
                             }
-                          }
-                          //
-                        },
+                            //
+                          },
+                        ),
                       ),
-                    ),
                     SizedBox(
                       width: AppSizes.minPadding,
                     ),

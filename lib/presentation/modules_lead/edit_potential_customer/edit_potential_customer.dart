@@ -46,6 +46,7 @@ import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
+import 'package:lead_plugin_epoint/widget/custom_scaffold.dart';
 
 import '../../../utils/visibility_api_widget_name.dart';
 
@@ -165,7 +166,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       // LeadConnection.showLoading(context);
 
       if (widget.detailPotential != null) {
-        print('_________${widget.detailPotential?.toJson()}');
+        print('_____________ ${widget.detailPotential?.branchCode}__${widget.detailPotential?.toJson()}');
         _bloc.detail = widget.detailPotential;
         detailNew = widget.detailPotential;
         bool business = false;
@@ -379,15 +380,30 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         ], eagerError: false);
       } catch (_) {}
 
-      // 1. Chi nhánh
+      // 1. Chi nhánh — map branch_code từ data truyền vào với list branch từ API
       try {
-        var result = _bloc.listBranch.firstWhereOrNull(
-            (element) => element.branchCode == detailNew?.branchCode);
-        if (result != null) {
-          result.selected = true;
-          _bloc.branchSelected = result;
+        final targetBranchCode = detailNew?.branchCode;
+        print('____EDIT: target branchCode = $targetBranchCode');
+        print(
+            '____EDIT: listBranch codes = ${_bloc.listBranch.map((e) => e.branchCode).toList()}');
+        if (targetBranchCode != null && targetBranchCode.isNotEmpty) {
+          // Reset selected flag trước khi map
+          for (var b in _bloc.listBranch) {
+            b.selected = false;
+          }
+          var result = _bloc.listBranch.firstWhereOrNull(
+              (element) => element.branchCode == targetBranchCode);
+          if (result != null) {
+            result.selected = true;
+            _bloc.branchSelected = result;
+            print('____EDIT: matched branch = ${result.branchName}');
+          } else {
+            print('____EDIT: no branch matched for code $targetBranchCode');
+          }
         }
-      } catch (e) {}
+      } catch (e) {
+        print('____EDIT: branch mapping error: $e');
+      }
 
       // 2. Nhóm khách hàng
       try {
@@ -612,21 +628,10 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       onTap: () {
         keyboardDismissOnTap(context);
       },
-      child: Scaffold(
-          appBar: AppBar(
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-            ),
-            backgroundColor: AppColors.primaryColor,
-            title: Text(
-              AppLocalizations.text(LangKey.editPotential)!,
-              style: const TextStyle(color: Colors.white, fontSize: 16.0),
-            ),
-            // leadingWidth: 20.0,
-          ),
-          body: Container(
-              decoration: const BoxDecoration(color: AppColors.white),
-              child: _buildBody())),
+      child: CustomScaffold(
+        title: AppLocalizations.text(LangKey.editPotential),
+        body: _buildBody(),
+      ),
     );
   }
 

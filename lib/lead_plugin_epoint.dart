@@ -32,6 +32,8 @@ class LeadPluginEpoint {
       String? phone,
       String? customerLeadCode,
       Function? createJob,
+      String? branchId,
+      String? userId,
       Function(Map<String, dynamic>)? createCare,
       Function(int)? editJob,
       Function(int)? negativeDetailPrefer,
@@ -77,6 +79,12 @@ class LeadPluginEpoint {
 
     if (createDeal != null) {
       Global.createDeal = createDeal;
+    }
+    if (branchId != null) {
+      Global.branchId = branchId;
+    }
+    if (userId != null) {
+      Global.userId = userId;
     }
     LeadConnection.locale = locale;
     Global.locale = locale;

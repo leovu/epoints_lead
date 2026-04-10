@@ -3,10 +3,17 @@ import 'package:flutter/widgets.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
 import 'package:lead_plugin_epoint/model/request/get_customer_group_model_request.dart';
+import 'package:lead_plugin_epoint/model/request/get_journey_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/customer_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_branch_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_group_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_customer_option_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_journey_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_pipeline_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
+import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
+import 'package:lead_plugin_epoint/model/request/get_list_staff_request_model.dart';
 import 'package:lead_plugin_epoint/model/response_model.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/module_address/src/ui/create_address_screen.dart';
@@ -72,6 +79,152 @@ class CreatePotentialCustomerBloc extends BaseBloc {
 
   setAddressModel(CustomerCreateAddressModel? event) =>
       set(_streamAddressModel, event);
+
+  // Data loaded from APIs
+  CustomerOptionData? customerOptionData = CustomerOptionData();
+  List<CustomerOptionSource>? customerSourcesData = <CustomerOptionSource>[];
+  CustomerOptionSource sourceSelected = CustomerOptionSource();
+
+  List<PipelineData>? pipeLineData = <PipelineData>[];
+  PipelineData pipelineSelected = PipelineData();
+
+  List<JourneyData>? journeysData = <JourneyData>[];
+  JourneyData? journeySelected = JourneyData();
+
+  List<TagData>? tagsData;
+
+  String tagsString = "";
+
+  WorkListStaffModel? staffSelected;
+
+  bool isLoading = false;
+
+  /// Load all APIs when entering screen
+  Future<void> initData(BuildContext context) async {
+    isLoading = true;
+    LeadConnection.showLoading(context);
+
+    await Future.wait([
+      _loadCustomerOption(context),
+      _loadPipeline(context),
+      _loadBranch(context),
+      _loadTag(context),
+    ]);
+
+    // Load journeys after pipeline is selected
+    if (pipelineSelected.pipelineCode != null) {
+      await _loadJourneys(context, pipelineSelected.pipelineCode!);
+    }
+
+    // Auto-fill staff by userId
+    await autoFillStaffByUserId(context);
+
+    Navigator.of(context).pop();
+    isLoading = false;
+  }
+
+  Future<void> _loadCustomerOption(BuildContext context) async {
+    var dataTypeSource = await LeadConnection.getCustomerOption(context);
+    if (dataTypeSource != null) {
+      customerOptionData = dataTypeSource.data;
+      customerSourcesData = customerOptionData!.source;
+      // Default select first item
+      if (customerSourcesData != null && customerSourcesData!.isNotEmpty) {
+        sourceSelected = customerSourcesData!.first;
+      }
+    }
+  }
+
+  Future<void> _loadPipeline(BuildContext context) async {
+    var pipelines = await LeadConnection.getPipeline(context);
+    if (pipelines != null) {
+      pipeLineData = pipelines.data;
+      // Auto select pipeline with isDefault == 1
+      if (pipeLineData != null && pipeLineData!.isNotEmpty) {
+        try {
+          pipelineSelected = pipeLineData!.firstWhere(
+            (p) => p.isDefault == 1,
+          );
+        } catch (_) {
+          pipelineSelected = pipeLineData!.first;
+        }
+      }
+    }
+  }
+
+  Future<void> _loadBranch(BuildContext context) async {
+    List<BranchData>? data = await getBranch(context, showLoading: false);
+    if (data != null && data.isNotEmpty) {
+      // Find branch matching Global.branchId
+      if (Global.branchId != null) {
+        try {
+          branchSelected = data.firstWhere(
+            (b) => b.branchId.toString() == Global.branchId,
+          );
+        } catch (_) {
+          branchSelected = data.first;
+        }
+      } else {
+        branchSelected = data.first;
+      }
+    }
+  }
+
+  Future<void> _loadTag(BuildContext context) async {
+    var tags = await LeadConnection.getTag(context);
+    if (tags != null) {
+      tagsData = tags.data;
+    }
+  }
+
+  /// Auto-fill allocated person based on Global.userId
+  Future<void> autoFillStaffByUserId(BuildContext context) async {
+    if (Global.userId == null || Global.userId!.isEmpty) return;
+
+    var result = await LeadConnection.workListStaff(
+      context,
+      WorkListStaffRequestModel(
+        branchId: branchSelected?.branchId?.toString(),
+      ),
+    );
+
+    if (result != null && result.data != null && result.data!.isNotEmpty) {
+      try {
+        staffSelected = result.data!.firstWhere(
+          (staff) => staff.staffId.toString() == Global.userId,
+        );
+      } catch (_) {
+        staffSelected = null;
+      }
+    }
+  }
+
+  /// Load journeys internally (no loading dialog)
+  Future<void> _loadJourneys(BuildContext context, String pipelineCode) async {
+    var journeys = await LeadConnection.getJourney(
+        context, GetJourneyModelRequest(pipelineCode: [pipelineCode]));
+    if (journeys != null) {
+      journeysData = journeys.data;
+      if (journeysData != null && journeysData!.isNotEmpty) {
+        journeySelected = journeysData!.first;
+      }
+    }
+  }
+
+  /// Load journeys after selecting pipeline (with loading dialog)
+  Future<void> loadJourneys(BuildContext context, String? pipelineCode) async {
+    if (pipelineCode == null) return;
+    LeadConnection.showLoading(context);
+    var journeys = await LeadConnection.getJourney(
+        context, GetJourneyModelRequest(pipelineCode: [pipelineCode]));
+    Navigator.of(context).pop();
+    if (journeys != null) {
+      journeysData = journeys.data;
+      if (journeysData != null && journeysData!.isNotEmpty) {
+        journeySelected = journeysData!.first;
+      }
+    }
+  }
 
   onImageAdd(List<File> files) {
     images.addAll(files);

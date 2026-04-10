@@ -238,7 +238,7 @@ class _LeadScreen extends State<LeadScreen> {
                       }
                     },
                     physics: const AlwaysScrollableScrollPhysics(),
-                    shrinkWrap: true,
+                    shrinkWrap: false,
                     controller: _controller,
                     children: [
                       Column(

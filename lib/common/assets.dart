@@ -247,6 +247,6 @@ class Assets {
   static final String imageMSWord = "packages/lead_plugin_epoint/assets/images/img_msword.png";
   static final String imagePDF = "packages/lead_plugin_epoint/assets/images/img_pdf.png";
   static final String imagePPT = "packages/lead_plugin_epoint/assets/images/img_ppt.png";
-
+  static final String imageAssign = "packages/lead_plugin_epoint/assets/images/ico_assign.png";
   
 }

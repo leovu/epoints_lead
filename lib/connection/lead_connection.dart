@@ -633,15 +633,12 @@ class LeadConnection {
                       ? AppLocalizations.text(LangKey.warning)!
                       : AppLocalizations.text(LangKey.notify)! + "\n",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black),
+                      fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
                 )),
-                Container(
-                  height: 10,
-                ),
                 Center(
                     child: Text(
                   title!,
-                  textAlign: TextAlign.start,
+                  textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey[700]),
                 )),
               ],

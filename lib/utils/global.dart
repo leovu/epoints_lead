@@ -37,6 +37,9 @@ class Global {
 
   static List<Map<String, dynamic>>? permissionModels = [];
 
-  static Function(Map<String,dynamic>)? callHotline; 
+  static Function(Map<String,dynamic>)? callHotline;
+
+  static String? branchId;
+  static String? userId;
 
 }

@@ -103,6 +103,7 @@ class DetailPotentialData {
   int? facebookId;
   String? note;
   String? website;
+  String? branchId;
 
 
 
@@ -182,7 +183,7 @@ class DetailPotentialData {
       this.zaloId,
       this.facebookId,
       this.note,
-      this.website});
+      this.website, this.branchId});
 
   DetailPotentialData.fromJson(Map<String, dynamic> json) {
     customerLeadId = json['customer_lead_id'];
@@ -297,6 +298,7 @@ class DetailPotentialData {
     zaloId = json['zalo_id'];
     facebookId = json['facebook_id'];
     website = json['website'];
+    branchId = json['branch_id'];
   }
 
   Map<String, dynamic> toJson() {
@@ -352,7 +354,7 @@ class DetailPotentialData {
     data['birthday'] = this.birthday;
     data['position'] = this.position;
     data['website'] = this.website;
-    
+    data['branch_id'] = this.branchId;
     if (this.journeyTracking != null) {
       data['journey_tracking'] =
           this.journeyTracking!.map((v) => v.toJson()).toList();

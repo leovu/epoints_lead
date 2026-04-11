@@ -48,6 +48,7 @@ import 'package:lead_plugin_epoint/model/response/work_list_comment_model_respon
 import 'package:lead_plugin_epoint/model/response/work_list_department_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/work_list_file_response_model.dart';
 import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
+import 'package:lead_plugin_epoint/presentation/network/api.dart';
 
 import '../model/response/list_customer_lead_model_response.dart';
 
@@ -315,11 +316,12 @@ class LeadConnection {
   }
 
   static Future<PositionResponseModel?> getPosition(
-      BuildContext context) async {
-    showLoading(context);
+      BuildContext context,
+      {bool showLoading = true}) async {
+    if (showLoading) LeadConnection.showLoading(context);
     ResponseData responseData =
         await connection.post('/customer-lead/customer-lead/position', {});
-    Navigator.of(context).pop();
+    if (showLoading) Navigator.of(context).pop();
     if (responseData.isSuccess) {
       PositionResponseModel data =
           PositionResponseModel.fromJson(responseData.data!);
@@ -363,6 +365,23 @@ class LeadConnection {
       WorkListStaffResponseModel data =
           WorkListStaffResponseModel.fromJson(responseData.data!);
       return data;
+    }
+    return null;
+  }
+
+  static Future<ListProjectModelResponse?> getListProject(
+      BuildContext context, ListProjectModelRequest model) async {
+    showLoading(context);
+    ResponseData responseData = await connection.post(
+        '/project-management/list-project', model.toJson());
+    Navigator.of(context).pop();
+    if (responseData.isSuccess && responseData.data != null) {
+      if (responseData.data != null) {
+        ListProjectModelResponse data =
+            ListProjectModelResponse.fromJson(responseData.data!);
+        return data;
+      }
+      return null;
     }
     return null;
   }
@@ -428,16 +447,17 @@ class LeadConnection {
     return null;
   }
 
-  static Future<ListProjectModelResponse?> getListProject(
-      BuildContext context, ListProjectModelRequest model) async {
-    showLoading(context);
-    ResponseData responseData = await connection.post(
-        '/project-management/list-project', model.toJson());
-    Navigator.of(context).pop();
+  static Future<WorkListStaffResponseModel?> workListStaffPermission(
+      BuildContext context, WorkListStaffRequestModel model,
+      {bool showLoading = true}) async {
+    if (showLoading) LeadConnection.showLoading(context);
+    ResponseData responseData =
+        await connection.post(API.getStaffWithPermission(), model.toJson());
+    if (showLoading) Navigator.of(context).pop();
     if (responseData.isSuccess && responseData.data != null) {
       if (responseData.data != null) {
-        ListProjectModelResponse data =
-            ListProjectModelResponse.fromJson(responseData.data!);
+        WorkListStaffResponseModel data =
+            WorkListStaffResponseModel.fromJson(responseData.data!);
         return data;
       }
       return null;
@@ -633,7 +653,9 @@ class LeadConnection {
                       ? AppLocalizations.text(LangKey.warning)!
                       : AppLocalizations.text(LangKey.notify)! + "\n",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black, fontSize: 18),
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontSize: 18),
                 )),
                 Center(
                     child: Text(
@@ -705,7 +727,7 @@ class LeadConnection {
                 ),
                 Center(
                     child: Text(
-                  title??'',
+                  title ?? '',
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey[700]),
                 )),

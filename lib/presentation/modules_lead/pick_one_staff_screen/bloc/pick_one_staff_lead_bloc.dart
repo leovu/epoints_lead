@@ -168,8 +168,8 @@ class PickOneStaffBloc extends BaseBloc {
         }
       } catch (_) {}
     }
-    var response = await LeadConnection.workListStaff(
-        context, WorkListStaffRequestModel(manageProjectId: id));
+    var response = await LeadConnection.workListStaffPermission(
+        context!, WorkListStaffRequestModel(manageProjectId: id));
     if (response != null) {
       _models = response.data ?? [];
 

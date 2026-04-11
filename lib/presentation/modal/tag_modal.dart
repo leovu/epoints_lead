@@ -70,6 +70,7 @@ class _TagsModalState extends State<TagsModal> {
             color: Colors.white,
           ),
           backgroundColor: Color(0xFF0067AC),
+          centerTitle: true,
           title: Text(
             AppLocalizations.text(LangKey.chooseCards)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

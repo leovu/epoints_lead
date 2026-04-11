@@ -45,6 +45,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
             color: Colors.white,
           ),
           backgroundColor: Color(0xFF0067AC),
+          centerTitle: true,
           title: Text(
             AppLocalizations.text(LangKey.choosePipeline)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

@@ -151,10 +151,11 @@ class _LeadScreen extends State<LeadScreen> {
           color: Colors.white,
         ),
         backgroundColor: AppColors.primaryColor,
+        centerTitle: true,
         title: Text(
           AppLocalizations.text(LangKey.listPotential)!,
-          style: TextStyle(color: Colors.white, fontSize: 16.0),
-          textAlign: TextAlign.start,
+          style: TextStyle(color: Colors.white, fontSize: 18.0),
+          textAlign: TextAlign.center,
         ),
         actions: [
           InkWell(

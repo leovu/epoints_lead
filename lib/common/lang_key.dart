@@ -1266,4 +1266,5 @@ class LangKey {
   static const String attachmentContent = "attachmentContent";
   static const String thisIsAttachmentContent = "thisIsAttachmentContent";
   static const String uploadFile = "uploadFile";
+  static const String noStaffAvailable = "noStaffAvailable";
 }

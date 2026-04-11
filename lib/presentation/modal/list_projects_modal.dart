@@ -108,6 +108,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
             color: Colors.white,
           ),
           backgroundColor: Color(0xFF0067AC),
+          centerTitle: true,
           title: Text(
             AppLocalizations.text(LangKey.chooseProject)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

@@ -24,11 +24,18 @@ class MultipleStaffScreenCustomerCare extends StatefulWidget {
   final List<WorkListStaffModel>? modelsSelectedCustomerCare;
   final List<WorkListStaffModel>? staffs;
   final int? projectId;
+
+  /// When true, the screen renders without its own blue `AppBar`.
+  /// Used when embedding this widget inside a bottom sheet that
+  /// provides its own header.
+  final bool hideAppBar;
+
   const MultipleStaffScreenCustomerCare(
       {this.models,
       this.modelsSelectedCustomerCare,
       this.staffs,
-      this.projectId});
+      this.projectId,
+      this.hideAppBar = false});
 
   @override
   _MultipleStaffScreenCustomerCareState createState() =>
@@ -437,17 +444,21 @@ class _MultipleStaffScreenCustomerCareState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
-        backgroundColor: Color(0xFF0067AC),
-        title: Text(
-          AppLocalizations.text(LangKey.chooseSupporterUpcase)!,
-          style: const TextStyle(color: Colors.white, fontSize: 18.0),
-        ),
-        // leadingWidth: 20.0,
-      ),
+      backgroundColor: Colors.white,
+      appBar: widget.hideAppBar
+          ? null
+          : AppBar(
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+              ),
+              backgroundColor: Color(0xFF0067AC),
+              centerTitle: true,
+              title: Text(
+                AppLocalizations.text(LangKey.chooseSupporterUpcase)!,
+                style: const TextStyle(color: Colors.white, fontSize: 18.0),
+              ),
+              // leadingWidth: 20.0,
+            ),
       body: _buildBody(),
     );
   }

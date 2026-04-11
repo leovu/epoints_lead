@@ -1216,5 +1216,6 @@
   "attachmentContent": "Attachment content",
   "thisIsAttachmentContent": "This is an attachment content",
   "uploadFile": "Upload file",
-  "unassign": "Unassign"
+  "unassign": "Unassign",
+  "noStaffAvailable": "No staff available for the selected branch"
 }

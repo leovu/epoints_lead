@@ -214,6 +214,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
               color: Colors.white,
             ),
             backgroundColor: AppColors.primaryColor,
+            centerTitle: true,
             title: Text(
               AppLocalizations.text(LangKey.customerCareUpcase)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),

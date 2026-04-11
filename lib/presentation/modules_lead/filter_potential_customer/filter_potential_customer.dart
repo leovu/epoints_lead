@@ -22,19 +22,15 @@ import 'package:lead_plugin_epoint/model/response/get_status_work_response_model
 import 'package:lead_plugin_epoint/model/response/get_tag_model_response.dart';
 import 'package:lead_plugin_epoint/model/status_assign_model.dart';
 import 'package:lead_plugin_epoint/model/work_schedule_date.dart';
-import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_allocate_date.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_convert_status.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_create_date.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_customer_source.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_customer_type.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_journey.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_pipeline.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_by_status.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/filter_history_care_date.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/multi_staff_screen_customer_care/ui/multi_staff_screen_customer_care.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/widgets/filter_multi_select_bottom_sheet.dart';
+import 'package:lead_plugin_epoint/presentation/modules_lead/filter_potential_customer/widgets/multi_staff_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
-import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class FilterPotentialCustomer extends StatefulWidget {
   FilterScreenModel? filterScreenModel = FilterScreenModel();
@@ -512,9 +508,10 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
               color: Colors.white,
             ),
             backgroundColor: AppColors.primaryColor,
+            centerTitle: true,
             title: Text(
               AppLocalizations.text(LangKey.filter)!,
-              style: const TextStyle(color: Colors.white, fontSize: 20.0),
+              style: const TextStyle(color: Colors.white, fontSize: 18.0),
             ),
           ),
           body: Container(
@@ -606,16 +603,21 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                     false,
                     true,
                     false, ontap: () async {
-                  print("Tag");
                   FocusScope.of(context).unfocus();
 
                   List<int?> tagsSeletecd = [];
 
-                  var listTagsSelected = await Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => TagsModal(tagsData: tagsData)));
+                  var listTagsSelected =
+                      await _showFilterBottomSheet<List<TagData>>(
+                    FilterMultiSelectBottomSheet<TagData>(
+                      title: AppLocalizations.text(LangKey.chooseCards),
+                      items: tagsData,
+                      labelOf: (e) => e.name ?? "",
+                      isSelectedOf: (e) => e.selected ?? false,
+                      toggleSelected: (e) => e.selected = !(e.selected ?? false),
+                    ),
+                  );
                   if (listTagsSelected != null) {
-                    // widget.detailDeal.tag = [];
                     tagsString = "";
                     tagsData = listTagsSelected;
 
@@ -682,11 +684,18 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           false,
           true,
           false, ontap: () async {
+        FocusScope.of(context).unfocus();
         List<int?> customerSourceSelected = [];
-        var customerSourceData = await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) =>
-                    FilterByCustomerSource(customerSources: customerSources)));
+        var customerSourceData =
+            await _showFilterBottomSheet<List<CustomerOptionSource>>(
+          FilterMultiSelectBottomSheet<CustomerOptionSource>(
+            title: AppLocalizations.text(LangKey.byCustomerSource),
+            items: customerSources,
+            labelOf: (e) => e.sourceName ?? "",
+            isSelectedOf: (e) => e.selected ?? false,
+            toggleSelected: (e) => e.selected = !(e.selected ?? false),
+          ),
+        );
 
         if (customerSourceData != null) {
           // widget.detailDeal.tag = [];
@@ -771,13 +780,12 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
 
       _buildTextField(AppLocalizations.text(LangKey.chooseAllottedPerson),
           staffs, Assets.iconName, false, true, false, ontap: () async {
-        print("Chọn người được phân bổ");
+        FocusScope.of(context).unfocus();
         List<int?> listStaff = [];
         _modelStaffSSupportSelected =
-            await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => MultipleStaffScreenCustomerCare(
-                      models: _modelStaffSSupportSelected,
-                    )));
+            await _showFilterBottomSheet<List<WorkListStaffModel>>(
+          MultiStaffBottomSheet(models: _modelStaffSSupportSelected),
+        );
 
         if (_modelStaffSSupportSelected != null &&
             _modelStaffSSupportSelected!.length > 0) {
@@ -815,13 +823,20 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           false,
           true,
           false, ontap: () async {
-        print("Pipeline");
+        FocusScope.of(context).unfocus();
 
         List<int?> pipelineSelected = [];
         List<String?> pipelineStringSelected = [];
-        List<PipelineData>? pipeline = await Navigator.of(context).push(
-            MaterialPageRoute(
-                builder: (context) => FilterByPipeline(pipeLineData)));
+        List<PipelineData>? pipeline =
+            await _showFilterBottomSheet<List<PipelineData>>(
+          FilterMultiSelectBottomSheet<PipelineData>(
+            title: AppLocalizations.text(LangKey.choosePipeline),
+            items: pipeLineData,
+            labelOf: (e) => e.pipelineName ?? "",
+            isSelectedOf: (e) => e.selected ?? false,
+            toggleSelected: (e) => e.selected = !(e.selected ?? false),
+          ),
+        );
 
         if (pipeline != null) {
           journeyString = "";
@@ -841,10 +856,47 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           }
           filterScreenModel.filterModel!.pipelineId = pipelineSelected;
 
-          var journeys = await LeadConnection.getJourney(context,
-              GetJourneyModelRequest(pipelineCode: pipelineStringSelected));
-          if (journeys != null) {
-            journeysData = journeys.data;
+          // Pipeline đã đổi → reset journey filter cũ để tránh journeyId
+          // "mồ côi" không còn thuộc pipeline mới được chọn.
+          filterScreenModel.filterModel!.journeyId = [];
+          journeysData = [];
+
+          // Gọi API getJourney song song — 1 request / pipeline.
+          // Backend chỉ trả đúng journey khi truyền 1 pipelineCode,
+          // nên phải fan-out multi-pipeline ở client rồi merge kết quả.
+          final validCodes =
+              pipelineStringSelected.whereType<String>().toList();
+          if (validCodes.isNotEmpty) {
+            LeadConnection.showLoading(context);
+            try {
+              final futures = validCodes
+                  .map((code) => LeadConnection.getJourney(
+                        context,
+                        GetJourneyModelRequest(pipelineCode: [code]),
+                      ))
+                  .toList();
+              final results =
+                  await Future.wait(futures, eagerError: false);
+
+              // Merge + dedupe theo journeyId (phòng 2 pipeline share journey).
+              final merged = <JourneyData>[];
+              final seenIds = <int?>{};
+              for (final r in results) {
+                final list = r?.data;
+                if (list == null) continue;
+                for (final j in list) {
+                  if (seenIds.add(j.journeyId)) {
+                    j.selected = false; // reset selected state
+                    merged.add(j);
+                  }
+                }
+              }
+              journeysData = merged;
+            } catch (_) {
+              // Giữ journeysData rỗng nếu toàn bộ call fail.
+            } finally {
+              if (context.mounted) Navigator.of(context).pop();
+            }
           }
 
           setState(() {});
@@ -869,14 +921,19 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           false,
           true,
           false, ontap: () async {
-        print("Chọn hành trình");
+        FocusScope.of(context).unfocus();
 
         List<int?> journeySelected = [];
         List<JourneyData>? journeys =
-            await Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => FilterByJourney(
-                      journeys: journeysData,
-                    )));
+            await _showFilterBottomSheet<List<JourneyData>>(
+          FilterMultiSelectBottomSheet<JourneyData>(
+            title: AppLocalizations.text(LangKey.chooseItinerary),
+            items: journeysData,
+            labelOf: (e) => e.journeyName ?? "",
+            isSelectedOf: (e) => e.selected ?? false,
+            toggleSelected: (e) => e.selected = !(e.selected ?? false),
+          ),
+        );
 
         if (journeys != null) {
           journeyString = "";
@@ -916,6 +973,18 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         ],
       ),
     ];
+  }
+
+  Future<T?> _showFilterBottomSheet<T>(Widget child) {
+    return showModalBottomSheet<T>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => child,
+    );
   }
 
   Widget _buildTextField(String? title, String? content, String icon,

@@ -177,15 +177,20 @@ class CreatePotentialCustomerBloc extends BaseBloc {
     }
   }
 
-  /// Auto-fill allocated person based on Global.userId
+  /// Auto-fill allocated person based on Global.userId.
+  ///
+  /// Caller is expected to show its own loading dialog; this method does
+  /// NOT open one (it passes `showLoading: false` to the underlying API)
+  /// to avoid stacked loading dialogs.
   Future<void> autoFillStaffByUserId(BuildContext context) async {
     if (Global.userId == null || Global.userId!.isEmpty) return;
 
-    var result = await LeadConnection.workListStaff(
+    var result = await LeadConnection.workListStaffPermission(
       context,
       WorkListStaffRequestModel(
         branchId: branchSelected?.branchId?.toString(),
       ),
+      showLoading: false,
     );
 
     if (result != null && result.data != null && result.data!.isNotEmpty) {

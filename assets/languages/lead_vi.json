@@ -1215,5 +1215,6 @@
   "attachmentContent": "Nội dung đính kèm",
   "thisIsAttachmentContent": "Đây là một nội dung đính kèm",
   "uploadFile": "Tải tập tin",
-  "unassign": "Thu hồi"
+  "unassign": "Thu hồi",
+  "noStaffAvailable": "Không có nhân viên thuộc chi nhánh đã chọn"
 }

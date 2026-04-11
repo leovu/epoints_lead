@@ -405,17 +405,18 @@ class _CreatePotentialCustomerBodyState
     FocusScope.of(context).unfocus();
 
     LeadConnection.showLoading(context);
-    var result = await LeadConnection.workListStaff(
+    var result = await LeadConnection.workListStaffPermission(
       context,
       WorkListStaffRequestModel(
         branchId: _bloc.branchSelected?.branchId?.toString(),
       ),
+      showLoading: false,
     );
     Navigator.of(context).pop();
 
     if (result == null || result.data == null || result.data!.isEmpty) {
       LeadConnection.showMyDialog(
-          context, "No staff available for the selected branch",
+          context, AppLocalizations.text(LangKey.noStaffAvailable),
           warning: true);
       return;
     }
@@ -489,7 +490,6 @@ class _CreatePotentialCustomerBodyState
   }
 
   // -- Sub-widgets --
-
   Widget _buildAddPhone() {
     return Column(
       children: [

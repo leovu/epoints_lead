@@ -23,4 +23,5 @@ class API {
   static getListFile() => "/customer-lead/customer-lead/list-file";
   static addFile() => "/customer-lead/customer-lead/add-file";
   static getCustomer() => "/customer/get-customer";
+  static getStaffWithPermission() => "/customer-lead/customer-lead/get-staff-permission";
 }

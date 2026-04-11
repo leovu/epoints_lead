@@ -83,6 +83,7 @@ class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen> wi
           color: Colors.white,
         ),
         backgroundColor: Color(0xFF0067AC),
+        centerTitle: true,
         title: Text(
           AppLocalizations.text(LangKey.select_address)!,
           style: const TextStyle(color: Colors.white, fontSize: 18.0),

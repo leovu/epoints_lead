@@ -166,7 +166,7 @@ class MultipleStaffCustomerCareBloc extends BaseBloc {
       } catch (_) {}
     }
     var response = await LeadConnection.workListStaff(
-        context, WorkListStaffRequestModel(manageProjectId: id));
+        context!, WorkListStaffRequestModel(manageProjectId: id));
     if (response != null) {
       _models = response.data ?? [];
 

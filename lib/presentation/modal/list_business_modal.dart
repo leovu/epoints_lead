@@ -62,6 +62,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
             color: Colors.white,
           ),
           backgroundColor: Color(0xFF0067AC),
+          centerTitle: true,
           title: Text(
             AppLocalizations.text(LangKey.listBusiness)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

@@ -33,6 +33,8 @@ import 'package:lead_plugin_epoint/presentation/modal/create_new_phone_modal.dar
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/group_customer_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
+// Giữ lại để bật lại dropdown pipeline (xem block "chọn pipeline" bên dưới).
+// ignore: unused_import
 import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
 import 'package:lead_plugin_epoint/model/request/customer_request_model.dart';
@@ -40,10 +42,10 @@ import 'package:lead_plugin_epoint/presentation/modal/presenter_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/customer_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/edit_potential_customer/build_more_address_edit_potential.dart';
-import 'package:lead_plugin_epoint/presentation/modules_lead/pick_one_staff_screen/ui/pick_one_staff_screen.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
 
 import 'package:lead_plugin_epoint/utils/ultility.dart';
+import 'package:lead_plugin_epoint/widget/custom_bottom_sheet.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:lead_plugin_epoint/widget/custom_scaffold.dart';
@@ -166,7 +168,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       // LeadConnection.showLoading(context);
 
       if (widget.detailPotential != null) {
-        print('_____________ ${widget.detailPotential?.branchCode}__${widget.detailPotential?.toJson()}');
+        print(
+            '_____________ ${widget.detailPotential?.branchCode}__${widget.detailPotential?.toJson()}');
         _bloc.detail = widget.detailPotential;
         detailNew = widget.detailPotential;
         bool business = false;
@@ -249,8 +252,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         DetailPotentialModelResponse? dataDetail =
             await LeadConnection.getdetailPotential(
                 context, widget.customer_lead_code);
-        // getdetailPotential tự showLoading nhưng không tự pop → đóng tại đây
-        if (context.mounted) Navigator.of(context).pop();
+        // getdetailPotential tự showLoading và tự pop — KHÔNG pop thêm ở đây
+        // (pop thêm sẽ pop luôn edit screen).
 
         if (dataDetail != null) {
           if (dataDetail.errorCode == 0) {
@@ -275,7 +278,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             }
 
             detailPotential = AddLeadModelRequest(
-              // createAllocationDate: DateTime.now().,
+                // createAllocationDate: DateTime.now().,
                 avatar: "",
                 customerType: dataDetail.data!.customerType ?? "",
                 customerSource: dataDetail.data!.customerSource ?? "" as int?,
@@ -354,10 +357,12 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       final customerOptionFuture = LeadConnection.getCustomerOption(context);
       final provinceFuture = LeadConnection.getProvince(context);
       final pipelineFuture = LeadConnection.getPipeline(context);
-      final staffFuture = LeadConnection.workListStaff(
-          context, WorkListStaffRequestModel(manageProjectId: null));
+      final staffFuture = LeadConnection.workListStaffPermission(
+          context, WorkListStaffRequestModel(manageProjectId: null),
+          showLoading: false);
       final businessAreasFuture = LeadConnection.getListBusinessAreas(context);
-      final positionFuture = LeadConnection.getPosition(context);
+      final positionFuture =
+          LeadConnection.getPosition(context, showLoading: false);
       final tagFuture = LeadConnection.getTag(context);
       final journeyFuture = LeadConnection.getJourney(context,
           GetJourneyModelRequest(pipelineCode: [detailPotential.pipelineCode]));
@@ -383,9 +388,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       // 1. Chi nhánh — map branch_code từ data truyền vào với list branch từ API
       try {
         final targetBranchCode = detailNew?.branchCode;
-        print('____EDIT: target branchCode = $targetBranchCode');
-        print(
-            '____EDIT: listBranch codes = ${_bloc.listBranch.map((e) => e.branchCode).toList()}');
         if (targetBranchCode != null && targetBranchCode.isNotEmpty) {
           // Reset selected flag trước khi map
           for (var b in _bloc.listBranch) {
@@ -396,9 +398,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           if (result != null) {
             result.selected = true;
             _bloc.branchSelected = result;
-            print('____EDIT: matched branch = ${result.branchName}');
-          } else {
-            print('____EDIT: no branch matched for code $targetBranchCode');
           }
         }
       } catch (e) {
@@ -804,82 +803,80 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               : Container(),
 
           checkVisibilityKey(VisibilityWidgetName.LE000003)
-              ?
-          _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
-              Assets.iconCall, true, false, true,
-              fillText: _phoneNumberText,
-              focusNode: _phoneNumberFocusNode,
-              inputType: TextInputType.phone)
-          : Container(),
+              ? _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber),
+                  "", Assets.iconCall, true, false, true,
+                  fillText: _phoneNumberText,
+                  focusNode: _phoneNumberFocusNode,
+                  inputType: TextInputType.phone)
+              : Container(),
 
           checkVisibilityKey(VisibilityWidgetName.LE000003)
-              ?
-          _buildAddPhone()
-          : Container(),
+              ? _buildAddPhone()
+              : Container(),
 
           // email
           checkVisibilityKey(VisibilityWidgetName.LE000003)
-              ?
-          _buildTextField(AppLocalizations.text(LangKey.email), "",
-              Assets.iconEmail, false, false, true,
-              fillText: _emailText, focusNode: _emailFocusNode)
-          : Container(),
-          // chọn pipeline
+              ? _buildTextField(AppLocalizations.text(LangKey.email), "",
+                  Assets.iconEmail, false, false, true,
+                  fillText: _emailText, focusNode: _emailFocusNode)
+              : Container(),
+          // chọn pipeline — TẠM DISABLE: chỉ hiển thị dữ liệu, không cho đổi.
+          // Để mở lại: đổi `false` dưới thành `true` (dropdown) và bỏ comment `ontap` bên dưới.
           _buildTextField(
               AppLocalizations.text(LangKey.choosePipeline),
               pipelineSelected.pipelineName ?? "",
               Assets.iconChance,
               true,
-              true,
-              false, ontap: () async {
-            FocusScope.of(context).unfocus();
-            PipelineData? pipeline = await showModalBottomSheet(
-                context: context,
-                useRootNavigator: true,
-                isScrollControlled: true,
-                backgroundColor: Colors.transparent,
-                builder: (context) {
-                  return GestureDetector(
-                    child: PipelineModal(
-                      pipeLineData: pipeLineData,
-                    ),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    behavior: HitTestBehavior.opaque,
-                  );
-                });
-            if (pipeline != null) {
-              if (pipelineSelected.pipelineName != pipeline.pipelineName) {
-                journeySelected = null;
-              }
-
-              pipelineSelected = pipeline;
-              detailPotential.pipelineCode = pipelineSelected.pipelineCode;
-              detailPotential.journeyCode = "";
-              LeadConnection.showLoading(context);
-              var journeys = await LeadConnection.getJourney(
-                  context,
-                  GetJourneyModelRequest(
-                      pipelineCode: [pipelineSelected.pipelineCode]));
-              Navigator.of(context).pop();
-              if (journeys != null) {
-                journeysData = journeys.data;
-              }
-              setState(() {});
-            }
-          }),
+              false, // dropdown off → ẩn mũi tên
+              false
+              // , ontap: () async {
+              //   FocusScope.of(context).unfocus();
+              //   PipelineData? pipeline = await showModalBottomSheet(
+              //       context: context,
+              //       useRootNavigator: true,
+              //       isScrollControlled: true,
+              //       backgroundColor: Colors.transparent,
+              //       builder: (context) {
+              //         return GestureDetector(
+              //           child: PipelineModal(
+              //             pipeLineData: pipeLineData,
+              //           ),
+              //           onTap: () {
+              //             Navigator.of(context).pop();
+              //           },
+              //           behavior: HitTestBehavior.opaque,
+              //         );
+              //       });
+              //   if (pipeline != null) {
+              //     if (pipelineSelected.pipelineName != pipeline.pipelineName) {
+              //       journeySelected = null;
+              //     }
+              //
+              //     pipelineSelected = pipeline;
+              //     detailPotential.pipelineCode = pipelineSelected.pipelineCode;
+              //     detailPotential.journeyCode = "";
+              //     LeadConnection.showLoading(context);
+              //     var journeys = await LeadConnection.getJourney(
+              //         context,
+              //         GetJourneyModelRequest(
+              //             pipelineCode: [pipelineSelected.pipelineCode]));
+              //     Navigator.of(context).pop();
+              //     if (journeys != null) {
+              //       journeysData = journeys.data;
+              //     }
+              //     setState(() {});
+              //   }
+              // }
+              ),
 
           // chọn hành trình
           _buildTextField(
-              AppLocalizations.text(LangKey.chooseJourney) ?? "Chọn hành trình",
+              AppLocalizations.text(LangKey.chooseJourney)!,
               journeySelected?.journeyName ?? "",
               Assets.iconItinerary,
               true,
               true,
               false, ontap: () async {
-            print("Chọn hành trình");
-
             FocusScope.of(context).unfocus();
             JourneyData? journey = await CustomNavigator.showCustomBottomDialog(
               context,
@@ -893,6 +890,16 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             }
           }),
 
+          // Chọn chi nhánh
+          _buildTextField(
+              AppLocalizations.text(LangKey.chooseBranch),
+              _bloc.branchSelected?.branchName ?? "",
+              Assets.iconName,
+              true,
+              true,
+              false,
+              ontap: _onTapBranch),
+
           // Chọn người được phân bổ
           _buildTextField(
               AppLocalizations.text(LangKey.chooseAllottedPerson),
@@ -902,45 +909,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               Assets.iconName,
               false,
               true,
-              false, ontap: () async {
-            FocusScope.of(context).unfocus();
-
-            List<WorkListStaffModel>? _model =
-                await Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => PickOneStaffScreen(
-                          models: _modelStaffSelected,
-                        )));
-
-            if (_model != null && _model.length > 0) {
-              _modelStaffSelected = _model;
-              detailPotential.saleId = _modelStaffSelected[0].staffId;
-              detailPotential.position = _modelStaffSelected[0].departmentName;
-              setState(() {});
-            }
-          }),
-
-          // Chọn chi nhánh
-          _buildTextField(
-              AppLocalizations.text(LangKey.chooseBranch),
-              _bloc.branchSelected?.branchName ?? "",
-              Assets.iconName,
-              true,
-              true,
-              false, ontap: () async {
-            FocusScope.of(context).unfocus();
-            _bloc.getBranch(context).then((val) async {
-              if (val != null) {
-                BranchData? data = await CustomNavigator.showCustomBottomDialog(
-                  context,
-                  BranchModal(datas: _bloc.listBranch),
-                );
-                if (data != null) {
-                  _bloc.branchSelected = data;
-                  setState(() {});
-                }
-              }
-            });
-          }),
+              false,
+              ontap: _onTapAllocatedPerson),
 
           _buildAddress(),
 
@@ -1052,6 +1022,118 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         ],
       ),
     ];
+  }
+
+  Future<void> _onTapBranch() async {
+    FocusScope.of(context).unfocus();
+    var val = await _bloc.getBranch(context);
+    if (val != null) {
+      BranchData? data;
+      if (_bloc.listBranch.length > 10) {
+        // Use searchable bottom sheet for large list
+        data = await showModalBottomSheet<BranchData>(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          isDismissible: true,
+          enableDrag: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => SearchableBranchBottomSheet(
+            title: AppLocalizations.text(LangKey.chooseBranch),
+            branches: _bloc.listBranch,
+          ),
+        );
+      } else {
+        data = await showModalBottomSheet<BranchData>(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          isDismissible: true,
+          enableDrag: true,
+          backgroundColor: Colors.transparent,
+          builder: (context) => BranchModal(datas: _bloc.listBranch),
+        );
+      }
+      if (data != null) {
+        _bloc.branchSelected = data;
+        // Reset allocated person and reload staff list filtered by new branch
+        _bloc.staffSelected = null;
+        _modelStaffSelected = [];
+        _modelStaff = [];
+        detailPotential.saleId = 0;
+
+        LeadConnection.showLoading(context);
+        var staffResult = await LeadConnection.workListStaffPermission(
+          context,
+          WorkListStaffRequestModel(
+            branchId: _bloc.branchSelected?.branchId?.toString(),
+          ),
+          showLoading: false,
+        );
+        _modelStaff = staffResult?.data ?? [];
+
+        // Auto-fill by Global.userId if matching staff exists
+        if (Global.userId != null && Global.userId!.isNotEmpty) {
+          var matched = _modelStaff.firstWhereOrNull(
+              (staff) => staff.staffId.toString() == Global.userId);
+          if (matched != null) {
+            _bloc.staffSelected = matched;
+            _modelStaffSelected = [matched];
+            detailPotential.saleId = matched.staffId ?? 0;
+            detailPotential.position = matched.departmentName;
+          }
+        }
+        Navigator.of(context).pop();
+        setState(() {});
+      }
+    }
+  }
+
+  Future<void> _onTapAllocatedPerson() async {
+    FocusScope.of(context).unfocus();
+
+    LeadConnection.showLoading(context);
+    var result = await LeadConnection.workListStaffPermission(
+      context,
+      WorkListStaffRequestModel(
+        branchId: _bloc.branchSelected?.branchId?.toString(),
+      ),
+      showLoading: false,
+    );
+    Navigator.of(context).pop();
+
+    if (result == null || result.data == null || result.data!.isEmpty) {
+      LeadConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.noStaffAvailable),
+          warning: true);
+      return;
+    }
+
+    _modelStaff = result.data!;
+
+    WorkListStaffModel? selected =
+        await showModalBottomSheet<WorkListStaffModel>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return SearchableStaffBottomSheet(
+          title: AppLocalizations.text(LangKey.chooseAllottedPerson),
+          staffs: result.data!,
+        );
+      },
+    );
+
+    if (selected != null) {
+      _bloc.staffSelected = selected;
+      _modelStaffSelected = [selected];
+      detailPotential.saleId = selected.staffId ?? 0;
+      detailPotential.position = selected.departmentName;
+      setState(() {});
+    }
   }
 
   Future<void> _onTapPresenter() async {

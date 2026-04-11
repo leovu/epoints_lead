@@ -59,6 +59,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
             color: Colors.white,
           ),
           backgroundColor: Color(0xFF0067AC),
+          centerTitle: true,
           title: Text(
             AppLocalizations.text(LangKey.staff)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

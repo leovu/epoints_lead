@@ -112,6 +112,7 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
           color: Colors.white,
         ),
         backgroundColor: Color(0xFF0067AC),
+        centerTitle: true,
         title: Text(
           AppLocalizations.text(LangKey.enter_address)!,
           style: const TextStyle(color: Colors.white, fontSize: 18.0),

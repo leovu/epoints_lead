@@ -378,6 +378,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           // actionsIconTheme: Navigator.of(context).pop(true),
           backgroundColor: AppColors.primaryColor,
+          centerTitle: true,
           title: Text(
             AppLocalizations.text(LangKey.discuss)!,
             style: TextStyle(color: Colors.white, fontSize: 18.0),

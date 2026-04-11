@@ -127,6 +127,7 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
             color: Colors.white,
           ),
           backgroundColor: Color(0xFF0067AC),
+          centerTitle: true,
           title: Text(
             AppLocalizations.text(LangKey.businessFocalPoint)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

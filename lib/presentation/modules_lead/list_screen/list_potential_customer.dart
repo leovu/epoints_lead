@@ -16,6 +16,7 @@ import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
+import 'package:lead_plugin_epoint/widget/custom_dialog.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 import 'package:lead_plugin_epoint/widget/widget.dart';
@@ -96,6 +97,7 @@ class _LeadScreen extends State<LeadScreen> {
   }
 
   getData(bool loadMore, {int? page}) async {
+    LeadConnection.showLoading(context);
     ListCustomLeadModelReponse? model = await LeadConnection.getList(
         context,
         ListCustomLeadModelRequest(
@@ -112,6 +114,7 @@ class _LeadScreen extends State<LeadScreen> {
             careHistory: filterModel!.careHistory,
             pipelineId: filterModel!.pipelineId,
             journeyId: filterModel!.journeyId));
+     Navigator.of(context).pop();
 
     if (model != null) {
       models = [];
@@ -458,7 +461,7 @@ class _LeadCardHeader extends StatelessWidget {
           ),
           Text(
             hidePhone(item.phone ?? '',
-                checkVisibilityKey(VisibilityWidgetName.LE000002)),
+                checkVisibilityKey(VisibilityWidgetName.CM000004)),
             style: const TextStyle(
               fontSize: 16.0,
               color: Colors.black,

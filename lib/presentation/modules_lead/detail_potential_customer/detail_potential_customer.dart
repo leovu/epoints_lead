@@ -272,7 +272,8 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
             height: AppSizes.minPadding / 2,
           ),
           CustomRowImageContentWidget(
-              icon: Assets.iconCall, title: detail?.phone ?? NULL_VALUE),
+              icon: Assets.iconCall, title: hidePhone(detail?.phone ?? '',
+                checkVisibilityKey(VisibilityWidgetName.CM000004)),),
           SizedBox(
             height: AppSizes.minPadding / 2,
           ),
@@ -1586,8 +1587,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
                       style: AppTextStyles.style14HintNormal,
                     ),
                     Text(
-                      parseAndFormatDate(date,
-                          format: AppFormat.formatDateTime),
+                      toAustraliaTime(date),
                       style: AppTextStyles.style14HintNormal,
                     ),
                   ],

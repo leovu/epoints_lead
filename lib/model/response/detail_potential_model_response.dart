@@ -298,7 +298,7 @@ class DetailPotentialData {
     zaloId = json['zalo_id'];
     facebookId = json['facebook_id'];
     website = json['website'];
-    branchId = json['branch_id'];
+    branchId = json['branch_id'].toString();
   }
 
   Map<String, dynamic> toJson() {

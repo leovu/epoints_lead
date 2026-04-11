@@ -1,4 +1,4 @@
-
+import 'package:flutter/widgets.dart';
 import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 
@@ -9,7 +9,8 @@ class VisibilityWidgetName {
   static const String CM000003 = "CM000003"; //Chỉnh sửa khách hàng
   static const String CM000004 = "CM000004"; //Xem liên hệ khách hàng
   static const String CM000005 = "CM000005"; //Chỉnh sửa liên hệ khách hàng
-  static const String CM000006 = "CM000006"; //Cập nhật người giới thiệu khách hàng
+  static const String CM000006 =
+      "CM000006"; //Cập nhật người giới thiệu khách hàng
   static const String CM000007 = "CM000007"; //Xem thông tin giá trị đơn hàng
   static const String CM000008 = "CM000008"; //Call hot line
   static const String OD000000 = "OD000000"; //Khóa/bật chức năng đơn hàng
@@ -18,7 +19,8 @@ class VisibilityWidgetName {
   static const String OD000004 = "OD000004"; //Thanh toán đơn hàng
   static const String OD000005 = "OD000005"; //Xem danh sách sản phẩm
   static const String OD000007 = "OD000007"; //Xem hình ảnh đơn hàng
-  static const String OD000008 = "OD000008"; //Chỉnh sửa và upload hình ảnh đơn hàng
+  static const String OD000008 =
+      "OD000008"; //Chỉnh sửa và upload hình ảnh đơn hàng
   static const String OD000009 = "OD000009"; //Xem thông tin giá trị đơn hàng
   static const String RP000000 = "RP000000"; //Khóa/bật chức năng báo cáo
   static const String RP000001 = "RP000001"; //Xem doanh thu bán hàng
@@ -55,23 +57,42 @@ class VisibilityWidgetName {
   static const String LE000000 = "LE000000"; //Khách hàng tiềm năng
   static const String LE000001 = "LE000001"; //Thêm khách hàng tiềm năng
   static const String LE000002 = "LE000002"; //Xem liên hệ khách hàng tiềm năng
-  static const String LE000003 = "LE000003"; //Chỉnh sửa liên hệ khách hàng khách hàng tiềm năng
-  static const String LE000004 = "LE000004"; //Cập nhật người giới thiệu khách hàng tiềm năng
+  static const String LE000003 =
+      "LE000003"; //Chỉnh sửa liên hệ khách hàng khách hàng tiềm năng
+  static const String LE000004 =
+      "LE000004"; //Cập nhật người giới thiệu khách hàng tiềm năng
   static const String DE000000 = "DE000000"; //Cơ hội bán hàng
   static const String PR000000 = "PR000000"; //Quản lý dự án
   static const String PR000001 = "PR000001"; //Thêm dự án
-
-
 }
 
-bool checkVisibilityKey(String key) {
+// bool checkVisibilityKey(String key) {
 
-  bool returnCheck = false;
-  final model = Global.permissionModels!.firstWhereOrNull((element) => element['widget_id'] == key);
-  if(model != null){
-    returnCheck = true;
+//   bool returnCheck = false;
+//   final model = Global.permissionModels!.firstWhereOrNull((element) => element['widget_id'] == key);
+//   if(model != null){
+//     returnCheck = true;
+//   }
+//   return returnCheck;
+// }
+bool checkVisibilityKey(String key) {
+  final model = Global.permissionModels!
+      .firstWhereOrNull((e) => e['widget_id'] == key);
+
+  if (model == null) {
+    return false;
   }
-  return returnCheck;
+
+  // Chỉ áp dụng cho các key đặc biệt
+  const specialKeys = {
+    'CM000004',
+  };
+
+  if (specialKeys.contains(key)) {
+    return model['is_hot_function'] == 1;
+  }
+
+  return true;
 }
 
 String hidePhone(String? event, bool show) {
@@ -92,14 +113,14 @@ String hidePhone(String? event, bool show) {
   return event ?? "";
 }
 
-String hideEmail(String? event, bool show){
+String hideEmail(String? event, bool show) {
   if ((event ?? "").isEmpty) {
     return "";
   }
 
-  if(!show){
+  if (!show) {
     List<String> events = event!.split("@");
-    if(events.isEmpty){
+    if (events.isEmpty) {
       return event;
     }
 
@@ -107,17 +128,17 @@ String hideEmail(String? event, bool show){
 
     String email = "";
 
-    if(events.first.length > length){
-      email += "${List.generate(events.first.length - length, (index) => "*").join()}${events.first.substring(events.first.length - length)}";
-    }
-    else{
+    if (events.first.length > length) {
+      email +=
+          "${List.generate(events.first.length - length, (index) => "*").join()}${events.first.substring(events.first.length - length)}";
+    } else {
       email += "*";
     }
 
-    for(var i = 1; i < events.length; i++){
+    for (var i = 1; i < events.length; i++) {
       email += "@${events[i]}";
     }
-  print(event);
+    print(event);
     return email;
   }
 
@@ -126,12 +147,12 @@ String hideEmail(String? event, bool show){
   return event ?? "";
 }
 
-String hideSocial(String? event, bool show){
+String hideSocial(String? event, bool show) {
   if ((event ?? "").isEmpty) {
     return "";
   }
 
-  if(!show){
+  if (!show) {
     return List.generate(5, (index) => "*").join();
   }
 

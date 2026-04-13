@@ -19,7 +19,10 @@ import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart
 import 'package:lead_plugin_epoint/presentation/modal/group_customer_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
+import 'package:lead_plugin_epoint/presentation/modal/position_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
+import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
+import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/build_more_address_create_potential.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
@@ -70,6 +73,16 @@ class _CreatePotentialCustomerBodyState
 
   List<ProvinceData> provinces = <ProvinceData>[];
   AddLeadModelRequest requestModel = AddLeadModelRequest();
+
+  // Contact person controllers (business only)
+  final TextEditingController _contactFullNameText = TextEditingController();
+  final FocusNode _contactFullNameFocusNode = FocusNode();
+  final TextEditingController _contactPhoneText = TextEditingController();
+  final FocusNode _contactPhoneFocusNode = FocusNode();
+  final TextEditingController _contactEmailText = TextEditingController();
+  final FocusNode _contactEmailFocusNode = FocusNode();
+  List<PositionData>? positionData;
+  PositionData? positionSelected;
 
   WorkListStaffModel? get _staffSelected => _bloc.staffSelected;
   set _staffSelected(WorkListStaffModel? val) => _bloc.staffSelected = val;
@@ -287,7 +300,195 @@ class _CreatePotentialCustomerBodyState
           ontap: _onTapTags),
 
       _buildPresenter(),
+
+      // Contact information (business only)
+      if (!selectedPersonal) ..._buildContactInfo(),
     ];
+  }
+
+  List<Widget> _buildContactInfo() {
+    return [
+      const SizedBox(height: 10.0),
+      Text(
+        AppLocalizations.text(LangKey.contactInformation)!,
+        style: TextStyle(
+            fontSize: AppTextSizes.size16,
+            color: const Color(0xFF0067AC),
+            fontWeight: FontWeight.normal),
+      ),
+      const SizedBox(height: 15.0),
+      _buildContactTextField(
+          AppLocalizations.text(LangKey.inputFullname),
+          "",
+          Assets.iconPerson,
+          true,
+          false,
+          true,
+          fillText: _contactFullNameText,
+          focusNode: _contactFullNameFocusNode,
+          onChanged: (value) {
+            widget.detailPotential.contactFullName = value;
+          }),
+      _buildContactTextField(
+          AppLocalizations.text(LangKey.inputPhonenumber),
+          "",
+          Assets.iconCall,
+          true,
+          false,
+          true,
+          fillText: _contactPhoneText,
+          focusNode: _contactPhoneFocusNode,
+          inputType: const TextInputType.numberWithOptions(
+              signed: false, decimal: false),
+          onChanged: (value) {
+            widget.detailPotential.contactPhone = value;
+          }),
+      _buildContactTextField(
+          AppLocalizations.text(LangKey.email),
+          "",
+          Assets.iconEmail,
+          false,
+          false,
+          true,
+          fillText: _contactEmailText,
+          focusNode: _contactEmailFocusNode,
+          onChanged: (value) {
+            widget.detailPotential.contactEmail = value;
+          }),
+      _buildTextField(
+          AppLocalizations.text(LangKey.choose_position),
+          positionSelected?.staffTitleName ?? "",
+          Assets.iconPosition,
+          false,
+          true,
+          false,
+          ontap: _onTapPosition),
+    ];
+  }
+
+  void _onTapPosition() async {
+    FocusScope.of(context).unfocus();
+    if (positionData == null || positionData!.isEmpty) {
+      LeadConnection.showLoading(context);
+      var positions = await LeadConnection.getPosition(context);
+      Navigator.of(context).pop();
+      if (positions != null) {
+        positionData = positions.data;
+        _loadPositionModal();
+      }
+    } else {
+      _loadPositionModal();
+    }
+  }
+
+  void _loadPositionModal() async {
+    PositionData? position = await CustomNavigator.showCustomBottomDialog(
+      context,
+      PositionModal(positionData: positionData),
+    );
+    if (position != null) {
+      positionSelected = position;
+      widget.detailPotential.position = positionSelected!.staffTitleName;
+      setState(() {});
+    }
+  }
+
+  Widget _buildContactTextField(
+    String? title,
+    String? content,
+    String icon,
+    bool mandatory,
+    bool dropdown,
+    bool textfield, {
+    GestureTapCallback? ontap,
+    TextEditingController? fillText,
+    FocusNode? focusNode,
+    TextInputType? inputType,
+    ValueChanged<String>? onChanged,
+  }) {
+    final commonBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10.0),
+      borderSide: const BorderSide(
+        width: 1,
+        color: Color(0xFFB8BFC9),
+      ),
+    );
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 15),
+      child: InkWell(
+        onTap: ontap,
+        child: TextField(
+          enabled: textfield,
+          readOnly: !textfield,
+          controller: fillText,
+          focusNode: focusNode,
+          keyboardType: inputType ?? TextInputType.text,
+          cursorColor: Colors.black,
+          decoration: InputDecoration(
+            isCollapsed: true,
+            isDense: true,
+            contentPadding: const EdgeInsets.all(12.0),
+            border: commonBorder,
+            enabledBorder: commonBorder,
+            focusedBorder: commonBorder,
+            disabledBorder: commonBorder,
+            label: (content == null || content.isEmpty)
+                ? RichText(
+                    text: TextSpan(
+                      text: title,
+                      style: TextStyle(
+                        fontSize: AppTextSizes.size15,
+                        color: const Color(0xFF858080),
+                        fontWeight: FontWeight.normal,
+                      ),
+                      children: [
+                        if (mandatory)
+                          const TextSpan(
+                            text: "*",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                      ],
+                    ),
+                  )
+                : Text(
+                    content,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.normal,
+                    ),
+                  ),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Image.asset(
+                icon,
+                color: AppColors.primaryColor,
+              ),
+            ),
+            prefixIconConstraints: const BoxConstraints(
+              maxHeight: 32.0,
+              maxWidth: 32.0,
+            ),
+            suffixIcon: dropdown
+                ? Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(
+                      Assets.iconDropDown,
+                    ),
+                  )
+                : null,
+            suffixIconConstraints: const BoxConstraints(
+              maxHeight: 32.0,
+              maxWidth: 32.0,
+            ),
+          ),
+          onChanged: onChanged,
+        ),
+      ),
+    );
   }
 
   // -- Tap Handlers --

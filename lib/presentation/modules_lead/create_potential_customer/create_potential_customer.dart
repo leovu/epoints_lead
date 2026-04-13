@@ -222,6 +222,18 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 warning: true);
             return;
           }
+          // Validate contact fullname & phone for business
+          if (customerTypeSelected.customerTypeID != 1) {
+            if (detailPotential.contactFullName == null ||
+                detailPotential.contactFullName!.isEmpty ||
+                detailPotential.contactPhone == null ||
+                detailPotential.contactPhone!.isEmpty) {
+              LeadConnection.showMyDialog(context,
+                  AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
+                  warning: true);
+              return;
+            }
+          }
           if (_bloc.images.length > 0) {
             await _bloc.uploadFileAWS(_bloc.images[0]).then((value) {
               if (value != "") {

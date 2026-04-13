@@ -6,7 +6,6 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
-import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/gender_model.dart';
 import 'package:lead_plugin_epoint/model/request/add_lead_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
@@ -18,12 +17,10 @@ import 'package:lead_plugin_epoint/model/response/list_customer_lead_model_respo
 import 'package:lead_plugin_epoint/model/response/position_response_model.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/modal/business_areas_modal.dart';
-import 'package:lead_plugin_epoint/presentation/modal/position_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_date_picker.dart';
 import 'package:lead_plugin_epoint/widget/custom_menu_bottom_sheet.dart';
-import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:lead_plugin_epoint/widget/widget.dart';
 
 class BuildMoreAddressCreatPotential extends StatefulWidget {
@@ -53,7 +50,6 @@ class _BuildMoreAddressCreatPotentialState
   TextEditingController _addressContactText = TextEditingController();
 
   TextEditingController _emailContactPersonText = TextEditingController();
-  FocusNode _emailContactPersonFocusNode = FocusNode();
 
   TextEditingController _numberOfEmployeesText = TextEditingController();
   FocusNode _numberOfEmployeesFocusNode = FocusNode();
@@ -67,10 +63,7 @@ class _BuildMoreAddressCreatPotentialState
   TextEditingController _establishDateText = TextEditingController();
 
   TextEditingController _fullNameText = TextEditingController();
-  FocusNode _fullnameFocusNode = FocusNode();
-
   TextEditingController _phoneNumberText = TextEditingController();
-  FocusNode _phoneNumberFocusNode = FocusNode();
 
   ProvinceData provinceSeleted = ProvinceData();
   AllocatorData allocatorSelected = AllocatorData();
@@ -154,6 +147,15 @@ class _BuildMoreAddressCreatPotentialState
           Container(
             height: 16.0,
           ),
+
+          // Người đại diện (business only) - đặt lên đầu
+          !widget.selectedPersonal!
+              ? _buildTextField(AppLocalizations.text(LangKey.representative),
+                  "", Assets.iconRepresentative, false, false, true,
+                  fillText: widget.bloc.representativeController,
+                  focusNode: widget.bloc.representativeFocusNode)
+              : Container(),
+
           widget.selectedPersonal!
               ? sexInfo(genderSelected.genderID ?? 0)
               : _buildTextField(
@@ -218,14 +220,6 @@ class _BuildMoreAddressCreatPotentialState
                   focusNode: _numberOfEmployeesFocusNode,
                   inputType: TextInputType.numberWithOptions(
                       signed: false, decimal: false))
-              : Container(),
-
-          // người đại diện
-          !widget.selectedPersonal!
-              ? _buildTextField(AppLocalizations.text(LangKey.representative),
-                  "", Assets.iconRepresentative, false, false, true,
-                  fillText: widget.bloc.representativeController,
-                  focusNode: widget.bloc.representativeFocusNode)
               : Container(),
 
           (showMoreAll == false)
@@ -361,75 +355,6 @@ class _BuildMoreAddressCreatPotentialState
             Assets.iconFanpage, false, false, true,
             fillText: _fanpageFBText, focusNode: _fanpageFBFocusNode),
 
-        !widget.selectedPersonal!
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: 10.0),
-                  Text(
-                    AppLocalizations.text(LangKey.contactInformation)!,
-                    style: TextStyle(
-                        fontSize: AppTextSizes.size16,
-                        color: const Color(0xFF0067AC),
-                        fontWeight: FontWeight.normal),
-                  ),
-
-                  SizedBox(height: 15.0),
-
-                  // nhap ho va ten
-                  _buildTextField(AppLocalizations.text(LangKey.inputFullname),
-                      "", Assets.iconPerson, false, false, true,
-                      fillText: _fullNameText, focusNode: _fullnameFocusNode),
-                  // so dien thoai
-                  _buildTextField(
-                      AppLocalizations.text(LangKey.inputPhonenumber),
-                      "",
-                      Assets.iconCall,
-                      false,
-                      false,
-                      true,
-                      fillText: _phoneNumberText,
-                      focusNode: _phoneNumberFocusNode,
-                      inputType: TextInputType.numberWithOptions(
-                          signed: false, decimal: false)),
-
-                  // email
-                  _buildTextField(AppLocalizations.text(LangKey.email), "",
-                      Assets.iconEmail, false, false, true,
-                      fillText: _emailContactPersonText,
-                      focusNode: _emailContactPersonFocusNode),
-
-                  _buildTextField(
-                      AppLocalizations.text(LangKey.choose_position),
-                      positionSelected?.staffTitleName ?? "",
-                      Assets.iconPosition,
-                      false,
-                      true,
-                      false, ontap: () async {
-                    FocusScope.of(context).unfocus();
-
-                    if (positionData == null || positionData!.length == 0) {
-                      LeadConnection.showLoading(context);
-                      var positions = await LeadConnection.getPosition(context);
-                      Navigator.of(context).pop();
-                      if (positions != null) {
-                        positionData = positions.data;
-
-                        _loadPositionModal();
-                      }
-                    } else {
-                      _loadPositionModal();
-                    }
-                  }),
-
-                  // _buildTextField(AppLocalizations.text(LangKey.inputAddress),
-                  //     "", Assets.iconAddress, false, false, true,
-                  //     fillText: _addressContactText,
-                  //     focusNode: _addressContactFocusNode),
-                ],
-              )
-            : Container(),
-
         Text(
           AppLocalizations.text(LangKey.note)!,
           style: TextStyle(
@@ -468,18 +393,6 @@ class _BuildMoreAddressCreatPotentialState
 
       ],
     );
-  }
-
-  void _loadPositionModal() async {
-    PositionData? position = await CustomNavigator.showCustomBottomDialog(
-      context,
-      PositionModal(positionData: positionData),
-    );
-    if (position != null) {
-      positionSelected = position;
-      widget.detailPotential!.position = positionSelected!.staffTitleName;
-      setState(() {});
-    }
   }
 
    Widget _buildImage() {

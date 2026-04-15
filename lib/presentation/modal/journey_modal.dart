@@ -24,7 +24,7 @@ class _JourneyModalState extends State<JourneyModal> {
   @override
   Widget build(BuildContext context) {
     return CustomMenuBottomSheet(
-      title: AppLocalizations.text(LangKey.chooseStatus),
+      title:  AppLocalizations.text(LangKey.chooseJourney)!,
       widget: (widget.journeys!.length > 0) ? CustomListView(
                     shrinkWrap: true,
                     padding: EdgeInsets.all(0.0),

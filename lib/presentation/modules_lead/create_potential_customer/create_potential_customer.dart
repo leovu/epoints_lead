@@ -200,18 +200,18 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               return;
             }
           }
-          if (detailPotential.contactPhone!.isNotEmpty &&
-              customerTypeSelected.customerTypeID != 1) {
-            if ((!Validators()
-                    .isValidPhone(detailPotential.contactPhone!.trim())) &&
-                (!Validators()
-                    .isNumber(detailPotential.contactPhone!.trim()))) {
-              LeadConnection.showMyDialog(
-                  context, AppLocalizations.text(LangKey.contactPhoneInvalid),
-                  warning: true);
-              return;
-            }
-          }
+          // if (detailPotential.contactPhone!.isNotEmpty &&
+          //     customerTypeSelected.customerTypeID != 1) {
+          //   if ((!Validators()
+          //           .isValidPhone(detailPotential.contactPhone!.trim())) &&
+          //       (!Validators()
+          //           .isNumber(detailPotential.contactPhone!.trim()))) {
+          //     LeadConnection.showMyDialog(
+          //         context, AppLocalizations.text(LangKey.contactPhoneInvalid),
+          //         warning: true);
+          //     return;
+          //   }
+          // }
           if (_fullNameText.text == "" ||
               detailPotential.pipelineCode == "" ||
               detailPotential.journeyCode == "" ||
@@ -225,9 +225,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           // Validate contact fullname & phone for business
           if (customerTypeSelected.customerTypeID != 1) {
             if (detailPotential.contactFullName == null ||
-                detailPotential.contactFullName!.isEmpty ||
-                detailPotential.contactPhone == null ||
-                detailPotential.contactPhone!.isEmpty) {
+                detailPotential.contactFullName!.isEmpty) {
               LeadConnection.showMyDialog(context,
                   AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
                   warning: true);

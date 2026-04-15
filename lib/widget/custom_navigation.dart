@@ -6,7 +6,7 @@ import 'package:lead_plugin_epoint/widget/progress_dialog.dart';
 
 class CustomNavigator {
    static showCustomBottomDialog(BuildContext context, Widget screen,
-      {bool root = true, isScrollControlled = true, GestureTapCallback? func, allowBack= false, disMissAble = true}) {
+      {bool root = true, isScrollControlled = true, GestureTapCallback? func, allowBack= true, disMissAble = true}) {
 
     return showModalBottomSheet(
         context: context,
@@ -22,7 +22,7 @@ class CustomNavigator {
                 Navigator.pop(context);
               }
             },
-            behavior: HitTestBehavior.opaque,
+            behavior: HitTestBehavior.deferToChild,
           );
         });
   }

@@ -33,8 +33,6 @@ import 'package:lead_plugin_epoint/presentation/modal/create_new_phone_modal.dar
 import 'package:lead_plugin_epoint/presentation/modal/customer_source_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/group_customer_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/journey_modal.dart';
-// Giữ lại để bật lại dropdown pipeline (xem block "chọn pipeline" bên dưới).
-// ignore: unused_import
 import 'package:lead_plugin_epoint/presentation/modal/pipeline_modal.dart';
 import 'package:lead_plugin_epoint/presentation/modal/tag_modal.dart';
 import 'package:lead_plugin_epoint/model/request/customer_request_model.dart';
@@ -804,7 +802,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
 
           checkVisibilityKey(VisibilityWidgetName.LE000003)
               ? _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber),
-                  "", Assets.iconCall, true, false, true,
+                  "", Assets.iconCall, false, false, true,
                   fillText: _phoneNumberText,
                   focusNode: _phoneNumberFocusNode,
                   inputType: TextInputType.phone)
@@ -820,54 +818,14 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   Assets.iconEmail, false, false, true,
                   fillText: _emailText, focusNode: _emailFocusNode)
               : Container(),
-          // chọn pipeline — TẠM DISABLE: chỉ hiển thị dữ liệu, không cho đổi.
-          // Để mở lại: đổi `false` dưới thành `true` (dropdown) và bỏ comment `ontap` bên dưới.
+          // chọn pipeline
           _buildTextField(
               AppLocalizations.text(LangKey.choosePipeline),
               pipelineSelected.pipelineName ?? "",
               Assets.iconChance,
               true,
-              false, // dropdown off → ẩn mũi tên
-              false
-              // , ontap: () async {
-              //   FocusScope.of(context).unfocus();
-              //   PipelineData? pipeline = await showModalBottomSheet(
-              //       context: context,
-              //       useRootNavigator: true,
-              //       isScrollControlled: true,
-              //       backgroundColor: Colors.transparent,
-              //       builder: (context) {
-              //         return GestureDetector(
-              //           child: PipelineModal(
-              //             pipeLineData: pipeLineData,
-              //           ),
-              //           onTap: () {
-              //             Navigator.of(context).pop();
-              //           },
-              //           behavior: HitTestBehavior.opaque,
-              //         );
-              //       });
-              //   if (pipeline != null) {
-              //     if (pipelineSelected.pipelineName != pipeline.pipelineName) {
-              //       journeySelected = null;
-              //     }
-              //
-              //     pipelineSelected = pipeline;
-              //     detailPotential.pipelineCode = pipelineSelected.pipelineCode;
-              //     detailPotential.journeyCode = "";
-              //     LeadConnection.showLoading(context);
-              //     var journeys = await LeadConnection.getJourney(
-              //         context,
-              //         GetJourneyModelRequest(
-              //             pipelineCode: [pipelineSelected.pipelineCode]));
-              //     Navigator.of(context).pop();
-              //     if (journeys != null) {
-              //       journeysData = journeys.data;
-              //     }
-              //     setState(() {});
-              //   }
-              // }
-              ),
+              true,
+              false, ontap: _onTapPipeline),
 
           // chọn hành trình
           _buildTextField(
@@ -876,19 +834,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               Assets.iconItinerary,
               true,
               true,
-              false, ontap: () async {
-            FocusScope.of(context).unfocus();
-            JourneyData? journey = await CustomNavigator.showCustomBottomDialog(
-              context,
-              JourneyModal(journeys: journeysData),
-            );
-
-            if (journey != null) {
-              journeySelected = journey;
-              detailPotential.journeyCode = journeySelected!.journeyCode;
-              setState(() {});
-            }
-          }),
+              false, ontap: _openJourneyBottomSheet),
 
           // Chọn chi nhánh
           _buildTextField(
@@ -1022,6 +968,62 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         ],
       ),
     ];
+  }
+
+  Future<void> _onTapPipeline() async {
+    FocusScope.of(context).unfocus();
+    PipelineData? pipeline = await showModalBottomSheet<PipelineData>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => PipelineModal(pipeLineData: pipeLineData),
+    );
+    if (pipeline == null) return;
+
+    final changed = pipelineSelected.pipelineCode != pipeline.pipelineCode;
+    pipelineSelected = pipeline;
+    detailPotential.pipelineCode = pipeline.pipelineCode;
+
+    if (changed) {
+      journeySelected = null;
+      journeysData = <JourneyData>[];
+      detailPotential.journeyCode = "";
+
+      LeadConnection.showLoading(context);
+      var journeys = await LeadConnection.getJourney(
+          context,
+          GetJourneyModelRequest(
+              pipelineCode: [pipelineSelected.pipelineCode]));
+      Navigator.of(context).pop();
+      if (journeys != null) {
+        journeysData = journeys.data ?? <JourneyData>[];
+      }
+    }
+    setState(() {});
+
+    // Auto mở bottomsheet chọn journey sau khi chọn pipeline
+    await _openJourneyBottomSheet();
+  }
+
+  Future<void> _openJourneyBottomSheet() async {
+    FocusScope.of(context).unfocus();
+    JourneyData? journey = await showModalBottomSheet<JourneyData>(
+      context: context,
+      useRootNavigator: true,
+      isScrollControlled: true,
+      isDismissible: true,
+      enableDrag: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => JourneyModal(journeys: journeysData),
+    );
+    if (journey != null) {
+      journeySelected = journey;
+      detailPotential.journeyCode = journey.journeyCode;
+      setState(() {});
+    }
   }
 
   Future<void> _onTapBranch() async {
@@ -1212,17 +1214,18 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             }
           }
 
-          if (detailPotential.contactPhone!.isNotEmpty) {
-            if ((!Validators()
-                    .isValidPhone(detailPotential.contactPhone!.trim())) &&
-                (!Validators()
-                    .isNumber(detailPotential.contactPhone!.trim()))) {
-              LeadConnection.showMyDialog(
-                  context, AppLocalizations.text(LangKey.contactPhoneInvalid),
-                  warning: true);
-              return;
-            }
-          }
+          // if (detailPotential.contactPhone!.isNotEmpty) {
+          //   if (
+          //     (!Validators()
+          //           .isValidPhone(detailPotential.contactPhone!.trim())) &&
+          //       (!Validators()
+          //           .isNumber(detailPotential.contactPhone!.trim()))) {
+          //     LeadConnection.showMyDialog(
+          //         context, AppLocalizations.text(LangKey.contactPhoneInvalid),
+          //         warning: true);
+          //     return;
+          //   }
+          // }
 
           if (_fullNameText.text == "" ||
               detailPotential.pipelineCode == "" ||

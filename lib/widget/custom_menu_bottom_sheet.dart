@@ -31,8 +31,13 @@ class CustomMenuBottomSheet extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          Container(
-            height: MediaQuery.of(context).size.height * 0.1,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.1,
+              color: Colors.transparent,
+            ),
           ),
           Flexible(
               fit: FlexFit.loose,

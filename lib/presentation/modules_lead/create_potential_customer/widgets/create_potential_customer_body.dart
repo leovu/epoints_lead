@@ -209,7 +209,7 @@ class _CreatePotentialCustomerBodyState
 
       // Phone number
       _buildTextField(AppLocalizations.text(LangKey.inputPhonenumber), "",
-          Assets.iconCall, true, false, true,
+          Assets.iconCall, false, false, true,
           fillText: widget.phoneNumberText,
           focusNode: widget.phoneNumberFocusNode,
           inputType: const TextInputType.numberWithOptions(

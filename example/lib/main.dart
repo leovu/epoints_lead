@@ -36,7 +36,7 @@ class _MyAppState extends State<MyApp> {
               var result = await LeadPluginEpoint.open(
                 context,
                 const Locale('en', 'EN'),
-                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5kZXYubWF0dGhld3NsaXF1b3IuY29tLmF1Ly91c2VyL2xvZ2luIiwiaWF0IjoxNzc2MDUwNDYwLCJleHAiOjE3NzYwNzIwNjAsIm5iZiI6MTc3NjA1MDQ2MCwianRpIjoidFc4d3g3RnVqRmtQNUtCMiIsInN1YiI6MjA3LCJwcnYiOiJhMGYzZTc0YmVkZjUxMmM0Nzc4Mjk3ZGU1ZjkyMDg2ZGFkMzljYTlmIiwic2lkIjoiYWRtaW5AbWF0dGhld3NsaXF1b3IuY29tIiwicGhvbmUiOiJhZG1pbkBtYXR0aGV3c2xpcXVvci5jb20iLCJicmFuZF9jb2RlIjpudWxsLCJpbWVpIjoiMTIzIn0.pP_uNbnRKAtS2TGwVOdM6wyPmJXt5jiqfNzO8i5cVzk',
+                'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS5kZXYubWF0dGhld3NsaXF1b3IuY29tLmF1L2N1c3RvbWVyLWxlYWQvY3VzdG9tZXItbGVhZC9nZXQtY3VzdG9tZXItb3B0aW9uIiwiaWF0IjoxNzc2MjM4NDMyLCJleHAiOjE3NzYyNjAxMjksIm5iZiI6MTc3NjIzODUyOSwianRpIjoiNWllNlc4NHhIWlBEaEtTMCIsInN1YiI6MzA2LCJwcnYiOiJhMGYzZTc0YmVkZjUxMmM0Nzc4Mjk3ZGU1ZjkyMDg2ZGFkMzljYTlmIiwic2lkIjoibmdvY3Z0bSIsInBob25lIjoibmdvY3Z0bSIsImJyYW5kX2NvZGUiOiJtYXR0aGV3c2xpcXVvciIsImltZWkiOiIyYjUwY2NhZTE5YmU1NTU4In0.Gx5Tbm9IcKxmYCeLJIqjVQudCCfyqjFrk7L4o8jJVEo',
                 2,
                 domain: 'https://staff-api.dev.matthewsliquor.com.au',
                 brandCode: 'matthewsliquor',

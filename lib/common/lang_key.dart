@@ -1229,6 +1229,8 @@ class LangKey {
   static const String submit_review_success_message = "submit_review_success_message";
   static const String purpose_of_appointment = "purpose_of_appointment";
   static const String create_order_from_booking_message = "create_order_from_booking_message";
-  
-
+  static const String useExcel = "use_excel";
+  static const String timekeeping = "timekeeping";
+  static const String jobManagement = "job_management";
+  static const String noPhoneNumber = "no_phone_number";
 }

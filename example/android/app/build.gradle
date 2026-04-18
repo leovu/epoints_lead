@@ -22,7 +22,7 @@ android {
         applicationId "com.example.lead_plugin_epoint_example"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-build-configuration.
-        minSdkVersion 22
+        minSdkVersion flutter.minSdkVersion
         targetSdkVersion 34
         versionCode 1
         versionName "1.0.0"

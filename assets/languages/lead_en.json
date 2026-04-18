@@ -1182,5 +1182,9 @@
   "submit_review": "Submit review",
   "submit_review_success_message": "Submit service review to customer successfully",
   "purpose_of_appointment": "Purpose of appointment",
-  "create_order_from_booking_message": "Confirm creation of order from this appointment?"
+  "create_order_from_booking_message": "Confirm creation of order from this appointment?",
+  "use_excel": "Use excel",
+  "timekeeping": "Timekeeping",
+  "job_management": "Job management",
+  "no_phone_number": "No phone number information"
 }

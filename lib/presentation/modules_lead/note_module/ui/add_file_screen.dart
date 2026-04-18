@@ -4,6 +4,7 @@ import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
+import 'package:lead_plugin_epoint/model/note_file_req_res_model.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/bloc/detail_potential_customer_bloc.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
@@ -84,12 +85,12 @@ class _AddFileScreenState extends State<AddFileScreen>
                       child: GestureDetector(
                         onTap: () {
                           widget.bloc.uploadFile().then((value) {
-                      setState(() {
-                        if (value != null) {
-                          file = value;
-                        }
-                      });
-                    });
+                            setState(() {
+                              if (value != null) {
+                                file = value;
+                              }
+                            });
+                          });
                         },
                         child: Text(
                           "Thay đổi",
@@ -214,12 +215,21 @@ class _AddFileScreenState extends State<AddFileScreen>
       child: InkWell(
         onTap: () async {
           if (validateAllow()) {
-            widget.bloc.uploadFileAWS(file!, content: noteController.text).then((value) {
-              if (value) {
-                widget.bloc.getListFile(context);
-                Navigator.pop(context);
-              }
-            });
+            final url = await widget.bloc
+                .uploadFileAWS(file!, content: noteController.text);
+            if (url == null || url.isEmpty) {
+              return;
+            }
+            final success = await widget.bloc.addFile(UploadFileReqModel(
+              customer_lead_id: widget.bloc.detail?.customerLeadId,
+              path: url,
+              content: noteController.text,
+              fileName: file!.path.split("/").last,
+            ));
+            if (success) {
+              widget.bloc.getListFile(context);
+              Navigator.pop(context);
+            }
           }
         },
         child: Center(

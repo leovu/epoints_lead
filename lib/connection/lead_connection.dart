@@ -52,7 +52,10 @@ import 'package:lead_plugin_epoint/model/work_upload_file_model_response.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart';
 
+import '../model/custom_create_address_model.dart';
 import '../model/response/list_customer_lead_model_response.dart';
+import '../model/response/ward_new_res_model.dart';
+import '../presentation/network/api.dart';
 
 class LeadConnection {
   static late BuildContext buildContext;
@@ -87,7 +90,6 @@ class LeadConnection {
     }
     return null;
   }
-
 
   static Future<DetailPotentialModelResponse?> getdetailPotential(
       BuildContext context, String? customer_lead_code) async {
@@ -155,8 +157,7 @@ class LeadConnection {
     return null;
   }
 
-  static Future<List<ProvinceData>?> getProvince(
-      BuildContext context) async {
+  static Future<List<ProvinceData>?> getProvince(BuildContext context) async {
     ResponseData responseData =
         await connection.post('/customer-lead/customer-lead/get-province', {});
     if (responseData.isSuccess) {
@@ -194,10 +195,14 @@ class LeadConnection {
     return null;
   }
 
-  static Future<GetAllocatorModelReponse?> getAllocator(
-      BuildContext context) async {
-    ResponseData responseData =
-        await connection.post('/customer-lead/customer-lead/get-allocator', {});
+  static Future<GetAllocatorModelReponse?> getAllocator(BuildContext context,
+      {int? branchId}) async {
+    final Map<String, dynamic> body = {};
+    if (branchId != null) {
+      body['branch_id'] = branchId;
+    }
+    ResponseData responseData = await connection.post(
+        '/customer-lead/customer-lead/get-allocator', body);
     if (responseData.isSuccess) {
       GetAllocatorModelReponse data =
           GetAllocatorModelReponse.fromJson(responseData.data!);
@@ -297,7 +302,8 @@ class LeadConnection {
       BuildContext context, int customer_lead_id) async {
     showLoading(context);
     ResponseData responseData = await connection.post(
-        '/customer-lead/customer-lead/convert-lead', {"customer_lead_id" : customer_lead_id});
+        '/customer-lead/customer-lead/convert-lead',
+        {"customer_lead_id": customer_lead_id});
     Navigator.of(context).pop();
     if (responseData.isSuccess) {
       DescriptionModelResponse data =
@@ -320,7 +326,8 @@ class LeadConnection {
     return null;
   }
 
-  static Future<PositionResponseModel?> getPosition(BuildContext context) async {
+  static Future<PositionResponseModel?> getPosition(
+      BuildContext context) async {
     showLoading(context);
     ResponseData responseData =
         await connection.post('/customer-lead/customer-lead/position', {});
@@ -487,7 +494,7 @@ class LeadConnection {
     return null;
   }
 
-   static Future<DescriptionModelResponse?> addPhone(
+  static Future<DescriptionModelResponse?> addPhone(
       BuildContext context, AddPhoneModelRequest model) async {
     ResponseData responseData = await connection.post(
         '/customer-lead/customer-lead/add-phone', model.toJson());
@@ -501,7 +508,8 @@ class LeadConnection {
 
   static Future<WorkUploadFileResponseModel?> workUploadFile(
       BuildContext context, MultipartFileModel model) async {
-    ResponseData response =  await connection.upload('/manage-work/upload-file', model);
+    ResponseData response =
+        await connection.upload('/manage-work/upload-file', model);
     if (response.isSuccess) {
       WorkUploadFileResponseModel responseModel =
           WorkUploadFileResponseModel.fromJson(response.data!);
@@ -513,17 +521,28 @@ class LeadConnection {
     return null;
   }
 
+  static Future<dynamic> upload(
+      BuildContext context, MultipartFileModel model) async {
+    ResponseData response =
+        await connection.upload('/user/upload-avatar', model);
+    print('__________${response.data}____________${response.datas}');
+    if (response.isSuccess) {
+      WorkUploadFileResponseModel responseModel =
+          WorkUploadFileResponseModel.fromJson(response.data!);
+
+      return responseModel;
+    }
+    return null;
+  }
+
   static Future<List<WorkListFileModel>?> workUploadFileDocument(
       WorkUploadFileDocumentRequestModel model) async {
-    List<WorkListFileModel>? _fileModels;
     ResponseData response = await connection.post(
         '/manage-work/upload-file-document', model.toJson());
+    print('workUploadFileDocument response: ${response.data}');
     if (response.isSuccess) {
       var responseModel = WorkListFileModel.fromJson(response.data!);
-
-      _fileModels!.insert(0, responseModel);
-      // setFileModels(_fileModels);
-      return _fileModels;
+      return [responseModel];
     }
     return null;
   }
@@ -555,13 +574,11 @@ class LeadConnection {
     return null;
   }
 
-
- static Future<String?> uploadFileAWS(
-      BuildContext? context, File file) async {
+  static Future<String?> uploadFileAWS(BuildContext? context, File file) async {
     // showLoading(context);
     var data = await _checkConnectivity(context);
     if (data != null) {
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
 
     final mimeType = lookupMimeType(file.path)!;
@@ -574,29 +591,26 @@ class LeadConnection {
         region: "ap-southeast-1",
         destDir: "",
         filename: basename(file.path),
-        contentType: mimeType
-    );
+        contentType: mimeType);
 
-    if(url.isEmpty){
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
+    if (url.isEmpty) {
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
       return null;
     } else {
       return url;
     }
   }
 
-   static Future _checkConnectivity(BuildContext? context) async {
+  static Future _checkConnectivity(BuildContext? context) async {
     if (!(await NetworkConnectivity.isConnected())) {
-      handleError(context!,AppLocalizations.text(LangKey.server_error));
+      handleError(context!, AppLocalizations.text(LangKey.server_error));
     }
     return null;
   }
 
-
   static Future handleError(BuildContext context, String? title) async {
     await showMyDialog(context, AppLocalizations.text(LangKey.server_error));
-  } 
-
+  }
 
   static Future showLoading(BuildContext context) async {
     return await showDialog(
@@ -731,8 +745,8 @@ class LeadConnection {
                     },
                   ),
                   TextButton(
-                    child:
-                        Center(child: Text(AppLocalizations.text(LangKey.yes)!)),
+                    child: Center(
+                        child: Text(AppLocalizations.text(LangKey.yes)!)),
                     onPressed: ontap,
                   ),
                 ],
@@ -742,5 +756,45 @@ class LeadConnection {
         );
       },
     );
+  }
+
+  static Future<WorkListStaffResponseModel?> workListStaffPermission(
+      BuildContext context,
+      {bool showLoading = true,
+      int? branchId}) async {
+    if (showLoading) LeadConnection.showLoading(context);
+    ResponseData responseData = await connection
+        .post(API.getStaffWithPermission(), {"branch_id": branchId});
+    if (showLoading) Navigator.of(context).pop();
+    if (responseData.isSuccess && responseData.data != null) {
+      if (responseData.data != null) {
+        WorkListStaffResponseModel data =
+            WorkListStaffResponseModel.fromJson(responseData.data!);
+        return data;
+      }
+      return null;
+    }
+    return null;
+  }
+
+  static Future<ProvinceResponseModel> getProvinceNew(
+      BuildContext context) async {
+    LeadConnection.showLoading(context);
+    ResponseData responseData =
+        await connection.post(API.addressProvinceNew(), {});
+    Navigator.of(context).pop();
+    ProvinceResponseModel? res =
+        ProvinceResponseModel.fromJson(responseData.datas);
+    return res;
+  }
+
+  static Future<WardNewResponseModel> addressWardNew(
+      BuildContext context) async {
+    LeadConnection.showLoading(context);
+    ResponseData responseData = await connection.post(API.addressWardNew(), {});
+    Navigator.of(context).pop();
+    WardNewResponseModel? res =
+        WardNewResponseModel.fromJson(responseData.datas);
+    return res;
   }
 }

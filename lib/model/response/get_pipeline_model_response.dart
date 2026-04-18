@@ -34,6 +34,7 @@ class PipelineData {
   String? pipelineCategoryCode;
   int? ownerId;
   bool? selected;
+  int? isDefault;
 
   PipelineData(
       {this.pipelineId,
@@ -41,7 +42,7 @@ class PipelineData {
       this.pipelineName,
       this.pipelineCategoryCode,
       this.ownerId,
-      this.selected});
+      this.selected, this.isDefault});
 
   PipelineData.fromJson(Map<String, dynamic> json) {
     pipelineId = json['pipeline_id'];
@@ -50,6 +51,7 @@ class PipelineData {
     pipelineCategoryCode = json['pipeline_category_code'];
     ownerId = json['owner_id'];
     selected = json['selected'] ?? false;
+    isDefault = json['is_default'] ?? 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -60,6 +62,7 @@ class PipelineData {
     data['pipeline_category_code'] = this.pipelineCategoryCode;
     data['owner_id'] = this.ownerId;
     data['selected'] = this.selected;
+    data['is_default'] = this.isDefault;
     return data;
   }
 }

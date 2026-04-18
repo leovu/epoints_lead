@@ -11,9 +11,9 @@
   "choose_itinerary": "Chọn hành trình",
   "choose_pipeline": "Chọn pipeline",
   "choose_allotted_person": "Chọn người được phân bổ",
-  "detail_Potential": "CHI TIẾT KHÁCH HÀNG TIỀM NĂNG",
-  "list_Potential": "DANH SÁCH KHÁCH HÀNG TIỀM NĂNG",
-  "edit_Potential": "CHỈNH SỬA KHÁCH HÀNG TIỀM NĂNG",
+  "detail_Potential": "Chi tiết khách hàng tiềm năng",
+  "list_Potential": "Danh sách khách hàng tiềm năng",
+  "edit_Potential": "Chỉnh sửa khách hàng tiềm năng",
   "phoneNumber": "Số điện thoại",
   "customer_source": "Nguồn khách hàng",
   "customer_style": "Loại khách hàng",
@@ -200,9 +200,8 @@
   "createDeal": "Tạo deal",
   "enter_keyword": "Nhập từ khoá tìm kiếm",
   "tax_acronym": "Mst",
-  "journey":"Hành trình",
-  "group_customer":"Nhóm khách hàng",
-
+  "journey": "Hành trình",
+  "group_customer": "Nhóm khách hàng",
   "data_error": "Lỗi dữ liệu!",
   "work": "Công việc",
   "list_job": "Danh sách công việc",
@@ -257,7 +256,6 @@
   "week": "Tuần",
   "task": "Tác vụ",
   "select": "Chọn",
-
   "detail_deal": "CHI TIẾT CƠ HỘI BÁN HÀNG",
   "list_deal": "DANH SÁCH CƠ HỘI BÁN HÀNG",
   "edit_deal": "CHỈNH SỬA CƠ HỘI BÁN HÀNG",
@@ -1183,6 +1181,9 @@
   "submit_review": "Gửi đánh giá",
   "submit_review_success_message": "Gửi đánh giá dịch vụ cho khách hàng thành công",
   "purpose_of_appointment": "Mục đích lịch hẹn",
-  "create_order_from_booking_message": "Xác nhận tạo đơn hàng từ lịch hẹn này?"
-
+  "create_order_from_booking_message": "Xác nhận tạo đơn hàng từ lịch hẹn này?",
+  "use_excel": "Dùng excel",
+  "timekeeping": "Chấm công",
+  "job_management": "Quản lý công việc",
+  "no_phone_number": "Không có thông tin số điện thoại"
 }

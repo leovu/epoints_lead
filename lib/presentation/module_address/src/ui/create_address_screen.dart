@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
@@ -30,7 +29,7 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
     super.initState();
     _bloc = CreateAddressBloc(context);
 
-    if(widget.model != null){
+    if (widget.model != null) {
       _bloc.addressModel = CustomerCreateAddressModel(
         provinceModel: widget.model!.provinceModel,
         districtModel: widget.model!.districtModel,
@@ -48,9 +47,10 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
     super.dispose();
   }
 
-  Widget _buildAddress(){
+  Widget _buildAddress() {
     return new CustomColumnInformation(
-        title: "${AppLocalizations.text(LangKey.province)}/${AppLocalizations.text(LangKey.city)}, ${AppLocalizations.text(LangKey.district)}, ${AppLocalizations.text(LangKey.ward)}",
+        title:
+            "${AppLocalizations.text(LangKey.province)}/${AppLocalizations.text(LangKey.city)}, ${AppLocalizations.text(LangKey.district)}, ${AppLocalizations.text(LangKey.ward)}",
         titleIcon: Assets.iconCity,
         child: CustomTextField(
           focusNode: _bloc.focusAddress,
@@ -64,9 +64,10 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
         ));
   }
 
-  Widget _buildStreet(){
+  Widget _buildStreet() {
     return CustomColumnInformation(
-      title: "${AppLocalizations.text(LangKey.street_name)}, ${AppLocalizations.text(LangKey.house_number)!.toLowerCase()}",
+      title:
+          "${AppLocalizations.text(LangKey.street_name)}, ${AppLocalizations.text(LangKey.house_number)!.toLowerCase()}",
       titleIcon: Assets.iconMarker,
       child: CustomTextField(
         focusNode: _bloc.focusStreet,
@@ -78,7 +79,7 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
     );
   }
 
-  Widget _buildContent(){
+  Widget _buildContent() {
     return CustomListView(
       separatorPadding: AppSizes.maxPadding,
       children: [
@@ -88,22 +89,19 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
     );
   }
 
-  Widget _buildBottom(){
+  Widget _buildBottom() {
     return CustomBottom(
       text: AppLocalizations.text(LangKey.confirm),
       ontap: _bloc.onConfirm,
     );
   }
 
-  Widget _buildBody(){
+  Widget _buildBody() {
     return Column(
-      children: [
-        Expanded(child: _buildContent()),
-        _buildBottom()
-      ],
+      children: [Expanded(child: _buildContent()), _buildBottom()],
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,9 +110,11 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
           color: Colors.white,
         ),
         backgroundColor: Color(0xFF0067AC),
-        title: Text(
-          AppLocalizations.text(LangKey.enter_address)!,
-          style: const TextStyle(color: Colors.white, fontSize: 18.0),
+        title: Center(
+          child: Text(
+            AppLocalizations.text(LangKey.enter_address)!,
+            style: const TextStyle(color: Colors.white, fontSize: 18.0),
+          ),
         ),
         // leadingWidth: 20.0,
       ),

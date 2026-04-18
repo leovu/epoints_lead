@@ -86,6 +86,8 @@ fieldFocus(BuildContext context, FocusNode? focusNode) {
 class Validators {
   var validatePhone = RegExp(r"^[+#*()\[\]]*([0-9][ ext+-pw#*()\[\]]*){10,45}$");
   var validateNumber = RegExp(r"^[\d]*$");
+  var validateEmail = RegExp(
+      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
 
  bool isValidPhone(String phone){
     if (phone.isNotEmpty&&validatePhone.hasMatch(phone)){
@@ -101,7 +103,12 @@ class Validators {
     return false;
   }
 
-
+  bool isValidEmail(String email){
+    if (email.isNotEmpty && validateEmail.hasMatch(email.trim())){
+      return true;
+    }
+    return false;
+  }
 }
 
 extension IterableModifier<E> on Iterable<E> {

@@ -3,7 +3,6 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
 import 'package:lead_plugin_epoint/presentation/module_address/src/bloc/create_address_select_bloc.dart';
-import 'package:lead_plugin_epoint/presentation/module_address/src/ui/create_address_district_screen.dart';
 import 'package:lead_plugin_epoint/presentation/module_address/src/ui/create_address_province_screen.dart';
 import 'package:lead_plugin_epoint/presentation/module_address/src/ui/create_address_ward_screen.dart';
 import 'package:lead_plugin_epoint/widget/custom_bottom.dart';
@@ -35,10 +34,6 @@ class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen> wi
       CustomModelTabBar(
         name: "${AppLocalizations.text(LangKey.province)}/${AppLocalizations.text(LangKey.city)}",
         child: CreateAddressProvinceScreen(bloc: _bloc,)
-      ),
-      CustomModelTabBar(
-          name: AppLocalizations.text(LangKey.district),
-          child: CreateAddressDistrictScreen(bloc: _bloc,)
       ),
       CustomModelTabBar(
           name: AppLocalizations.text(LangKey.ward),

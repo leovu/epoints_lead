@@ -31,6 +31,8 @@ class LeadPluginEpoint {
       String? fullname,
       String? phone,
       String? customerLeadCode,
+      int? staffId,
+      int? branchId,
       Function? createJob,
       Function(Map<String,dynamic>)?  createCare,
       Function(int)?  editJob,
@@ -39,6 +41,8 @@ class LeadPluginEpoint {
       Function(Map<String,dynamic>)? createDeal,
       Function(Map<String,dynamic>)? callHotline,
       List<Map<String, dynamic>>? permission}) async {
+    Global.staffId = staffId;
+    Global.branchId = branchId;
     if (permission != null) {
         Global.permissionModels = permission;
     }

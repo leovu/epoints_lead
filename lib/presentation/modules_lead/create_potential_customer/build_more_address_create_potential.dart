@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -52,9 +51,6 @@ class _BuildMoreAddressCreatPotentialState
 
   TextEditingController _addressContactText = TextEditingController();
 
-  TextEditingController _emailContactPersonText = TextEditingController();
-  FocusNode _emailContactPersonFocusNode = FocusNode();
-
   TextEditingController _numberOfEmployeesText = TextEditingController();
   FocusNode _numberOfEmployeesFocusNode = FocusNode();
 
@@ -62,15 +58,8 @@ class _BuildMoreAddressCreatPotentialState
   FocusNode _zaloFocusNode = FocusNode();
   TextEditingController _fanpageFBText = TextEditingController();
   FocusNode _fanpageFBFocusNode = FocusNode();
-  // FocusNode _emailFocusNode = FocusNode();
   TextEditingController _birthdayText = TextEditingController();
   TextEditingController _establishDateText = TextEditingController();
-
-  TextEditingController _fullNameText = TextEditingController();
-  FocusNode _fullnameFocusNode = FocusNode();
-
-  TextEditingController _phoneNumberText = TextEditingController();
-  FocusNode _phoneNumberFocusNode = FocusNode();
 
   ProvinceData provinceSeleted = ProvinceData();
   AllocatorData allocatorSelected = AllocatorData();
@@ -182,8 +171,7 @@ class _BuildMoreAddressCreatPotentialState
                           businessAreasSelected!.createdBy;
 
                       // widget.detailPotential.saleId = _modelStaffSelected[0].staffId;
-                    }
-                    catch(_){}
+                    } catch (_) {}
                     setState(() {});
                   }
                 }),
@@ -263,7 +251,6 @@ class _BuildMoreAddressCreatPotentialState
       ),
     );
   }
-
 
   _showBirthDay() {
     DateTime selectedDate = selectedBirthDay ?? DateTime.now();
@@ -348,10 +335,10 @@ class _BuildMoreAddressCreatPotentialState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         // Website
-        _buildTextField("Website", "",
-            Assets.iconWebsite, false, false, true,
-            fillText: widget.bloc.websiteController, focusNode: widget.bloc.websiteFocusNode),
-   
+        _buildTextField("Website", "", Assets.iconWebsite, false, false, true,
+            fillText: widget.bloc.websiteController,
+            focusNode: widget.bloc.websiteFocusNode),
+
         // Zalo
         _buildTextField(AppLocalizations.text(LangKey.zalo), "",
             Assets.iconSource, false, false, true,
@@ -366,39 +353,6 @@ class _BuildMoreAddressCreatPotentialState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 10.0),
-                  Text(
-                    AppLocalizations.text(LangKey.contactInformation)!,
-                    style: TextStyle(
-                        fontSize: AppTextSizes.size16,
-                        color: const Color(0xFF0067AC),
-                        fontWeight: FontWeight.normal),
-                  ),
-
-                  SizedBox(height: 15.0),
-
-                  // nhap ho va ten
-                  _buildTextField(AppLocalizations.text(LangKey.inputFullname),
-                      "", Assets.iconPerson, false, false, true,
-                      fillText: _fullNameText, focusNode: _fullnameFocusNode),
-                  // so dien thoai
-                  _buildTextField(
-                      AppLocalizations.text(LangKey.inputPhonenumber),
-                      "",
-                      Assets.iconCall,
-                      false,
-                      false,
-                      true,
-                      fillText: _phoneNumberText,
-                      focusNode: _phoneNumberFocusNode,
-                      inputType: TextInputType.numberWithOptions(
-                          signed: false, decimal: false)),
-
-                  // email
-                  _buildTextField(AppLocalizations.text(LangKey.email), "",
-                      Assets.iconEmail, false, false, true,
-                      fillText: _emailContactPersonText,
-                      focusNode: _emailContactPersonFocusNode),
-
                   _buildTextField(
                       AppLocalizations.text(LangKey.choose_position),
                       positionSelected?.staffTitleName ?? "",
@@ -421,11 +375,6 @@ class _BuildMoreAddressCreatPotentialState
                       _loadPositionModal();
                     }
                   }),
-
-                  // _buildTextField(AppLocalizations.text(LangKey.inputAddress),
-                  //     "", Assets.iconAddress, false, false, true,
-                  //     fillText: _addressContactText,
-                  //     focusNode: _addressContactFocusNode),
                 ],
               )
             : Container(),
@@ -433,8 +382,7 @@ class _BuildMoreAddressCreatPotentialState
         Text(
           "Ghi chú",
           style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color:  AppColors.primaryColor),
+              fontWeight: FontWeight.bold, color: AppColors.primaryColor),
         ),
 
         SizedBox(height: 8.0),
@@ -465,7 +413,6 @@ class _BuildMoreAddressCreatPotentialState
         ),
 
         _buildImage()
-
       ],
     );
   }
@@ -482,7 +429,7 @@ class _BuildMoreAddressCreatPotentialState
     }
   }
 
-   Widget _buildImage() {
+  Widget _buildImage() {
     return StreamBuilder(
         stream: widget.bloc.streamImages.output,
         initialData: widget.bloc.images,
@@ -656,12 +603,20 @@ class _BuildMoreAddressCreatPotentialState
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
+              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
               borderRadius: BorderRadius.circular(10.0),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+              borderRadius: BorderRadius.circular(10.0),
             ),
             label: (content == "")
                 ? RichText(
@@ -706,28 +661,17 @@ class _BuildMoreAddressCreatPotentialState
             isDense: true,
           ),
           onChanged: (event) {
-            print(event.toLowerCase());
             if (fillText == _addressText) {
               widget.detailPotential?.address = event;
             } else if (fillText == _zaloText) {
               widget.detailPotential?.zalo = event;
             } else if (fillText == _fanpageFBText) {
               widget.detailPotential?.fanpage = event;
-            } else if (fillText == _emailContactPersonText) {
-              widget.detailPotential?.contactEmail =
-                  _emailContactPersonText.text;
             } else if (fillText == _numberOfEmployeesText) {
               widget.detailPotential?.employees =
                   (_numberOfEmployeesText.text != "")
                       ? int.parse(_numberOfEmployeesText.text)
                       : 0;
-            } else if (fillText == _fullNameText) {
-              widget.detailPotential?.contactFullName = _fullNameText.text;
-            } else if (fillText == _phoneNumberText) {
-              widget.detailPotential?.contactPhone = _phoneNumberText.text;
-            } else if (fillText == _emailContactPersonText) {
-              widget.detailPotential?.contactEmail =
-                  _emailContactPersonText.text;
             } else if (fillText == _addressContactText) {
               widget.detailPotential?.contactAddress = _addressContactText.text;
             }

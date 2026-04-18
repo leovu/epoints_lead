@@ -29,6 +29,8 @@ class Global {
   static String domain = '';
   static String brandCode = '';
   static String asscessToken = '';
+  static int? staffId;
+  static int? branchId;
   static Locale? locale;
 
   static http.Client client = http.Client();

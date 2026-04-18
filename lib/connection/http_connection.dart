@@ -16,7 +16,13 @@ class HTTPConnection {
   Future<ResponseData> upload(String path, MultipartFileModel model) async {
     final uri = Uri.parse('$domain$path');
     var request = http.MultipartRequest('POST', uri);
-    request.headers.addAll({'Content-Type': 'multipart/form-data','Authorization':'Bearer ${asscessToken}','brand-code':brandCode, 'lang': LeadConnection.locale!.languageCode, 'branch-id':'1'});
+    request.headers.addAll({
+      'Content-Type': 'multipart/form-data',
+      'Authorization': 'Bearer ${asscessToken}',
+      'brand-code': brandCode,
+      'lang': LeadConnection.locale!.languageCode,
+      'branch-id': '1'
+    });
     request.files.add(
       http.MultipartFile(
         model.name!,
@@ -33,23 +39,22 @@ class HTTPConnection {
     }
     var streamResponse = await request.send();
     var response = await http.Response.fromStream(streamResponse);
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       print(response.body);
       ResponseData data = ResponseData();
       data.isSuccess = true;
       try {
         String responseBody = response.body;
         data.data = jsonDecode(responseBody);
-      }catch(_) {}
+      } catch (_) {}
       return data;
-    }
-    else {
+    } else {
       ResponseData data = ResponseData();
       data.isSuccess = false;
       try {
         String responseBody = response.body;
         data.data = jsonDecode(responseBody);
-      }catch(_) {}
+      } catch (_) {}
       return data;
     }
   }
@@ -87,14 +92,16 @@ class HTTPConnection {
 //     return headers;
 //   }
 
-
-  
-  Future<ResponseData>post(String path, Map<String, dynamic> body) async {
+  Future<ResponseData> post(String path, Map<String, dynamic> body) async {
     final uri = Uri.parse('$domain$path');
-    final headers = {'Content-Type': 'application/json','brand-code':brandCode, 'lang': LeadConnection.locale!.languageCode};
+    final headers = {
+      'Content-Type': 'application/json',
+      'brand-code': brandCode,
+      'lang': LeadConnection.locale!.languageCode
+    };
     // if(LeadConnection.account != null) {
-      // headers['Authorization'] = 'Bearer ${LeadConnection.account.accessToken}';
-      headers['Authorization'] = 'Bearer ${asscessToken}';
+    // headers['Authorization'] = 'Bearer ${LeadConnection.account.accessToken}';
+    headers['Authorization'] = 'Bearer ${asscessToken}';
     // }
     String jsonBody = json.encode(body);
     if (kDebugMode) {
@@ -113,41 +120,34 @@ class HTTPConnection {
     );
     int statusCode = response.statusCode;
     print(response);
-    if(statusCode == 200) {
+    if (statusCode == 200) {
       ResponseData data = ResponseData();
       data.isSuccess = true;
       try {
         String responseBody = response.body;
         data.data = jsonDecode(responseBody);
-      }catch(_) {}
+      } catch (_) {}
       return data;
-    }
-    else if( 201 <= statusCode && statusCode < 300) {
+    } else if (201 <= statusCode && statusCode < 300) {
       ResponseData data = ResponseData();
       data.isSuccess = true;
       return data;
-    }
-    else {
+    } else {
       ResponseData data = ResponseData();
       data.isSuccess = false;
       try {
         String responseBody = response.body;
         data.data = jsonDecode(responseBody);
-      }catch(_) {}
+      } catch (_) {}
       return data;
-     
     }
   }
-
-
-
- 
 }
 
 class ResponseData {
-   late bool isSuccess;
-   Map<String,dynamic>? data;
-   List<dynamic>? datas;
+  late bool isSuccess;
+  Map<String, dynamic>? data;
+  List<dynamic>? datas;
 }
 
 class MultipartFileModel {
@@ -156,11 +156,10 @@ class MultipartFileModel {
 
   MultipartFileModel({this.file, this.name});
 
-   Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-     data['file'] = this.file;
+    data['file'] = this.file;
     data['name'] = this.name;
     return data;
   }
 }
-

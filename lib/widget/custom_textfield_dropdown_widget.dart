@@ -12,10 +12,28 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
   final FocusNode? focusNode;
   final Function()? ontap;
 
-   CustomTextfieldDropdownWidget({super.key, this.title, this.icon, this.content, this.mandatory, this.dropdown, this.textfield = true, this.inputType, this.fillText, this.focusNode, this.ontap});
+  CustomTextfieldDropdownWidget(
+      {super.key,
+      this.title,
+      this.icon,
+      this.content,
+      this.mandatory,
+      this.dropdown,
+      this.textfield = true,
+      this.inputType,
+      this.fillText,
+      this.focusNode,
+      this.ontap});
 
   @override
   Widget build(BuildContext context) {
+    final commonBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(8.0),
+      borderSide: const BorderSide(
+        width: 1,
+        color: Color(0xFFB8BFC9),
+      ),
+    );
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: InkWell(
@@ -25,62 +43,56 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
           readOnly: !textfield!,
           controller: fillText,
           focusNode: focusNode,
-          keyboardType: (inputType != null) ? inputType : TextInputType.text,
+          keyboardType: inputType ?? TextInputType.text,
           decoration: InputDecoration(
             isCollapsed: true,
-            contentPadding: EdgeInsets.all(12.0),
-            border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            ),
+            contentPadding: const EdgeInsets.all(12.0),
+            border: commonBorder,
+            enabledBorder: commonBorder,
+            focusedBorder: commonBorder,
+            disabledBorder: commonBorder,
             label: (content == "")
                 ? RichText(
                     text: TextSpan(
-                        text: title,
-                        style: TextStyle(
-                            fontSize: AppTextSizes.size15,
-                            color: const Color(0xFF858080),
-                            fontWeight: FontWeight.normal),
-                        children: [
+                      text: title,
+                      style: TextStyle(
+                        fontSize: AppTextSizes.size15,
+                        color: const Color(0xFF858080),
+                      ),
+                      children: [
                         if (mandatory ?? false)
-                          TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
-                      ]))
+                          const TextSpan(
+                            text: "*",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                      ],
+                    ),
+                  )
                 : Text(
                     content ?? "",
                     maxLines: 2,
+                    style: TextStyle(color: AppColors.black),
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                        fontSize: 15.0,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: Image.asset(
                 icon ?? Assets.iconUser,
                 color: AppColors.primaryColor,
               ),
             ),
             prefixIconConstraints:
-                BoxConstraints(maxHeight: 32.0, maxWidth: 32.0),
+                const BoxConstraints(maxHeight: 32, maxWidth: 32),
             suffixIcon: (dropdown ?? false)
                 ? Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Image.asset(
-                      Assets.iconDropDown,
-                    ),
+                    padding: const EdgeInsets.all(8.0),
+                    child: Image.asset(Assets.iconDropDown),
                   )
-                : Container(),
+                : const SizedBox(),
             suffixIconConstraints:
-                BoxConstraints(maxHeight: 32.0, maxWidth: 32.0),
+                const BoxConstraints(maxHeight: 32, maxWidth: 32),
             isDense: true,
           ),
-          onChanged: (event) {},
         ),
       ),
     );

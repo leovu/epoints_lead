@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
 import 'package:lead_plugin_epoint/model/request/district_model_request.dart';
 import 'package:lead_plugin_epoint/model/response_model.dart';
@@ -55,7 +56,7 @@ class CreateAddressSelectBloc extends BaseBloc {
     wardModel = null;
     setProvinceModels(_provinceModels);
     tabController.index = 1;
-    onRefreshDistrict(isRefresh: false);
+    onRefreshWard(isRefresh: false);
   }
 
   searchProvince(String event){
@@ -89,14 +90,11 @@ class CreateAddressSelectBloc extends BaseBloc {
   }
 
   provinceFull(String event, bool isRefresh) async {
-    if(!isRefresh) setProvinceModels(null);
-    ResponseModel response = await repository.provinceFull(context);
-    if(response.success!){
-      var responseModel = ProvinceResponseModel.fromJson(response.datas);
-
-      _provinceModels = responseModel.data ?? [];
-    }
-    else{
+    if (!isRefresh) setProvinceModels(null);
+    try {
+      final response = await LeadConnection.getProvinceNew(context!);
+      _provinceModels = response.data ?? [];
+    } catch (_) {
       _provinceModels = [];
     }
 
@@ -233,16 +231,13 @@ class CreateAddressSelectBloc extends BaseBloc {
   }
 
   ward(String event, bool isRefresh) async {
-    if(!isRefresh) setWardModels(null);
-    ResponseModel response = await repository.ward(context, WardRequestModel(
-        districtId: districtModel?.districtid
-    ));
-    if(response.success!){
-      var responseModel = WardResponseModel.fromJson(response.datas);
-
-      _wardModels = responseModel.data ?? [];
-    }
-    else{
+    if (!isRefresh) setWardModels(null);
+    try {
+      final response = await LeadConnection.addressWardNew(context!);
+      _wardModels = (response.data ?? [])
+          .map((e) => WardModel(wardId: e.wardId, name: e.name))
+          .toList();
+    } catch (_) {
       _wardModels = [];
     }
 

@@ -2,8 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_direct_call_plus/flutter_direct_call.dart';
-import 'package:lead_plugin_epoint/common/lang_key.dart';
-import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
+import 'package:lead_plugin_epoint/connection/aws_interaction.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/note_file_req_res_model.dart';
 import 'package:lead_plugin_epoint/model/request/add_contact_req_model.dart';
@@ -363,21 +362,19 @@ class DetailPotentialCustomerBloc extends BaseBloc {
     uploadFileAWS(file, content: content);
   }
 
-  uploadFileAWS(File model, {String content = ""}) async {
+  Future<String?> uploadFileAWS(File model, {String content = ""}) async {
     CustomNavigator.showProgressDialog(context);
-    String? result = await LeadConnection.uploadFileAWS(context, model);
+    final response = await AWSInteraction(
+      context: context,
+      file: AWSFileModel(file: model),
+    ).upload();
     CustomNavigator.hideProgressDialog();
-    if (result != null) {
-      bool value = await addFile(UploadFileReqModel(
-          customer_lead_id: detail?.customerLeadId,
-          path: result,
-          content: content,
-          fileName: model.path.split("/").last));
-        return value;
-    } else {
-      LeadConnection.handleError(
-          context!, AppLocalizations.text(LangKey.server_error));
+    print('AWS upload result: ${response.toJson()}');
+    final url = response.url;
+    if ((response.success ?? false) && url != null && url.isNotEmpty) {
+      return url;
     }
+    return null;
   }
 
   Future<bool> addFile(UploadFileReqModel model) async {

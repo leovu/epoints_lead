@@ -4,6 +4,8 @@ import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
+import 'package:lead_plugin_epoint/connection/aws_interaction.dart';
+import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/work_create_comment_request_model.dart';
 import 'package:lead_plugin_epoint/model/request/work_list_comment_request_model.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
@@ -76,8 +78,17 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   _showOption() {
-    CustomImagePicker.showPicker(context, (file) {
-      _bloc.workUploadFile(file);
+    CustomImagePicker.showPicker(context, (file) async {
+      LeadConnection.showLoading(context);
+      final response = await AWSInteraction(
+        context: context,
+        file: AWSFileModel(file: file),
+      ).upload();
+      Navigator.of(context).pop();
+      print('AWS upload result: ${response.toJson()}');
+      if ((response.success ?? false) && (response.url ?? "").isNotEmpty) {
+        _bloc.setFile(response.url);
+      }
     });
   }
 

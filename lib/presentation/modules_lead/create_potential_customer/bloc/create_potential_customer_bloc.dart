@@ -3,10 +3,15 @@ import 'package:flutter/widgets.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/custom_create_address_model.dart';
 import 'package:lead_plugin_epoint/model/request/get_customer_group_model_request.dart';
+import 'package:lead_plugin_epoint/model/request/get_journey_model_request.dart';
 import 'package:lead_plugin_epoint/model/response/customer_response_model.dart';
 import 'package:lead_plugin_epoint/model/response/detail_potential_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_branch_model_response.dart';
 import 'package:lead_plugin_epoint/model/response/get_customer_group_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_customer_option_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_journey_model_response.dart';
+import 'package:lead_plugin_epoint/model/response/get_pipeline_model_response.dart';
 import 'package:lead_plugin_epoint/model/response_model.dart';
 import 'package:lead_plugin_epoint/presentation/interface/base_bloc.dart';
 import 'package:lead_plugin_epoint/presentation/module_address/src/ui/create_address_screen.dart';
@@ -16,6 +21,8 @@ import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
+
+import '../../../../model/response/get_list_staff_responese_model.dart';
 
 class CreatePotentialCustomerBloc extends BaseBloc {
   CreatePotentialCustomerBloc(BuildContext context) {
@@ -52,6 +59,23 @@ class CreatePotentialCustomerBloc extends BaseBloc {
 
   TextEditingController representativeController = TextEditingController();
   FocusNode representativeFocusNode = FocusNode();
+
+  TextEditingController contactFullNameController = TextEditingController();
+  FocusNode contactFullNameFocusNode = FocusNode();
+
+  TextEditingController contactPhoneController = TextEditingController();
+  FocusNode contactPhoneFocusNode = FocusNode();
+
+  TextEditingController contactEmailController = TextEditingController();
+  FocusNode contactEmailFocusNode = FocusNode();
+
+  CustomerOptionData? customerOptionData;
+  List<CustomerOptionSource> listCustomerSource = [];
+
+  List<PipelineData> listPipeline = [];
+  List<JourneyData> listJourney = [];
+
+  WorkListStaffResponseModel? listAllocator;
 
   CustomerCreateAddressModel? addressModel;
 
@@ -115,9 +139,74 @@ class CreatePotentialCustomerBloc extends BaseBloc {
     return null;
   }
 
-  Future<void> onGetBranch(BuildContext context) async {
-    List<BranchData>? data = await getBranch(context);
-    branchSelected = data?.first;
+  Future<void> onGetBranch(BuildContext context,
+      {bool showLoading = true}) async {
+    List<BranchData>? data = await getBranch(context, showLoading: showLoading);
+    if (data == null || data.isEmpty) return;
+    if (Global.branchId != null) {
+      try {
+        branchSelected = data.firstWhere((b) => b.branchId == Global.branchId);
+      } catch (_) {
+        branchSelected = data.first;
+      }
+    } else {
+      branchSelected = data.first;
+    }
+  }
+
+  Future<List<CustomerOptionSource>> getCustomerSources(
+      BuildContext context) async {
+    if (listCustomerSource.isNotEmpty) return listCustomerSource;
+    var res = await LeadConnection.getCustomerOption(context);
+    if (res != null) {
+      customerOptionData = res.data;
+      listCustomerSource = customerOptionData?.source ?? [];
+    }
+    return listCustomerSource;
+  }
+
+  Future<List<PipelineData>> getPipelines(BuildContext context) async {
+    if (listPipeline.isNotEmpty) return listPipeline;
+    var res = await LeadConnection.getPipeline(context);
+    listPipeline = res?.data ?? [];
+    return listPipeline;
+  }
+
+  Future<List<JourneyData>> getJourneys(
+      BuildContext context, String? pipelineCode) async {
+    if (pipelineCode == null || pipelineCode.isEmpty) return [];
+    var res = await LeadConnection.getJourney(
+        context, GetJourneyModelRequest(pipelineCode: [pipelineCode]));
+    listJourney = res?.data ?? [];
+    return listJourney;
+  }
+
+  Future<WorkListStaffResponseModel?> getAllocatorByBranch(
+      BuildContext context, int? branchId,
+      {bool showLoading = true}) async {
+    var res = await LeadConnection.workListStaffPermission(context,
+        branchId: branchId, showLoading: showLoading);
+    listAllocator = res;
+    return listAllocator;                      
+  }
+
+  // TODO: tạm thời — dùng API cũ get-allocator (không filter theo branch).
+  // Bỏ hàm này khi backend đã ổn định endpoint workListStaffPermission.
+  Future<WorkListStaffResponseModel?> getAllocatorByBranchLegacy(
+      BuildContext context, int? branchId,
+      {bool showLoading = true}) async {
+    if (showLoading) LeadConnection.showLoading(context);
+    var res = await LeadConnection.getAllocator(context, branchId: branchId);
+    if (showLoading) Navigator.of(context).pop();
+    final List<AllocatorData> raw = res?.data ?? [];
+    final mapped = raw
+        .map((a) => WorkListStaffModel(
+              staffId: a.staffId,
+              staffName: a.fullName,
+            ))
+        .toList();
+    listAllocator = WorkListStaffResponseModel(data: mapped);
+    return listAllocator;
   }
 
   Future<List<CustomerGroupData>?> getCustomerGroup(BuildContext context,

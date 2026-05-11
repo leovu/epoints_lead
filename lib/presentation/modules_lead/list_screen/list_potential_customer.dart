@@ -16,7 +16,6 @@ import 'package:lead_plugin_epoint/utils/global.dart';
 import 'package:lead_plugin_epoint/utils/visibility_api_widget_name.dart';
 import 'package:lead_plugin_epoint/widget/container_data_builder.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
-import 'package:lead_plugin_epoint/widget/custom_dialog.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 import 'package:lead_plugin_epoint/widget/widget.dart';

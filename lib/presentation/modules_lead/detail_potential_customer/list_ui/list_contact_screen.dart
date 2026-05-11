@@ -219,7 +219,7 @@ class ListContactScreenState extends State<ListContactScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
-      title: AppLocalizations.text(LangKey.care_list),
+      title: 'Contacts list',
       body: _buildContent(),
       onWillPop: () => CustomNavigator.pop(context, object: false),
     );

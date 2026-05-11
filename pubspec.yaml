@@ -22,7 +22,7 @@ dependencies:
   cached_network_image: ^3.4.1
   dotted_border: ^2.1.0
   file_picker: ^9.2.0
-  keyboard_actions: ^4.2.0
+  keyboard_actions: 4.2.1
   image: ^4.5.3
   rxdart: ^0.28.0
   webview_flutter: 4.10.0

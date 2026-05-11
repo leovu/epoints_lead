@@ -148,7 +148,7 @@ class ListNoteScreenState extends State<ListNoteScreen> {
   Widget build(BuildContext context) {
     return CustomScaffold(
       options: _options,
-      title: AppLocalizations.text(LangKey.care_list),
+      title: 'Notes list',
       body: _buildContent(),
       onWillPop: () => CustomNavigator.pop(context, object: false),
     );

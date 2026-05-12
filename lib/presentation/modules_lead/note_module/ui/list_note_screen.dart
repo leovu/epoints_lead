@@ -1,5 +1,5 @@
-
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -36,10 +36,10 @@ class ListNoteScreenState extends State<ListNoteScreen> {
     _options = [
       CustomOptionAppBar(
           icon: Assets.iconPlus,
-          ontap:() {
-             widget.bloc.onAddNote(() {
-            widget.bloc.getListNote(context);
-          });
+          ontap: () {
+            widget.bloc.onAddNote(() {
+              widget.bloc.getListNote(context);
+            });
           })
     ];
 
@@ -127,21 +127,31 @@ class ListNoteScreenState extends State<ListNoteScreen> {
                       style: AppTextStyles.style14HintNormal,
                     ),
                     Text(
-                      parseAndFormatDate(date, format: AppFormat.formatDateTime),
+                      formatDateTime(date),
                       style: AppTextStyles.style14HintNormal,
                     ),
                   ],
                 )),
                 SizedBox(
-                    width: AppSizes.minPadding,
-                  ),
-                  CustomIndex(index: index)
+                  width: AppSizes.minPadding,
+                ),
+                CustomIndex(index: index)
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  String formatDateTime(String? date) {
+    if (date == null || date.isEmpty) {
+      return "";
+    }
+
+    final parsedDate = DateTime.parse(date);
+
+    return DateFormat("dd/MM/yyyy HH:mm").format(parsedDate);
   }
 
   @override
@@ -164,13 +174,14 @@ class CustomIndex extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: AppColors.primaryColor.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(4.0)
-      ),
+          borderRadius: BorderRadius.circular(4.0)),
       padding: EdgeInsets.all(4.0),
       child: Row(
         children: [
           CustomDot(),
-          SizedBox(width: 2.0,),
+          SizedBox(
+            width: 2.0,
+          ),
           Text(
             (index + 1).toString(),
             style: AppTextStyles.style12PrimaryBold,
@@ -182,12 +193,10 @@ class CustomIndex extends StatelessWidget {
 }
 
 class CustomDot extends StatelessWidget {
-
   final double size;
   final Color? color;
 
-  const CustomDot({Key? key, this.size = 6.0, this.color})
-      : super(key: key);
+  const CustomDot({Key? key, this.size = 6.0, this.color}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -195,9 +204,7 @@ class CustomDot extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color ?? AppColors.primaryColor
-      ),
+          shape: BoxShape.circle, color: color ?? AppColors.primaryColor),
     );
   }
 }

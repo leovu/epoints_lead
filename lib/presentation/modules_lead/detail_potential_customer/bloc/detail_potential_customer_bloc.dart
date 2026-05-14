@@ -386,7 +386,7 @@ class DetailPotentialCustomerBloc extends BaseBloc {
     }
   }
 
-  onPushPresenter () async {
-    await Global.negativeDetailPrefer?.call(detail?.customerLeadReferId ?? 0);
+  onPushPresenter ({int? id}) async {
+    await Global.negativeDetailPrefer?.call(id??detail?.customerLeadReferId ?? 0);
   }
 }

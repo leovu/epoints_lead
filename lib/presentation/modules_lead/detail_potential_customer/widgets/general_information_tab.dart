@@ -136,6 +136,7 @@ extension GeneralInformationTabExtension on _DetailPotentialCustomerState {
   }
 
   Widget _buildPresenter(DetailPotentialData model) {
+    // return Text('${_bloc.detail!.customerLeadReferId}');
     return CustomColumnIconInformation(
       icon: Assets.iconSearch,
       title: AppLocalizations.text(LangKey.presenter),
@@ -146,7 +147,7 @@ extension GeneralInformationTabExtension on _DetailPotentialCustomerState {
               .copyWith(decoration: TextDecoration.underline),
       onTap: _bloc.detail!.customerLeadReferId == null
           ? null
-          : _bloc.onPushPresenter,
+          : () => _bloc.onPushPresenter(),
     );
   }
 

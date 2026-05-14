@@ -243,6 +243,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
         if (dataDetail != null) {
           if (dataDetail.errorCode == 0) {
             detailNew = dataDetail.data!;
+            _bloc.detail = detailNew;
             bool business = false;
             if (dataDetail.data!.customerType == "business") {
               business = true;
@@ -385,11 +386,14 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       _bloc.presenterModel = CustomerModel(
           customerId: detailNew?.customerLeadReferId,
           fullName: detailNew?.customerLeadReferName ?? "");
+      _bloc.setPresenterModel(_bloc.presenterModel);
     }
 
     if (detailNew?.avatar != null && detailNew?.avatar != "") {
       _bloc.imgAvatar = detailNew?.avatar;
     }
+
+    _bloc.noteController.text = detailNew?.note ?? "";
 
     var dataType_Source = await LeadConnection.getCustomerOption(context);
     if (dataType_Source != null) {

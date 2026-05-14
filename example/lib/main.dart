@@ -50,7 +50,7 @@ class _MyAppState extends State<MyApp> {
                   staffId: 230,
                   context,
                   Locale(LangKey.langVi, 'vi'),
-                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS1zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTc3NjQ3NTM2OCwiZXhwIjoxNzc2NDk2OTY4LCJuYmYiOjE3NzY0NzUzNjgsImp0aSI6InpueVYxSm1DVHF0bGVqUDYiLCJzdWIiOjIzMCwicHJ2IjoiYTBmM2U3NGJlZGY1MTJjNDc3ODI5N2RlNWY5MjA4NmRhZDM5Y2E5ZiIsInNpZCI6InF1YW5nbWwiLCJicmFuZF9jb2RlIjoicWMifQ.CK-zAT3Mo_lmbPD-MA8uMTN93Y2nBqtILqS60l-MqfA',
+                  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL3N0YWZmLWFwaS1zdGFnLmVwb2ludHMudm4vdXNlci9sb2dpbiIsImlhdCI6MTc3ODczMzQxNCwiZXhwIjoxNzc4NzU1MDE0LCJuYmYiOjE3Nzg3MzM0MTQsImp0aSI6Im9UeWpjbWxSUkZrMjNKTVQiLCJzdWIiOjIzMCwicHJ2IjoiYTBmM2U3NGJlZGY1MTJjNDc3ODI5N2RlNWY5MjA4NmRhZDM5Y2E5ZiIsInNpZCI6InF1YW5nbWwiLCJicmFuZF9jb2RlIjoicWMifQ.aI5kLw-dJ01bYTngPfcqTIT3vpn-Kh5EL_L0T9XMuTc',
                   2,
                   domain: 'https://staff-api.stag.epoints.vn',
                   brandCode: 'qc');

@@ -254,7 +254,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
               title: AppLocalizations.text(LangKey.inputPhonenumber),
               content: "",
               icon: Assets.iconCall,
-              mandatory: true,
+              mandatory: false,
               dropdown: false,
               textfield: true,
               fillText: _phoneNumberText,

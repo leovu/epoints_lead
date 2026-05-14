@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
@@ -35,6 +36,7 @@ class _LeadScreen extends State<LeadScreen> {
   ScrollController _controller = ScrollController();
   final TextEditingController _searchtext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
+  Timer? _debounce;
 
   List<WorkListStaffModel> models = [];
 
@@ -96,7 +98,7 @@ class _LeadScreen extends State<LeadScreen> {
   }
 
   getData(bool loadMore, {int? page}) async {
-    LeadConnection.showLoading(context);
+    // LeadConnection.showLoading(context);
     ListCustomLeadModelReponse? model = await LeadConnection.getList(
         context,
         ListCustomLeadModelRequest(
@@ -113,7 +115,7 @@ class _LeadScreen extends State<LeadScreen> {
             careHistory: filterModel!.careHistory,
             pipelineId: filterModel!.pipelineId,
             journeyId: filterModel!.journeyId));
-    Navigator.of(context).pop();
+    // Navigator.of(context).pop();
 
     if (model != null) {
       models = [];
@@ -140,6 +142,7 @@ class _LeadScreen extends State<LeadScreen> {
 
   @override
   void dispose() {
+    _debounce?.cancel();
     _controller.removeListener(() {});
     super.dispose();
   }
@@ -230,7 +233,7 @@ class _LeadScreen extends State<LeadScreen> {
                   },
                   bodyBuilder: () => CustomListView(
                     padding: const EdgeInsets.only(
-                        top: 30.0, bottom: 10.0, left: 10.0, right: 10.0),
+                        top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
                     onLoadmore: () async {
                       if (currentPage < nextPage) {
                         filterModel!.page = currentPage + 1;
@@ -311,7 +314,15 @@ class _LeadScreen extends State<LeadScreen> {
                 BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
             isDense: true,
           ),
+          onChanged: (value) {
+            _debounce?.cancel();
+            _debounce = Timer(const Duration(milliseconds: 700), () {
+              filterModel!.page = 1;
+              getData(false);
+            });
+          },
           onSubmitted: (event) async {
+            _debounce?.cancel();
             filterModel!.page = 1;
             getData(false);
           }),
@@ -341,60 +352,67 @@ class _LeadCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(bottom: 32.0),
-          child: InkWell(
-            onTap: () => _navigateToDetail(context),
-            child: Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(width: 1, color: const Color(0xFFC3C8D3))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _LeadCardHeader(item: item),
-                  _LeadCardInfoRow(
-                    item: item,
-                    onNavigate: () => _navigateToDetail(context),
-                    onCall: () {
-                      if (Global.callHotline != null &&
-                          (item.phone ?? "") != "") {
-                        Global.callHotline!({
-                          'id': item.customerLeadId,
-                          'code': item.customerLeadCode,
-                          'avatar': item.avatar,
-                          'name': item.leadFullName,
-                          'phone': item.phone,
-                          'type': item.customerType,
-                        });
-                      } else {
-                        LeadConnection.showMyDialog(context,
-                            AppLocalizations.text(LangKey.noPhoneNumber) ?? "Không có thông tin số điện thoại");
-                      }
-                    },
-                  ),
-                  if (item.tag != null && item.tag!.isNotEmpty)
-                    _LeadCardTags(tags: item.tag!),
-                ],
-              ),
+    return Container(
+      margin: EdgeInsets.only(bottom: AppSizes.minPadding),
+      child: InkWell(
+        onTap: () => _navigateToDetail(context),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+              width: 1,
+              color: const Color(0xFFC3C8D3),
             ),
           ),
-        ),
-        Positioned(
-          left: 10,
-          top: -10,
-          child: CustomAvatarWithURL(
-            backgroundColor: const Color(0xFFEEB132),
-            url: item.avatar ?? '',
-            name: item.leadFullName,
-            size: 60.0,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+                    child: CustomAvatarWithURL(
+                      backgroundColor: const Color(0xFFEEB132),
+                      url: item.avatar ?? '',
+                      name: item.leadFullName,
+                      size: 60.0,
+                    ),
+                  ),
+                  Expanded(
+                    child: _LeadCardHeader(item: item),
+                  ),
+                ],
+              ),
+              _LeadCardInfoRow(
+                item: item,
+                onNavigate: () => _navigateToDetail(context),
+                onCall: () {
+                  if (Global.callHotline != null && (item.phone ?? "") != "") {
+                    Global.callHotline!({
+                      'id': item.customerLeadId,
+                      'code': item.customerLeadCode,
+                      'avatar': item.avatar,
+                      'name': item.leadFullName,
+                      'phone': item.phone,
+                      'type': item.customerType,
+                    });
+                  } else {
+                    LeadConnection.showMyDialog(
+                      context,
+                      AppLocalizations.text(LangKey.noPhoneNumber) ??
+                          "Không có thông tin số điện thoại",
+                    );
+                  }
+                },
+              ),
+              if (item.tag != null && item.tag!.isNotEmpty)
+                _LeadCardTags(tags: item.tag!),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
@@ -411,8 +429,9 @@ class _LeadCardHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 4.0),
-      margin: const EdgeInsets.only(left: 80),
+      padding:
+          const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 4.0, left: 8),
+      // margin: const EdgeInsets.only(left: 8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

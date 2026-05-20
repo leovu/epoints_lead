@@ -41,7 +41,8 @@ part 'create_potential_customer_handlers.dart';
 class CreatePotentialCustomer extends StatefulWidget {
   final String? fullname;
   final String? phoneNumber;
-  CreatePotentialCustomer({Key? key, this.fullname, this.phoneNumber})
+  final int? saleId;
+  CreatePotentialCustomer({Key? key, this.fullname, this.phoneNumber, this.saleId})
       : super(key: key);
 
   @override

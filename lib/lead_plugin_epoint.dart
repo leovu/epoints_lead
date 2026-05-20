@@ -29,6 +29,7 @@ class LeadPluginEpoint {
       {String? domain,
       String? brandCode,
       String? fullname,
+      int? saleId,
       String? phone,
       String? customerLeadCode,
       int? staffId,
@@ -42,6 +43,7 @@ class LeadPluginEpoint {
       Function(Map<String,dynamic>)? callHotline,
       List<Map<String, dynamic>>? permission}) async {
     Global.staffId = staffId;
+    if (type == 0) Global.saleId = saleId;
     Global.branchId = branchId;
     if (permission != null) {
         Global.permissionModels = permission;
@@ -94,7 +96,7 @@ class LeadPluginEpoint {
         Map<String, dynamic>? event = await Navigator.of(context).push(
             MaterialPageRoute(
                 builder: (context) => CreatePotentialCustomer(
-                    fullname: fullname, phoneNumber: phone)));
+                    fullname: fullname, phoneNumber: phone, saleId: saleId)));
         return event;
       } else if (type == 1) {
         await Navigator.of(context).push(MaterialPageRoute(

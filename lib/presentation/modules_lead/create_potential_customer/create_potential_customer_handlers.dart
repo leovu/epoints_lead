@@ -47,8 +47,7 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
     final staffs = res?.data ?? [];
     if (staffs.isEmpty || Global.staffId == null) return;
     try {
-      allocatorSelected =
-          staffs.firstWhere((a) => a.staffId == Global.staffId);
+      allocatorSelected = staffs.firstWhere((a) => a.staffId == Global.staffId);
       detailPotential.saleId = allocatorSelected!.staffId;
     } catch (_) {
       // không match → để trống cho user chọn
@@ -62,11 +61,9 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
       await _bloc.getCustomerSources(context);
       Navigator.of(context).pop();
     }
-    CustomerOptionSource? source =
-        await CustomNavigator.showCustomBottomDialog(
+    CustomerOptionSource? source = await CustomNavigator.showCustomBottomDialog(
       context,
       CustomerSourceModal(sources: _bloc.listCustomerSource),
-
     );
     if (source != null) {
       sourceSelected = source;
@@ -85,7 +82,6 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
     PipelineData? pipeline = await CustomNavigator.showCustomBottomDialog(
       context,
       PipelineModal(pipeLineData: _bloc.listPipeline),
-
     );
     if (pipeline == null) return;
 
@@ -109,7 +105,6 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
     JourneyData? journey = await CustomNavigator.showCustomBottomDialog(
       context,
       JourneyModal(journeys: journeys),
-
     );
     if (journey != null) {
       journeySelected = journey;
@@ -129,7 +124,6 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
     JourneyData? journey = await CustomNavigator.showCustomBottomDialog(
       context,
       JourneyModal(journeys: _bloc.listJourney),
-
     );
     if (journey != null) {
       journeySelected = journey;
@@ -153,8 +147,7 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
     WorkListStaffModel? data = await CustomNavigator.showCustomBottomDialog(
       context,
       StaffPickModal(
-          staffs: _bloc.listAllocator?.data,
-          selected: allocatorSelected),
+          staffs: _bloc.listAllocator?.data, selected: allocatorSelected),
     );
     if (data != null) {
       allocatorSelected = data;
@@ -170,7 +163,6 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
     BranchData? data = await CustomNavigator.showCustomBottomDialog(
       context,
       BranchModal(datas: _bloc.listBranch),
-
     );
     if (data == null) return;
 
@@ -193,7 +185,6 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
     CustomerGroupData? data = await CustomNavigator.showCustomBottomDialog(
       context,
       GroupCustomerModal(datas: _bloc.listCustomerGroupData),
-
     );
     if (data != null) {
       _bloc.customerGroupSelected = data;
@@ -209,8 +200,8 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
       Navigator.of(context).pop();
       if (tags != null) tagsData = tags.data;
     }
-    var listTagsSelected = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => TagsModal(tagsData: tagsData)));
+    var listTagsSelected = await Navigator.of(context).push(
+        MaterialPageRoute(builder: (context) => TagsModal(tagsData: tagsData)));
     if (listTagsSelected == null) return;
 
     tagsString = "";
@@ -249,8 +240,8 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
         detailPotential.journeyCode == "" ||
         (detailPotential.saleId ?? 0) == 0 ||
         _bloc.branchSelected == null) {
-      LeadConnection.showMyDialog(context,
-          AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
+      LeadConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.warningChooseAllRequiredInfo),
           warning: true);
       return;
     }
@@ -259,8 +250,8 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
     if (phone.isNotEmpty &&
         !Validators().isValidPhone(phone) &&
         !Validators().isNumber(phone)) {
-      LeadConnection.showMyDialog(context,
-          AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
+      LeadConnection.showMyDialog(
+          context, AppLocalizations.text(LangKey.phoneNumberNotCorrectFormat),
           warning: true);
       return;
     }
@@ -294,8 +285,7 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
         return;
       }
       final contactEmail = _bloc.contactEmailController.text.trim();
-      if (contactEmail.isNotEmpty &&
-          !Validators().isValidEmail(contactEmail)) {
+      if (contactEmail.isNotEmpty && !Validators().isValidEmail(contactEmail)) {
         LeadConnection.showMyDialog(
             context, "Email người liên hệ không đúng định dạng",
             warning: true);
@@ -330,7 +320,11 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
               typePersonnal ? "" : _bloc.representativeController.text,
           pipelineCode: detailPotential.pipelineCode,
           journeyCode: detailPotential.journeyCode,
-          saleId: detailPotential.saleId,
+          saleId:
+              //  (detailPotential.saleId ?? 0) != 0
+              //     ? detailPotential.saleId
+              //     :
+              Global.saleId ?? detailPotential.saleId,
           tagId: detailPotential.tagId,
           gender: detailPotential.gender,
           birthday: detailPotential.birthday,
@@ -345,8 +339,7 @@ extension CreatePotentialCustomerHandlers on _CreatePotentialCustomerState {
           fanpage: detailPotential.fanpage ?? "",
           contactAddress: typePersonnal ? "" : detailPotential.contactAddress,
           contactEmail: typePersonnal ? "" : detailPotential.contactEmail,
-          contactFullName:
-              typePersonnal ? "" : detailPotential.contactFullName,
+          contactFullName: typePersonnal ? "" : detailPotential.contactFullName,
           contactPhone: typePersonnal ? "" : detailPotential.contactPhone,
           position: typePersonnal ? "" : detailPotential.position,
           customerGroupId: _bloc.customerGroupSelected?.customerGroupId ?? 0,

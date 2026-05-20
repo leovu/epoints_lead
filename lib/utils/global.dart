@@ -30,6 +30,7 @@ class Global {
   static String brandCode = '';
   static String asscessToken = '';
   static int? staffId;
+  static int? saleId;
   static int? branchId;
   static Locale? locale;
 

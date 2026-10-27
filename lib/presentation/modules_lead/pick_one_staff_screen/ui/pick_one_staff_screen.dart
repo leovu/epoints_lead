@@ -437,7 +437,9 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: Color(0xFF0067AC),
+        backgroundColor: AppColors.primaryColor,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
         title: Text(
           widget.title ?? AppLocalizations.text(LangKey.staff)!,
           style: const TextStyle(color: Colors.white, fontSize: 18.0),

@@ -109,7 +109,9 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: Color(0xFF0067AC),
+        backgroundColor: AppColors.primaryColor,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
         title: Center(
           child: Text(
             AppLocalizations.text(LangKey.enter_address)!,

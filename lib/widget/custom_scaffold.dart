@@ -55,7 +55,12 @@ class CustomScaffold extends StatelessWidget {
         (title == null && customTitle == null)?Container():Container(
           height: 90,
           width: double.infinity,
-          color: AppColors.primaryColor,
+          decoration: BoxDecoration(
+            gradient: AppGlass.headerGradient,
+            border: Border(
+              bottom: BorderSide(color: Colors.white.withValues(alpha: 0.25)),
+            ),
+          ),
           padding: EdgeInsets.only(top: 30.0),
           child: CustomAppBar(
             title: title,
@@ -86,7 +91,7 @@ class CustomScaffold extends StatelessWidget {
 
   Widget _buildBody(){
     return Scaffold(
-        backgroundColor: backgroundColor??AppColors.white,
+        backgroundColor: backgroundColor??AppColors.surfaceColor,
         body: SafeArea(
           top: false,
           left: false,

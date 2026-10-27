@@ -582,6 +582,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               color: Colors.white,
             ),
             backgroundColor: AppColors.primaryColor,
+            surfaceTintColor: Colors.transparent,
+            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
             title: Text(
               AppLocalizations.text(LangKey.editPotential)!,
               style: const TextStyle(color: Colors.white, fontSize: 16.0),

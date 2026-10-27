@@ -180,19 +180,11 @@ class ContainerBooking extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.0),
-            color: AppColors.white,
+            gradient: AppGlass.cardGradient,
             border: Border.all(
                 color:
                     isSelected ? AppColors.primaryColor : AppColors.white),
-            boxShadow: isSelected
-                ? null
-                : [
-                    BoxShadow(
-                      color: AppColors.black.withValues(alpha: 0.25),
-                      blurRadius: 2.0,
-                      offset: Offset.zero,
-                    )
-                  ]),
+            boxShadow: AppGlass.shadow),
         child: child,
       ),
       onTap: onTap,

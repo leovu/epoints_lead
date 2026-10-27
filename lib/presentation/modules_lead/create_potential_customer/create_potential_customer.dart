@@ -183,6 +183,8 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           appBar: AppBar(
             iconTheme: const IconThemeData(color: Colors.white),
             backgroundColor: AppColors.primaryColor,
+            surfaceTintColor: Colors.transparent,
+            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
             title: Text(
               AppLocalizations.text(LangKey.addPotentialCustomer)!,
               style: const TextStyle(color: Colors.white, fontSize: 18.0),

@@ -44,7 +44,9 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: Color(0xFF0067AC),
+          backgroundColor: AppColors.primaryColor,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
           title: Text(
             AppLocalizations.text(LangKey.byCustomerSource)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

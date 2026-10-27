@@ -1,3 +1,4 @@
+import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -126,7 +127,9 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: Color(0xFF0067AC),
+          backgroundColor: AppColors.primaryColor,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
           title: Text(
             AppLocalizations.text(LangKey.businessFocalPoint)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),

@@ -460,7 +460,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
     return Container(
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-          color: Colors.white,
+          gradient: AppGlass.cardGradient,
           borderRadius: BorderRadius.circular(5),
           border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
       child: Column(

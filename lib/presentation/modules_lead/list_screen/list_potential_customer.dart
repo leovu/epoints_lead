@@ -155,6 +155,8 @@ class _LeadScreen extends State<LeadScreen> {
           color: Colors.white,
         ),
         backgroundColor: AppColors.primaryColor,
+        surfaceTintColor: Colors.transparent,
+        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
         centerTitle: true,
         title: Text(
           AppLocalizations.text(LangKey.listPotential)!,
@@ -187,7 +189,7 @@ class _LeadScreen extends State<LeadScreen> {
           )
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.surfaceColor,
       body: _buildBody(),
       floatingActionButton: !checkVisibilityKey(VisibilityWidgetName.LE000001)
           ? FloatingActionButton(
@@ -358,7 +360,7 @@ class _LeadCard extends StatelessWidget {
         onTap: () => _navigateToDetail(context),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            gradient: AppGlass.cardGradient,
             borderRadius: BorderRadius.circular(5),
             border: Border.all(
               width: 1,

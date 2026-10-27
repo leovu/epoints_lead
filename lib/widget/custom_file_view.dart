@@ -58,6 +58,8 @@ class CustomFileViewState extends State<CustomFileView> {
           ),
           // actionsIconTheme: Navigator.of(context).pop(true),
           backgroundColor: AppColors.primaryColor,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
           title: Text(
             widget.title!,
             style: TextStyle(color: Colors.white, fontSize: 18.0),

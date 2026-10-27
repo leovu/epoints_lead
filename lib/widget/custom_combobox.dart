@@ -59,7 +59,7 @@ class CustomComboBoxState extends State<CustomComboBox> {
     return InkWell(
       child: Container(
         decoration: BoxDecoration(
-            color: AppColors.white,
+            gradient: AppGlass.cardGradient,
             borderRadius: BorderRadius.circular(8.0),
             border: Border.all(color: AppColors.grey200)),
         child: Padding(

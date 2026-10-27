@@ -51,7 +51,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
     return Container(
       padding: EdgeInsets.only(bottom: 50, top: 10, left: 13.0, right: 13.0),
       decoration: BoxDecoration(
-          color: Colors.white,
+          gradient: AppGlass.sheetGradient,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10))),
       height: _isKeyboardVisible

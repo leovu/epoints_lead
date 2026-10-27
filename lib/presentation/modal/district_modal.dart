@@ -55,7 +55,7 @@ class _DistrictModalState extends State<DistrictModal> {
     return Container(
       padding: EdgeInsets.only(bottom: 50, top: 10),
       decoration: BoxDecoration(
-          color: Colors.white,
+          gradient: AppGlass.sheetGradient,
           borderRadius: BorderRadius.only(
               topLeft: Radius.circular(10), topRight: Radius.circular(10))),
       height: MediaQuery.of(context).size.height * 0.8,

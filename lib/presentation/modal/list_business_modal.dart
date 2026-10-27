@@ -61,7 +61,9 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
           iconTheme: const IconThemeData(
             color: Colors.white,
           ),
-          backgroundColor: Color(0xFF0067AC),
+          backgroundColor: AppColors.primaryColor,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
           title: Text(
             AppLocalizations.text(LangKey.listBusiness)!,
             style: const TextStyle(color: Colors.white, fontSize: 18.0),
@@ -135,13 +137,8 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
         padding: EdgeInsets.only(left: 8.0, right: 8.0),
         height: 80.0,
         decoration: BoxDecoration(
-          boxShadow: [
-                      BoxShadow(
-                          blurRadius: 0.3,
-                          spreadRadius: 0.3,
-                          color: Color.fromRGBO(0, 0, 0, 0.25))
-                    ],
-            color: Colors.white,
+          boxShadow: AppGlass.shadow,
+            gradient: AppGlass.cardGradient,
             border: Border.all(
                 width: 1.0, color: Color(0xFFC3C8D3), style: BorderStyle.solid),
             borderRadius: BorderRadius.circular(10.0)),

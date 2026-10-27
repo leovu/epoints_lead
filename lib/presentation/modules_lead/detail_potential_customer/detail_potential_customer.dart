@@ -366,12 +366,14 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           ),
           // actionsIconTheme: Navigator.of(context).pop(true),
           backgroundColor: AppColors.primaryColor,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
           title: Text(
             AppLocalizations.text(LangKey.detailPotential)!,
             style: TextStyle(color: Colors.white, fontSize: 18.0),
           ),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: AppColors.surfaceColor,
         body: Container(
             decoration: BoxDecoration(color: AppColors.white),
             child: buildBody()),

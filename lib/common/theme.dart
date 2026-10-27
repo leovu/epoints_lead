@@ -4,6 +4,12 @@ import 'package:intl/intl.dart';
 class AppColors {
   static const subColor = Color(0xFF2F2E41);
   static const primaryColor = Color(0xFF3298DD);
+  static const primaryColorMix = Color(0xFFE1F0FA);
+  static const primaryDarkColor = Color(0xFF1F7BBF);
+  static const primaryLightColor = Color(0xFF9CCFF0);
+  static const secondaryColor = Color(0xFF1A6497);
+  static const secondaryColorMix = Color(0xFFD3E8F7);
+  static const surfaceColor = Color(0xFFF2F7FB);
   static const primary50Color = Color(0xFFF9DECF);
   static const white = Color(0xFFFFFFFF);
   static const white50 = Color(0xFFFAFAFA);
@@ -662,3 +668,90 @@ class AppSizeWebConfig {
   static const maxHeightWeb =  926.0;
 }
 
+
+
+class AppGlass {
+  static const double radius = 16.0;
+
+  static const double sheetRadius = 26.0;
+
+  static const LinearGradient headerGradient = LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [AppColors.primaryColor, AppColors.primaryGradiantColor],
+  );
+
+  static Color get borderColor => Colors.white.withValues(alpha: 0.9);
+
+  static List<BoxShadow> get shadow => [
+        BoxShadow(
+          offset: Offset(0.0, 8.0),
+          blurRadius: 22.0,
+          spreadRadius: -4.0,
+          color: AppColors.primaryDarkColor.withValues(alpha: 0.12),
+        ),
+        BoxShadow(
+          offset: Offset(0.0, 1.0),
+          blurRadius: 3.0,
+          color: Color(0xFF0F172A).withValues(alpha: 0.04),
+        ),
+      ];
+
+  static List<BoxShadow> get shadowPressed => [
+        BoxShadow(
+          offset: Offset(0.0, 3.0),
+          blurRadius: 10.0,
+          spreadRadius: -2.0,
+          color: AppColors.primaryDarkColor.withValues(alpha: 0.16),
+        ),
+      ];
+
+  static LinearGradient get cardGradient => LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Colors.white.withValues(alpha: 0.92),
+          Color.lerp(Colors.white, AppColors.primaryColor, 0.05)!
+              .withValues(alpha: 0.74),
+        ],
+      );
+
+  static LinearGradient get sheetGradient => LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Color(0xFFFDFEFF),
+          Color.lerp(Colors.white, AppColors.primaryColor, 0.03)!,
+          AppColors.surfaceColor,
+        ],
+        stops: [0.0, 0.3, 1.0],
+      );
+
+  static BoxDecoration card({double radius = AppGlass.radius}) {
+    return BoxDecoration(
+      borderRadius: BorderRadius.circular(radius),
+      gradient: cardGradient,
+      border: Border.all(color: borderColor, width: 1.0),
+      boxShadow: shadow,
+    );
+  }
+
+  static BoxDecoration sheet() {
+    return BoxDecoration(
+      borderRadius:
+          BorderRadius.vertical(top: Radius.circular(AppGlass.sheetRadius)),
+      gradient: sheetGradient,
+      border: Border(top: BorderSide(color: Colors.white, width: 1.5)),
+      boxShadow: [
+        BoxShadow(
+          offset: Offset(0.0, -6.0),
+          blurRadius: 28.0,
+          color: AppColors.primaryDarkColor.withValues(alpha: 0.14),
+        ),
+      ],
+    );
+  }
+
+  static bool reduceMotion(BuildContext context) =>
+      MediaQuery.maybeDisableAnimationsOf(context) ?? false;
+}

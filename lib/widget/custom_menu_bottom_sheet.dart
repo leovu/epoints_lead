@@ -1,3 +1,4 @@
+import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -45,7 +46,7 @@ class CustomMenuBottomSheet extends StatelessWidget {
                     horizontal: 12.0 * 1.5,
                     vertical:  15.0 * 1.5),
                 decoration: BoxDecoration(
-                    color: Colors.white,
+                    gradient: AppGlass.sheetGradient,
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(16.0),
                       topRight: Radius.circular(16.0),

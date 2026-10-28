@@ -119,8 +119,9 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             width: 1.0,
-                                            color: Color(0xFFE5E5E5)),
-                                        borderRadius: BorderRadius.circular(5)),
+                                            color: AppColors.primaryColorMix),
+                                        borderRadius: BorderRadius.circular(
+                                            AppRadius.sm)),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -178,8 +179,9 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             width: 1.0,
-                                            color: Color(0xFFE5E5E5)),
-                                        borderRadius: BorderRadius.circular(5)),
+                                            color: AppColors.primaryColorMix),
+                                        borderRadius: BorderRadius.circular(
+                                            AppRadius.sm)),
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -346,7 +348,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
                         fontSize: 15.0,
                         color: ((model.isSelected ?? false))
                             ? AppColors.primaryColor
-                            : AppColors.black,
+                            : AppColors.textTitleColor,
                         fontWeight: ((model.isSelected ?? false))
                             ? FontWeight.bold
                             : FontWeight.normal),
@@ -412,21 +414,27 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppGlass.background(
+        child: Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.headerShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
         title: Text(
           AppLocalizations.text(LangKey.staff)!,
-          style: const TextStyle(color: Colors.white, fontSize: 18.0),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
         ),
         // leadingWidth: 20.0,
       ),
       body: _buildBody(),
-    );
+    ));
   }
 }

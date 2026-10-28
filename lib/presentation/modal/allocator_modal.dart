@@ -53,10 +53,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 50, top: 10),
-      decoration: BoxDecoration(
-          gradient: AppGlass.sheetGradient,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+      decoration: AppGlass.sheet(),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
@@ -81,7 +78,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
                   AppLocalizations.text(LangKey.chooseAllottedPerson)!,
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: Colors.black,
+                      color: AppColors.textTitleColor,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
@@ -102,7 +99,7 @@ class _AllocatorModalState extends State<AllocatorModal> {
                         top: 16.0, bottom: 16.0, left: 16.0, right: 8.0),
                     physics: ClampingScrollPhysics(),
                     controller: _controller,
-                    separator: Divider(),
+                    separator: Divider(color: AppColors.primaryColorMix),
                     children: _listWidget(),
                   ),
                 )
@@ -135,7 +132,9 @@ class _AllocatorModalState extends State<AllocatorModal> {
               title,
               style: TextStyle(
                   fontSize: 15.0,
-                  color: selected ? AppColors.primaryColor : Color(0xFF040C21),
+                  color: selected
+                      ? AppColors.primaryColor
+                      : AppColors.textTitleColor,
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w400),
             ),
             selected
@@ -163,11 +162,12 @@ class _AllocatorModalState extends State<AllocatorModal> {
         contentPadding: EdgeInsets.all(12.0),
         border: OutlineInputBorder(
           // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
+          //     BorderSide(width: 1, color: AppColors.secondaryColorMix),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+          borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),

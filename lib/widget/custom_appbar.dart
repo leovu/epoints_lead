@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_icon_button.dart';
+import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class CustomAppBar extends StatelessWidget {
@@ -14,17 +15,40 @@ class CustomAppBar extends StatelessWidget {
 
   Widget _buildIcon(int index) {
     CustomOptionAppBar model = options![index];
-    return CustomIconButton(
-        ontap: model.ontap,
-        icon: model.icon,
-        isText: model.text != null,
-        color: Colors.white,
-        child: model.text == null
-            ? null
-            : Text(
-          options![index].text!,
-          style: AppTextStyles.style15PrimaryNormal,
-        ));
+    if (model.text != null) {
+      return CustomIconButton(
+          ontap: model.ontap,
+          isText: true,
+          color: Colors.white,
+          child: Text(
+            options![index].text!,
+            style: AppTextStyles.style15PrimaryNormal
+                .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+          ));
+    }
+    return Center(
+      child: Container(
+        width: 36.0,
+        height: 36.0,
+        margin: EdgeInsets.only(left: 4.0),
+        decoration: BoxDecoration(
+          color: AppGlass.headerIconBackground,
+          shape: BoxShape.circle,
+        ),
+        child: InkWell(
+          customBorder: CircleBorder(),
+          onTap: model.ontap,
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CustomImageIcon(
+              icon: model.icon,
+              size: 20.0,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   @override
@@ -39,14 +63,16 @@ class CustomAppBar extends StatelessWidget {
                   ((options == null || options!.length == 0)
                       ? (canPop ? 40.0 : 0.0)
                       : (options!.length * 40.0))),
-          child: customTitle ?? Center(
-            child: Text(
-              title!,
-              style: AppTextStyles.style17WhiteNormal,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
+          child: customTitle ??
+              Center(
+                child: Text(
+                  title!,
+                  style: AppTextStyles.style17WhiteNormal
+                      .copyWith(fontWeight: FontWeight.w600),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
         ),
         Row(
           children: [
@@ -56,13 +82,18 @@ class CustomAppBar extends StatelessWidget {
                     ? (onWillPop  ?? () => Navigator.pop(context))
                     : null,
                 child: Container(
-                  width: 40.0,
-                  height: 40.0,
-                  padding: EdgeInsets.only(left: 20.0),
+                  width: 36.0,
+                  height: 36.0,
+                  margin: EdgeInsets.only(left: 12.0),
+                  decoration: BoxDecoration(
+                    color: AppGlass.headerIconBackground,
+                    shape: BoxShape.circle,
+                  ),
+                  alignment: Alignment.center,
                   child: Icon(
-                    icon ?? Icons.arrow_back_ios,
+                    icon ?? Icons.arrow_back_ios_new,
                     color: Colors.white,
-                    size: 24.0,
+                    size: 18.0,
                   ),
                 ),
               ),

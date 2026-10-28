@@ -54,22 +54,22 @@ class ListFileScreenState extends State<ListFileScreen> {
 
   _buildCustomerType() {
     return RichText(
-              text: TextSpan(
-                  text: widget.bloc.detail?.customerType == "personal"
-                      ? "${AppLocalizations.text(LangKey.personal)} - "
-                      : "${AppLocalizations.text(LangKey.business)} - ",
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal),
-                  children: [
-                TextSpan(
-                    text: widget.bloc.detail?.fullName,
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold))
-              ]));
+        text: TextSpan(
+            text: widget.bloc.detail?.customerType == "personal"
+                ? "${AppLocalizations.text(LangKey.personal)} - "
+                : "${AppLocalizations.text(LangKey.business)} - ",
+            style: TextStyle(
+                fontSize: 16.0,
+                color: AppColors.textSecondaryColor,
+                fontWeight: FontWeight.normal),
+            children: [
+          TextSpan(
+              text: widget.bloc.detail?.fullName,
+              style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold))
+        ]));
   }
 
    Widget _buildBody() {
@@ -133,7 +133,8 @@ class ListFileScreenState extends State<ListFileScreen> {
                   Container(
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(AppRadius.sm)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 2.0),
                     child: Row(

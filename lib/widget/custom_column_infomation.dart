@@ -5,7 +5,6 @@ import 'package:lead_plugin_epoint/widget/custom_shimer.dart';
 import 'package:lead_plugin_epoint/widget/custom_skeleton.dart';
 
 class CustomColumnInformation extends StatelessWidget {
-
   final String? title;
   final Widget? titleSuffix;
   final dynamic titleIcon;
@@ -42,16 +41,20 @@ class CustomColumnInformation extends StatelessWidget {
 
   final _titleIconSize = 18.0;
 
-  Widget _buildSkeleton(){
+  Widget _buildSkeleton() {
     return CustomShimmer(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CustomSkeleton(width: AppSizes.maxWidth! / 4,),
-          Container(height: AppSizes.minPadding,),
+          CustomSkeleton(
+            width: AppSizes.maxWidth! / 4,
+          ),
+          Container(
+            height: AppSizes.minPadding,
+          ),
           CustomSkeleton(
             height: AppSizes.maxPadding * 2,
-            radius: 5.0,
+            radius: AppRadius.md,
           )
         ],
       ),
@@ -60,7 +63,7 @@ class CustomColumnInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(title == null){
+    if (title == null) {
       return _buildSkeleton();
     }
     return Column(
@@ -72,17 +75,20 @@ class CustomColumnInformation extends StatelessWidget {
               Expanded(
                 child: Row(
                   children: [
-                    if(titleIcon != null)
+                    if (titleIcon != null)
                       Padding(
-                        padding: EdgeInsets.only(right: AppSizes.minPadding / 2),
-                        child: (titleIcon is IconData) ? Icon(
-                          titleIcon,
-                          size: _titleIconSize,
-                          color: AppColors.primaryColor,
-                        ): CustomImageIcon(
-                          icon: titleIcon,
-                          size: _titleIconSize,
-                        ),
+                        padding:
+                            EdgeInsets.only(right: AppSizes.minPadding / 2),
+                        child: (titleIcon is IconData)
+                            ? Icon(
+                                titleIcon,
+                                size: _titleIconSize,
+                                color: AppColors.primaryColor,
+                              )
+                            : CustomImageIcon(
+                                icon: titleIcon,
+                                size: _titleIconSize,
+                              ),
                       ),
                     Flexible(
                       child: RichText(
@@ -91,16 +97,15 @@ class CustomColumnInformation extends StatelessWidget {
                             style: titleStyle ?? AppTextStyles.style16BlackBold,
                             children: [
                               TextSpan(
-                                text: isRequired?" *":"",
-                                style: (titleStyle ?? AppTextStyles.style16BlackBold).copyWith(
-                                    color: Colors.red
-                                ),
+                                text: isRequired ? " *" : "",
+                                style: (titleStyle ??
+                                        AppTextStyles.style16BlackBold)
+                                    .copyWith(color: AppColors.dangerColor),
                               ),
-                            ]
-                        ),
+                            ]),
                       ),
                     ),
-                    if(titleSuffixIcon != null)
+                    if (titleSuffixIcon != null)
                       Padding(
                         padding: EdgeInsets.only(left: AppSizes.minPadding / 2),
                         child: Icon(
@@ -112,47 +117,53 @@ class CustomColumnInformation extends StatelessWidget {
                   ],
                 ),
               ),
-              if(titleSuffix != null)
-                titleSuffix!,
+              if (titleSuffix != null) titleSuffix!,
             ],
           ),
-          onTap: onTitleTap ,
+          onTap: onTitleTap,
         ),
-        Container(height: AppSizes.minPadding,),
+        Container(
+          height: AppSizes.minPadding,
+        ),
         InkWell(
-          child: (child != null && enable) ? child : Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0),
-                color: backgroundColor ?? Color(0xFFF6F6F6),
-                border: borderColor == null?null:Border.all(
-                    color: borderColor!
-                )
-            ),
-            padding: EdgeInsets.all(AppSizes.minPadding),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    content ?? "",
-                    style: AppTextStyles.style14BlackNormal,
+          child: (child != null && enable)
+              ? child
+              : Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      color: backgroundColor ?? AppGlass.surface,
+                      border: Border.all(
+                          color: borderColor ?? AppGlass.borderColor)),
+                  padding: EdgeInsets.all(AppSizes.minPadding),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          content ?? "",
+                          style: AppTextStyles.style14BlackNormal,
+                        ),
+                      ),
+                      (suffixIcon == null && suffixIconData == null)
+                          ? Container()
+                          : Container(
+                              padding:
+                                  EdgeInsets.only(left: AppSizes.minPadding),
+                              child: suffixIcon != null
+                                  ? CustomImageIcon(
+                                      icon: suffixIcon,
+                                      size: 20.0,
+                                      color: AppColors.grey500Color,
+                                    )
+                                  : Icon(
+                                      suffixIconData,
+                                      size: 20.0,
+                                      color: AppColors.grey500Color,
+                                    ),
+                            )
+                    ],
                   ),
                 ),
-                (suffixIcon == null && suffixIconData == null)?Container():Container(
-                  padding: EdgeInsets.only(left: AppSizes.minPadding),
-                  child: suffixIcon != null? CustomImageIcon(
-                    icon: suffixIcon,
-                    size: 20.0,
-                    color: AppColors.grey500Color,
-                  ): Icon(
-                    suffixIconData,
-                    size: 20.0,
-                    color: AppColors.grey500Color,
-                  ),
-                )
-              ],
-            ),
-          ),
-          onTap: enable ? ontap  : null,
+          onTap: enable ? ontap : null,
         )
       ],
     );

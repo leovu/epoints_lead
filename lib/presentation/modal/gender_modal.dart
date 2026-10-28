@@ -20,8 +20,10 @@ class _GenderModalState extends State<GenderModal> {
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-              width: 1.0, color: Color(0xFFC3C8D3), style: BorderStyle.solid),
-          borderRadius: BorderRadius.circular(10.0)),
+              width: 1.0,
+              color: AppColors.secondaryColorMix,
+              style: BorderStyle.solid),
+          borderRadius: BorderRadius.circular(AppRadius.md)),
       padding: const EdgeInsets.only(top: 4.0, bottom: 4.0, left: 5.0),
       margin: EdgeInsets.only(bottom: 15.0 / 2),
       child: Row(
@@ -52,7 +54,7 @@ class _GenderModalState extends State<GenderModal> {
             padding: const EdgeInsets.all(4.0),
             decoration: BoxDecoration(
                 // color: AppColors.darkGrey,
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(AppRadius.md)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -63,7 +65,7 @@ class _GenderModalState extends State<GenderModal> {
                   child: Container(
                     decoration: BoxDecoration(
                         color: AppColors.darkGrey,
-                        borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(AppRadius.md)),
                     margin: EdgeInsets.only(right: 5.0),
                     padding: EdgeInsets.all(5.0),
                     child: Row(
@@ -80,7 +82,9 @@ class _GenderModalState extends State<GenderModal> {
                           AppLocalizations.text(LangKey.male)!,
                           style: TextStyle(
                               fontSize: AppTextSizes.size15,
-                              color: index == 1 ? Colors.black : Color(0xFF9E9E9E),
+                              color: index == 1
+                                  ? AppColors.textTitleColor
+                                  : AppColors.textMutedColor,
                               fontWeight: FontWeight.normal),
                           maxLines: 1,
                         )
@@ -91,7 +95,7 @@ class _GenderModalState extends State<GenderModal> {
                 Container(
                   decoration: BoxDecoration(
                       color: AppColors.darkGrey,
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(AppRadius.md)),
                   margin: EdgeInsets.only(right: 5.0),
                   padding: EdgeInsets.all(5.0),
                   child: Row(
@@ -108,7 +112,9 @@ class _GenderModalState extends State<GenderModal> {
                         AppLocalizations.text(LangKey.female)!,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: index == 2 ? Colors.black : Color(0xFF9E9E9E),
+                            color: index == 2
+                                ? AppColors.textTitleColor
+                                : AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         maxLines: 1,
                       )
@@ -119,7 +125,7 @@ class _GenderModalState extends State<GenderModal> {
                   height: 30,
                   decoration: BoxDecoration(
                       color: AppColors.darkGrey,
-                      borderRadius: BorderRadius.circular(10)),
+                      borderRadius: BorderRadius.circular(AppRadius.md)),
                   margin: EdgeInsets.only(right: 5.0),
                   padding: EdgeInsets.only(
                       top: 3.0, bottom: 3.0, left: 8.0, right: 8.0),
@@ -128,7 +134,9 @@ class _GenderModalState extends State<GenderModal> {
                       AppLocalizations.text(LangKey.other)!,
                       style: TextStyle(
                           fontSize: AppTextSizes.size15,
-                          color: index == 3 ? Colors.black : Color(0xFF9E9E9E),
+                          color: index == 3
+                              ? AppColors.textTitleColor
+                              : AppColors.textMutedColor,
                           fontWeight: FontWeight.normal),
                       maxLines: 1,
                     ),

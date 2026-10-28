@@ -63,7 +63,7 @@ class _StatusWorkModalState extends State<StatusWorkModal> {
   //             title,
   //             style: TextStyle(
   //                 fontSize: 17.0,
-  //                 color: selected ? Colors.orange : Colors.black,
+  //                 color: selected ? Colors.orange : AppColors.textTitleColor,
   //                 fontWeight: FontWeight.normal),
   //           )
   //         ],

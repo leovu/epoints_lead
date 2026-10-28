@@ -89,54 +89,57 @@ class CustomBottomOptionState extends State<CustomBottomOption> {
       bodyBuilder: () => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Flexible(child: _buildContainer(widget.options!
-              .map((e) => InkWell(
-            child: Container(
-              padding:
-              EdgeInsets.symmetric(vertical: AppSizes.maxPadding),
-              child: Row(
-                children: [
-                  if (e.icon != null || e.image != null)
-                    Container(
-                      padding:
-                      EdgeInsets.only(right: AppSizes.minPadding),
-                      child: e.icon != null
-                          ? CustomImageIcon(
-                        icon: e.icon,
-                        size: _iconSize,
-                        color:
-                        e.textColor ?? AppColors.grey200Color,
-                      )
-                          : Image.asset(
-                        e.image!,
-                        width: _iconSize,
-                      ),
-                    ),
-                  Expanded(
-                    child: Text(
-                      e.text ?? "",
-                      style: AppTextStyles.style15BlackNormal.copyWith(
-                          color: e.textColor ?? AppColors.black),
-                    ),
-                  ),
-                  if (e.isSelected != null && e.isSelected!)
-                    Container(
-                      padding:
-                      EdgeInsets.only(left: AppSizes.minPadding),
-                      child: Icon(
-                        Icons.check,
-                        color: AppColors.primaryColor,
-                        size: _iconSize,
-                      ),
-                    )
-                ],
-              ),
-            ),
-            onTap: widget.onConfirm == null
-                ? e.onTap
-                : () => _onSelected(e),
-          ))
-              .toList())),
+          Flexible(
+              child: _buildContainer(widget.options!
+                  .map((e) => InkWell(
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                              vertical: AppSizes.maxPadding),
+                          child: Row(
+                            children: [
+                              if (e.icon != null || e.image != null)
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      right: AppSizes.minPadding),
+                                  child: e.icon != null
+                                      ? CustomImageIcon(
+                                          icon: e.icon,
+                                          size: _iconSize,
+                                          color: e.textColor ??
+                                              AppColors.grey200Color,
+                                        )
+                                      : Image.asset(
+                                          e.image!,
+                                          width: _iconSize,
+                                        ),
+                                ),
+                              Expanded(
+                                child: Text(
+                                  e.text ?? "",
+                                  style: AppTextStyles.style15BlackNormal
+                                      .copyWith(
+                                          color: e.textColor ??
+                                              AppColors.textTitleColor),
+                                ),
+                              ),
+                              if (e.isSelected != null && e.isSelected!)
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: AppSizes.minPadding),
+                                  child: Icon(
+                                    Icons.check,
+                                    color: AppColors.primaryColor,
+                                    size: _iconSize,
+                                  ),
+                                )
+                            ],
+                          ),
+                        ),
+                        onTap: widget.onConfirm == null
+                            ? e.onTap
+                            : () => _onSelected(e),
+                      ))
+                  .toList())),
           if (widget.onConfirm != null)
             CustomBottom(
               text: AppLocalizations.text(LangKey.confirm),

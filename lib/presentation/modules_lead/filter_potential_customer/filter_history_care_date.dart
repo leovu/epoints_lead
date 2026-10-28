@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
+import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/model/filter_screen_model.dart';
 import 'package:lead_plugin_epoint/model/history_customer_care_date.dart';
@@ -103,7 +104,7 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                           AppLocalizations.text(LangKey.byHistoryCustomerCare)!,
                           style: TextStyle(
                               fontSize: 15.0,
-                              color: const Color(0xFF8E8E8E),
+                              color: AppColors.textMutedColor,
                               fontWeight: FontWeight.normal),
                         ),
                         Container(
@@ -128,7 +129,8 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                                 margin: EdgeInsets.only(left: 15, right: 5),
                                 child: Text(
                                   "-",
-                                  style: TextStyle(color: Color(0xFF8E8E8E)),
+                                  style: TextStyle(
+                                      color: AppColors.textMutedColor),
                                 )),
                             Container(
                                 margin: const EdgeInsets.only(
@@ -264,12 +266,12 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
           isCollapsed: true,
           contentPadding: EdgeInsets.all(12.0),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
+            borderRadius: BorderRadius.circular(AppRadius.md),
           ),
           hintText: hintText,
           hintStyle: TextStyle(
               fontSize: 14.0,
-              color: Color(0xFF8E8E8E),
+              color: AppColors.textMutedColor,
               fontWeight: FontWeight.normal),
           isDense: true,
         ),
@@ -290,16 +292,16 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                   height: 40,
                   // width: 100,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
+                      borderRadius: BorderRadius.circular(AppRadius.sm),
                       border: Border.all(
                           width: 1.0,
-                          color: Colors.blue,
+                          color: AppColors.primaryColor,
                           style: BorderStyle.solid)),
                   child: Center(
                     child: Text(
                       name!,
                       style: TextStyle(
-                          color: Color(0xFF0067AC),
+                          color: AppColors.primaryColor,
                           fontWeight: FontWeight.w600),
                     ),
                   ),
@@ -309,12 +311,12 @@ class FilterHistoryCareDateState extends State<FilterHistoryCareDate> {
                   height: 40,
                   // width: 100,
                   decoration: BoxDecoration(
-                      color: Color(0xFFEAEAEA),
-                      borderRadius: BorderRadius.circular(5.0)),
+                      color: AppColors.primaryColorMix,
+                      borderRadius: BorderRadius.circular(AppRadius.sm)),
                   child: Center(
                     child: Text(
                       name!,
-                      style: TextStyle(color: Color(0xFF8E8E8E)),
+                      style: TextStyle(color: AppColors.textMutedColor),
                     ),
                   ),
                 ),

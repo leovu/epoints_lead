@@ -179,20 +179,28 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => keyboardDismissOnTap(context),
-      child: Scaffold(
-          appBar: AppBar(
-            iconTheme: const IconThemeData(color: Colors.white),
-            backgroundColor: AppColors.primaryColor,
-            surfaceTintColor: Colors.transparent,
-            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-            title: Text(
-              AppLocalizations.text(LangKey.addPotentialCustomer)!,
-              style: const TextStyle(color: Colors.white, fontSize: 18.0),
-            ),
-          ),
-          body: Container(
-              decoration: const BoxDecoration(color: AppColors.white),
-              child: _buildBody())),
+      child: AppGlass.background(
+          child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                iconTheme: const IconThemeData(color: Colors.white),
+                backgroundColor: Colors.transparent,
+                surfaceTintColor: Colors.transparent,
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                shape: AppGlass.headerShape,
+                flexibleSpace: Container(decoration: AppGlass.header()),
+                title: Text(
+                  AppLocalizations.text(LangKey.addPotentialCustomer)!,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              body: Container(
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  child: _buildBody()))),
     );
   }
 

@@ -22,24 +22,25 @@ class CustomChip extends StatelessWidget {
   final String? topIcon;
   final double? iconRadius;
   final double iconSize;
+  final Gradient? gradient;
 
-  CustomChip({
-    this.backgroundColor,
-    this.text,
-    this.style,
-    this.ontap,
-    this.icon,
-    this.iconAsset = true,
-    this.radius,
-    this.borderColor,
-    this.onClose,
-    this.padding,
-    this.icons,
-    this.isExpand = false,
-    this.topIcon,
-    this.iconRadius,
-    this.iconSize = 12
-  });
+  CustomChip(
+      {this.backgroundColor,
+      this.text,
+      this.style,
+      this.ontap,
+      this.icon,
+      this.iconAsset = true,
+      this.radius,
+      this.borderColor,
+      this.onClose,
+      this.padding,
+      this.icons,
+      this.isExpand = false,
+      this.topIcon,
+      this.iconRadius,
+      this.iconSize = 12,
+      this.gradient});
 
   Widget _buildText(){
     return AutoSizeText(
@@ -61,22 +62,26 @@ class CustomChip extends StatelessWidget {
     return GestureDetector(
       child: Container(
         decoration: BoxDecoration(
-            color: backgroundColor??AppColors.primaryColor,
-            borderRadius: BorderRadius.all(Radius.circular(radius??(onClose == null
-                ? topIcon != null
-                ? 5.0
-                : 100.0
-                : 5.0))),
-            border: borderColor == null?null:Border.all(
-                color: borderColor!,
-                width: 1.0,
-                style: BorderStyle.solid
-            )
-        ),
-        padding: padding??(onClose == null?EdgeInsets.symmetric(
-            vertical: 5.0,
-            horizontal: isExpand?2.0:AppSizes.maxPadding
-        ):EdgeInsets.only(left: AppSizes.minPadding)),
+            color: gradient != null
+                ? null
+                : (backgroundColor ?? AppColors.primaryColor),
+            gradient: gradient,
+            borderRadius: BorderRadius.all(Radius.circular(radius ??
+                (onClose == null
+                    ? topIcon != null
+                        ? AppRadius.md
+                        : AppRadius.pill
+                    : AppRadius.md))),
+            border: borderColor == null
+                ? null
+                : Border.all(
+                    color: borderColor!, width: 1.0, style: BorderStyle.solid)),
+        padding: padding ??
+            (onClose == null
+                ? EdgeInsets.symmetric(
+                    vertical: 5.0,
+                    horizontal: isExpand ? 2.0 : AppSizes.maxPadding)
+                : EdgeInsets.only(left: AppSizes.minPadding)),
         child: icons != null
             ? Icon(
           icons,
@@ -160,47 +165,53 @@ class CustomChipSelected extends StatelessWidget {
 
     TextStyle style;
     Color backgroundColor, borderColor;
+    Gradient? gradient;
 
-    if(_enable){
-      if(type == selected){
-        style = AppTextStyles.style14WhiteNormal;
+    if (_enable) {
+      if (type == selected) {
+        style = AppTextStyles.style14WhiteNormal
+            .copyWith(fontWeight: FontWeight.w600);
         backgroundColor = AppColors.primaryColor;
-        borderColor = AppColors.primaryColor;
-      }
-      else{
+        borderColor = AppGlass.borderColor;
+        gradient = AppGlass.activeGradient;
+      } else {
         style = AppTextStyles.style14PrimaryRegular;
-        borderColor = AppColors.primaryColor;
-        backgroundColor = Colors.transparent;
+        borderColor = AppColors.primaryColor.withValues(alpha: 0.4);
+        backgroundColor = AppGlass.surface;
       }
     }
     else{
       style = AppTextStyles.style14HintNormal;
-      borderColor = AppColors.hintColor;
-      backgroundColor = Colors.transparent;
+      borderColor = AppGlass.borderColor;
+      backgroundColor = AppGlass.surfaceLight;
     }
 
     GestureTapCallback? _onTap = _enable ? ontap : null;
 
-    return isExpanded?CustomChip(
-      text: text,
-      style: style,
-      backgroundColor: backgroundColor,
-      borderColor: borderColor,
-      icon: icon,
-      ontap: _onTap,
-    ):Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        CustomChip(
-          text: text,
-          style: style,
-          backgroundColor: backgroundColor,
-          borderColor: borderColor,
-          topIcon: icon,
-          ontap: _onTap,
-        )
-      ],
-    );
+    return isExpanded
+        ? CustomChip(
+            text: text,
+            style: style,
+            backgroundColor: backgroundColor,
+            borderColor: borderColor,
+            gradient: gradient,
+            icon: icon,
+            ontap: _onTap,
+          )
+        : Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CustomChip(
+                text: text,
+                style: style,
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
+                gradient: gradient,
+                topIcon: icon,
+                ontap: _onTap,
+              )
+            ],
+          );
   }
 }
 
@@ -237,7 +248,7 @@ class ContainerChipSelected extends StatelessWidget {
         ),
         if(children != null)
           Container(
-            color: AppColors.white,
+            color: AppGlass.surfaceLight,
             padding: EdgeInsets.symmetric(
                 horizontal: AppSizes.maxPadding,
                 vertical: AppSizes.minPadding

@@ -98,8 +98,8 @@ class ListDealScreenState extends State<ListDealScreen> {
         margin: EdgeInsets.only(left: 11, right: 11, bottom: 8.0),
         decoration: BoxDecoration(
             // color: Color.fromARGB(255, 37, 16, 16),
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
+            border: Border.all(width: 1, color: AppColors.secondaryColorMix)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -127,9 +127,7 @@ class ListDealScreenState extends State<ListDealScreen> {
                   Container(
                     padding: EdgeInsets.only(left: 4.0, right: 4.0),
                     height: 24,
-                    decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.circular(5.0)),
+                    decoration: AppGlass.primaryButton(),
                     child: Center(
                       child: Text(item.journeyName ?? "N/A",
                           style: TextStyle(
@@ -198,7 +196,7 @@ class ListDealScreenState extends State<ListDealScreen> {
               maxLines: 4,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.textTitleColor,
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal),
               // maxLines: 1,

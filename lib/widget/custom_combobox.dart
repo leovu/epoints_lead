@@ -58,10 +58,7 @@ class CustomComboBoxState extends State<CustomComboBox> {
   Widget _buildHeader() {
     return InkWell(
       child: Container(
-        decoration: BoxDecoration(
-            gradient: AppGlass.cardGradient,
-            borderRadius: BorderRadius.circular(8.0),
-            border: Border.all(color: AppColors.grey200)),
+        decoration: AppGlass.tile(color: AppGlass.surface),
         child: Padding(
           padding: EdgeInsets.all(AppSizes.minPadding),
           child: Row(
@@ -69,7 +66,7 @@ class CustomComboBoxState extends State<CustomComboBox> {
               if (widget.icon != null)
                 CustomImageIcon(
                   icon: widget.icon,
-                  color: AppColors.black,
+                  color: AppColors.textTitleColor,
                   size: 20.0,
                 ),
               SizedBox(width: 16),
@@ -80,6 +77,7 @@ class CustomComboBoxState extends State<CustomComboBox> {
                       widget.title,
                       style: TextStyle(
                         fontSize: AppTextSizes.size14,
+                        color: AppColors.textTitleColor,
                         fontWeight: (widget.child != null && _expand)
                             ? FontWeight.bold
                             : FontWeight.normal,
@@ -104,7 +102,7 @@ class CustomComboBoxState extends State<CustomComboBox> {
                   child: Icon(
                     Icons.keyboard_arrow_down,
                     size: 20,
-                    color: AppColors.black,
+                    color: AppColors.textMutedColor,
                   ),
                   open: _expand,
                 ),
@@ -155,7 +153,8 @@ class CustomComboBoxState extends State<CustomComboBox> {
   Widget _buildBody() {
     return Container(
       decoration: BoxDecoration(
-          color: AppColors.white, borderRadius: BorderRadius.circular(4.0)),
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(AppRadius.md)),
       child: Column(
         children: [_buildHeader(), if (widget.child != null) _buildContent()],
       ),

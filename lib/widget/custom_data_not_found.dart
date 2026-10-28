@@ -28,7 +28,11 @@ class CustomDataNotFound extends StatelessWidget {
           Container(
             height: MediaQuery.of(context).size.width / 8,
             width: MediaQuery.of(context).size.width / 4,
-            child: Icon(Icons.not_interested, color: Colors.grey[850],size: 50,),
+            child: Icon(
+              Icons.not_interested,
+              color: AppColors.textMutedColor,
+              size: 50,
+            ),
           ),
           if (isTitle)
             Padding(
@@ -41,7 +45,7 @@ class CustomDataNotFound extends StatelessWidget {
                   title ?? AppLocalizations.text(LangKey.searchNotFound)!,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.style14Black50Weight400
-                      .copyWith(color: Color.fromARGB(255, 112, 91, 91))),
+                      .copyWith(color: AppColors.textSecondaryColor)),
             )
           else
             Container(height: 20.0),
@@ -51,7 +55,7 @@ class CustomDataNotFound extends StatelessWidget {
               child: Text(content!,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.style14Black50Weight400
-                      .copyWith(color: AppColors.grey500Color)),
+                      .copyWith(color: AppColors.textMutedColor)),
             )
         ],
       ),

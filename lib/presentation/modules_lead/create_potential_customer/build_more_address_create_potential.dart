@@ -118,7 +118,7 @@ class _BuildMoreAddressCreatPotentialState
                 AppLocalizations.text(LangKey.moreInformation)!,
                 style: TextStyle(
                     fontSize: 16.0,
-                    color: const Color(0xFF0067AC),
+                    color: AppColors.primaryColor,
                     fontWeight: FontWeight.normal),
               ),
               showMoreAll
@@ -127,7 +127,7 @@ class _BuildMoreAddressCreatPotentialState
                         AppLocalizations.text(LangKey.collapse)!,
                         style: TextStyle(
                             fontSize: 16.0,
-                            color: const Color(0xFF0067AC),
+                            color: AppColors.primaryColor,
                             fontWeight: FontWeight.normal),
                       ),
                       onTap: () {
@@ -230,7 +230,7 @@ class _BuildMoreAddressCreatPotentialState
                           AppLocalizations.text(LangKey.showMore)!,
                           style: TextStyle(
                               fontSize: 16.0,
-                              color: const Color(0xFF0067AC),
+                              color: AppColors.primaryColor,
                               fontWeight: FontWeight.normal),
                         ),
                         Container(
@@ -398,11 +398,11 @@ class _BuildMoreAddressCreatPotentialState
             hintStyle: AppTextStyles.style13GrayWeight400,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderSide: BorderSide(color: AppColors.primaryColor, width: 1.0),
+              borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
             ),
           ),
           maxLines: 4,
@@ -448,8 +448,10 @@ class _BuildMoreAddressCreatPotentialState
     return Container(
       decoration: BoxDecoration(
           border: Border.all(
-              width: 1.0, color: Color(0xFFC3C8D3), style: BorderStyle.solid),
-          borderRadius: BorderRadius.circular(10.0)),
+              width: 1.0,
+              color: AppColors.secondaryColorMix,
+              style: BorderStyle.solid),
+          borderRadius: BorderRadius.circular(AppRadius.md)),
       padding: const EdgeInsets.only(left: 5.0),
       margin: EdgeInsets.only(bottom: 15.0 / 2),
       child: Row(
@@ -480,7 +482,7 @@ class _BuildMoreAddressCreatPotentialState
             // padding: const EdgeInsets.all(4.0),
             decoration: BoxDecoration(
                 // color: AppColors.darkGrey,
-                borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(AppRadius.md)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -493,7 +495,7 @@ class _BuildMoreAddressCreatPotentialState
                         color: (genderSelected.genderID == 0)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
-                        borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(AppRadius.md)),
                     margin: EdgeInsets.only(right: 5.0, top: 5.0, bottom: 5.0),
                     padding: EdgeInsets.only(
                         top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
@@ -504,7 +506,7 @@ class _BuildMoreAddressCreatPotentialState
                             fontSize: AppTextSizes.size15,
                             color: (genderSelected.genderID == 0)
                                 ? Colors.white
-                                : Color(0xFF9E9E9E),
+                                : AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         maxLines: 1,
                       ),
@@ -520,7 +522,7 @@ class _BuildMoreAddressCreatPotentialState
                         color: (genderSelected.genderID == 1)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
-                        borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(AppRadius.md)),
                     margin: EdgeInsets.only(right: 5.0, top: 5.0, bottom: 5.0),
                     padding: EdgeInsets.only(
                         top: 5.0, bottom: 5.0, left: 15.0, right: 15.0),
@@ -530,7 +532,7 @@ class _BuildMoreAddressCreatPotentialState
                           fontSize: AppTextSizes.size15,
                           color: (genderSelected.genderID == 1)
                               ? Colors.white
-                              : Color(0xFF9E9E9E),
+                              : AppColors.textMutedColor,
                           fontWeight: FontWeight.normal),
                       maxLines: 1,
                     ),
@@ -546,7 +548,7 @@ class _BuildMoreAddressCreatPotentialState
                         color: (genderSelected.genderID == 2)
                             ? AppColors.primaryColor
                             : AppColors.darkGrey,
-                        borderRadius: BorderRadius.circular(10)),
+                        borderRadius: BorderRadius.circular(AppRadius.md)),
                     margin: EdgeInsets.only(right: 5.0),
                     padding: EdgeInsets.only(
                         top: 3.0, bottom: 3.0, left: 15.0, right: 15.0),
@@ -557,7 +559,7 @@ class _BuildMoreAddressCreatPotentialState
                             fontSize: AppTextSizes.size15,
                             color: (genderSelected.genderID == 2)
                                 ? Colors.white
-                                : Color(0xFF9E9E9E),
+                                : AppColors.textMutedColor,
                             fontWeight: FontWeight.normal),
                         maxLines: 1,
                       ),
@@ -603,20 +605,24 @@ class _BuildMoreAddressCreatPotentialState
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide:
+                  BorderSide(width: 1, color: AppColors.secondaryColorMix),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide:
+                  BorderSide(width: 1, color: AppColors.secondaryColorMix),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide:
+                  BorderSide(width: 1, color: AppColors.secondaryColorMix),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             disabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide:
+                  BorderSide(width: 1, color: AppColors.secondaryColorMix),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             label: (content == "")
                 ? RichText(
@@ -624,12 +630,13 @@ class _BuildMoreAddressCreatPotentialState
                         text: title,
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textSecondaryColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content,
@@ -637,7 +644,7 @@ class _BuildMoreAddressCreatPotentialState
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 14.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(

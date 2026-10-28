@@ -68,7 +68,7 @@ class _JourneyModalState extends State<JourneyModal> {
   //             title,
   //             style: TextStyle(
   //                 fontSize: 18.0,
-  //                 color: selected ? Colors.orange : Colors.black,
+  //                 color: selected ? Colors.orange : AppColors.textTitleColor,
   //                 fontWeight: FontWeight.normal),
   //           )
   //         ],

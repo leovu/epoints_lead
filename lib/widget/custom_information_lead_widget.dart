@@ -16,18 +16,20 @@ class CustomInfomationLeadWidget extends StatelessWidget {
           horizontal: AppSizes.minPadding, vertical: AppSizes.minPadding/2),
       decoration: BoxDecoration(
           color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(6.0)),
+          borderRadius: BorderRadius.circular(AppRadius.sm)),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CustomAvatarWithURL(
-                    backgroundColor: Color(0xFFEEB132),
-                    url: avatarUrl ?? "",
-                    name: name,
-                    size: 30.0,
-                  ),
-          SizedBox(width: 4.0,),
+            backgroundColor: AppColors.primaryGradiantColor,
+            url: avatarUrl ?? "",
+            name: name,
+            size: 30.0,
+          ),
+          SizedBox(
+            width: 4.0,
+          ),
           Expanded(
             child: Text(
               name ?? "",

@@ -101,23 +101,31 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: AppColors.primaryColor,
-          surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-          title: Text(
-            AppLocalizations.text(LangKey.chooseProject)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
-          // leadingWidth: 20.0,
-        ),
-        body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            child: _buildBody()));
+    return AppGlass.background(
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              shape: AppGlass.headerShape,
+              flexibleSpace: Container(decoration: AppGlass.header()),
+              title: Text(
+                AppLocalizations.text(LangKey.chooseProject)!,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600),
+              ),
+              // leadingWidth: 20.0,
+            ),
+            body: Container(
+                decoration: const BoxDecoration(color: Colors.transparent),
+                child: _buildBody())));
   }
 
   Widget _buildBody() {
@@ -126,19 +134,21 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
       child: Column(
         children: [
           _buildSearch(),
-           Expanded(
-                  child: (listProjectData!.length > 0) ? CustomListView(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.only(
-                      top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
-                  physics: AlwaysScrollableScrollPhysics(),
-                  controller: _controller,
-                  separator: Divider(),
-                  children: _listWidget(),
-                ) : Container() )
-              ,
-          (_searchext.text == "" && listProjectData!.length > 0 &&
-                      this.currentPage < this.nextPage)
+          Expanded(
+              child: (listProjectData!.length > 0)
+                  ? CustomListView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(
+                          top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
+                      physics: AlwaysScrollableScrollPhysics(),
+                      controller: _controller,
+                      separator: Divider(color: AppColors.primaryColorMix),
+                      children: _listWidget(),
+                    )
+                  : Container()),
+          (_searchext.text == "" &&
+                  listProjectData!.length > 0 &&
+                  this.currentPage < this.nextPage)
               ? Container(
                   height: 20.0,
                   margin: EdgeInsets.only(bottom: 40),
@@ -165,7 +175,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   //       padding:
   //           EdgeInsets.only(top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
   //       physics: NeverScrollableScrollPhysics(),
-  //       separator: Divider(),
+  //       separator: Divider(color: AppColors.primaryColorMix),
   //       children: List.generate(
   //         5,
   //         (index) => Container(
@@ -196,9 +206,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
           height: 40,
           width: MediaQuery.of(context).size.width,
           margin: EdgeInsets.only(bottom: 20),
-          decoration: BoxDecoration(
-              color: AppColors.primaryColor,
-              borderRadius: BorderRadius.circular(10)),
+          decoration: AppGlass.primaryButton(),
           child: Center(
             child: Text(
               // AppLocalizations.text(LangKey.convertCustomers),
@@ -240,7 +248,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
                   fontSize: 15.0,
                   color: item.selected!
                       ? AppColors.primaryColor
-                      : Color(0xFF040C21),
+                      : AppColors.textTitleColor,
                   fontWeight:
                       item.selected! ? FontWeight.w700 : FontWeight.w400),
             ),
@@ -272,18 +280,19 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
         contentPadding: EdgeInsets.all(12.0),
         border: OutlineInputBorder(
           // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
+          //     BorderSide(width: 1, color: AppColors.secondaryColorMix),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+          borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),
         hintStyle: TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w400,
-            color: Color(0xFF8E8E8E)),
+            color: AppColors.textMutedColor),
         isDense: true,
       ),
       onChanged: (event) {

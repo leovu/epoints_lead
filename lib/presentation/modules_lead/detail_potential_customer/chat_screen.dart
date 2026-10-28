@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/assets.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
@@ -52,8 +51,8 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     _bloc = CommentBloc(context);
-    _bloc.workListComment(
-        WorkListCommentRequestModel(customerLeadID: widget.detail!.customerLeadId));
+    _bloc.workListComment(WorkListCommentRequestModel(
+        customerLeadID: widget.detail!.customerLeadId));
   }
 
   _send() {
@@ -73,8 +72,8 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   Future _onRefresh() {
-    return _bloc.workListComment(
-        WorkListCommentRequestModel(customerLeadID: widget.detail!.customerLeadId));
+    return _bloc.workListComment(WorkListCommentRequestModel(
+        customerLeadID: widget.detail!.customerLeadId));
   }
 
   _showOption() {
@@ -256,8 +255,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildChatBox() {
     return Container(
-      decoration:
-          BoxDecoration(border: Border(top: BorderSide(color: Colors.grey))),
+      decoration: BoxDecoration(
+          border: Border(top: BorderSide(color: AppColors.primaryColorMix))),
       padding:
           EdgeInsets.symmetric(horizontal: AppSizes.maxPadding, vertical: 5.0),
       child: Column(
@@ -382,26 +381,30 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppGlass.background(
+        child: Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          // actionsIconTheme: Navigator.of(context).pop(true),
-          backgroundColor: AppColors.primaryColor,
-          surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-          title: Text(
-            AppLocalizations.text(LangKey.discuss)!,
-            style: TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
+        // actionsIconTheme: Navigator.of(context).pop(true),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.headerShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
+        title: Text(
+          AppLocalizations.text(LangKey.discuss)!,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
-            child: Container(
-                width: AppSizes.maxWidth,
-                child: _buildComments()),
+            child: Container(width: AppSizes.maxWidth, child: _buildComments()),
           ),
           Padding(
             padding: EdgeInsets.only(bottom: 20),
@@ -409,6 +412,6 @@ class _ChatScreenState extends State<ChatScreen> {
           )
         ],
       ),
-    );
+    ));
   }
 }

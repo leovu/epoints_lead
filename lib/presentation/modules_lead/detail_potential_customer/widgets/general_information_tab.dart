@@ -317,7 +317,7 @@ extension GeneralInformationTabExtension on _DetailPotentialCustomerState {
               maxLines: 4,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.textTitleColor,
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal),
               // maxLines: 1,
@@ -333,7 +333,8 @@ extension GeneralInformationTabExtension on _DetailPotentialCustomerState {
       padding: EdgeInsets.only(left: 4.0, right: 4.0),
       height: 24,
       decoration: BoxDecoration(
-          color: Color(0x420067AC), borderRadius: BorderRadius.circular(5.0)),
+          color: AppColors.primaryColorMix,
+          borderRadius: BorderRadius.circular(AppRadius.sm)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
@@ -343,11 +344,11 @@ extension GeneralInformationTabExtension on _DetailPotentialCustomerState {
               width: 8.0,
               margin: EdgeInsets.only(right: 5.0),
               decoration: BoxDecoration(
-                  color: Color(0x790067AC),
-                  borderRadius: BorderRadius.circular(1000.0))),
+                  color: AppColors.primaryColor,
+                  borderRadius: BorderRadius.circular(AppRadius.pill))),
           Text(item.tagName!,
               style: TextStyle(
-                  color: Color(0xFF0067AC),
+                  color: AppColors.primaryColor,
                   fontSize: 14.0,
                   fontWeight: FontWeight.w600))
         ],

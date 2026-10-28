@@ -51,26 +51,34 @@ class CustomFileViewState extends State<CustomFileView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppGlass.background(
+        child: Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-          iconTheme: IconThemeData(
-            color: Colors.white,
-          ),
-          // actionsIconTheme: Navigator.of(context).pop(true),
-          backgroundColor: AppColors.primaryColor,
-          surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-          title: Text(
-            widget.title!,
-            style: TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
+        iconTheme: IconThemeData(
+          color: Colors.white,
         ),
-      body: ["jpeg", "jpg", "png"].contains(widget.url!.split(".").last)?CustomNetworkImage(
-        width: double.infinity,
-        height: double.infinity,
-        url: widget.url,
-        fit: BoxFit.contain,
-      ):WebViewWidget(controller: _controller),
-    );
+        // actionsIconTheme: Navigator.of(context).pop(true),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.headerShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
+        title: Text(
+          widget.title!,
+          style: TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+        ),
+      ),
+      body: ["jpeg", "jpg", "png"].contains(widget.url!.split(".").last)
+          ? CustomNetworkImage(
+              width: double.infinity,
+              height: double.infinity,
+              url: widget.url,
+              fit: BoxFit.contain,
+            )
+          : WebViewWidget(controller: _controller),
+    ));
   }
 }

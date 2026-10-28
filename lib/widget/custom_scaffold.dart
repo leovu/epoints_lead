@@ -52,30 +52,29 @@ class CustomScaffold extends StatelessWidget {
   Widget _buildContent(){
     return Column(
       children: [
-        (title == null && customTitle == null)?Container():Container(
-          height: 90,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: AppGlass.headerGradient,
-            border: Border(
-              bottom: BorderSide(color: Colors.white.withValues(alpha: 0.25)),
-            ),
-          ),
-          padding: EdgeInsets.only(top: 30.0),
-          child: CustomAppBar(
-            title: title,
-            customTitle: customTitle,
-            options: options,
-            icon: icon,
-            onWillPop: onWillPop,
-          ),
-        ),
-        tabs == null?Container():CustomTabBar(
-          tabs: tabs,
-          group: AutoSizeGroup(),
-          controller: tabController,
-          isExpanded: isExpanded,
-        ),
+        (title == null && customTitle == null)
+            ? Container()
+            : Container(
+                height: 90,
+                width: double.infinity,
+                decoration: AppGlass.header(),
+                padding: EdgeInsets.only(top: 30.0),
+                child: CustomAppBar(
+                  title: title,
+                  customTitle: customTitle,
+                  options: options,
+                  icon: icon,
+                  onWillPop: onWillPop,
+                ),
+              ),
+        tabs == null
+            ? Container()
+            : CustomTabBar(
+                tabs: tabs,
+                group: AutoSizeGroup(),
+                controller: tabController,
+                isExpanded: isExpanded,
+              ),
         Expanded(
             child: tabs == null?ContainerScrollable(
                 child: body,
@@ -89,18 +88,22 @@ class CustomScaffold extends StatelessWidget {
     );
   }
 
-  Widget _buildBody(){
+  bool get _isGlass => backgroundColor == null;
+
+  Widget _buildBody() {
     return Scaffold(
-        backgroundColor: backgroundColor??AppColors.surfaceColor,
-        body: SafeArea(
-          top: false,
-          left: false,
-          right: false,
-          child: Container(
+      backgroundColor: _isGlass ? Colors.transparent : backgroundColor!,
+      body: SafeArea(
+        top: false,
+        left: false,
+        right: false,
+        child: Container(
             width: double.infinity,
             height: double.infinity,
             child: backgroundImage == null
-                ? _buildContent()
+                ? (_isGlass
+                    ? AppGlass.background(child: _buildContent())
+                    : _buildContent())
                 : Stack(
               fit: StackFit.expand,
               children: [
@@ -144,6 +147,6 @@ class CustomScaffold extends StatelessWidget {
 configKeyboardActions(List<KeyboardActionsItem> actions) {
   return KeyboardActionsConfig(
       // keyboardActionsPlatform: KeyboardActionsPlatform.IOS,
-      keyboardBarColor: Colors.grey[200],
+      keyboardBarColor: AppColors.surfaceColor,
       actions: actions);
 }

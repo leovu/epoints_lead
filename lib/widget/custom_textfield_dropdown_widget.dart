@@ -28,10 +28,10 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final commonBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8.0),
+      borderRadius: BorderRadius.circular(AppRadius.sm),
       borderSide: const BorderSide(
         width: 1,
-        color: Color(0xFFB8BFC9),
+        color: AppColors.secondaryColorMix,
       ),
     );
     return Container(
@@ -57,13 +57,13 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
                       text: title,
                       style: TextStyle(
                         fontSize: AppTextSizes.size15,
-                        color: const Color(0xFF858080),
+                        color: AppColors.textSecondaryColor,
                       ),
                       children: [
                         if (mandatory ?? false)
                           const TextSpan(
                             text: "*",
-                            style: TextStyle(color: Colors.red),
+                            style: TextStyle(color: AppColors.dangerColor),
                           ),
                       ],
                     ),
@@ -71,7 +71,7 @@ class CustomTextfieldDropdownWidget extends StatelessWidget {
                 : Text(
                     content ?? "",
                     maxLines: 2,
-                    style: TextStyle(color: AppColors.black),
+                    style: TextStyle(color: AppColors.textTitleColor),
                     overflow: TextOverflow.ellipsis,
                   ),
             prefixIcon: Padding(

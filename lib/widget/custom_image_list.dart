@@ -68,7 +68,7 @@ class CustomImageList extends StatelessWidget {
                   width: AppSizes.maxWidth! - 32,
                   decoration: BoxDecoration(
                     border: Border.all(color: AppColors.grey500Color),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(AppRadius.sm),
                   ),
                   child: Center(
                       child: Text(

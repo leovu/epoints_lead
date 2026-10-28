@@ -36,9 +36,10 @@ class CustomSearchBox extends StatelessWidget {
       child: CustomTextField(
         focusNode: focusNode,
         controller: controller,
-        hintText: hint ?? AppLocalizations.text(LangKey.enter_search_information),
-        backgroundColor: Colors.transparent,
-        borderColor: AppColors.borderColor,
+        hintText:
+            hint ?? AppLocalizations.text(LangKey.enter_search_information),
+        backgroundColor: AppGlass.surface,
+        borderColor: AppGlass.borderColor,
         suffixIcon: suffixIcon ?? Assets.iconSearch,
         onSuffixTap: onSuffixTap ?? onSearch,
         textInputAction: TextInputAction.search,

@@ -92,8 +92,8 @@ class ListContactScreenState extends State<ListContactScreen> {
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
           gradient: AppGlass.cardGradient,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+          borderRadius: BorderRadius.circular(AppRadius.sm),
+          border: Border.all(width: 1, color: AppColors.secondaryColorMix)),
       child: Column(
         children: [
           Row(
@@ -123,7 +123,7 @@ class ListContactScreenState extends State<ListContactScreen> {
                             item.positon ?? "",
                             style: TextStyle(
                                 fontSize: 14.0,
-                                color: Color(0XFF8E8E8E),
+                                color: AppColors.textMutedColor,
                                 fontWeight: FontWeight.normal),
                           ),
                         )
@@ -140,8 +140,8 @@ class ListContactScreenState extends State<ListContactScreen> {
                         height: 45,
                         width: 45,
                         decoration: BoxDecoration(
-                          color: Color(0xFF06A605),
-                          borderRadius: BorderRadius.circular(50),
+                          color: AppColors.successColor,
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
                           // border:  Border.all(color: AppColors.white,)
                         ),
                         child: Center(
@@ -166,7 +166,7 @@ class ListContactScreenState extends State<ListContactScreen> {
                         item.phone ?? "",
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ],
@@ -185,7 +185,7 @@ class ListContactScreenState extends State<ListContactScreen> {
                         item.email ?? "",
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ],
@@ -204,7 +204,7 @@ class ListContactScreenState extends State<ListContactScreen> {
                         item.address ?? "",
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ],

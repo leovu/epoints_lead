@@ -28,11 +28,11 @@ class CustomDropDown extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          color:backgroundColor?? AppColors.colorBgTextField,
+          borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
+          color: backgroundColor ?? AppGlass.surface,
           border: Border.all(
               width: 1.0,
-              color:AppColors.lightGrey,
+              color: AppGlass.borderColor,
               style: BorderStyle.solid)),
       child: CustomInkWell(
         ontap: ontap,

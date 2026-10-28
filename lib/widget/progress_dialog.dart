@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:lead_plugin_epoint/common/theme.dart';
 
 class ProgressDialog {
   bool _isShowing = false;
@@ -34,11 +35,14 @@ class ProgressDialog {
         pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
           return PopScope(
             child: Scaffold(
-              backgroundColor: Colors.black.withValues(alpha: 0.3),
+              backgroundColor: AppColors.textTitleColor.withValues(alpha: 0.3),
               body: Container(
                 height: MediaQuery.of(context).size.height,
                 child: Center(
-                  child: Platform.isAndroid?CircularProgressIndicator():CupertinoActivityIndicator(),
+                  child: Platform.isAndroid
+                      ? CircularProgressIndicator(color: AppColors.primaryColor)
+                      : CupertinoActivityIndicator(
+                          color: AppColors.primaryColor),
                 ),
               ),
             ),

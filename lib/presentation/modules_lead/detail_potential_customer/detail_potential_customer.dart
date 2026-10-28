@@ -197,14 +197,9 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
+        color: AppGlass.surface,
+        border: Border(bottom: BorderSide(color: AppGlass.borderColor)),
+        boxShadow: AppGlass.shadow,
       ),
       child: Row(
         children: [
@@ -315,7 +310,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
               maxLines: 4,
               textAlign: TextAlign.start,
               style: TextStyle(
-                  color: Colors.black,
+                  color: AppColors.textTitleColor,
                   fontSize: 14.0,
                   fontWeight: FontWeight.normal),
               // maxLines: 1,
@@ -335,9 +330,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
       margin: EdgeInsets.only(bottom: 10.0),
       height: 41,
       width: MediaQuery.of(context).size.width - 20,
-      decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(5)),
+      decoration: AppGlass.primaryButton(),
       child: InkWell(
         onTap: ontap,
         child: Center(
@@ -359,26 +352,33 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
   Widget build(BuildContext context) {
     super.build(context);
     return PopScope(
-      child: Scaffold(
+      child: AppGlass.background(
+          child: Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Colors.white,
           ),
           // actionsIconTheme: Navigator.of(context).pop(true),
-          backgroundColor: AppColors.primaryColor,
+          backgroundColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          shape: AppGlass.headerShape,
+          flexibleSpace: Container(decoration: AppGlass.header()),
           title: Text(
             AppLocalizations.text(LangKey.detailPotential)!,
-            style: TextStyle(color: Colors.white, fontSize: 18.0),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600),
           ),
         ),
-        backgroundColor: AppColors.surfaceColor,
+        backgroundColor: Colors.transparent,
         body: Container(
-            decoration: BoxDecoration(color: AppColors.white),
+            decoration: const BoxDecoration(color: Colors.transparent),
             child: buildBody()),
         floatingActionButtonLocation: FloatingActionButtonLocation.startDocked,
-      ),
+      )),
       canPop: false,
       onPopInvokedWithResult: (event, _) {
         if (!event) {

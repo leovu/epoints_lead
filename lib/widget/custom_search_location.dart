@@ -37,7 +37,7 @@ class CustomSearchLocation extends StatelessWidget {
         onChanged: onChanged,
         onSubmitted: onSubmitted,
         suffixIcon: suffixIcon,
-        suffixIconColor: Color(0xFF727682),
+        suffixIconColor: AppColors.textSecondaryColor,
         onSuffixIconTap: ontapSuffix,
         textInputAction: TextInputAction.search,
       ),

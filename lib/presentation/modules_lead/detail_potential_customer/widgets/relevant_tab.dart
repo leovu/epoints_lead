@@ -16,7 +16,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                       : "${AppLocalizations.text(LangKey.business)} - ",
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: Colors.grey,
+                      color: AppColors.textSecondaryColor,
                       fontWeight: FontWeight.normal),
                   children: [
                 TextSpan(
@@ -49,7 +49,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                     text: detail!.dateLastCare! + " ",
                     style: TextStyle(
                         fontSize: 14.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                     children: [
                   TextSpan(
@@ -82,8 +82,8 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
         margin: EdgeInsets.only(left: 11, right: 11, bottom: 8.0),
         decoration: BoxDecoration(
             // color: Color.fromARGB(255, 37, 16, 16),
-            borderRadius: BorderRadius.circular(5),
-            border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
+            border: Border.all(width: 1, color: AppColors.secondaryColorMix)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -111,9 +111,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                   Container(
                     padding: EdgeInsets.only(left: 4.0, right: 4.0),
                     height: 24,
-                    decoration: BoxDecoration(
-                        color: AppColors.primaryColor,
-                        borderRadius: BorderRadius.circular(5.0)),
+                    decoration: AppGlass.primaryButton(),
                     child: Center(
                       child: Text(item.journeyName ?? NULL_VALUE,
                           style: TextStyle(
@@ -180,10 +178,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
           // margin: EdgeInsets.all(10),
           width: MediaQuery.of(context).size.width,
           // height: 300,
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: Colors.grey, width: 1, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: AppGlass.card(radius: AppRadius.md),
           child: Row(
             children: [
               Container(
@@ -196,12 +191,13 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                     children: [
                       Text(
                         "${createTime.hour}:${createTime.minute}",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: AppColors.textMutedColor),
                       ),
                       Text(
                         '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                            color: AppColors.textTitleColor,
+                            fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -215,7 +211,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                   decoration: BoxDecoration(
                       border: Border(
                     left: BorderSide(
-                      color: Colors.grey,
+                      color: AppColors.primaryColorMix,
                       width: 1.0,
                     ),
                   )),
@@ -233,7 +229,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                                   text:
                                       "[${item.manageWorkCode}] ${item.manageWorkTitle}",
                                   style: TextStyle(
-                                    color: Color(0xFF0067AC),
+                                    color: AppColors.primaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
@@ -244,7 +240,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                                     WidgetSpan(
                                         child: Icon(
                                       Icons.check_circle_outline_sharp,
-                                      color: Colors.green,
+                                      color: AppColors.successColor,
                                       size: 16,
                                     )),
                                   ],
@@ -258,13 +254,8 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                       Container(
                         margin: EdgeInsets.only(top: 10.0),
                         padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 2,
-                            color: Colors.black.withValues(alpha: 0.3),
-                          )
-                        ], color: Colors.white),
+                        decoration: AppGlass.tile(
+                            radius: AppRadius.sm, color: AppGlass.surface),
                         child: Padding(
                           padding: EdgeInsets.all(6.0),
                           child: Row(
@@ -304,7 +295,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                                 Text(
                                   "${item.countFile}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: AppColors.textTitleColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -326,7 +317,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                                 Text(
                                   "${item.countComment}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: AppColors.textTitleColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -348,7 +339,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                                 Text(
                                   "${item.daysLate}",
                                   style: TextStyle(
-                                      color: Colors.red,
+                                      color: AppColors.dangerColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -425,13 +416,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
       height: 30,
       margin: EdgeInsets.only(top: 10.0),
       padding: EdgeInsets.only(left: 5.0, right: 5.0),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          offset: Offset(0, 1),
-          blurRadius: 2,
-          color: Colors.black.withValues(alpha: 0.3),
-        )
-      ], color: Colors.white),
+      decoration: AppGlass.tile(radius: AppRadius.sm, color: AppGlass.surface),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -461,8 +446,8 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
       padding: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
           gradient: AppGlass.cardGradient,
-          borderRadius: BorderRadius.circular(5),
-          border: Border.all(width: 1, color: Color(0xFFC3C8D3))),
+          borderRadius: BorderRadius.circular(AppRadius.sm),
+          border: Border.all(width: 1, color: AppColors.secondaryColorMix)),
       child: Column(
         children: [
           Row(
@@ -492,7 +477,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                             item.positon ?? "",
                             style: TextStyle(
                                 fontSize: 14.0,
-                                color: Color(0XFF8E8E8E),
+                                color: AppColors.textMutedColor,
                                 fontWeight: FontWeight.normal),
                           ),
                         )
@@ -510,8 +495,8 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                         height: 45,
                         width: 45,
                         decoration: BoxDecoration(
-                          color: Color(0xFF06A605),
-                          borderRadius: BorderRadius.circular(50),
+                          color: AppColors.successColor,
+                          borderRadius: BorderRadius.circular(AppRadius.pill),
                           // border:  Border.all(color: AppColors.white,)
                         ),
                         child: Center(
@@ -536,7 +521,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                         item.phone ?? '',
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ],
@@ -555,7 +540,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                         item.email ?? "",
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ],
@@ -574,7 +559,7 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                         item.address ?? "",
                         style: TextStyle(
                             fontSize: 14.0,
-                            color: Colors.black,
+                            color: AppColors.textTitleColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ],
@@ -919,7 +904,8 @@ extension RelevantTabExtension on _DetailPotentialCustomerState {
                   Container(
                     decoration: BoxDecoration(
                       color: AppColors.primaryColor.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderRadius:
+                          BorderRadius.all(Radius.circular(AppRadius.sm)),
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 2.0),
                     child: Row(

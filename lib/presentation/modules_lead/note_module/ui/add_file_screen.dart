@@ -103,7 +103,7 @@ class _AddFileScreenState extends State<AddFileScreen>
                   ],
                 )
               : CustomButton(
-                  backgroundColor: AppColors.white,
+                  backgroundColor: AppGlass.surface,
                   borderColor: AppColors.primaryColor,
                   ontap: () {
                     widget.bloc.uploadFile().then((value) {
@@ -135,7 +135,7 @@ class _AddFileScreenState extends State<AddFileScreen>
               Container(
                 decoration: BoxDecoration(
                   color: AppColors.primaryColor.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                  borderRadius: BorderRadius.all(Radius.circular(AppRadius.sm)),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 2.0),
                 child: Row(
@@ -188,11 +188,11 @@ class _AddFileScreenState extends State<AddFileScreen>
             hintStyle: AppTextStyles.style13GrayWeight400,
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.grey700Color, width: 1.0),
-              borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              borderSide: BorderSide(color: AppColors.primaryColor, width: 1.0),
+              borderRadius: BorderRadius.all(Radius.circular(AppRadius.md)),
             ),
           ),
           maxLines: 4,
@@ -209,9 +209,7 @@ class _AddFileScreenState extends State<AddFileScreen>
     return Container(
       height: 40,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
+      decoration: AppGlass.primaryButton(),
       child: InkWell(
         onTap: () async {
           if (validateAllow()) {

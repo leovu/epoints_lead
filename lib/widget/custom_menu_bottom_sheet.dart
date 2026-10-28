@@ -43,17 +43,15 @@ class CustomMenuBottomSheet extends StatelessWidget {
               fit: FlexFit.loose,
               child: Container(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 12.0 * 1.5,
-                    vertical:  15.0 * 1.5),
-                decoration: BoxDecoration(
-                    gradient: AppGlass.sheetGradient,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16.0),
-                      topRight: Radius.circular(16.0),
-                    )),
+                    horizontal: 12.0 * 1.5, vertical: 10.0),
+                decoration: AppGlass.sheet(),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 8.0),
+                      child: AppGlass.grabber(),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,9 +63,12 @@ class CustomMenuBottomSheet extends StatelessWidget {
                               child: Container(
                                 width: 48.0,
                                 height: 48.0,
-                                padding:
-                                EdgeInsets.only(left: 20.0),
-                                child: Icon(Icons.clear,color: Colors.black,size: 20.0,),
+                                padding: EdgeInsets.only(left: 20.0),
+                                child: Icon(
+                                  Icons.clear,
+                                  color: AppColors.textSecondaryColor,
+                                  size: 20.0,
+                                ),
                               ),
                             ),
                             opacity: 1.0,
@@ -76,9 +77,9 @@ class CustomMenuBottomSheet extends StatelessWidget {
                           child: Text(
                             title ?? "",
                             style: TextStyle(
-      fontSize: 16.0,
-      color: Colors.black,
-      fontWeight: FontWeight.w500),
+                                fontSize: 16.0,
+                                color: AppColors.textTitleColor,
+                                fontWeight: FontWeight.w700),
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -88,7 +89,8 @@ class CustomMenuBottomSheet extends StatelessWidget {
                       ],
                     ),
                     // CustomLine(),
-                    if((title??"")!="") Divider(),
+                    if ((title ?? "") != "")
+                      Divider(color: AppGlass.dividerColor),
                     Flexible(
                         child: Column(
                       mainAxisSize: MainAxisSize.min,

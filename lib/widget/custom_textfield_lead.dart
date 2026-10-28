@@ -74,7 +74,7 @@ class CustomTextField extends StatelessWidget {
       this.prefixIcon,
       this.prefixIconColor,
       this.onPrefixIconTap,
-      this.radius = 5.0,
+      this.radius = AppRadius.md,
       this.backgroundColor,
       this.hintStyle,
       this.suffixSize,
@@ -94,17 +94,14 @@ class CustomTextField extends StatelessWidget {
               right: verticalMargin),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(radius)),
-              color: backgroundColor ??
-                  ((error != "")
-                      ? AppColors.white
-                      : (enableBorder ? AppColors.white : AppColors.lightGrey)),
+              color: backgroundColor ?? AppGlass.surface,
               border: Border.all(
                   width: 1.0,
                   color: (error != "")
                       ? AppColors.redColor
                       : (enableBorder
                           ? AppColors.primaryColor
-                          : AppColors.lightGrey),
+                          : AppGlass.borderColor),
                   style: BorderStyle.solid)),
           child: Row(
             children: [

@@ -56,26 +56,31 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: AppColors.primaryColor,
-          surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-          title: Text(
-            AppLocalizations.text(LangKey.listBusiness)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
-          // leadingWidth: 20.0,
+    return AppGlass.background(
+        child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white,
         ),
-        body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            child: _buildBody()),
-            
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: AppColors.primaryColor,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.headerShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
+        title: Text(
+          AppLocalizations.text(LangKey.listBusiness)!,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+        ),
+        // leadingWidth: 20.0,
+      ),
+      body: Container(
+          decoration: const BoxDecoration(color: Colors.transparent),
+          child: _buildBody()),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primaryColor,
         onPressed: () async {
          var result = await showModalBottomSheet(
                     context: context,
@@ -94,7 +99,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
         },
         child: const Icon(Icons.add,color: Colors.white, size: 50,),
       ),
-      );
+    ));
   }
 
   Widget _buildBody() {
@@ -111,7 +116,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
             physics: AlwaysScrollableScrollPhysics(),
             controller: _controller,
             separatorPadding: 5.0,
-            // separator: Divider(),
+            // separator: Divider(color: AppColors.primaryColorMix),
             // children: (_model != null) ? (_model.data.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
             children: _listWidget(),
           )),
@@ -140,8 +145,10 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
           boxShadow: AppGlass.shadow,
             gradient: AppGlass.cardGradient,
             border: Border.all(
-                width: 1.0, color: Color(0xFFC3C8D3), style: BorderStyle.solid),
-            borderRadius: BorderRadius.circular(10.0)),
+                width: 1.0,
+                color: AppColors.secondaryColorMix,
+                style: BorderStyle.solid),
+            borderRadius: BorderRadius.circular(AppRadius.md)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -155,7 +162,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
                       "Doanh nghiệp 01",
                       style: TextStyle(
                           fontSize: 16.0,
-                          // color: item.selected ? Colors.orange : Colors.black,
+                          // color: item.selected ? Colors.orange : AppColors.textTitleColor,
                           color: AppColors.primaryColor,
                           fontWeight: FontWeight.w500),
                       maxLines: 1,
@@ -164,7 +171,11 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
                 ],
               ),
             ),
-            Icon(Icons.navigate_next, color: Color(0xFF0067AC), size: 30.0,)
+            Icon(
+              Icons.navigate_next,
+              color: AppColors.primaryColor,
+              size: 30.0,
+            )
           ],
         ),
       ),
@@ -183,11 +194,12 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
         contentPadding: EdgeInsets.all(12.0),
         border: OutlineInputBorder(
           // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
+          //     BorderSide(width: 1, color: AppColors.secondaryColorMix),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+          borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),
@@ -217,7 +229,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
         // color: Color.fromARGB(255, 243, 245, 247),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10000.0),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
         child: CustomAvatar(
           color: AppColors.primaryColor,
           name: name,

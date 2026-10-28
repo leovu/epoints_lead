@@ -623,8 +623,10 @@ class LeadConnection {
             children: <Widget>[
               Center(
                 child: Platform.isAndroid
-                    ? const CircularProgressIndicator()
-                    : const CupertinoActivityIndicator(),
+                    ? const CircularProgressIndicator(
+                        color: AppColors.primaryColor)
+                    : const CupertinoActivityIndicator(
+                        color: AppColors.primaryColor),
               )
             ],
           );
@@ -638,6 +640,10 @@ class LeadConnection {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: AppColors.white,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.card)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -647,7 +653,8 @@ class LeadConnection {
                       ? AppLocalizations.text(LangKey.warning)!
                       : AppLocalizations.text(LangKey.notify)! + "\n",
                   style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black),
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.textTitleColor),
                 )),
                 Container(
                   height: 10,
@@ -656,7 +663,7 @@ class LeadConnection {
                     child: Text(
                   title!,
                   textAlign: TextAlign.start,
-                  style: TextStyle(color: Colors.grey[700]),
+                  style: TextStyle(color: AppColors.textBodyColor),
                 )),
               ],
             ),
@@ -666,9 +673,7 @@ class LeadConnection {
               margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 15.0),
               height: 40,
               width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: AppColors.primaryColor,
-                  borderRadius: BorderRadius.circular(10)),
+              decoration: AppGlass.primaryButton(),
               child: TextButton(
                 child: Center(
                     child: Text(
@@ -694,6 +699,10 @@ class LeadConnection {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: AppColors.white,
+          surfaceTintColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppRadius.card)),
           // title:  Text(''),
           content: SingleChildScrollView(
             child: ListBody(
@@ -707,7 +716,8 @@ class LeadConnection {
                         child: Text(
                       AppLocalizations.text(LangKey.notify)! + "\n",
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.textTitleColor),
                     )),
                     InkWell(
                       child: Icon(
@@ -724,7 +734,7 @@ class LeadConnection {
                     child: Text(
                   title!,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey[700]),
+                  style: TextStyle(color: AppColors.textBodyColor),
                 )),
               ],
             ),
@@ -738,7 +748,7 @@ class LeadConnection {
                     child: Center(
                         child: Text(
                       AppLocalizations.text(LangKey.no)!,
-                      style: TextStyle(color: Color(0xFF0067AC)),
+                      style: TextStyle(color: AppColors.textSecondaryColor),
                     )),
                     onPressed: () {
                       Navigator.of(context).pop();

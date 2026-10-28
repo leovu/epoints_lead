@@ -149,18 +149,23 @@ class _LeadScreen extends State<LeadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppGlass.background(
+        child: Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.headerShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
         centerTitle: true,
         title: Text(
           AppLocalizations.text(LangKey.listPotential)!,
-          style: TextStyle(color: Colors.white, fontSize: 18.0),
+          style: TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
           textAlign: TextAlign.center,
         ),
         actions: [
@@ -189,7 +194,7 @@ class _LeadScreen extends State<LeadScreen> {
           )
         ],
       ),
-      backgroundColor: AppColors.surfaceColor,
+      backgroundColor: Colors.transparent,
       body: _buildBody(),
       floatingActionButton: !checkVisibilityKey(VisibilityWidgetName.LE000001)
           ? FloatingActionButton(
@@ -211,7 +216,7 @@ class _LeadScreen extends State<LeadScreen> {
               ),
             )
           : Container(),
-    );
+    ));
   }
 
   Widget _buildBody() {
@@ -293,10 +298,11 @@ class _LeadScreen extends State<LeadScreen> {
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+              borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
             suffixIcon: InkWell(
@@ -361,10 +367,10 @@ class _LeadCard extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             gradient: AppGlass.cardGradient,
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
             border: Border.all(
               width: 1,
-              color: const Color(0xFFC3C8D3),
+              color: AppColors.secondaryColorMix,
             ),
           ),
           child: Column(
@@ -376,7 +382,7 @@ class _LeadCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 8.0, top: 8.0),
                     child: CustomAvatarWithURL(
-                      backgroundColor: const Color(0xFFEEB132),
+                      backgroundColor: AppColors.primaryGradiantColor,
                       url: item.avatar ?? '',
                       name: item.leadFullName,
                       size: 60.0,
@@ -447,7 +453,7 @@ class _LeadCardHeader extends StatelessWidget {
                     style: const TextStyle(
                       height: 1.5,
                       fontSize: 16.0,
-                      color: Colors.black,
+                      color: AppColors.textTitleColor,
                       fontWeight: FontWeight.normal,
                     ),
                     children: [
@@ -483,7 +489,7 @@ class _LeadCardHeader extends StatelessWidget {
                 checkVisibilityKey(VisibilityWidgetName.LE000002)),
             style: const TextStyle(
               fontSize: 16.0,
-              color: Colors.black,
+              color: AppColors.textTitleColor,
               fontWeight: FontWeight.normal,
             ),
           ),
@@ -593,7 +599,7 @@ class _LeadJourneyBadge extends StatelessWidget {
       margin: const EdgeInsets.only(right: 8.0),
       decoration: BoxDecoration(
         color: const Color(0xFF3AEDB6),
-        borderRadius: BorderRadius.circular(4.0),
+        borderRadius: BorderRadius.circular(AppRadius.xs),
       ),
       padding: const EdgeInsets.all(3.0),
       child: Text(
@@ -630,7 +636,7 @@ class _LeadInfoTile extends StatelessWidget {
             child: Text(
               title,
               style: const TextStyle(
-                color: Colors.black,
+                color: AppColors.textTitleColor,
                 fontSize: 14.0,
                 fontWeight: FontWeight.normal,
               ),
@@ -667,7 +673,7 @@ class _LeadLastCareTile extends StatelessWidget {
                 text: '$dateLastCare ',
                 style: const TextStyle(
                   fontSize: 14.0,
-                  color: Colors.black,
+                  color: AppColors.textTitleColor,
                   fontWeight: FontWeight.normal,
                 ),
                 children: [
@@ -701,8 +707,8 @@ class _LeadTagChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4.0),
       height: 24,
       decoration: BoxDecoration(
-        color: const Color(0x420067AC),
-        borderRadius: BorderRadius.circular(5.0),
+        color: AppColors.primaryColorMix,
+        borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -713,14 +719,14 @@ class _LeadTagChip extends StatelessWidget {
             width: 8.0,
             margin: const EdgeInsets.only(right: 5.0),
             decoration: BoxDecoration(
-              color: const Color(0x790067AC),
-              borderRadius: BorderRadius.circular(1000.0),
+              color: AppColors.primaryColor,
+              borderRadius: BorderRadius.circular(AppRadius.pill),
             ),
           ),
           Text(
             tag.tagName ?? "",
             style: const TextStyle(
-              color: Color(0xFF0067AC),
+              color: AppColors.primaryColor,
               fontSize: 14.0,
               fontWeight: FontWeight.w600,
             ),
@@ -740,10 +746,10 @@ class _LeadCallIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: BorderRadius.circular(AppRadius.xs),
       child: const Padding(
         padding: EdgeInsets.all(6.0),
-        child: Icon(Icons.phone, color: Color(0xFF06A605), size: 24),
+        child: Icon(Icons.phone, color: AppColors.successColor, size: 24),
       ),
     );
   }
@@ -766,7 +772,7 @@ class _LeadActionIcon extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(4),
+      borderRadius: BorderRadius.circular(AppRadius.xs),
       child: Padding(
         padding: const EdgeInsets.all(6.0),
         child: Stack(
@@ -781,7 +787,7 @@ class _LeadActionIcon extends StatelessWidget {
                   width: number > 9 ? 22 : 18,
                   height: 14,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(100),
+                    borderRadius: BorderRadius.circular(AppRadius.pill),
                     color: const Color(0xFFF45E38),
                   ),
                   child: Center(

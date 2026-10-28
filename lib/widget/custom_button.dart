@@ -38,7 +38,21 @@ class CustomButton extends StatelessWidget {
       this.marginHorizontal = 0.0,
       this.marginVertical = 0.0,
       this.heightIcon = 20.0,
-      this.widthIcon = 20.0, this.radius=8.0});
+      this.widthIcon = 20.0,
+      this.radius = AppRadius.md});
+
+  bool get _isPrimary =>
+      enable! &&
+      gradient == null &&
+      borderColor == null &&
+      (backgroundColor == null || backgroundColor == AppColors.primaryColor);
+
+  bool get _isOutline =>
+      borderColor != null &&
+      (backgroundColor == null ||
+          backgroundColor == Colors.transparent ||
+          backgroundColor == AppColors.white ||
+          backgroundColor == Colors.white);
 
   @override
   Widget build(BuildContext context) {
@@ -46,17 +60,24 @@ class CustomButton extends StatelessWidget {
         child: Container(
           margin: EdgeInsets.symmetric(
               horizontal: marginHorizontal, vertical: marginVertical),
-          decoration: BoxDecoration(
-              color: enable!
-                  ? (backgroundColor ?? AppColors.primaryColor)
-                  : AppColors.grey200Color,
-              borderRadius: BorderRadius.all(Radius.circular(radius)),
-              border: borderColor == null
-                  ? null
-                  : Border.all(
-                      color: borderColor!,
-                      width: 1.0,
-                      style: BorderStyle.solid)),
+          decoration: _isPrimary
+              ? AppGlass.primaryButton(radius: radius)
+              : BoxDecoration(
+                  color: enable!
+                      ? (_isOutline
+                          ? AppGlass.surface
+                          : (gradient == null ? backgroundColor : null))
+                      : AppColors.primaryLightColor,
+                  gradient: enable! ? gradient : null,
+                  borderRadius: BorderRadius.all(Radius.circular(radius)),
+                  border: borderColor == null
+                      ? null
+                      : Border.all(
+                          color: borderColor == AppColors.primaryColor
+                              ? AppColors.primaryColor.withValues(alpha: 0.4)
+                              : borderColor!,
+                          width: 1.0,
+                          style: BorderStyle.solid)),
           height: heightButton != null ? heightButton : 48.0,
           padding: EdgeInsets.symmetric(horizontal: 15.0),
           child: Row(
@@ -86,8 +107,9 @@ class CustomButton extends StatelessWidget {
                       child: AutoSizeText(
                         text!,
                         style: style ??
-                            AppTextStyles.style15WhiteNormal
-                                .copyWith(color: AppColors.white),
+                            AppTextStyles.style15WhiteNormal.copyWith(
+                                color: AppColors.white,
+                                fontWeight: FontWeight.w600),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         minFontSize: 1,
@@ -98,8 +120,9 @@ class CustomButton extends StatelessWidget {
                   : Text(
                       text!,
                       style: style ??
-                          AppTextStyles.style15WhiteNormal
-                              .copyWith(color: AppColors.white),
+                          AppTextStyles.style15WhiteNormal.copyWith(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.w600),
                       // enable ? AppColors.white : AppColors.grey600),
                     )
             ],

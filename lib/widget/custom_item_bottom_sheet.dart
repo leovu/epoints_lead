@@ -38,7 +38,7 @@ class CustomItemBottomSheet extends StatelessWidget {
       decoration: BoxDecoration(
           border: Border(
               bottom: isBorder
-                  ? BorderSide(color: Color(0xFFEFEFEF), width: 1)
+                  ? BorderSide(color: AppGlass.dividerColor, width: 1)
                   : BorderSide.none)),
       child: Row(
         children: [
@@ -58,7 +58,7 @@ class CustomItemBottomSheet extends StatelessWidget {
                       child: CustomImageIcon(
                         icon: icon,
                         size: 20.0,
-                        color: colorIcon ?? (color ?? Color(0xFF040C21)),
+                        color: colorIcon ?? (color ?? AppColors.textTitleColor),
                         child: iconChild,
                       ),
                     ),
@@ -68,7 +68,9 @@ class CustomItemBottomSheet extends StatelessWidget {
                               style: textStyle ??
                                   TextStyle(
                                       fontSize: 15.0,
-                                      color: (isSelected ?? false) ? AppColors.primaryColor : Color(0xFF040C21) ,
+                                      color: (isSelected ?? false)
+                                          ? AppColors.primaryColor
+                                          : AppColors.textTitleColor,
                                       fontWeight: (isSelected ?? false)
                                           ? FontWeight.w700
                                           : FontWeight.w400)))
@@ -82,7 +84,7 @@ class CustomItemBottomSheet extends StatelessWidget {
                               style: textStyle ??
                                   TextStyle(
                                       fontSize: 14.0,
-                                      color: color ?? Color(0xFF040C21),
+                                      color: color ?? AppColors.textTitleColor,
                                       fontWeight: (isSelected ?? false)
                                           ? FontWeight.w700
                                           : FontWeight.w400),
@@ -93,11 +95,12 @@ class CustomItemBottomSheet extends StatelessWidget {
                                   subText ?? "",
                                   style: textStyle ??
                                       TextStyle(
-                                      fontSize: 14.0,
-                                      color: color ?? Color(0xFF040C21),
-                                      fontWeight: (isSelected ?? false)
-                                          ? FontWeight.w700
-                                          : FontWeight.w400),
+                                          fontSize: 14.0,
+                                          color:
+                                              color ?? AppColors.textTitleColor,
+                                          fontWeight: (isSelected ?? false)
+                                              ? FontWeight.w700
+                                              : FontWeight.w400),
                                 )),
                           ],
                         )),

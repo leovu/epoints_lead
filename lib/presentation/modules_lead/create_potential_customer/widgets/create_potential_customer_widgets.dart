@@ -40,9 +40,9 @@ class CreatePotentialFieldRow extends StatelessWidget {
     //     ? InputBorder.none
     //     : 
         OutlineInputBorder(
-            borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
-            borderRadius: BorderRadius.circular(10.0),
-          );
+      borderSide: BorderSide(width: 1, color: AppColors.secondaryColorMix),
+      borderRadius: BorderRadius.circular(AppRadius.md),
+    );
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: InkWell(
@@ -66,21 +66,21 @@ class CreatePotentialFieldRow extends StatelessWidget {
                         text: title,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textSecondaryColor,
                             fontWeight: FontWeight.normal),
                         children: [
-                          if (mandatory)
-                            TextSpan(
-                                text: "*",
-                                style: TextStyle(color: Colors.red))
-                        ]))
+                        if (mandatory)
+                          TextSpan(
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
+                      ]))
                 : Text(
                     content!,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(
@@ -153,20 +153,14 @@ class CustomerTypeSelector extends StatelessWidget {
         width: MediaQuery.of(context).size.width / 2 - 19,
         padding: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
-            color: selected ? AppColors.primaryColor : Color(0xFFF2F2F2),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 1),
-                blurRadius: 2,
-                color: Colors.black.withValues(alpha: 0.3),
-              )
-            ]),
+            color: selected ? AppColors.primaryColor : AppColors.surfaceColor,
+            borderRadius: BorderRadius.circular(AppRadius.md),
+            boxShadow: AppGlass.shadow),
         child: Center(
           child: Text(
             label,
             style: TextStyle(
-                color: selected ? Colors.white : Color(0xFF8E8E8E),
+                color: selected ? Colors.white : AppColors.textMutedColor,
                 fontSize: 14.0,
                 fontWeight: FontWeight.w400),
           ),
@@ -188,9 +182,7 @@ class PhoneListItem extends StatelessWidget {
       children: [
         Container(
           height: 56,
-          decoration: BoxDecoration(
-              border: Border.all(color: AppColors.grey200, width: 1),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: AppGlass.tile(),
           child: Row(
             children: [
               Padding(
@@ -201,13 +193,13 @@ class PhoneListItem extends StatelessWidget {
               Spacer(),
               Container(
                 decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: AppColors.primaryColorMix,
                     borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        bottomRight: Radius.circular(10))),
+                        topRight: Radius.circular(AppRadius.md),
+                        bottomRight: Radius.circular(AppRadius.md))),
                 padding: EdgeInsets.all(8.0),
                 child: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.grey),
+                  icon: Icon(Icons.delete, color: AppColors.textMutedColor),
                   onPressed: onDelete,
                 ),
               )
@@ -232,17 +224,17 @@ class AddMoreInfoButton extends StatelessWidget {
         margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
         height: 45,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(AppRadius.sm),
             border: Border.all(
                 width: 1.0,
-                color: Colors.blue,
+                color: AppColors.primaryColor,
                 style: BorderStyle.solid)),
         child: Center(
           child: Text(
             "+ ${AppLocalizations.text(LangKey.moreInformation)}",
             style: TextStyle(
                 fontSize: AppTextSizes.size16,
-                color: const Color(0xFF0067AC),
+                color: AppColors.primaryColor,
                 fontWeight: FontWeight.normal),
           ),
         ),
@@ -263,7 +255,7 @@ class SectionTitle extends StatelessWidget {
         title,
         style: TextStyle(
             fontSize: AppTextSizes.size16,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.normal),
       ),
     );
@@ -282,9 +274,7 @@ class SubmitButton extends StatelessWidget {
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 15.0),
       height: 40,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
+      decoration: AppGlass.primaryButton(),
       child: InkWell(
         onTap: onTap,
         child: Center(

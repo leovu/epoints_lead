@@ -89,22 +89,22 @@ late ListCustomerCareBloc _bloc;
 
    _buildCustomerType() {
     return RichText(
-              text: TextSpan(
-                  text: widget.bloc.detail?.customerType == "personal"
-                      ? "${AppLocalizations.text(LangKey.personal)} - "
-                      : "${AppLocalizations.text(LangKey.business)} - ",
-                  style: TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.grey,
-                      fontWeight: FontWeight.normal),
-                  children: [
-                TextSpan(
-                    text: widget.bloc.detail?.fullName,
-                    style: TextStyle(
-                        color: AppColors.primaryColor,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold))
-              ]));
+        text: TextSpan(
+            text: widget.bloc.detail?.customerType == "personal"
+                ? "${AppLocalizations.text(LangKey.personal)} - "
+                : "${AppLocalizations.text(LangKey.business)} - ",
+            style: TextStyle(
+                fontSize: 16.0,
+                color: AppColors.textSecondaryColor,
+                fontWeight: FontWeight.normal),
+            children: [
+          TextSpan(
+              text: widget.bloc.detail?.fullName,
+              style: TextStyle(
+                  color: AppColors.primaryColor,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold))
+        ]));
   }
 
   Widget _buildContent() {
@@ -175,10 +175,7 @@ late ListCustomerCareBloc _bloc;
           // margin: EdgeInsets.all(10),
           width: MediaQuery.of(context).size.width,
           // height: 300,
-          decoration: BoxDecoration(
-              border: Border.all(
-                  color: Colors.grey, width: 1, style: BorderStyle.solid),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: AppGlass.card(radius: AppRadius.md),
           child: Row(
             children: [
               Container(
@@ -191,12 +188,13 @@ late ListCustomerCareBloc _bloc;
                     children: [
                       Text(
                         "${createTime.hour}:${createTime.minute}",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: AppColors.textMutedColor),
                       ),
                       Text(
                         '${createTime.day},\ntháng ${createTime.month},\nnăm ${createTime.year}',
                         style: TextStyle(
-                            color: Colors.black, fontWeight: FontWeight.bold),
+                            color: AppColors.textTitleColor,
+                            fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                     ],
@@ -210,7 +208,7 @@ late ListCustomerCareBloc _bloc;
                   decoration: BoxDecoration(
                       border: Border(
                     left: BorderSide(
-                      color: Colors.grey,
+                      color: AppColors.primaryColorMix,
                       width: 1.0,
                     ),
                   )),
@@ -228,7 +226,7 @@ late ListCustomerCareBloc _bloc;
                                   text:
                                       "[${item.manageWorkCode}] ${item.manageWorkTitle}",
                                   style: TextStyle(
-                                    color: Color(0xFF0067AC),
+                                    color: AppColors.primaryColor,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 16,
                                   ),
@@ -239,7 +237,7 @@ late ListCustomerCareBloc _bloc;
                                     WidgetSpan(
                                         child: Icon(
                                       Icons.check_circle_outline_sharp,
-                                      color: Colors.green,
+                                      color: AppColors.successColor,
                                       size: 16,
                                     )),
                                   ],
@@ -253,13 +251,8 @@ late ListCustomerCareBloc _bloc;
                       Container(
                         margin: EdgeInsets.only(top: 10.0),
                         padding: EdgeInsets.only(left: 5.0, right: 5.0),
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 2,
-                            color: Colors.black.withValues(alpha: 0.3),
-                          )
-                        ], color: Colors.white),
+                        decoration: AppGlass.tile(
+                            radius: AppRadius.sm, color: AppGlass.surface),
                         child: Padding(
                           padding: EdgeInsets.all(6.0),
                           child: Row(
@@ -299,7 +292,7 @@ late ListCustomerCareBloc _bloc;
                                 Text(
                                   "${item.countFile}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: AppColors.textTitleColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -321,7 +314,7 @@ late ListCustomerCareBloc _bloc;
                                 Text(
                                   "${item.countComment}",
                                   style: TextStyle(
-                                      color: Colors.black,
+                                      color: AppColors.textTitleColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -343,7 +336,7 @@ late ListCustomerCareBloc _bloc;
                                 Text(
                                   "${item.daysLate}",
                                   style: TextStyle(
-                                      color: Colors.red,
+                                      color: AppColors.dangerColor,
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.w500),
                                   // maxLines: 1,
@@ -420,13 +413,7 @@ late ListCustomerCareBloc _bloc;
       height: 30,
       margin: EdgeInsets.only(top: 10.0),
       padding: EdgeInsets.only(left: 5.0, right: 5.0),
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-          offset: Offset(0, 1),
-          blurRadius: 2,
-          color: Colors.black.withValues(alpha: 0.3),
-        )
-      ], color: Colors.white),
+      decoration: AppGlass.tile(radius: AppRadius.sm, color: AppGlass.surface),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

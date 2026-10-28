@@ -54,23 +54,31 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: AppColors.primaryColor,
-          surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-          title: Text(
-            AppLocalizations.text(LangKey.staff)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
-          // leadingWidth: 20.0,
-        ),
-        body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            child: _buildBody()));
+    return AppGlass.background(
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              shape: AppGlass.headerShape,
+              flexibleSpace: Container(decoration: AppGlass.header()),
+              title: Text(
+                AppLocalizations.text(LangKey.staff)!,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600),
+              ),
+              // leadingWidth: 20.0,
+            ),
+            body: Container(
+                decoration: const BoxDecoration(color: Colors.transparent),
+                child: _buildBody())));
   }
 
   Widget _buildBody() {
@@ -87,8 +95,12 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
                       top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
                   physics: AlwaysScrollableScrollPhysics(),
                   controller: _controller,
-                  separator: Divider(),
-                  children: (_model != null) ? (_model!.data!.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
+                  separator: Divider(color: AppColors.primaryColorMix),
+                  children: (_model != null)
+                      ? (_model!.data!.length > 0)
+                          ? _listWidget()
+                          : [CustomDataNotFound()]
+                      : [Container()],
                 ))
               : Container(),
           Container(
@@ -122,7 +134,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
     return InkWell(
       onTap: ontap ,
       child: Container(
-        decoration: BoxDecoration(color: Colors.white),
+        decoration: BoxDecoration(color: AppGlass.surface),
         child: Row(
           children: [
             _buildAvatar(item.fullName!),
@@ -133,7 +145,9 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
                   item.fullName!,
                   style: TextStyle(
                       fontSize: 18.0,
-                      color: item.selected! ? Colors.orange : Colors.black,
+                      color: item.selected!
+                          ? AppColors.primaryColor
+                          : AppColors.textTitleColor,
                       fontWeight: FontWeight.normal),
                   maxLines: 1,
                 ),
@@ -157,11 +171,12 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
         contentPadding: EdgeInsets.all(12.0),
         border: OutlineInputBorder(
           // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
+          //     BorderSide(width: 1, color: AppColors.secondaryColorMix),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+          borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),
@@ -183,7 +198,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
         // color: Color.fromARGB(255, 243, 245, 247),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(10000.0),
+        borderRadius: BorderRadius.circular(AppRadius.pill),
         child: CustomAvatar(
           color: Color.fromARGB(255, 117, 176, 215),
           name: name,

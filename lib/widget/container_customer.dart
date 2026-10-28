@@ -178,13 +178,11 @@ class ContainerBooking extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10.0),
-            gradient: AppGlass.cardGradient,
+        decoration: AppGlass.card().copyWith(
             border: Border.all(
-                color:
-                    isSelected ? AppColors.primaryColor : AppColors.white),
-            boxShadow: AppGlass.shadow),
+                color: isSelected
+                    ? AppColors.primaryColor
+                    : AppGlass.borderColor)),
         child: child,
       ),
       onTap: onTap,
@@ -312,10 +310,10 @@ class CustomTag extends StatelessWidget {
               AppTextStyles.style10WhiteBold
                   .copyWith(color: textColor ?? AppColors.white),
           borderColor: borderColor ?? null,
-          radius: 5.0,
+          radius: AppRadius.pill,
           backgroundColor: backgroundColor ?? AppColors.primaryColor,
           padding:
-              padding ?? EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+              padding ?? EdgeInsets.symmetric(vertical: 2.0, horizontal: 6.0),
           onClose: onClose,
         )
       ],

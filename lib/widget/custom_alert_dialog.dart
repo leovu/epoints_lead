@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
@@ -20,19 +19,17 @@ class CustomAlertDialog extends StatelessWidget {
   final bool showSubmitted;
 
   CustomAlertDialog(
-      {
-        required this.title,
-        this.content,
-        this.onSubmitted,
-        this.textSubmitted,
-        this.onSubSubmitted,
-        this.textSubSubmitted,
-        this.colorSubmitted,
-        this.enableCancel = false,
-        this.isTicket = false,
-        this.showSubmitted = true,
-        this.child
-      });
+      {required this.title,
+      this.content,
+      this.onSubmitted,
+      this.textSubmitted,
+      this.onSubSubmitted,
+      this.textSubSubmitted,
+      this.colorSubmitted,
+      this.enableCancel = false,
+      this.isTicket = false,
+      this.showSubmitted = true,
+      this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -40,9 +37,7 @@ class CustomAlertDialog extends StatelessWidget {
       alignment: Alignment.topRight,
       children: [
         Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              color: Colors.white),
+          decoration: AppGlass.dialog(),
           child: Column(
             children: [
               Container(
@@ -51,42 +46,49 @@ class CustomAlertDialog extends StatelessWidget {
                   children: [
                     Container(
                       padding: EdgeInsets.symmetric(
-                          horizontal: AppSizes.sizeOnTap! - AppSizes.maxPadding),
+                          horizontal:
+                              AppSizes.sizeOnTap! - AppSizes.maxPadding),
                       child: Text(
                         title ?? "",
-                        style: AppTextStyles.style20BlackBold,
+                        style: AppTextStyles.style20BlackBold
+                            .copyWith(fontWeight: FontWeight.w700),
                         textAlign: TextAlign.center,
                       ),
                     ),
                     Container(
                       height: AppSizes.minPadding,
                     ),
-                    child ?? Text(
-                      content ?? "",
-                      style: AppTextStyles.style15BlackNormal,
-                      textAlign: TextAlign.center,
-                    ),
-                   if (showSubmitted)
-                      ...[
-                        SizedBox(
-                          height: AppSizes.minPadding,
+                    child ??
+                        Text(
+                          content ?? "",
+                          style: AppTextStyles.style15BlackNormal
+                              .copyWith(color: AppColors.textBodyColor),
+                          textAlign: TextAlign.center,
                         ),
-                        CustomButton(
-                          text: textSubmitted ??
-                              AppLocalizations.text(LangKey.i_get_it),
-                          backgroundColor:
-                          colorSubmitted ?? AppColors.primaryColor,
-                          ontap:
-                          onSubmitted ?? () => CustomNavigator.pop(context),
-                        ),
-                      ],
+                    if (showSubmitted) ...[
+                      SizedBox(
+                        height: AppSizes.minPadding,
+                      ),
+                      CustomButton(
+                        text: textSubmitted ??
+                            AppLocalizations.text(LangKey.i_get_it),
+                        backgroundColor:
+                            colorSubmitted ?? AppColors.primaryColor,
+                        ontap:
+                            onSubmitted ?? () => CustomNavigator.pop(context),
+                      ),
+                    ],
                     textSubSubmitted == null
                         ? Container()
                         : Container(
                             padding: EdgeInsets.only(top: AppSizes.minPadding),
                             child: CustomButton(
                               text: textSubSubmitted,
-                              backgroundColor: AppColors.subColor,
+                              backgroundColor: Colors.transparent,
+                              borderColor: AppColors.primaryColor,
+                              style: AppTextStyles.style15WhiteNormal.copyWith(
+                                  color: AppColors.primaryColor,
+                                  fontWeight: FontWeight.w600),
                               ontap: onSubSubmitted ??
                                   () => Navigator.of(context).pop(),
                             ))
@@ -98,12 +100,15 @@ class CustomAlertDialog extends StatelessWidget {
         ),
         enableCancel
             ? InkWell(
-                child: Icon(
-                  Icons.close,
-                  size: 24,
-                  color: AppColors.primaryColor,
+                child: Padding(
+                  padding: EdgeInsets.all(AppSizes.minPadding),
+                  child: Icon(
+                    Icons.close,
+                    size: 22,
+                    color: AppColors.textSecondaryColor,
+                  ),
                 ),
-                onTap: () =>  Navigator.of(context).pop(),
+                onTap: () => Navigator.of(context).pop(),
               )
             : Container()
       ],

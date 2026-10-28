@@ -505,22 +505,30 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      child: Scaffold(
-          appBar: AppBar(
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-            ),
-            backgroundColor: AppColors.primaryColor,
-            surfaceTintColor: Colors.transparent,
-            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-            title: Text(
-              AppLocalizations.text(LangKey.filter)!,
-              style: const TextStyle(color: Colors.white, fontSize: 20.0),
-            ),
-          ),
-          body: Container(
-              decoration: const BoxDecoration(color: AppColors.white),
-              child: _buildBody())),
+      child: AppGlass.background(
+          child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                iconTheme: const IconThemeData(
+                  color: Colors.white,
+                ),
+                backgroundColor: Colors.transparent,
+                surfaceTintColor: Colors.transparent,
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                shape: AppGlass.headerShape,
+                flexibleSpace: Container(decoration: AppGlass.header()),
+                title: Text(
+                  AppLocalizations.text(LangKey.filter)!,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w600),
+                ),
+              ),
+              body: Container(
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  child: _buildBody()))),
       canPop: false,
       onPopInvokedWithResult: (event, _) {
         if (!event) {
@@ -590,7 +598,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                   AppLocalizations.text(LangKey.byLabel)!,
                   style: TextStyle(
                       fontSize: 16.0,
-                      color: const Color(0xFF0067AC),
+                      color: AppColors.primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
                 // FilterByTags(
@@ -644,7 +652,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         AppLocalizations.text(LangKey.byCustomerType)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold),
       ),
       FilterByCustomerType(customerTypeData: customerTypeData),
@@ -654,7 +662,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         AppLocalizations.text(LangKey.byStatus)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold),
       ),
       FilterBySatus(
@@ -666,7 +674,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         AppLocalizations.text(LangKey.byCustomerSource)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold),
       ),
       // FilterByCustomerSource(
@@ -719,7 +727,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         AppLocalizations.text(LangKey.byCreationDate)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold),
       ),
       FilterByCreateDate(
@@ -735,7 +743,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             AppLocalizations.text(LangKey.byAllocateDate)!,
             style: TextStyle(
                 fontSize: 16.0,
-                color: const Color(0xFF0067AC),
+                color: AppColors.primaryColor,
                 fontWeight: FontWeight.bold),
           ),
           FilterByAllocateDate(
@@ -752,7 +760,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         AppLocalizations.text(LangKey.byConvertStatus)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold),
       ),
       FilterByConvertStatus(
@@ -762,7 +770,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         AppLocalizations.text(LangKey.byAllocator)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold),
       ),
 
@@ -803,7 +811,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         AppLocalizations.text(LangKey.byPipeline)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold),
       ),
 
@@ -858,7 +866,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
         AppLocalizations.text(LangKey.byJourney)!,
         style: TextStyle(
             fontSize: 16.0,
-            color: const Color(0xFF0067AC),
+            color: AppColors.primaryColor,
             fontWeight: FontWeight.bold),
       ),
 
@@ -906,7 +914,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             AppLocalizations.text(LangKey.byHistoryCustomerCare)!,
             style: TextStyle(
                 fontSize: 16.0,
-                color: const Color(0xFF0067AC),
+                color: AppColors.primaryColor,
                 fontWeight: FontWeight.bold),
           ),
           FilterHistoryCareDate(
@@ -936,12 +944,13 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide:
+                  BorderSide(width: 1, color: AppColors.secondaryColorMix),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+              borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             label: (content == "")
                 ? RichText(
@@ -949,19 +958,20 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                         text: title,
                         style: TextStyle(
                             fontSize: 15.0,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textSecondaryColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,
                     style: TextStyle(
                         overflow: TextOverflow.ellipsis,
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(
@@ -1002,9 +1012,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 15.0),
           height: 40,
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-              color: AppColors.primaryColor,
-              borderRadius: BorderRadius.circular(10)),
+          decoration: AppGlass.primaryButton(),
           child: InkWell(
             onTap: () {
               print("ap dung");
@@ -1084,9 +1092,11 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           height: 40,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(AppRadius.md),
               border: Border.all(
-                  width: 1.0, color: Colors.blue, style: BorderStyle.solid)),
+                  width: 1.0,
+                  color: AppColors.primaryColor,
+                  style: BorderStyle.solid)),
           child: InkWell(
             onTap: () async {
               allowPop = false;
@@ -1098,7 +1108,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                 AppLocalizations.text(LangKey.delete)!,
                 style: TextStyle(
                     fontSize: 14.0,
-                    color: Color(0xFF1A76B4),
+                    color: AppColors.primaryDarkColor,
                     fontWeight: FontWeight.bold),
                 maxLines: 1,
               ),

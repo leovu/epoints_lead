@@ -48,7 +48,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
     if (widget.listBusinessData!.length == 0) {
       ListBusinessAreasModelResponse? model =
           await LeadConnection.getListBusinessAreas(context);
-     
+
       if (model != null) {
         listBusinessData = model.data;
       }
@@ -59,57 +59,67 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
         listBusinessData = widget.listBusinessData;
       }
     }
-    
+
     listBusinessDataDisplay = listBusinessData;
-     Navigator.of(context).pop();
+    Navigator.of(context).pop();
     setState(() {});
     // }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: AppColors.primaryColor,
-          surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-          title: Text(
-            AppLocalizations.text(LangKey.chooseBusinessAreas)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
-          actions: [
-            Container(
-              margin: EdgeInsets.only(right: 10.0),
-              child: InkWell(
-                onTap: () async {
-                   var result = await showModalBottomSheet(
-                      context: context,
-                      useRootNavigator: true,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (context) {
-                        return GestureDetector(
+    return AppGlass.background(
+        child: Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.headerShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
+        title: Text(
+          AppLocalizations.text(LangKey.chooseBusinessAreas)!,
+          style: const TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+        ),
+        actions: [
+          Container(
+            margin: EdgeInsets.only(right: 10.0),
+            child: InkWell(
+              onTap: () async {
+                var result = await showModalBottomSheet(
+                    context: context,
+                    useRootNavigator: true,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return GestureDetector(
                           onTap: () {
                             Navigator.of(context).pop();
                           },
                           child: CreateNewBusinessAreaModal());
-                      });
-                  if (result != null && result) {
-                    getData();
-                    }
-                },
-                child: Icon(Icons.add, size: 30,),
+                    });
+                if (result != null && result) {
+                  getData();
+                }
+              },
+              child: Icon(
+                Icons.add,
+                size: 30,
               ),
-            )
-          ],
-          // leadingWidth: 20.0,
-        ),
-        body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            child: _buildBody()),);
+            ),
+          )
+        ],
+        // leadingWidth: 20.0,
+      ),
+      body: Container(
+          decoration: const BoxDecoration(color: Colors.transparent),
+          child: _buildBody()),
+    ));
   }
 
   Widget _buildBody() {
@@ -127,7 +137,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
                           top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
                       physics: AlwaysScrollableScrollPhysics(),
                       controller: _controller,
-                      separator: Divider(),
+                      separator: Divider(color: AppColors.primaryColorMix),
                       children: _listWidget(),
                     ))
                   : Expanded(child: CustomDataNotFound())
@@ -148,12 +158,14 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
 
   List<Widget> _listWidget() {
     return (listBusinessDataDisplay != null)
-        ? (listBusinessDataDisplay!.length > 0) ? List.generate(
-            listBusinessDataDisplay!.length,
-            (index) => _buildItem(listBusinessDataDisplay![index], () {
-                  selectedItem(listBusinessDataDisplay![index]);
-                }))
-        : [CustomDataNotFound()] : Expanded(child: Container()) as List<Widget>;
+        ? (listBusinessDataDisplay!.length > 0)
+            ? List.generate(
+                listBusinessDataDisplay!.length,
+                (index) => _buildItem(listBusinessDataDisplay![index], () {
+                      selectedItem(listBusinessDataDisplay![index]);
+                    }))
+            : [CustomDataNotFound()]
+        : Expanded(child: Container()) as List<Widget>;
   }
 
   Widget _buildItem(ListBusinessAreasItem item, GestureTapCallback ontap) {
@@ -171,8 +183,9 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
                 overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                     fontSize: 15.0,
-                    color:
-                        item.selected! ? AppColors.primaryColor : Colors.black,
+                    color: item.selected!
+                        ? AppColors.primaryColor
+                        : AppColors.textTitleColor,
                     fontWeight:
                         item.selected! ? FontWeight.bold : FontWeight.normal),
               ),
@@ -203,23 +216,24 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
         contentPadding: EdgeInsets.all(12.0),
         border: OutlineInputBorder(
           // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
+          //     BorderSide(width: 1, color: AppColors.secondaryColorMix),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+          borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel( event);
+        searchModel(event);
       },
     );
   }
 
-  searchModel( String value) {
+  searchModel(String value) {
     if (value.isEmpty) {
       listBusinessDataDisplay = listBusinessData;
       setState(() {});
@@ -247,8 +261,7 @@ class _BusinessAreasModalState extends State<BusinessAreasModal> {
   }
 
   selectedItem(ListBusinessAreasItem item) async {
-
-if (item.selected!) {
+    if (item.selected!) {
       return;
     }
     try {
@@ -258,7 +271,6 @@ if (item.selected!) {
     item.selected = true;
     setState(() {});
   }
-
 
   // if (!item.selected) {
   //     //   return;

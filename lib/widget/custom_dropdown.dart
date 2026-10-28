@@ -51,14 +51,12 @@ class CustomDropdown extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             color: (menus ?? []).isNotEmpty
-                ? Colors.transparent
-                : AppColors.grey50Color,
+                ? AppGlass.surface
+                : AppGlass.surfaceLight,
             border: Border.all(
-              color: (menus ?? []).isNotEmpty
-                  ? AppColors.borderColor
-                  : AppColors.grey50Color,
+              color: AppGlass.borderColor,
             )),
         padding: EdgeInsets.all(AppSizes.minPadding),
         child: Row(
@@ -73,12 +71,14 @@ class CustomDropdown extends StatelessWidget {
               ),
             Expanded(
                 child: Text(
-                  (isHint ? hint : text) ?? "",
-                  style: AppTextStyles.style14BlackNormal.copyWith(
-                      color: isHint ? AppColors.hintColor : (textColor ?? AppColors.black)),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                )),
+              (isHint ? hint : text) ?? "",
+              style: AppTextStyles.style14BlackNormal.copyWith(
+                  color: isHint
+                      ? AppColors.hintColor
+                      : (textColor ?? AppColors.textTitleColor)),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            )),
             if (showIcon || !isText) ...[
               Container(
                 width: AppSizes.minPadding,
@@ -115,7 +115,7 @@ class CustomDropdown extends StatelessWidget {
       return CustomShimmer(
         child: CustomSkeleton(
           height: AppSizes.maxPadding * 2,
-          radius: 5.0,
+          radius: AppRadius.md,
         ),
       );
     }

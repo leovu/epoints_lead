@@ -53,11 +53,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5.0),
-            color: backgroundColor??Color(0xFFF6F6F6),
-            border: borderColor == null?null:Border.all(color: borderColor!)
-        ),
+        decoration: AppGlass.input(color: backgroundColor, border: borderColor),
         child: Row(
           children: [
             Expanded(
@@ -65,12 +61,13 @@ class CustomTextField extends StatelessWidget {
                 focusNode: focusNode,
                 controller: controller,
                 style: TextStyle(
-      fontSize: AppTextSizes.size14,
-      color: AppColors.black,
-      fontWeight: FontWeight.normal),
+                    fontSize: AppTextSizes.size14,
+                    color: AppColors.textTitleColor,
+                    fontWeight: FontWeight.normal),
                 decoration: InputDecoration(
                     isDense: true,
-                    contentPadding: EdgeInsets.all(10.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 12.0, vertical: 10.0),
                     hintText: hintText,
                     hintStyle: TextStyle(
       fontSize: 14.0,
@@ -91,22 +88,26 @@ class CustomTextField extends StatelessWidget {
                 obscureText: obscureText ?? false,
               ),
             ),
-            (suffixIcon == null && suffixIconData == null)?Container():InkWell(
-              splashColor: Colors.transparent,
-              child: Container(
-                padding: EdgeInsets.only(right: 10.0),
-                child: suffixIcon != null?CustomImageIcon(
-                  icon: suffixIcon,
-                  size: 20.0,
-                  color: Color(0xFF9E9E9E),
-                ):Icon(
-                  suffixIconData,
-                  size: 20.0,
-                  color: Color(0xFF9E9E9E),
-                ),
-              ),
-              onTap: onSuffixTap ,
-            )
+            (suffixIcon == null && suffixIconData == null)
+                ? Container()
+                : InkWell(
+                    splashColor: Colors.transparent,
+                    child: Container(
+                      padding: EdgeInsets.only(right: 10.0),
+                      child: suffixIcon != null
+                          ? CustomImageIcon(
+                              icon: suffixIcon,
+                              size: 20.0,
+                              color: AppColors.textMutedColor,
+                            )
+                          : Icon(
+                              suffixIconData,
+                              size: 20.0,
+                              color: AppColors.textMutedColor,
+                            ),
+                    ),
+                    onTap: onSuffixTap,
+                  )
           ],
         ),
       ),

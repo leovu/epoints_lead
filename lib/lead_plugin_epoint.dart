@@ -131,8 +131,9 @@ class LeadPluginEpoint {
                 Center(
                     child: Text(
                   'Cảnh báo\n',
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, color: Colors.red),
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.dangerColor),
                 )),
                 Center(child: Text(title)),
               ],

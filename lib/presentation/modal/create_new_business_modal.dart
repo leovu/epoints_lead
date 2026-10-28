@@ -47,10 +47,7 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 50, top: 10, left: 13.0, right: 13.0),
-      decoration: BoxDecoration(
-          gradient: AppGlass.sheetGradient,
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10), topRight: Radius.circular(10))),
+      decoration: AppGlass.sheet(),
       height: _isKeyboardVisible
           ? MediaQuery.of(context).size.height * 0.55
           : MediaQuery.of(context).size.height * 0.28,
@@ -63,7 +60,7 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
                   AppLocalizations.text(LangKey.createNewBusiness)!,
                   style: TextStyle(
                       fontSize: 18.0,
-                      color: Colors.black,
+                      color: AppColors.textTitleColor,
                       fontWeight: FontWeight.w600),
                 ),
               )),
@@ -89,9 +86,7 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
     return Container(
         height: 40,
         width: MediaQuery.of(context).size.width,
-        decoration: BoxDecoration(
-            color: AppColors.primaryColor,
-            borderRadius: BorderRadius.circular(10)),
+        decoration: AppGlass.primaryButton(),
         child: Center(
           child: Text(
             // AppLocalizations.text(LangKey.convertCustomers),
@@ -125,12 +120,13 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
             isCollapsed: true,
             contentPadding: EdgeInsets.all(12.0),
             border: OutlineInputBorder(
-              borderSide: BorderSide(
-                  width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-              borderRadius: BorderRadius.circular(10.0),
+              borderSide:
+                  BorderSide(width: 1, color: AppColors.secondaryColorMix),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+              borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             label: (content == "")
                 ? RichText(
@@ -138,18 +134,19 @@ class _CreateNewBusinessModalState extends State<CreateNewBusinessModal>
                         text: title,
                         style: TextStyle(
                             fontSize: 15.0,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textSecondaryColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content,
                     style: TextStyle(
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(

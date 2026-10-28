@@ -157,9 +157,7 @@ class _AddContactBusinessScreenState extends State<AddContactBusinessScreen>
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 15.0),
       height: 40,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
+      decoration: AppGlass.primaryButton(),
       child: InkWell(
         onTap: () async {
           if (validateAllow()) {

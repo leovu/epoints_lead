@@ -57,7 +57,7 @@ class CustomColumnIconInformation extends StatelessWidget {
                     ? styleContent ??
                         AppTextStyles.style14BlackNormal.copyWith(
                             color: onTap == null
-                                ? AppColors.black
+                                ? AppColors.textTitleColor
                                 : AppColors.primaryColor,
                             decoration:
                                 onTap == null ? null : TextDecoration.underline)

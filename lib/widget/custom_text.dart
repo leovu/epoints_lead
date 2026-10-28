@@ -53,7 +53,7 @@ class CustomTextInput extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: AppSizes.minPadding),
           child: CustomText(
             text: text,
-            color: color ?? AppColors.black,
+            color: color ?? AppColors.textTitleColor,
             fontStyle: fontStyle,
           ),
         ),

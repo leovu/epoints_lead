@@ -576,23 +576,31 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       onTap: () {
         keyboardDismissOnTap(context);
       },
-      child: Scaffold(
-          appBar: AppBar(
-            iconTheme: const IconThemeData(
-              color: Colors.white,
-            ),
-            backgroundColor: AppColors.primaryColor,
-            surfaceTintColor: Colors.transparent,
-            flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-            title: Text(
-              AppLocalizations.text(LangKey.editPotential)!,
-              style: const TextStyle(color: Colors.white, fontSize: 16.0),
-            ),
-            // leadingWidth: 20.0,
-          ),
-          body: Container(
-              decoration: const BoxDecoration(color: AppColors.white),
-              child: _buildBody())),
+      child: AppGlass.background(
+          child: Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                iconTheme: const IconThemeData(
+                  color: Colors.white,
+                ),
+                backgroundColor: Colors.transparent,
+                surfaceTintColor: Colors.transparent,
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                shape: AppGlass.headerShape,
+                flexibleSpace: Container(decoration: AppGlass.header()),
+                title: Text(
+                  AppLocalizations.text(LangKey.editPotential)!,
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.w600),
+                ),
+                // leadingWidth: 20.0,
+              ),
+              body: Container(
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  child: _buildBody()))),
     );
   }
 
@@ -625,7 +633,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             AppLocalizations.text(LangKey.customerInformation)!,
             style: TextStyle(
                 fontSize: AppTextSizes.size16,
-                color: const Color(0xFF0067AC),
+                color: AppColors.primaryColor,
                 fontWeight: FontWeight.normal),
           ),
 
@@ -649,22 +657,16 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   decoration: BoxDecoration(
                       color: selectedPersonal
                           ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withValues(alpha: 0.3),
-                        )
-                      ]),
+                          : AppColors.surfaceColor,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      boxShadow: AppGlass.shadow),
                   child: Center(
                     child: Text(
                       AppLocalizations.text(LangKey.personal)!,
                       style: TextStyle(
                           color: selectedPersonal
                               ? Colors.white
-                              : Color(0xFF8E8E8E),
+                              : AppColors.textMutedColor,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w400),
                     ),
@@ -684,22 +686,16 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                   decoration: BoxDecoration(
                       color: !selectedPersonal
                           ? AppColors.primaryColor
-                          : Color(0xFFF2F2F2),
-                      borderRadius: BorderRadius.circular(10.0),
-                      boxShadow: [
-                        BoxShadow(
-                          offset: Offset(0, 1),
-                          blurRadius: 2,
-                          color: Colors.black.withValues(alpha: 0.3),
-                        )
-                      ]),
+                          : AppColors.surfaceColor,
+                      borderRadius: BorderRadius.circular(AppRadius.md),
+                      boxShadow: AppGlass.shadow),
                   child: Center(
                     child: Text(
                       AppLocalizations.text(LangKey.business)!,
                       style: TextStyle(
                           color: !selectedPersonal
                               ? Colors.white
-                              : Color(0xFF8E8E8E),
+                              : AppColors.textMutedColor,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w400),
                     ),
@@ -974,17 +970,17 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                     margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
                     height: 45,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
+                        borderRadius: BorderRadius.circular(AppRadius.sm),
                         border: Border.all(
                             width: 1.0,
-                            color: Colors.blue,
+                            color: AppColors.primaryColor,
                             style: BorderStyle.solid)),
                     child: Center(
                       child: Text(
                         "+ ${AppLocalizations.text(LangKey.moreInformation)}",
                         style: TextStyle(
                             fontSize: AppTextSizes.size16,
-                            color: const Color(0xFF0067AC),
+                            color: AppColors.primaryColor,
                             fontWeight: FontWeight.normal),
                       ),
                     ),
@@ -1049,9 +1045,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       margin: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 15.0),
       height: 40,
       width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-          color: AppColors.primaryColor,
-          borderRadius: BorderRadius.circular(10)),
+      decoration: AppGlass.primaryButton(),
       child: InkWell(
         onTap: () async {
           if (_phoneNumberText.text.isNotEmpty) {
@@ -1166,9 +1160,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       children: [
         Container(
           height: 56,
-          decoration: BoxDecoration(
-              border: Border.all(color: AppColors.grey200, width: 1),
-              borderRadius: BorderRadius.circular(10)),
+          decoration: AppGlass.tile(),
           child: Row(
             children: [
               Padding(
@@ -1185,15 +1177,15 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
               Spacer(),
               Container(
                 decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: AppColors.primaryColorMix,
                     borderRadius: BorderRadius.only(
-                        topRight: Radius.circular(10),
-                        bottomRight: Radius.circular(10))),
+                        topRight: Radius.circular(AppRadius.md),
+                        bottomRight: Radius.circular(AppRadius.md))),
                 padding: EdgeInsets.all(8.0),
                 child: IconButton(
                   icon: Icon(
                     Icons.delete,
-                    color: Colors.grey,
+                    color: AppColors.textMutedColor,
                   ),
                   onPressed: () {
                     _bloc.listPhone.remove(phone);
@@ -1233,10 +1225,11 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
             border: OutlineInputBorder(
               borderSide:
                   BorderSide(width: 1, color: Color.fromARGB(255, 230, 21, 84)),
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+              borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+              borderRadius: BorderRadius.circular(AppRadius.md),
             ),
             label: (content == "")
                 ? RichText(
@@ -1244,12 +1237,13 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                         text: title,
                         style: TextStyle(
                             fontSize: AppTextSizes.size15,
-                            color: const Color(0xFF858080),
+                            color: AppColors.textSecondaryColor,
                             fontWeight: FontWeight.normal),
                         children: [
                         if (mandatory)
                           TextSpan(
-                              text: "*", style: TextStyle(color: Colors.red))
+                              text: "*",
+                              style: TextStyle(color: AppColors.dangerColor))
                       ]))
                 : Text(
                     content!,
@@ -1257,7 +1251,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                         fontSize: 15.0,
-                        color: Colors.black,
+                        color: AppColors.textTitleColor,
                         fontWeight: FontWeight.normal),
                   ),
             prefixIcon: Padding(

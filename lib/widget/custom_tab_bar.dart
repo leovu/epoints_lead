@@ -61,23 +61,39 @@ class CustomTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return tabs == null
         ? Container()
-        : TabBar(
-            labelColor: labelColor ?? AppColors.primaryColor,
-            indicatorWeight: 2.0,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorColor: labelColor ?? AppColors.primaryColor,
-            unselectedLabelStyle:
-                unSelectedLabel ?? AppTextStyles.style16PrimaryBold,
-            unselectedLabelColor: unSelectedLabelColor ?? null,
-            labelStyle: labelStyle ?? AppTextStyles.style16PrimaryBold,
-            labelPadding: EdgeInsets.symmetric(
-                horizontal: isExpanded ? 0.0 : AppSizes.maxPadding),
-            isScrollable: true,
-            onTap: onTap,
-            tabs: tabs!.map((model) {
-              return Tab(child: _buildTab(model));
-            }).toList(),
-            controller: controller,
+        : Container(
+            margin: EdgeInsets.symmetric(
+                horizontal: AppSizes.minPadding, vertical: 6.0),
+            padding: EdgeInsets.all(4.0),
+            decoration: AppGlass.pill(color: AppGlass.surfaceLight),
+            child: TabBar(
+              labelColor: labelColor ?? Colors.white,
+              indicator: BoxDecoration(
+                gradient: AppGlass.activeGradient,
+                borderRadius: BorderRadius.circular(AppRadius.pill),
+                boxShadow: AppGlass.buttonShadow,
+              ),
+              indicatorSize: TabBarIndicatorSize.tab,
+              dividerColor: Colors.transparent,
+              overlayColor: WidgetStateProperty.all(Colors.transparent),
+              tabAlignment: TabAlignment.center,
+              unselectedLabelStyle: unSelectedLabel ??
+                  AppTextStyles.style16PrimaryBold
+                      .copyWith(fontWeight: FontWeight.w600),
+              unselectedLabelColor:
+                  unSelectedLabelColor ?? AppColors.textSecondaryColor,
+              labelStyle: labelStyle ??
+                  AppTextStyles.style16PrimaryBold
+                      .copyWith(fontWeight: FontWeight.w600),
+              labelPadding: EdgeInsets.symmetric(
+                  horizontal: isExpanded ? 0.0 : AppSizes.maxPadding),
+              isScrollable: true,
+              onTap: onTap,
+              tabs: tabs!.map((model) {
+                return Tab(height: 36.0, child: _buildTab(model));
+              }).toList(),
+              controller: controller,
+            ),
           );
   }
 }

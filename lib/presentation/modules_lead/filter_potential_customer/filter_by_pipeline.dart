@@ -39,22 +39,30 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
-          backgroundColor: AppColors.primaryColor,
-          surfaceTintColor: Colors.transparent,
-          flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
-          title: Text(
-            AppLocalizations.text(LangKey.choosePipeline)!,
-            style: const TextStyle(color: Colors.white, fontSize: 18.0),
-          ),
-        ),
-        body: Container(
-            decoration: const BoxDecoration(color: Colors.white),
-            child: _buildBody()));
+    return AppGlass.background(
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: AppBar(
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+              ),
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              shape: AppGlass.headerShape,
+              flexibleSpace: Container(decoration: AppGlass.header()),
+              title: Text(
+                AppLocalizations.text(LangKey.choosePipeline)!,
+                style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            body: Container(
+                decoration: const BoxDecoration(color: Colors.transparent),
+                child: _buildBody())));
   }
 
   Widget _buildBody() {
@@ -72,7 +80,7 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
                           top: 16.0, bottom: 16.0, left: 8.0, right: 8.0),
                       physics: AlwaysScrollableScrollPhysics(),
                       controller: _controller,
-                      separator: Divider(),
+                      separator: Divider(color: AppColors.primaryColorMix),
                       children: _listWidget(),
                     ))
                   : Expanded(child: CustomDataNotFound())
@@ -115,8 +123,9 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
                   item.pipelineName!,
                   style: TextStyle(
                       fontSize: 15.0,
-                      color:
-                          item.selected! ? AppColors.primaryColor : Colors.black,
+                      color: item.selected!
+                          ? AppColors.primaryColor
+                          : AppColors.textTitleColor,
                       fontWeight:
                           item.selected! ? FontWeight.bold : FontWeight.normal),
                 )
@@ -148,11 +157,12 @@ class _FilterByPipelineState extends State<FilterByPipeline> {
         contentPadding: EdgeInsets.all(12.0),
         border: OutlineInputBorder(
           // borderSide:
-          //     BorderSide(width: 1, color: Color.fromARGB(255, 21, 230, 129)),
-          borderRadius: BorderRadius.circular(10.0),
+          //     BorderSide(width: 1, color: AppColors.secondaryColorMix),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(width: 1, color: Color(0xFFB8BFC9)),
+          borderSide: BorderSide(width: 1, color: AppColors.primaryColor),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         // hintText: AppLocalizations.text(LangKey.filterNameCodePhone),
         hintText: AppLocalizations.text(LangKey.inputSearch),

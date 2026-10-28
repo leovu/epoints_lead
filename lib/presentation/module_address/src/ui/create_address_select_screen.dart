@@ -73,21 +73,27 @@ class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen> wi
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppGlass.background(
+        child: Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
-        backgroundColor: AppColors.primaryColor,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        flexibleSpace: Container(decoration: BoxDecoration(gradient: AppGlass.headerGradient)),
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        shape: AppGlass.headerShape,
+        flexibleSpace: Container(decoration: AppGlass.header()),
         title: Text(
           AppLocalizations.text(LangKey.select_address)!,
-          style: const TextStyle(color: Colors.white, fontSize: 18.0),
+          style: const TextStyle(
+              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
         ),
         // leadingWidth: 20.0,
       ),
       body: _buildBody(),
-    );
+    ));
   }
 }

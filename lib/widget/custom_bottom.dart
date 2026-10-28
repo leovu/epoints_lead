@@ -30,7 +30,7 @@ class CustomBottom extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
       decoration: BoxDecoration(
           border: Border(
-        top: BorderSide(color: Color(0xFFE5E5E5)),
+        top: BorderSide(color: AppGlass.dividerColor),
       )),
       child: Column(
         children: [
@@ -46,7 +46,7 @@ class CustomBottom extends StatelessWidget {
                   Expanded(
                       child: CustomButton(
                     text: subText,
-                    backgroundColor: subColor ?? Color(0xFFF44336),
+                    backgroundColor: subColor ?? AppColors.dangerColor,
                     style: TextStyle(
                         fontSize: AppTextSizes.size14,
                         color: AppColors.white,

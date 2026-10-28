@@ -9,7 +9,7 @@ class AppColors {
   static const primaryLightColor = Color(0xFF9CCFF0);
   static const secondaryColor = Color(0xFF1A6497);
   static const secondaryColorMix = Color(0xFFD3E8F7);
-  static const surfaceColor = Color(0xFFF2F7FB);
+  static const surfaceColor = Color(0xFFF5F7F9);
   static const tertiaryColor = Color(0xFFFF9F0A);
   static const successColor = Color(0xFF34C759);
   static const warningColor = Color(0xFFFFB020);
@@ -23,7 +23,7 @@ class AppColors {
   static const white = Color(0xFFFFFFFF);
   static const white50 = Color(0xFFFAFAFA);
   static const black = Color(0xFF000000);
-  static const lightGrey = Color(0xFFF2F7FB);
+  static const lightGrey = Color(0xFFF5F7F9);
   static const grey600 = Color(0xFF64748B);
   static const dark = Color(0xFF1E293B);
   static const grey200 = Color(0xFFD8D8D8);
@@ -40,10 +40,10 @@ class AppColors {
   static const colorLine = Color(0xFFE1F0FA);
   static const colorLineImage = Color(0xFFE1F0FA);
   static const headerColorBackground = Color(0xFF3398DC);
-  static const headerColorLinearTop = Color(0xFFE3F0FA);
-  static const headerColorLinearBottom = Color(0xFFF2F7FB);
+  static const headerColorLinearTop = Color(0xFFEDF2F6);
+  static const headerColorLinearBottom = Color(0xFFF5F7F9);
   static const colorSelectedService = Color(0xFFE1F0FA);
-  static const colorUnSelectedService = Color(0xFFF2F7FB);
+  static const colorUnSelectedService = Color(0xFFF5F7F9);
   static const colorBorderUnSelectedService = Color(0xFFE1F0FA);
   static const redColor = Color(0xFFE22119);
   static const colorRed = Color(0xFFFF0000);
@@ -62,7 +62,7 @@ class AppColors {
   static const redAccColor = Color(0xFFFF8F8F);
   static const blueAccColor = Color(0xFF75AEFF);
   static const colorIconVersion = Color(0xFF475569);
-  static const colorBgTextField = Color(0xFFF2F7FB);
+  static const colorBgTextField = Color(0xFFF5F7F9);
   static const colorBgBank = Color(0xFFF8F9FB);
   static const shadowColor = Color(0xFFC6C6C6);
   static const colorGreen = Color(0xFF30D78B);
@@ -85,7 +85,7 @@ class AppColors {
   static const filterSelectedColor = Color(0xFFE1F0FA);
   static const backgroundRed = Color(0xFFFFF8F8);
   static const green = Color(0xFF4CD964);
-  static const backgroundGrey = Color(0xFFF2F7FB);
+  static const backgroundGrey = Color(0xFFF5F7F9);
   static const darkGrey = Color(0xFFD3E8F7);
   static const ash = Color(0xFF64748B);
   static const colorDot = Color(0xFF94A3B8);
@@ -708,7 +708,7 @@ class AppGlass {
   static const LinearGradient backgroundGradient = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [Color(0xFFE3F0FA), AppColors.surfaceColor, Color(0xFFEDF3F8)],
+    colors: [Color(0xFFEDF2F6), AppColors.surfaceColor, Color(0xFFF2F4F6)],
     stops: [0.0, 0.45, 1.0],
   );
 
@@ -787,7 +787,7 @@ class AppGlass {
         end: Alignment.bottomCenter,
         colors: [
           Color(0xFFFDFEFF),
-          Color.lerp(Colors.white, AppColors.primaryColor, 0.03)!,
+          Color.lerp(Colors.white, AppColors.primaryColor, 0.012)!,
           AppColors.surfaceColor,
         ],
         stops: [0.0, 0.3, 1.0],

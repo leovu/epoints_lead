@@ -100,7 +100,7 @@ class AppColors {
 }
 
 class AppFonts {
-  static const font = "SF Pro Text";
+  static const font = "Inter";
 }
 
 // class AppSizes {

@@ -6,7 +6,6 @@ import 'package:lead_plugin_epoint/widget/custom_avatar_with_url.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CustomFileView extends StatefulWidget {
-
   final String? url;
   final String? title;
 
@@ -17,7 +16,6 @@ class CustomFileView extends StatefulWidget {
 }
 
 class CustomFileViewState extends State<CustomFileView> {
-
   late WebViewController _controller;
 
   @override
@@ -26,21 +24,21 @@ class CustomFileViewState extends State<CustomFileView> {
     super.initState();
 
     _controller = WebViewController()
-  ..setJavaScriptMode(JavaScriptMode.unrestricted)
-  ..setBackgroundColor(const Color(0x00000000))
-  ..setNavigationDelegate(
-    NavigationDelegate(
-      onProgress: (int progress) {
-        // Update loading bar.
-      },
-      onPageStarted: (String url) {},
-      onPageFinished: (String url) {
-
-      },
-      onWebResourceError: (WebResourceError error) {},
-    ),
-  )
-  ..loadRequest(Uri.parse(Platform.isAndroid?"https://docs.google.com/viewer?embedded=true&url=${widget.url}":widget.url!));
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(const Color(0x00000000))
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+        ),
+      )
+      ..loadRequest(Uri.parse(Platform.isAndroid
+          ? "https://docs.google.com/viewer?embedded=true&url=${widget.url}"
+          : widget.url!));
   }
 
   @override
@@ -55,8 +53,12 @@ class CustomFileViewState extends State<CustomFileView> {
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         // actionsIconTheme: Navigator.of(context).pop(true),
         backgroundColor: Colors.transparent,
@@ -68,7 +70,9 @@ class CustomFileViewState extends State<CustomFileView> {
         title: Text(
           widget.title!,
           style: TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+              color: AppGlass.headerForeground,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
       ),
       body: ["jpeg", "jpg", "png"].contains(widget.url!.split(".").last)

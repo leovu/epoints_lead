@@ -35,10 +35,10 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
         dataAllocator = data;
         allocators = data.data;
 
-         _model = GetAllocatorModelReponse(
-        data: (allocators ?? <AllocatorData>[])
-            .map((e) => AllocatorData.fromJson(e.toJson()))
-            .toList());
+        _model = GetAllocatorModelReponse(
+            data: (allocators ?? <AllocatorData>[])
+                .map((e) => AllocatorData.fromJson(e.toJson()))
+                .toList());
       }
 
       Navigator.of(context).pop();
@@ -58,8 +58,12 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+              centerTitle: true,
+              systemOverlayStyle: AppGlass.headerOverlayStyle,
+              leading: AppGlass.backButton(context),
+              leadingWidth: 60.0,
               iconTheme: const IconThemeData(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
               ),
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
@@ -70,7 +74,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
               title: Text(
                 AppLocalizations.text(LangKey.staff)!,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: AppGlass.headerForeground,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600),
               ),
@@ -132,7 +136,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
 
   Widget _buildItemStaff(AllocatorData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
         decoration: BoxDecoration(color: AppGlass.surface),
         child: Row(
@@ -183,7 +187,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel(allocators,event);
+        searchModel(allocators, event);
       },
     );
   }
@@ -211,8 +215,7 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
   searchModel(List<AllocatorData>? model, String value) {
     if (model == null || value.isEmpty) {
       _model!.data = allocators;
-      setState(() {
-      });
+      setState(() {});
     } else {
       try {
         List<AllocatorData> models = model.where((model) {
@@ -227,12 +230,9 @@ class _AllocatorScreenState extends State<AllocatorScreen> {
           return result;
         }).toList();
         _model!.data = models;
-        setState(() {
-      });
+        setState(() {});
       } catch (_) {
-        setState(() {
-        
-      });
+        setState(() {});
       }
     }
   }

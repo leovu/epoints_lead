@@ -5,12 +5,14 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/model/response/get_list_staff_responese_model.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class StaffPickModal extends StatefulWidget {
   final List<WorkListStaffModel>? staffs;
   final WorkListStaffModel? selected;
-  const StaffPickModal({Key? key, this.staffs, this.selected}) : super(key: key);
+  const StaffPickModal({Key? key, this.staffs, this.selected})
+      : super(key: key);
 
   @override
   State<StaffPickModal> createState() => _StaffPickModalState();
@@ -28,8 +30,8 @@ class _StaffPickModalState extends State<StaffPickModal> {
     super.initState();
     _all = widget.staffs ?? [];
     for (var s in _all) {
-      s.isSelected = (widget.selected != null &&
-          s.staffId == widget.selected!.staffId);
+      s.isSelected =
+          (widget.selected != null && s.staffId == widget.selected!.staffId);
     }
     _filtered = List.of(_all);
   }
@@ -53,9 +55,8 @@ class _StaffPickModalState extends State<StaffPickModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface.sheet(
       padding: EdgeInsets.only(bottom: 50, top: 10),
-      decoration: AppGlass.sheet(),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [

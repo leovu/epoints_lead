@@ -204,14 +204,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
       child: Row(
         children: [
           Expanded(
-            child: option(
-                tabPotentials[0].typeName!, tabPotentials[0].selected!, 100,
-                () => _goToTab(0)),
+            child: option(tabPotentials[0].typeName!,
+                tabPotentials[0].selected!, 100, () => _goToTab(0)),
           ),
           Expanded(
-            child: option(
-                tabPotentials[1].typeName!, tabPotentials[1].selected!, 100,
-                () => _goToTab(1)),
+            child: option(tabPotentials[1].typeName!,
+                tabPotentials[1].selected!, 100, () => _goToTab(1)),
           ),
         ],
       ),
@@ -355,8 +353,12 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
       child: AppGlass.background(
           child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          systemOverlayStyle: AppGlass.headerOverlayStyle,
+          leading: AppGlass.backButton(context),
+          leadingWidth: 60.0,
           iconTheme: IconThemeData(
-            color: Colors.white,
+            color: AppGlass.headerForeground,
           ),
           // actionsIconTheme: Navigator.of(context).pop(true),
           backgroundColor: Colors.transparent,
@@ -368,7 +370,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
           title: Text(
             AppLocalizations.text(LangKey.detailPotential)!,
             style: TextStyle(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),
@@ -383,8 +385,7 @@ class _DetailPotentialCustomerState extends State<DetailPotentialCustomer>
       onPopInvokedWithResult: (event, _) {
         if (!event) {
           if (widget.customerCare != null) {
-            Navigator.of(context)
-              .pop(true);
+            Navigator.of(context).pop(true);
           }
 
           if (_bloc.allowPop) {

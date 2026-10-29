@@ -385,8 +385,12 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         // actionsIconTheme: Navigator.of(context).pop(true),
         backgroundColor: Colors.transparent,
@@ -398,7 +402,9 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Text(
           AppLocalizations.text(LangKey.discuss)!,
           style: TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+              color: AppGlass.headerForeground,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
       ),
       body: Column(

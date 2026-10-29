@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:lead_plugin_epoint/common/constant.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/widget/container_scrollable.dart';
 
 class CustomBottomSheet extends StatelessWidget {
@@ -34,22 +35,7 @@ class CustomBottomSheet extends StatelessWidget {
             Flexible(
               fit: FlexFit.loose,
               child: InkWell(
-                child: Container(
-                  decoration: AppGlass.sheet(),
-                  foregroundDecoration: BoxDecoration(
-                    borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(AppGlass.sheetRadius)),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.white.withValues(alpha: 0.55),
-                        Colors.white.withValues(alpha: 0.0),
-                      ],
-                      stops: [0.0, 0.06],
-                    ),
-                  ),
-                  clipBehavior: Clip.antiAlias,
+                child: CustomGlassSurface.sheet(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

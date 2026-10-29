@@ -1,9 +1,8 @@
-
-
 import 'dart:io';
 
 import 'package:auto_size_text_plus/auto_size_text_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
 import 'package:lead_plugin_epoint/common/constant.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
@@ -12,7 +11,6 @@ import 'package:lead_plugin_epoint/widget/custom_appbar.dart';
 import 'package:lead_plugin_epoint/widget/widget.dart';
 
 class CustomScaffold extends StatelessWidget {
-
   final Widget? body;
   final String? title;
   final Widget? customTitle;
@@ -30,35 +28,34 @@ class CustomScaffold extends StatelessWidget {
   final bool isExpanded;
   final String? backgroundImage;
 
-  CustomScaffold({
-    this.body,
-    this.title,
-    this.customTitle,
-    this.options,
-    this.onRefresh,
-    this.isBottom = false,
-    this.backgroundColor,
-    this.floatingActionButton,
-    this.actions,
-    this.icon,
-    this.tabs,
-    this.tabController,
-    this.onWillPop,
-    this.isBottomSheet = false,
-    this.isExpanded = true,
-    this.backgroundImage
-  });
+  CustomScaffold(
+      {this.body,
+      this.title,
+      this.customTitle,
+      this.options,
+      this.onRefresh,
+      this.isBottom = false,
+      this.backgroundColor,
+      this.floatingActionButton,
+      this.actions,
+      this.icon,
+      this.tabs,
+      this.tabController,
+      this.onWillPop,
+      this.isBottomSheet = false,
+      this.isExpanded = true,
+      this.backgroundImage});
 
-  Widget _buildContent(){
+  Widget _buildContent(BuildContext context) {
     return Column(
       children: [
         (title == null && customTitle == null)
             ? Container()
             : Container(
-                height: 90,
+                height: MediaQuery.paddingOf(context).top + 56.0,
                 width: double.infinity,
-                decoration: AppGlass.header(),
-                padding: EdgeInsets.only(top: 30.0),
+                padding: EdgeInsets.only(
+                    top: MediaQuery.paddingOf(context).top + 8.0),
                 child: CustomAppBar(
                   title: title,
                   customTitle: customTitle,
@@ -76,71 +73,74 @@ class CustomScaffold extends StatelessWidget {
                 isExpanded: isExpanded,
               ),
         Expanded(
-            child: tabs == null?ContainerScrollable(
-                child: body,
-                onRefresh: onRefresh
-            ):CustomTabBarView(
-              controller: tabController,
-              tabs: tabs,
-            )
-        )
+            child: tabs == null
+                ? ContainerScrollable(child: body, onRefresh: onRefresh)
+                : CustomTabBarView(
+                    controller: tabController,
+                    tabs: tabs,
+                  ))
       ],
     );
   }
 
   bool get _isGlass => backgroundColor == null;
 
-  Widget _buildBody() {
-    return Scaffold(
-      backgroundColor: _isGlass ? Colors.transparent : backgroundColor!,
-      body: SafeArea(
-        top: false,
-        left: false,
-        right: false,
-        child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: backgroundImage == null
-                ? (_isGlass
-                    ? AppGlass.background(child: _buildContent())
-                    : _buildContent())
-                : Stack(
-              fit: StackFit.expand,
-              children: [
-                SingleChildScrollView(
-                  child: Container(
-                    // width: AppSizes.maxWidth,
-                    // height: AppSizes.maxHeight,
-                    child: Image.asset(backgroundImage!, fit: BoxFit.fill,),
-                  ),
-                ),
-                _buildContent()
-              ],
-            )
-        ),),
+  Widget _buildBody(BuildContext context) {
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: AppGlass.headerOverlayStyle,
+      child: Scaffold(
+        backgroundColor: _isGlass ? Colors.transparent : backgroundColor!,
+        body: SafeArea(
+          top: false,
+          left: false,
+          right: false,
+          child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: backgroundImage == null
+                  ? (_isGlass
+                      ? AppGlass.background(child: _buildContent(context))
+                      : _buildContent(context))
+                  : Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        SingleChildScrollView(
+                          child: Container(
+                            // width: AppSizes.maxWidth,
+                            // height: AppSizes.maxHeight,
+                            child: Image.asset(
+                              backgroundImage!,
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        _buildContent(context)
+                      ],
+                    )),
+        ),
         floatingActionButton: floatingActionButton,
         resizeToAvoidBottomInset: !isBottomSheet,
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return KeyboardActions(
-      config: configKeyboardActions(actions??[]),
-      disableScroll: true,
-      enable: Platform.isIOS || Platform.isMacOS,
-      child: onWillPop == null
-          ? _buildBody()
-          : PopScope(
-        child: _buildBody(),
-        canPop: false,
-        onPopInvokedWithResult: (event, _) {
-          if (!event) {
-            onWillPop!();
-          }
-        },
-      )
-    );
+        config: configKeyboardActions(actions ?? []),
+        disableScroll: true,
+        enable: Platform.isIOS || Platform.isMacOS,
+        child: onWillPop == null
+            ? _buildBody(context)
+            : PopScope(
+                child: _buildBody(context),
+                canPop: false,
+                onPopInvokedWithResult: (event, _) {
+                  if (!event) {
+                    onWillPop!();
+                  }
+                },
+              ));
   }
 }
 

@@ -5,6 +5,7 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/model/response/get_allocator_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class AllocatorModal extends StatefulWidget {
@@ -51,9 +52,8 @@ class _AllocatorModalState extends State<AllocatorModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface.sheet(
       padding: EdgeInsets.only(bottom: 50, top: 10),
-      decoration: AppGlass.sheet(),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [

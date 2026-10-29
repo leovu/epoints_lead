@@ -339,11 +339,11 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     }
     for (int i = 0; i < convertStatusOptions.length; i++) {
       if (widget.filterScreenModel!.filterModel!.isConvert ==
-            "${convertStatusOptions[i].statusID}") {
-          convertStatusOptions[i].selected = true;
-        } else {
-          convertStatusOptions[i].selected = false;
-        }
+          "${convertStatusOptions[i].statusID}") {
+        convertStatusOptions[i].selected = true;
+      } else {
+        convertStatusOptions[i].selected = false;
+      }
     }
 
     if (filterScreenModel.filterModel!.customerSourceId!.length > 0) {
@@ -509,8 +509,12 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
           child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
+                centerTitle: true,
+                systemOverlayStyle: AppGlass.headerOverlayStyle,
+                leading: AppGlass.backButton(context),
+                leadingWidth: 60.0,
                 iconTheme: const IconThemeData(
-                  color: Colors.white,
+                  color: AppGlass.headerForeground,
                 ),
                 backgroundColor: Colors.transparent,
                 surfaceTintColor: Colors.transparent,
@@ -521,7 +525,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
                 title: Text(
                   AppLocalizations.text(LangKey.filter)!,
                   style: const TextStyle(
-                      color: Colors.white,
+                      color: AppGlass.headerForeground,
                       fontSize: 20.0,
                       fontWeight: FontWeight.w600),
                 ),
@@ -933,7 +937,7 @@ class _FilterPotentialCustomerState extends State<FilterPotentialCustomer> {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       child: InkWell(
-        onTap: ontap ,
+        onTap: ontap,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

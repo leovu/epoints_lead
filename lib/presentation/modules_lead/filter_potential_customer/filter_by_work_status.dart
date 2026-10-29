@@ -12,7 +12,7 @@ import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class FilterByWorkStatus extends StatefulWidget {
   List<GetStatusWorkData>? statusWorkData;
-   FilterByWorkStatus({ Key? key, this.statusWorkData }) : super(key: key);
+  FilterByWorkStatus({Key? key, this.statusWorkData}) : super(key: key);
 
   @override
   _FilterByWorkStatusState createState() => _FilterByWorkStatusState();
@@ -25,13 +25,11 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
   List<GetStatusWorkData>? statusWorkData;
   List<GetStatusWorkData>? statusWorkDataDisplay;
 
-
   @override
   void initState() {
     super.initState();
     statusWorkData = widget.statusWorkData;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      
       getData();
     });
   }
@@ -46,20 +44,19 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
     keyboardDismissOnTap(context);
 
     if (statusWorkData == null || statusWorkData!.length == 0) {
-              LeadConnection.showLoading(context);
-              var statusWorkModel = await LeadConnection.getStatusWork(context);
+      LeadConnection.showLoading(context);
+      var statusWorkModel = await LeadConnection.getStatusWork(context);
 
-              Navigator.of(context).pop();
-              if (statusWorkModel != null) {
-                statusWorkData = statusWorkModel.data;
-                statusWorkDataDisplay = statusWorkData;
-              }
-            } else {
-              statusWorkDataDisplay = statusWorkData;
-            }
+      Navigator.of(context).pop();
+      if (statusWorkModel != null) {
+        statusWorkData = statusWorkModel.data;
+        statusWorkDataDisplay = statusWorkData;
+      }
+    } else {
+      statusWorkDataDisplay = statusWorkData;
+    }
 
-   
-      setState(() {});
+    setState(() {});
     // }
   }
 
@@ -69,8 +66,12 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+              centerTitle: true,
+              systemOverlayStyle: AppGlass.headerOverlayStyle,
+              leading: AppGlass.backButton(context),
+              leadingWidth: 60.0,
               iconTheme: const IconThemeData(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
               ),
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
@@ -81,7 +82,7 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
               title: Text(
                 AppLocalizations.text(LangKey.byWorkStatus)!,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: AppGlass.headerForeground,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600),
               ),
@@ -137,7 +138,7 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
 
   Widget _buildItem(GetStatusWorkData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -210,7 +211,9 @@ class _FilterByWorkStatusState extends State<FilterByWorkStatus> {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
-            if (!((model.manageStatusName ?? "").removeAccents().contains(element))) {
+            if (!((model.manageStatusName ?? "")
+                .removeAccents()
+                .contains(element))) {
               result = false;
               break;
             }

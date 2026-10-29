@@ -5,6 +5,7 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/create_potential_customer/bloc/create_potential_customer_bloc.dart';
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/utils/ultility.dart';
 
 class CreateNewPhoneModal extends StatefulWidget {
@@ -49,9 +50,8 @@ class _CreateNewPhoneModalState extends State<CreateNewPhoneModal>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface.sheet(
       padding: EdgeInsets.only(bottom: 50, top: 10, left: 13.0, right: 13.0),
-      decoration: AppGlass.sheet(),
       height: _isKeyboardVisible
           ? MediaQuery.of(context).size.height * 0.55
           : MediaQuery.of(context).size.height * 0.28,

@@ -53,7 +53,7 @@ class _TagsModalState extends State<TagsModal> {
     var tags = await LeadConnection.getTag(context);
     Navigator.of(context).pop();
     if (tags != null) {
-      tagsData!.add(tags.data!.elementAt(tags.data!.length-1));
+      tagsData!.add(tags.data!.elementAt(tags.data!.length - 1));
       // tagsData = tags.data;
       tagsDataDisplay = tagsData;
     }
@@ -68,8 +68,12 @@ class _TagsModalState extends State<TagsModal> {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+              centerTitle: true,
+              systemOverlayStyle: AppGlass.headerOverlayStyle,
+              leading: AppGlass.backButton(context),
+              leadingWidth: 60.0,
               iconTheme: const IconThemeData(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
               ),
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
@@ -80,7 +84,7 @@ class _TagsModalState extends State<TagsModal> {
               title: Text(
                 AppLocalizations.text(LangKey.chooseCards)!,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: AppGlass.headerForeground,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600),
               ),
@@ -165,7 +169,7 @@ class _TagsModalState extends State<TagsModal> {
 
   Widget _buildItem(TagData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

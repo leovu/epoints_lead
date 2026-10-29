@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_icon_button.dart';
 import 'package:lead_plugin_epoint/widget/custom_image_icon.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' as lg;
 
 class CustomAppBar extends StatelessWidget {
   final String? title;
@@ -11,7 +12,8 @@ class CustomAppBar extends StatelessWidget {
   final IconData? icon;
   final GestureTapCallback? onWillPop;
 
-  CustomAppBar({this.title, this.customTitle, this.options, this.icon, this.onWillPop});
+  CustomAppBar(
+      {this.title, this.customTitle, this.options, this.icon, this.onWillPop});
 
   Widget _buildIcon(int index) {
     CustomOptionAppBar model = options![index];
@@ -19,32 +21,24 @@ class CustomAppBar extends StatelessWidget {
       return CustomIconButton(
           ontap: model.ontap,
           isText: true,
-          color: Colors.white,
+          color: AppColors.primaryColor,
           child: Text(
             options![index].text!,
             style: AppTextStyles.style15PrimaryNormal
-                .copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                .copyWith(fontWeight: FontWeight.w600),
           ));
     }
     return Center(
-      child: Container(
-        width: 36.0,
-        height: 36.0,
-        margin: EdgeInsets.only(left: 4.0),
-        decoration: BoxDecoration(
-          color: AppGlass.headerIconBackground,
-          shape: BoxShape.circle,
-        ),
-        child: InkWell(
-          customBorder: CircleBorder(),
-          onTap: model.ontap,
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: CustomImageIcon(
-              icon: model.icon,
-              size: 20.0,
-              color: Colors.white,
-            ),
+      child: Padding(
+        padding: EdgeInsets.only(left: 4.0),
+        child: lg.GlassIconButton(
+          useOwnLayer: true,
+          size: 40.0,
+          onPressed: model.ontap,
+          icon: CustomImageIcon(
+            icon: model.icon,
+            size: 20.0,
+            color: AppGlass.headerForeground,
           ),
         ),
       ),
@@ -59,7 +53,7 @@ class CustomAppBar extends StatelessWidget {
       children: [
         Container(
           padding: EdgeInsets.symmetric(
-              horizontal:15.0 +
+              horizontal: 15.0 +
                   ((options == null || options!.length == 0)
                       ? (canPop ? 40.0 : 0.0)
                       : (options!.length * 40.0))),
@@ -67,8 +61,9 @@ class CustomAppBar extends StatelessWidget {
               Center(
                 child: Text(
                   title!,
-                  style: AppTextStyles.style17WhiteNormal
-                      .copyWith(fontWeight: FontWeight.w600),
+                  style: AppTextStyles.style17WhiteNormal.copyWith(
+                      color: AppGlass.headerForeground,
+                      fontWeight: FontWeight.w600),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -76,46 +71,38 @@ class CustomAppBar extends StatelessWidget {
         ),
         Row(
           children: [
-            Opacity(
-              child: InkWell(
-                onTap: canPop
-                    ? (onWillPop  ?? () => Navigator.pop(context))
-                    : null,
-                child: Container(
-                  width: 36.0,
-                  height: 36.0,
-                  margin: EdgeInsets.only(left: 12.0),
-                  decoration: BoxDecoration(
-                    color: AppGlass.headerIconBackground,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: Icon(
-                    icon ?? Icons.arrow_back_ios_new,
-                    color: Colors.white,
-                    size: 18.0,
+            if (canPop)
+              Padding(
+                padding: EdgeInsets.only(left: 12.0),
+                child: lg.GlassIconButton(
+                  useOwnLayer: true,
+                  size: 40.0,
+                  onPressed: onWillPop ?? () => Navigator.pop(context),
+                  icon: Icon(
+                    icon ?? CupertinoIcons.back,
+                    color: AppGlass.headerForeground,
+                    size: 22.0,
                   ),
                 ),
-              ),
-              opacity: canPop ? 1.0 : 0.0,
-            ),
+              )
+            else
+              SizedBox(width: 52.0),
             Expanded(
               child: Container(),
             ),
             (options == null || options!.length == 0)
                 ? Container()
                 : Container(
-              height: 40.0,
-              child: ListView.builder(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 15.0),
-                  itemCount: options!.length,
-                  physics: NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (_, index) =>
-                  options![index].child ?? _buildIcon(index)),
-            )
+                    height: 40.0,
+                    child: ListView.builder(
+                        padding: EdgeInsets.symmetric(horizontal: 15.0),
+                        itemCount: options!.length,
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (_, index) =>
+                            options![index].child ?? _buildIcon(index)),
+                  )
           ],
         )
       ],

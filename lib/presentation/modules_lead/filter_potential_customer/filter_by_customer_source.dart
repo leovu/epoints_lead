@@ -43,8 +43,12 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+              centerTitle: true,
+              systemOverlayStyle: AppGlass.headerOverlayStyle,
+              leading: AppGlass.backButton(context),
+              leadingWidth: 60.0,
               iconTheme: const IconThemeData(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
               ),
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
@@ -55,7 +59,7 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
               title: Text(
                 AppLocalizations.text(LangKey.byCustomerSource)!,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: AppGlass.headerForeground,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600),
               ),
@@ -100,7 +104,8 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
   }
 
   List<Widget> _listWidget() {
-    return (customerSourcesDisplay != null && customerSourcesDisplay!.length > 0)
+    return (customerSourcesDisplay != null &&
+            customerSourcesDisplay!.length > 0)
         ? List.generate(
             customerSourcesDisplay!.length,
             (index) => _buildItem(customerSourcesDisplay![index], () {
@@ -111,7 +116,7 @@ class _FilterByCustomerSourceState extends State<FilterByCustomerSource> {
 
   Widget _buildItem(CustomerOptionSource item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

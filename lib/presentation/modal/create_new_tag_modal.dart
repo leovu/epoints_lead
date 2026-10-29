@@ -5,6 +5,7 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/add_tag_model_request.dart';
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 
 class CreateNewTagModal extends StatefulWidget {
@@ -48,9 +49,8 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface.sheet(
       padding: EdgeInsets.only(bottom: 50, top: 10, left: 13.0, right: 13.0),
-      decoration: AppGlass.sheet(),
       height: _isKeyboardVisible
           ? MediaQuery.of(context).size.height * 0.55
           : MediaQuery.of(context).size.height * 0.28,
@@ -67,15 +67,9 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
                       fontWeight: FontWeight.w600),
                 ),
               )),
-          _tftCreateNewBusiness(
-              AppLocalizations.text(LangKey.enterNewTag),
-              "",
-              Assets.iconTag,
-              false,
-              false,
-              true,
-              fillText: _nameText,
-              focusNode: _nameFocusNode),
+          _tftCreateNewBusiness(AppLocalizations.text(LangKey.enterNewTag), "",
+              Assets.iconTag, false, false, true,
+              fillText: _nameText, focusNode: _nameFocusNode),
           SizedBox(
             height: 23.0,
           ),
@@ -85,21 +79,22 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
     );
   }
 
-   Widget _buildButton() {
+  Widget _buildButton() {
     return InkWell(
       onTap: () async {
         if (_nameText.text != "") {
           LeadConnection.showLoading(context);
-          DescriptionModelResponse? result =
-              await LeadConnection.addTag(
-                  context, AddTagModelRequest(
-                    name: _nameText.text,
-                  ));
-                  Navigator.of(context).pop();
+          DescriptionModelResponse? result = await LeadConnection.addTag(
+              context,
+              AddTagModelRequest(
+                name: _nameText.text,
+              ));
+          Navigator.of(context).pop();
 
           if (result != null) {
             if (result.errorCode == 0) {
-              await LeadConnection.showMyDialog(context, result.errorDescription);
+              await LeadConnection.showMyDialog(
+                  context, result.errorDescription);
               await Future.delayed(Duration(seconds: 2));
 
               Navigator.of(context).pop(true);
@@ -128,6 +123,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
           )),
     );
   }
+
   Widget _tftCreateNewBusiness(String? title, String content, String icon,
       bool mandatory, bool dropdown, bool textfield,
       {GestureTapCallback? ontap,
@@ -197,8 +193,7 @@ class _CreateNewTagModalState extends State<CreateNewTagModal>
                 BoxConstraints(maxHeight: 32.0, maxWidth: 32.0),
             isDense: true,
           ),
-          onChanged: (event) {
-          },
+          onChanged: (event) {},
         ),
       ),
     );

@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart' as lg;
 
 class AppColors {
   static const subColor = Color(0xFF334155);
@@ -93,7 +96,7 @@ class AppColors {
   static const hintColor = Color(0xFF94A3B8);
   static const borderColor = Color(0xFFE1F0FA);
   static const grey50Color = Color(0xFFF6F6F6);
-    static const primaryColorButton = RadialGradient(
+  static const primaryColorButton = RadialGradient(
       center: Alignment.centerRight,
       radius: 0.75,
       colors: <Color>[
@@ -245,11 +248,11 @@ class AppTextStyles {
       fontSize: AppTextSizes.size12,
       color: AppColors.primaryColor,
       fontWeight: FontWeight.bold);
-   static TextStyle style20BlackBold = TextStyle(
+  static TextStyle style20BlackBold = TextStyle(
       fontSize: AppTextSizes.size20,
       color: AppColors.textTitleColor,
       fontWeight: FontWeight.bold);
-    static TextStyle style14BlackNormal = TextStyle(
+  static TextStyle style14BlackNormal = TextStyle(
       fontSize: AppTextSizes.size14,
       color: AppColors.textTitleColor,
       fontWeight: FontWeight.normal);
@@ -261,7 +264,7 @@ class AppTextStyles {
       fontSize: AppTextSizes.size14,
       color: AppColors.hintColor,
       fontWeight: FontWeight.normal);
-   static TextStyle style14PrimaryRegular = TextStyle(
+  static TextStyle style14PrimaryRegular = TextStyle(
       fontSize: AppTextSizes.size14,
       color: AppColors.primaryColor,
       fontWeight: FontWeight.normal);
@@ -269,7 +272,7 @@ class AppTextStyles {
       fontSize: AppTextSizes.size14,
       color: Colors.white,
       fontWeight: FontWeight.normal);
-    static TextStyle style20WhiteBold = TextStyle(
+  static TextStyle style20WhiteBold = TextStyle(
       fontSize: AppTextSizes.size20,
       color: Colors.white,
       fontWeight: FontWeight.bold);
@@ -281,7 +284,7 @@ class AppTextStyles {
       fontSize: AppTextSizes.size12,
       color: AppColors.grey200Color,
       fontWeight: FontWeight.normal);
-   static TextStyle style14PrimaryBold = TextStyle(
+  static TextStyle style14PrimaryBold = TextStyle(
       fontSize: AppTextSizes.size14,
       color: AppColors.primaryColor,
       fontWeight: FontWeight.bold);
@@ -305,22 +308,25 @@ class AppTextStyles {
     fontSize: AppTextSizes.size12,
     color: AppColors.white,
     fontWeight: FontWeight.w700,
-    fontStyle: FontStyle.italic,);
+    fontStyle: FontStyle.italic,
+  );
   static TextStyle style10WhiteWeight700Italic = TextStyle(
     fontSize: AppTextSizes.size10,
     color: AppColors.white,
     fontWeight: FontWeight.w700,
-    fontStyle: FontStyle.italic,);
+    fontStyle: FontStyle.italic,
+  );
   static TextStyle style18WhiteBoldItalic = TextStyle(
     fontSize: AppTextSizes.size18,
     color: AppColors.white,
     fontWeight: FontWeight.bold,
-    fontStyle: FontStyle.italic,);
-  static TextStyle style20WhiteWeight700= TextStyle(
-    fontSize: AppTextSizes.size20,
-    color: AppColors.white,
-    fontWeight: FontWeight.w700);
-  static TextStyle style20BlackWeight400= TextStyle(
+    fontStyle: FontStyle.italic,
+  );
+  static TextStyle style20WhiteWeight700 = TextStyle(
+      fontSize: AppTextSizes.size20,
+      color: AppColors.white,
+      fontWeight: FontWeight.w700);
+  static TextStyle style20BlackWeight400 = TextStyle(
       fontSize: AppTextSizes.size20,
       color: AppColors.textTitleColor,
       fontWeight: FontWeight.w400);
@@ -332,7 +338,8 @@ class AppTextStyles {
     fontSize: AppTextSizes.size25,
     color: AppColors.white,
     fontWeight: FontWeight.w800,
-    fontStyle: FontStyle.italic,);
+    fontStyle: FontStyle.italic,
+  );
 
   static TextStyle style25BlackWeight700 = TextStyle(
       fontSize: AppTextSizes.size25,
@@ -419,10 +426,11 @@ class AppTextStyles {
       color: AppColors.primaryColor,
       fontWeight: FontWeight.w600);
   static TextStyle style14WhiteWeight700Italic = TextStyle(
-      fontSize: AppTextSizes.size14,
-      color: AppColors.white,
-      fontWeight: FontWeight.w700,
-    fontStyle: FontStyle.italic,);
+    fontSize: AppTextSizes.size14,
+    color: AppColors.white,
+    fontWeight: FontWeight.w700,
+    fontStyle: FontStyle.italic,
+  );
   static TextStyle style14Black50Weight400 = TextStyle(
       fontSize: AppTextSizes.size14,
       color: AppColors.black50Color,
@@ -444,7 +452,7 @@ class AppTextStyles {
       fontSize: AppTextSizes.size14,
       color: AppColors.grey500Color,
       fontWeight: FontWeight.w400);
-      static TextStyle style18LeadGreyBold = TextStyle(
+  static TextStyle style18LeadGreyBold = TextStyle(
       fontSize: AppTextSizes.size18,
       color: AppColors.colorTabUnselected,
       fontWeight: FontWeight.bold);
@@ -464,11 +472,11 @@ class AppTextStyles {
       fontSize: AppTextSizes.size14,
       color: AppColors.bluePrimary,
       fontWeight: FontWeight.w500);
-      static TextStyle style16BlueWeight500 = TextStyle(
+  static TextStyle style16BlueWeight500 = TextStyle(
       fontSize: AppTextSizes.size16,
       color: AppColors.bluePrimary,
       fontWeight: FontWeight.w500);
-      static TextStyle style18BlueBold = TextStyle(
+  static TextStyle style18BlueBold = TextStyle(
       fontSize: AppTextSizes.size18,
       color: AppColors.blueColor,
       fontWeight: FontWeight.bold);
@@ -651,8 +659,6 @@ class AppSizes {
   }
 }
 
-
-
 class AppFormat {
   static DateFormat formatDate = DateFormat("dd/MM/yyyy");
   static DateFormat formatDateResponse = DateFormat("yyyy-MM-dd");
@@ -672,9 +678,10 @@ class AppFormat {
       DateFormat("HH:mm - dd MMMM, yyyy", "vi_VN");
   static String formatNonSale = "d2d-nonsale/{instanceVer}";
 }
+
 class AppSizeWebConfig {
   static const maxWidthWeb = 500.0;
-  static const maxHeightWeb =  926.0;
+  static const maxHeightWeb = 926.0;
 }
 
 class AppRadius {
@@ -712,11 +719,20 @@ class AppGlass {
     stops: [0.0, 0.45, 1.0],
   );
 
-  static const RoundedRectangleBorder headerShape = RoundedRectangleBorder(
-    borderRadius: BorderRadius.only(
-      bottomLeft: Radius.circular(AppRadius.card),
-      bottomRight: Radius.circular(AppRadius.card),
-    ),
+  static const RoundedRectangleBorder headerShape = RoundedRectangleBorder();
+
+  static const Color headerForeground = AppColors.textTitleColor;
+
+  static const SystemUiOverlayStyle headerOverlayStyle =
+      SystemUiOverlayStyle.dark;
+
+  static const Color solidBorderColor = Color(0xFFE6EAF0);
+
+  static const lg.LiquidGlassSettings sheetSettings = lg.LiquidGlassSettings(
+    glassColor: Color(0xD9F7F9FC),
+    blur: 24.0,
+    thickness: 30.0,
+    saturation: 1.8,
   );
 
   static Color get surface => Colors.white.withValues(alpha: 0.72);
@@ -768,19 +784,18 @@ class AppGlass {
         ),
       ];
 
-  static LinearGradient get cardGradient => LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Colors.white.withValues(alpha: 0.92),
-          Color.lerp(
-            Colors.white,
-            AppColors.primaryColor,
-            0.05,
-          )!
-              .withValues(alpha: 0.74),
-        ],
+  static LinearGradient get cardGradient => const LinearGradient(
+        colors: [Colors.white, Colors.white],
       );
+
+  static List<BoxShadow> get solidShadow => [
+        BoxShadow(
+          offset: Offset(0.0, 2.0),
+          blurRadius: 10.0,
+          spreadRadius: -2.0,
+          color: Color(0xFF0F172A).withValues(alpha: 0.06),
+        ),
+      ];
 
   static LinearGradient get sheetGradient => LinearGradient(
         begin: Alignment.topCenter,
@@ -796,10 +811,9 @@ class AppGlass {
   static BoxDecoration card({double radius = AppGlass.radius, Color? color}) {
     return BoxDecoration(
       borderRadius: BorderRadius.circular(radius),
-      gradient: color != null ? null : cardGradient,
-      color: color,
-      border: Border.all(color: borderColor, width: 1.0),
-      boxShadow: shadow,
+      color: color ?? Colors.white,
+      border: Border.all(color: solidBorderColor, width: 0.5),
+      boxShadow: solidShadow,
     );
   }
 
@@ -832,13 +846,37 @@ class AppGlass {
   }
 
   static BoxDecoration header() {
-    return BoxDecoration(
-      gradient: headerGradient,
-      borderRadius: BorderRadius.only(
-        bottomLeft: Radius.circular(AppRadius.card),
-        bottomRight: Radius.circular(AppRadius.card),
+    return const BoxDecoration();
+  }
+
+  static Widget? backButton(BuildContext context,
+      {IconData? icon, VoidCallback? onTap}) {
+    if (!Navigator.of(context).canPop()) {
+      return null;
+    }
+    return Center(
+      child: lg.GlassIconButton(
+        useOwnLayer: true,
+        size: 40.0,
+        icon: Icon(icon ?? CupertinoIcons.back,
+            color: headerForeground, size: 22.0),
+        onPressed: onTap ?? () => Navigator.of(context).maybePop(),
       ),
-      boxShadow: headerShadow,
+    );
+  }
+
+  static Widget actionButton(
+      {required Widget icon, required VoidCallback onTap}) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: lg.GlassIconButton(
+          useOwnLayer: true,
+          size: 40.0,
+          icon: icon,
+          onPressed: onTap,
+        ),
+      ),
     );
   }
 

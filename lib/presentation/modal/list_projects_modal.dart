@@ -76,7 +76,8 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
         //     );
         // }
       } else {
-        listProjectData!.addAll(model.data?.items! as Iterable<ListProjectItems>);
+        listProjectData!
+            .addAll(model.data?.items! as Iterable<ListProjectItems>);
       }
 
       for (int i = 0; i < listProjectData!.length; i++) {
@@ -105,8 +106,12 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+              centerTitle: true,
+              systemOverlayStyle: AppGlass.headerOverlayStyle,
+              leading: AppGlass.backButton(context),
+              leadingWidth: 60.0,
               iconTheme: const IconThemeData(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
               ),
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
@@ -117,7 +122,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
               title: Text(
                 AppLocalizations.text(LangKey.chooseProject)!,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: AppGlass.headerForeground,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600),
               ),
@@ -188,7 +193,8 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
   // }
 
   List<Widget> _listWidget() {
-    return (listProjectDataDisplay != null && listProjectDataDisplay!.length > 0)
+    return (listProjectDataDisplay != null &&
+            listProjectDataDisplay!.length > 0)
         ? List.generate(
             listProjectDataDisplay!.length,
             (index) => _buildItem(listProjectDataDisplay![index], () {
@@ -299,7 +305,7 @@ class _ListProjectsModalState extends State<ListProjectsModal> {
         searchModel(event);
         print(event.toLowerCase());
         print(_searchext.text);
-            },
+      },
     );
   }
 

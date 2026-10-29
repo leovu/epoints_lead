@@ -74,7 +74,6 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
   TextEditingController _emailText = TextEditingController();
   FocusNode _emailFocusNode = FocusNode();
 
-
   bool showMoreAddress = false;
   bool showMoreAll = false;
   bool selectedPersonal = true;
@@ -382,7 +381,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
       _bloc.setAddressModel(_bloc.addressModel);
     }
 
-    if (detailNew?.customerLeadReferId != null && detailNew?.customerLeadReferName != null) {
+    if (detailNew?.customerLeadReferId != null &&
+        detailNew?.customerLeadReferName != null) {
       _bloc.presenterModel = CustomerModel(
           customerId: detailNew?.customerLeadReferId,
           fullName: detailNew?.customerLeadReferName ?? "");
@@ -580,8 +580,12 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
+                centerTitle: true,
+                systemOverlayStyle: AppGlass.headerOverlayStyle,
+                leading: AppGlass.backButton(context),
+                leadingWidth: 60.0,
                 iconTheme: const IconThemeData(
-                  color: Colors.white,
+                  color: AppGlass.headerForeground,
                 ),
                 backgroundColor: Colors.transparent,
                 surfaceTintColor: Colors.transparent,
@@ -592,7 +596,7 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
                 title: Text(
                   AppLocalizations.text(LangKey.editPotential)!,
                   style: const TextStyle(
-                      color: Colors.white,
+                      color: AppGlass.headerForeground,
                       fontSize: 16.0,
                       fontWeight: FontWeight.w600),
                 ),
@@ -1305,7 +1309,8 @@ class _EditPotentialCustomerState extends State<EditPotentialCustomer>
           taxCode: typePersonnal ? "" : _taxText.text,
           phone: _phoneNumberText.text,
           email: _emailText.text,
-          representative: typePersonnal ? "" : _bloc.representativeController.text,
+          representative:
+              typePersonnal ? "" : _bloc.representativeController.text,
           pipelineCode: detailPotential.pipelineCode,
           journeyCode: detailPotential.journeyCode,
           saleId: detailPotential.saleId,

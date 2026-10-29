@@ -386,7 +386,7 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
     );
   }
 
- Widget _buildBottom(List<WorkListStaffModel>? models) {
+  Widget _buildBottom(List<WorkListStaffModel>? models) {
     return CustomBottom(
       text: AppLocalizations.text(LangKey.apply),
       ontap: () => _bloc.confirm(models),
@@ -418,8 +418,12 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -430,7 +434,9 @@ class MultipleStaffScreenDealState extends State<MultipleStaffScreenDeal> {
         title: Text(
           AppLocalizations.text(LangKey.staff)!,
           style: const TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+              color: AppGlass.headerForeground,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
         // leadingWidth: 20.0,
       ),

@@ -5,6 +5,7 @@ import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/connection/lead_connection.dart';
 import 'package:lead_plugin_epoint/model/request/add_business_areas_model_request.dart';
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/model/response/description_model_response.dart';
 
 class CreateNewBusinessAreaModal extends StatefulWidget {
@@ -49,9 +50,8 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface.sheet(
       padding: EdgeInsets.only(bottom: 50, top: 10, left: 13.0, right: 13.0),
-      decoration: AppGlass.sheet(),
       height: _isKeyboardVisible
           ? MediaQuery.of(context).size.height * 0.55
           : MediaQuery.of(context).size.height * 0.28,
@@ -94,23 +94,24 @@ class _CreateNewBusinessAreaModalState extends State<CreateNewBusinessAreaModal>
           // await Future.delayed(Duration(seconds: 2));
           DescriptionModelResponse? result =
               await LeadConnection.addBusinessAreas(
-                  context, AddBusinessAreasModelRequest(
-                    name: _nameText.text,
-                    description: ""
-                  ));
-                  await Future.delayed(Duration(seconds: 2));
-                  Navigator.of(context).pop();
+                  context,
+                  AddBusinessAreasModelRequest(
+                      name: _nameText.text, description: ""));
+          await Future.delayed(Duration(seconds: 2));
+          Navigator.of(context).pop();
 
           if (result != null) {
             if (result.errorCode == 0) {
-              await LeadConnection.showMyDialog(context, result.errorDescription);
+              await LeadConnection.showMyDialog(
+                  context, result.errorDescription);
               Navigator.of(context).pop(true);
             } else {
               LeadConnection.showMyDialog(context, result.errorDescription);
             }
           }
         } else {
-          LeadConnection.showMyDialog(context, "Vui lòng nhập tên lĩnh vực kinh doanh");
+          LeadConnection.showMyDialog(
+              context, "Vui lòng nhập tên lĩnh vực kinh doanh");
         }
       },
       child: Container(

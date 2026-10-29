@@ -42,7 +42,8 @@ class CreatePotentialCustomer extends StatefulWidget {
   final String? fullname;
   final String? phoneNumber;
   final int? saleId;
-  CreatePotentialCustomer({Key? key, this.fullname, this.phoneNumber, this.saleId})
+  CreatePotentialCustomer(
+      {Key? key, this.fullname, this.phoneNumber, this.saleId})
       : super(key: key);
 
   @override
@@ -183,7 +184,12 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
           child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
-                iconTheme: const IconThemeData(color: Colors.white),
+                centerTitle: true,
+                systemOverlayStyle: AppGlass.headerOverlayStyle,
+                leading: AppGlass.backButton(context),
+                leadingWidth: 60.0,
+                iconTheme:
+                    const IconThemeData(color: AppGlass.headerForeground),
                 backgroundColor: Colors.transparent,
                 surfaceTintColor: Colors.transparent,
                 elevation: 0,
@@ -193,7 +199,7 @@ class _CreatePotentialCustomerState extends State<CreatePotentialCustomer>
                 title: Text(
                   AppLocalizations.text(LangKey.addPotentialCustomer)!,
                   style: const TextStyle(
-                      color: Colors.white,
+                      color: AppGlass.headerForeground,
                       fontSize: 18.0,
                       fontWeight: FontWeight.w600),
                 ),

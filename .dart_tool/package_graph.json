@@ -23,6 +23,7 @@
         "image_picker_android",
         "intl",
         "keyboard_actions",
+        "liquid_glass_widgets",
         "mime",
         "path",
         "plugin_platform_interface",
@@ -250,6 +251,13 @@
     {
       "name": "auto_size_text_plus",
       "version": "3.0.2",
+      "dependencies": [
+        "flutter"
+      ]
+    },
+    {
+      "name": "liquid_glass_widgets",
+      "version": "1.16.0",
       "dependencies": [
         "flutter"
       ]

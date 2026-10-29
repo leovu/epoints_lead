@@ -6,25 +6,25 @@ import 'package:lead_plugin_epoint/model/response/get_ward_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class WardModal extends StatefulWidget {
   List<WardData>? ward = <WardData>[];
   WardData? wardSelected = WardData();
-   WardModal({ Key? key, this.ward ,this.wardSelected}) : super(key: key);
+  WardModal({Key? key, this.ward, this.wardSelected}) : super(key: key);
 
   @override
   _WardModalState createState() => _WardModalState();
 }
 
 class _WardModalState extends State<WardModal> {
- final ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
   GetWardModelReponse? _model;
   List<WardData>? ward = <WardData>[];
   WardData? wardSelected = WardData();
-
 
   @override
   void initState() {
@@ -33,8 +33,7 @@ class _WardModalState extends State<WardModal> {
     wardSelected = widget.wardSelected;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       for (int i = 0; i < ward!.length; i++) {
-        if ((wardSelected?.wardid ?? "") ==
-            ward![i].wardid) {
+        if ((wardSelected?.wardid ?? "") == ward![i].wardid) {
           ward![i].selected = true;
         } else {
           ward![i].selected = false;
@@ -50,13 +49,10 @@ class _WardModalState extends State<WardModal> {
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface.sheet(
       padding: EdgeInsets.only(bottom: 50, top: 10),
-      decoration: AppGlass.sheet(),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
@@ -112,20 +108,22 @@ class _WardModalState extends State<WardModal> {
     );
   }
 
- List<Widget> _listWidget() {
+  List<Widget> _listWidget() {
     return (_model!.data != null)
-        ? (_model!.data!.length > 0) ? List.generate(
-            _model!.data!.length,
-            (index) => _buildItem(
-                    _model!.data![index].name!, _model!.data![index].selected!, () {
-                  selectedItem(index);
-                }))
-        : [CustomDataNotFound()]: Container() as List<Widget>;
+        ? (_model!.data!.length > 0)
+            ? List.generate(
+                _model!.data!.length,
+                (index) => _buildItem(_model!.data![index].name!,
+                        _model!.data![index].selected!, () {
+                      selectedItem(index);
+                    }))
+            : [CustomDataNotFound()]
+        : Container() as List<Widget>;
   }
 
-   Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
+  Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
         height: 40,
         child: Row(
@@ -140,15 +138,20 @@ class _WardModalState extends State<WardModal> {
                       : AppColors.textTitleColor,
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w400),
             ),
-
-            selected ? Icon(Icons.check, color: AppColors.primaryColor,size: 20,) : Container(),
+            selected
+                ? Icon(
+                    Icons.check,
+                    color: AppColors.primaryColor,
+                    size: 20,
+                  )
+                : Container(),
           ],
         ),
       ),
     );
   }
 
-   Widget _buildSearch() {
+  Widget _buildSearch() {
     return TextField(
       enabled: true,
       controller: _searchext,
@@ -175,7 +178,7 @@ class _WardModalState extends State<WardModal> {
     );
   }
 
-    searchModel(List<WardData>? model, String value) {
+  searchModel(List<WardData>? model, String value) {
     if (model == null || value.isEmpty) {
       _model!.data = ward;
       setState(() {});

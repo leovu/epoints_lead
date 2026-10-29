@@ -60,8 +60,12 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -72,7 +76,9 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
         title: Text(
           AppLocalizations.text(LangKey.listBusiness)!,
           style: const TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+              color: AppGlass.headerForeground,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
         // leadingWidth: 20.0,
       ),
@@ -82,22 +88,25 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primaryColor,
         onPressed: () async {
-         var result = await showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) {
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: CreateNewBusinessModal());
-                    });
-                if (result != null) {
-                  }
+          var result = await showModalBottomSheet(
+              context: context,
+              useRootNavigator: true,
+              isScrollControlled: true,
+              backgroundColor: Colors.transparent,
+              builder: (context) {
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: CreateNewBusinessModal());
+              });
+          if (result != null) {}
         },
-        child: const Icon(Icons.add,color: Colors.white, size: 50,),
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 50,
+        ),
       ),
     ));
   }
@@ -137,12 +146,12 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
 
   Widget _buildBusinessItem(GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
         padding: EdgeInsets.only(left: 8.0, right: 8.0),
         height: 80.0,
         decoration: BoxDecoration(
-          boxShadow: AppGlass.shadow,
+            boxShadow: AppGlass.shadow,
             gradient: AppGlass.cardGradient,
             border: Border.all(
                 width: 1.0,
@@ -209,8 +218,7 @@ class _ListBusinessModalState extends State<ListBusinessModal> {
             Assets.iconSearch,
           ),
         ),
-         suffixIconConstraints:
-                BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
+        suffixIconConstraints: BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
         isDense: true,
       ),
       onChanged: (event) {

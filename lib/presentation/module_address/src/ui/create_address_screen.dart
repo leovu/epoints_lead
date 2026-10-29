@@ -108,8 +108,12 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -121,7 +125,7 @@ class CreateAddressScreenState extends State<CreateAddressScreen> {
           child: Text(
             AppLocalizations.text(LangKey.enter_address)!,
             style: const TextStyle(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
                 fontSize: 18.0,
                 fontWeight: FontWeight.w600),
           ),

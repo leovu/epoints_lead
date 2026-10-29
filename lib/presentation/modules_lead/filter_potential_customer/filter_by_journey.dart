@@ -9,15 +9,15 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class FilterByJourney extends StatefulWidget {
-   List<JourneyData>? journeys = <JourneyData>[];
-   FilterByJourney({ Key? key, this.journeys }) : super(key: key);
+  List<JourneyData>? journeys = <JourneyData>[];
+  FilterByJourney({Key? key, this.journeys}) : super(key: key);
 
   @override
   _FilterByJourneyState createState() => _FilterByJourneyState();
 }
 
 class _FilterByJourneyState extends State<FilterByJourney> {
- final ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
   List<JourneyData>? journeysData;
@@ -43,8 +43,12 @@ class _FilterByJourneyState extends State<FilterByJourney> {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+              centerTitle: true,
+              systemOverlayStyle: AppGlass.headerOverlayStyle,
+              leading: AppGlass.backButton(context),
+              leadingWidth: 60.0,
               iconTheme: const IconThemeData(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
               ),
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
@@ -55,7 +59,7 @@ class _FilterByJourneyState extends State<FilterByJourney> {
               title: Text(
                 AppLocalizations.text(LangKey.byJourney)!,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: AppGlass.headerForeground,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600),
               ),
@@ -111,7 +115,7 @@ class _FilterByJourneyState extends State<FilterByJourney> {
 
   Widget _buildItem(JourneyData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -184,7 +188,9 @@ class _FilterByJourneyState extends State<FilterByJourney> {
           List<String> search = value.removeAccents().split(" ");
           bool result = true;
           for (String element in search) {
-            if (!((model.journeyName ?? "").removeAccents().contains(element))) {
+            if (!((model.journeyName ?? "")
+                .removeAccents()
+                .contains(element))) {
               result = false;
               break;
             }

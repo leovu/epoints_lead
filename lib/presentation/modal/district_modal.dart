@@ -5,27 +5,29 @@ import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/model/response/get_district_model_response.dart';
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class DistrictModal extends StatefulWidget {
-   List<DistrictData>? districts = <DistrictData>[];
-   DistrictData? distictSelected = DistrictData();
-   DistrictModal({ Key? key,this.districts,this.distictSelected }) : super(key: key);
+  List<DistrictData>? districts = <DistrictData>[];
+  DistrictData? distictSelected = DistrictData();
+  DistrictModal({Key? key, this.districts, this.distictSelected})
+      : super(key: key);
 
   @override
   _DistrictModalState createState() => _DistrictModalState();
 }
 
 class _DistrictModalState extends State<DistrictModal> {
- final ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
 
   List<DistrictData>? districts = <DistrictData>[];
-   DistrictData? distictSelected = DistrictData();
+  DistrictData? distictSelected = DistrictData();
   GetDistrictModelReponse? _model;
 
-    @override
+  @override
   void initState() {
     super.initState();
     districts = widget.districts;
@@ -49,12 +51,10 @@ class _DistrictModalState extends State<DistrictModal> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface.sheet(
       padding: EdgeInsets.only(bottom: 50, top: 10),
-      decoration: AppGlass.sheet(),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
@@ -110,7 +110,7 @@ class _DistrictModalState extends State<DistrictModal> {
     );
   }
 
-   Widget _buildSearch() {
+  Widget _buildSearch() {
     return TextField(
       enabled: true,
       controller: _searchext,
@@ -137,7 +137,7 @@ class _DistrictModalState extends State<DistrictModal> {
     );
   }
 
-    searchModel(List<DistrictData>? model, String value) {
+  searchModel(List<DistrictData>? model, String value) {
     if (model == null || value.isEmpty) {
       _model!.data = districts;
       setState(() {});
@@ -162,15 +162,17 @@ class _DistrictModalState extends State<DistrictModal> {
     }
   }
 
-   List<Widget> _listWidget() {
+  List<Widget> _listWidget() {
     return (_model!.data != null)
-        ? (_model!.data!.length > 0) ? List.generate(
-            _model!.data!.length,
-            (index) => _buildItem(
-                    _model!.data![index].name!, _model!.data![index].selected!, () {
-                  selectedItem(index);
-                }))
-        : [CustomDataNotFound()] :Container() as List<Widget>;
+        ? (_model!.data!.length > 0)
+            ? List.generate(
+                _model!.data!.length,
+                (index) => _buildItem(_model!.data![index].name!,
+                        _model!.data![index].selected!, () {
+                      selectedItem(index);
+                    }))
+            : [CustomDataNotFound()]
+        : Container() as List<Widget>;
   }
 
   Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
@@ -190,8 +192,13 @@ class _DistrictModalState extends State<DistrictModal> {
                       : AppColors.textTitleColor,
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w400),
             ),
-
-            selected ? Icon(Icons.check, color: AppColors.primaryColor,size: 20,) : Container(),
+            selected
+                ? Icon(
+                    Icons.check,
+                    color: AppColors.primaryColor,
+                    size: 20,
+                  )
+                : Container(),
           ],
         ),
       ),

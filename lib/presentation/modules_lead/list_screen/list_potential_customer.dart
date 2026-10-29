@@ -152,8 +152,11 @@ class _LeadScreen extends State<LeadScreen> {
     return AppGlass.background(
         child: Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -165,11 +168,13 @@ class _LeadScreen extends State<LeadScreen> {
         title: Text(
           AppLocalizations.text(LangKey.listPotential)!,
           style: TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+              color: AppGlass.headerForeground,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
           textAlign: TextAlign.center,
         ),
         actions: [
-          InkWell(
+          AppGlass.actionButton(
             onTap: () async {
               FilterScreenModel? result =
                   await Navigator.of(context).push(MaterialPageRoute(
@@ -184,12 +189,10 @@ class _LeadScreen extends State<LeadScreen> {
                 getData(false);
               }
             },
-            child: Padding(
-              padding: EdgeInsets.only(right: 8.0),
-              child: Image.asset(
-                Assets.iconFilter,
-                width: AppSizes.maxPadding,
-              ),
+            icon: Image.asset(
+              Assets.iconFilter,
+              width: 20.0,
+              color: AppGlass.headerForeground,
             ),
           )
         ],

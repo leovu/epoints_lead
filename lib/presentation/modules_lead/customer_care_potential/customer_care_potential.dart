@@ -193,8 +193,6 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
     if (file != null) {
       _bloc.workUploadFile(file);
-      
-
     }
   }
 
@@ -212,8 +210,12 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
           child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
+                centerTitle: true,
+                systemOverlayStyle: AppGlass.headerOverlayStyle,
+                leading: AppGlass.backButton(context),
+                leadingWidth: 60.0,
                 iconTheme: const IconThemeData(
-                  color: Colors.white,
+                  color: AppGlass.headerForeground,
                 ),
                 backgroundColor: Colors.transparent,
                 surfaceTintColor: Colors.transparent,
@@ -224,7 +226,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                 title: Text(
                   AppLocalizations.text(LangKey.customerCareUpcase)!,
                   style: const TextStyle(
-                      color: Colors.white,
+                      color: AppGlass.headerForeground,
                       fontSize: 18.0,
                       fontWeight: FontWeight.w600),
                 ),
@@ -401,7 +403,8 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                               LangKey.chooseExecutorUpcase),
                         )));
 
-            if (_modelStaffSelected != null && _modelStaffSelected!.length > 0) {
+            if (_modelStaffSelected != null &&
+                _modelStaffSelected!.length > 0) {
               if (addWorkModel.processorId == _modelStaffSelected![0].staffId) {
                 return;
               }
@@ -694,7 +697,9 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                                 staffId:
                                     _modelStaffSSupportSelected![i].staffId));
                             if (staffs == "") {
-                              staffs = _modelStaffSSupportSelected![i].staffName ?? "";
+                              staffs =
+                                  _modelStaffSSupportSelected![i].staffName ??
+                                      "";
                             } else {
                               staffs +=
                                   ", ${_modelStaffSSupportSelected![i].staffName}";
@@ -737,8 +742,8 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
                           for (int i = 0; i < tagsData!.length; i++) {
                             if (tagsData![i].selected!) {
-                              listTag
-                                  .add(ListTag(manageTagId: tagsData![i].tagId));
+                              listTag.add(
+                                  ListTag(manageTagId: tagsData![i].tagId));
                               if (tagsString == "") {
                                 tagsString = tagsData![i].name ?? "";
                               } else {
@@ -1007,7 +1012,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
 
   Widget typeOfWorkItem(String title, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
         // width: MediaQuery.of(context).size.width,
         margin: EdgeInsets.only(bottom: 16.0),
@@ -1120,7 +1125,6 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
                 //                   customerCare: true,
                 //                   indexTab: 2,
                 //                 )));
-
               } else {
                 LeadConnection.showMyDialog(context, result.errorDescription);
               }
@@ -1149,7 +1153,7 @@ class _CustomerCarePotentialState extends State<CustomerCarePotential>
     return Container(
       margin: EdgeInsets.only(bottom: 15),
       child: InkWell(
-        onTap: (ontap != null) ? ontap  : null,
+        onTap: (ontap != null) ? ontap : null,
         child: TextField(
           enabled: textfield,
           readOnly: !textfield,

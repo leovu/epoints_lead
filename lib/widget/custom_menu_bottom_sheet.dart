@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
 
 class CustomMenuBottomSheet extends StatelessWidget {
@@ -41,10 +42,9 @@ class CustomMenuBottomSheet extends StatelessWidget {
           ),
           Flexible(
               fit: FlexFit.loose,
-              child: Container(
+              child: CustomGlassSurface.sheet(
                 padding: EdgeInsets.symmetric(
                     horizontal: 12.0 * 1.5, vertical: 10.0),
-                decoration: AppGlass.sheet(),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -59,7 +59,9 @@ class CustomMenuBottomSheet extends StatelessWidget {
                         if (allowBack)
                           Opacity(
                             child: InkWell(
-                              onTap: funcPop == null ? () => Navigator.of(context).pop() : () => funcPop,
+                              onTap: funcPop == null
+                                  ? () => Navigator.of(context).pop()
+                                  : () => funcPop,
                               child: Container(
                                 width: 48.0,
                                 height: 48.0,

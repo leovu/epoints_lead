@@ -94,7 +94,6 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
 //         widget.businessFocalPointData.addAll(model.data?.items);
 //       }
 
-
 //       for (int i = 0; i < widget.businessFocalPointData.length ; i++) {
 //         if ((widget.businessFocalPointSeleted?.customerLeadCode ?? "") == widget.businessFocalPointData[i].customerLeadCode ) {
 //           widget.businessFocalPointData[i].selected = true;
@@ -108,8 +107,6 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
 //         items: (widget.businessFocalPointData ?? <ListCustomLeadItems>[])
 //             .map((e) => ListCustomLeadItems.fromJson(e.toJson()))
 //             .toList());
-
-
 
 //       currentPage = model.data?.pageInfo?.currentPage;
 //       nextPage = model.data?.pageInfo?.nextPage;
@@ -126,8 +123,12 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
         child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+              centerTitle: true,
+              systemOverlayStyle: AppGlass.headerOverlayStyle,
+              leading: AppGlass.backButton(context),
+              leadingWidth: 60.0,
               iconTheme: const IconThemeData(
-                color: Colors.white,
+                color: AppGlass.headerForeground,
               ),
               backgroundColor: Colors.transparent,
               surfaceTintColor: Colors.transparent,
@@ -138,7 +139,7 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
               title: Text(
                 AppLocalizations.text(LangKey.businessFocalPoint)!,
                 style: const TextStyle(
-                    color: Colors.white,
+                    color: AppGlass.headerForeground,
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600),
               ),
@@ -259,7 +260,7 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
 //         print(event.toLowerCase());
 //         if (_searchext != null) {
 //           print(_searchext.text);
-          
+
 //         }
 //       },
 //     );
@@ -288,10 +289,9 @@ class _BusinessFocalPointModalState extends State<BusinessFocalPointModal> {
 //       });
 //       } catch (_) {
 //         setState(() {
-        
+
 //       });
 //       }
 //     }
 //   }
 }
-

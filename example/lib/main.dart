@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/lead_plugin_epoint.dart';
+import 'package:liquid_glass_widgets/liquid_glass_widgets.dart';
 import 'dart:io';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -12,14 +13,20 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
+  await LiquidGlassWidgets.initialize();
 
-  runApp(MaterialApp(
-    locale: const Locale('vi', 'VN'),
-    title: 'Navigation Basics',
-    debugShowCheckedModeBanner: false,
-    home: MyApp(),
+  runApp(LiquidGlassWidgets.wrap(
+    brightnessResolver: Theme.maybeBrightnessOf,
+    theme: GlassThemeData.simple(brightness: Brightness.light),
+    child: MaterialApp(
+      locale: const Locale('vi', 'VN'),
+      title: 'Navigation Basics',
+      debugShowCheckedModeBanner: false,
+      home: MyApp(),
+    ),
   ));
 }
 

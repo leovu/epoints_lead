@@ -3,6 +3,7 @@ import 'package:lead_plugin_epoint/common/lang_key.dart';
 import 'package:lead_plugin_epoint/common/localization/app_localizations.dart';
 import 'package:lead_plugin_epoint/common/theme.dart';
 import 'package:lead_plugin_epoint/widget/custom_button.dart';
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/widget/custom_navigation.dart';
 
 class CustomAlertDialog extends StatelessWidget {
@@ -36,8 +37,7 @@ class CustomAlertDialog extends StatelessWidget {
     return Stack(
       alignment: Alignment.topRight,
       children: [
-        Container(
-          decoration: AppGlass.dialog(),
+        CustomGlassSurface(
           child: Column(
             children: [
               Container(

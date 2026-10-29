@@ -11,14 +11,14 @@ import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class ListStaffModal extends StatefulWidget {
-  const ListStaffModal({ Key? key }) : super(key: key);
-  
+  const ListStaffModal({Key? key}) : super(key: key);
+
   @override
   _ListStaffModalState createState() => _ListStaffModalState();
 }
 
 class _ListStaffModalState extends State<ListStaffModal> {
- final ScrollController _controller = ScrollController();
+  final ScrollController _controller = ScrollController();
   final TextEditingController _searchext = TextEditingController();
   final FocusNode _fonusNode = FocusNode();
   GetAllocatorModelReponse? _model;
@@ -36,10 +36,10 @@ class _ListStaffModalState extends State<ListStaffModal> {
         dataAllocator = data;
         allocators = data.data;
 
-         _model = GetAllocatorModelReponse(
-        data: (allocators ?? <AllocatorData>[])
-            .map((e) => AllocatorData.fromJson(e.toJson()))
-            .toList());
+        _model = GetAllocatorModelReponse(
+            data: (allocators ?? <AllocatorData>[])
+                .map((e) => AllocatorData.fromJson(e.toJson()))
+                .toList());
       }
 
       Navigator.of(context).pop();
@@ -59,8 +59,12 @@ class _ListStaffModalState extends State<ListStaffModal> {
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -71,7 +75,9 @@ class _ListStaffModalState extends State<ListStaffModal> {
         title: Text(
           AppLocalizations.text(LangKey.listBusiness)!,
           style: const TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+              color: AppGlass.headerForeground,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
         // leadingWidth: 20.0,
       ),
@@ -108,30 +114,33 @@ class _ListStaffModalState extends State<ListStaffModal> {
       child: Column(
         children: [
           _buildSearch(),
-          (allocators != null) ?
-          Expanded(
-              child: CustomListView(
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 19.0, bottom: 16.0),
-            physics: AlwaysScrollableScrollPhysics(),
-            controller: _controller,
-            separatorPadding: 5.0,
-            separator: Container(height: 8.0,),
-            children: (_model != null) ? (_model!.data!.length > 0) ? _listWidget() : [CustomDataNotFound()] : [Container()],
-            // children: _listWidget(),
-          ))
-          : Container(),
+          (allocators != null)
+              ? Expanded(
+                  child: CustomListView(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.only(top: 19.0, bottom: 16.0),
+                  physics: AlwaysScrollableScrollPhysics(),
+                  controller: _controller,
+                  separatorPadding: 5.0,
+                  separator: Container(
+                    height: 8.0,
+                  ),
+                  children: (_model != null)
+                      ? (_model!.data!.length > 0)
+                          ? _listWidget()
+                          : [CustomDataNotFound()]
+                      : [Container()],
+                  // children: _listWidget(),
+                ))
+              : Container(),
         ],
       ),
     );
   }
 
   List<Widget> _listWidget() {
-    return List.generate(
-        _model!.data!.length,
-        (index) => _buildStaffItem(_model!.data![index], () {
-
-        } ));
+    return List.generate(_model!.data!.length,
+        (index) => _buildStaffItem(_model!.data![index], () {}));
   }
 
   selectedStaff(int index) async {
@@ -147,12 +156,12 @@ class _ListStaffModalState extends State<ListStaffModal> {
 
   Widget _buildStaffItem(AllocatorData item, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
         padding: EdgeInsets.only(left: 8.0, right: 8.0),
         height: 80.0,
         decoration: BoxDecoration(
-          boxShadow: AppGlass.shadow,
+            boxShadow: AppGlass.shadow,
             gradient: AppGlass.cardGradient,
             border: Border.all(
                 width: 1.0,
@@ -219,12 +228,11 @@ class _ListStaffModalState extends State<ListStaffModal> {
             Assets.iconSearch,
           ),
         ),
-         suffixIconConstraints:
-                BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
+        suffixIconConstraints: BoxConstraints(maxHeight: 40.0, maxWidth: 40.0),
         isDense: true,
       ),
       onChanged: (event) {
-        searchModel(allocators,event);
+        searchModel(allocators, event);
       },
     );
   }

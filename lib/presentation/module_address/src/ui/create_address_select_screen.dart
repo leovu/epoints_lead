@@ -15,10 +15,12 @@ class CreateAddressSelectScreen extends StatefulWidget {
   const CreateAddressSelectScreen({super.key, this.model});
 
   @override
-  CreateAddressSelectScreenState createState() => CreateAddressSelectScreenState();
+  CreateAddressSelectScreenState createState() =>
+      CreateAddressSelectScreenState();
 }
 
-class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen> with SingleTickerProviderStateMixin {
+class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen>
+    with SingleTickerProviderStateMixin {
   late CreateAddressSelectBloc _bloc;
 
   @override
@@ -33,13 +35,16 @@ class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen> wi
 
     _bloc.tabs = [
       CustomModelTabBar(
-        name: "${AppLocalizations.text(LangKey.province)}/${AppLocalizations.text(LangKey.city)}",
-        child: CreateAddressProvinceScreen(bloc: _bloc,)
-      ),
+          name:
+              "${AppLocalizations.text(LangKey.province)}/${AppLocalizations.text(LangKey.city)}",
+          child: CreateAddressProvinceScreen(
+            bloc: _bloc,
+          )),
       CustomModelTabBar(
           name: AppLocalizations.text(LangKey.ward),
-          child: CreateAddressWardScreen(bloc: _bloc,)
-      ),
+          child: CreateAddressWardScreen(
+            bloc: _bloc,
+          )),
     ];
 
     _bloc.tabController = TabController(length: _bloc.tabs.length, vsync: this);
@@ -51,15 +56,16 @@ class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen> wi
     _bloc.dispose();
     super.dispose();
   }
-  
-  Widget _buildBody(){
+
+  Widget _buildBody() {
     return Column(
       children: [
         CustomTabBar(
           tabs: _bloc.tabs,
           controller: _bloc.tabController,
         ),
-        Expanded(child: CustomTabBarView(
+        Expanded(
+            child: CustomTabBarView(
           tabs: _bloc.tabs,
           controller: _bloc.tabController,
         )),
@@ -70,15 +76,19 @@ class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen> wi
       ],
     );
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return AppGlass.background(
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -89,7 +99,9 @@ class CreateAddressSelectScreenState extends State<CreateAddressSelectScreen> wi
         title: Text(
           AppLocalizations.text(LangKey.select_address)!,
           style: const TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+              color: AppGlass.headerForeground,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
         // leadingWidth: 20.0,
       ),

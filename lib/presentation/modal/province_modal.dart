@@ -6,6 +6,7 @@ import 'package:lead_plugin_epoint/model/response/get_province_model_response.da
 import 'package:lead_plugin_epoint/presentation/modules_lead/detail_potential_customer/allocator_screen.dart';
 import 'package:lead_plugin_epoint/widget/custom_data_not_found.dart';
 
+import 'package:lead_plugin_epoint/widget/custom_glass_surface.dart';
 import 'package:lead_plugin_epoint/widget/custom_listview.dart';
 
 class ProvinceModal extends StatefulWidget {
@@ -33,8 +34,7 @@ class _ProvinceModalState extends State<ProvinceModal> {
     provinceSeleted = widget.provinceSeleted;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       for (int i = 0; i < provinces!.length; i++) {
-        if ((provinceSeleted?.provinceid ?? "") ==
-            provinces![i].provinceid) {
+        if ((provinceSeleted?.provinceid ?? "") == provinces![i].provinceid) {
           provinces![i].selected = true;
         } else {
           provinces![i].selected = false;
@@ -52,9 +52,8 @@ class _ProvinceModalState extends State<ProvinceModal> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return CustomGlassSurface.sheet(
       padding: EdgeInsets.only(bottom: 50, top: 10),
-      decoration: AppGlass.sheet(),
       height: MediaQuery.of(context).size.height * 0.8,
       child: Column(
         children: [
@@ -164,18 +163,20 @@ class _ProvinceModalState extends State<ProvinceModal> {
 
   List<Widget> _listWidget() {
     return (_model!.province != null)
-        ? (_model!.province!.length > 0) ? List.generate(
-            _model!.province!.length,
-            (index) => _buildItem(
-                    _model!.province![index].name!, _model!.province![index].selected!, () {
-                  selectedItem(index);
-                }))
-        : [CustomDataNotFound()]: Container() as List<Widget>;
+        ? (_model!.province!.length > 0)
+            ? List.generate(
+                _model!.province!.length,
+                (index) => _buildItem(_model!.province![index].name!,
+                        _model!.province![index].selected!, () {
+                      selectedItem(index);
+                    }))
+            : [CustomDataNotFound()]
+        : Container() as List<Widget>;
   }
 
   Widget _buildItem(String title, bool selected, GestureTapCallback ontap) {
     return InkWell(
-      onTap: ontap ,
+      onTap: ontap,
       child: Container(
         height: 40,
         child: Row(
@@ -190,8 +191,13 @@ class _ProvinceModalState extends State<ProvinceModal> {
                       : AppColors.textTitleColor,
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w400),
             ),
-
-            selected ? Icon(Icons.check, color: AppColors.primaryColor,size: 20,) : Container(),
+            selected
+                ? Icon(
+                    Icons.check,
+                    color: AppColors.primaryColor,
+                    size: 20,
+                  )
+                : Container(),
           ],
         ),
       ),

@@ -438,8 +438,12 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
         child: Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
+        centerTitle: true,
+        systemOverlayStyle: AppGlass.headerOverlayStyle,
+        leading: AppGlass.backButton(context),
+        leadingWidth: 60.0,
         iconTheme: const IconThemeData(
-          color: Colors.white,
+          color: AppGlass.headerForeground,
         ),
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
@@ -450,7 +454,9 @@ class _PickOneStaffScreenState extends State<PickOneStaffScreen> {
         title: Text(
           widget.title ?? AppLocalizations.text(LangKey.staff)!,
           style: const TextStyle(
-              color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.w600),
+              color: AppGlass.headerForeground,
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600),
         ),
         // leadingWidth: 20.0,
       ),
